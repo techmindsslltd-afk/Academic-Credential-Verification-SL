@@ -15,7 +15,7 @@ BASE_DIR = Path(__file__).parent
 CORE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = config('SECRET_KEY', default='S#perS3crEt_1122')
+SECRET_KEY = config('SECRET_KEY', default='')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -378,9 +378,9 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587  # Use 587 for TLS
 EMAIL_USE_TLS = True
 EMAIL_USE_SSL = False  # Ensure this is False if using TLS
-EMAIL_HOST_USER = 'tdchsinfo@gmail.com'
-EMAIL_HOST_PASSWORD = 'hcerpjroveukllar'  # Ensure this is correct
-DEFAULT_FROM_EMAIL = 'tdchsinfo@gmail.com'
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''  # Ensure this is correct
+DEFAULT_FROM_EMAIL = ''
 EMAIL_DEBUG = True
 
 # Email timeout (prevents hanging)
@@ -389,12 +389,12 @@ EMAIL_TIMEOUT = 10
 
 # SITE_URL is already defined above, no need to redefine
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# EMAIL_HOST = 'mail.tdchs.edu.sl' # host of your cPanel email server
+# EMAIL_HOST = '' # host of your cPanel email server
 # EMAIL_PORT = 465 # or any other port that your server uses
 # EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = 'info@tdchs.edu.sl' # your cPanel email address
-# DEFAULT_FROM_EMAIL = 'info@tdchs.edu.sl'
-# EMAIL_HOST_PASSWORD = 'main@2024' # your email password
+# EMAIL_HOST_USER = '' # your cPanel email address
+# DEFAULT_FROM_EMAIL = ''
+# EMAIL_HOST_PASSWORD = '' # your email password
 
 
 #############################################################
