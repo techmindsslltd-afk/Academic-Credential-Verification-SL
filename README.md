@@ -1,281 +1,240 @@
-# [Material Dashboard Django](https://www.creative-tim.com/product/material-dashboard-django) [![Tweet](https://img.shields.io/twitter/url/http/shields.io.svg?style=social&logo=twitter)](https://twitter.com/home?status=Material%20Dashboard,%20a%20free%20Material%20Bootstrap%204%20Admin%20Template%20%E2%9D%A4%EF%B8%8F%20https%3A//bit.ly/2Lyat1Y%20%23bootstrap%20%23material%20%23design%20%23developers%20%23freebie%20%20via%20%40CreativeTim)
+# CertChain - Academic Credential Verification System
 
- ![version](https://img.shields.io/badge/version-1.0.1-blue.svg) [![GitHub issues open](https://img.shields.io/github/issues/creativetimofficial/material-dashboard-django.svg?maxAge=2592000)](https://github.com/creativetimofficial/material-dashboard-django/issues?q=is%3Aopen+is%3Aissue) [![GitHub issues closed](https://img.shields.io/github/issues-closed-raw/creativetimofficial/material-dashboard-django.svg?maxAge=2592000)](https://github.com/creativetimofficial/material-dashboard-django/issues?q=is%3Aissue+is%3Aclosed) [![Join the chat at https://gitter.im/NIT-dgp/General](https://badges.gitter.im/NIT-dgp/General.svg)](https://gitter.im/creative-tim-general/Lobby) [![Chat](https://img.shields.io/badge/chat-on%20discord-7289da.svg)](https://discord.gg/E4aHAQy)
+![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![Django](https://img.shields.io/badge/Django-5.0.3-green.svg)
+![Python](https://img.shields.io/badge/Python-3.12+-blue.svg)
+![License](https://img.shields.io/badge/license-Proprietary-red.svg)
 
-![Material Dashboard Django - Admin Dashboard coded in Django.](https://github.com/creativetimofficial/material-dashboard-django/blob/master/media/material-dashboard-django-intro.gif)
+> **Blockchain-Powered Academic Credential Verification Platform** - A comprehensive system for issuing, verifying, and managing academic credentials with blockchain security and IPFS backup.
 
-<br />
+## 🎯 Overview
 
-> Free product - **Django Dashboard** starter project - Features:
+CertChain is a dual-verification platform for academic credentials that combines blockchain security for partner institutions with global accreditation lookup capabilities. The system enables universities to issue tamper-proof credentials, employers to verify credentials instantly, and students to share their achievements securely.
 
-- Up-to-date [dependencies](./requirements.txt): **Django 3.2.6 LTS**
-- [SCSS compilation](#recompile-css) via **Gulp**
-- UI Kit: **Material Dashboard** (Free Version) provided by **[Creative-Tim](https://www.creative-tim.com/)**
-- Django Codebase - provided by **[AppSeed](https://appseed.us/)**
-- UI-Ready app, SQLite Database, Django Native ORM
-- Modular design, clean code-base
-- Session-Based Authentication, Forms validation
-- Deployment scripts: Docker, Gunicorn / Nginx
+### Key Features
 
-<br />
+- 🔐 **Blockchain Security** - Credentials are cryptographically hashed and stored on an immutable distributed ledger
+- 🌐 **IPFS Backup** - Decentralized storage for credential documents and metadata
+- 🏛️ **Institution Management** - Partner and non-partner institution support with accreditation tracking
+- 👥 **Multi-Role System** - Separate dashboards for Students, Institution Admins, Employers, and Super Admins
+- ✅ **Instant Verification** - Verify credentials by ID or blockchain hash with real-time status checking
+- 📱 **QR Code Generation** - Shareable QR codes for easy credential verification
+- 📄 **Document Upload** - Support for certificate file uploads with hash verification
+- 🔍 **Accreditation Lookup** - Global university accreditation status verification
+- 📊 **Analytics Dashboard** - Comprehensive reporting and activity tracking
+- 🌍 **Multi-language Support** - Support for multiple languages (English, Krio, French, Spanish, etc.)
 
-## Table of Contents
+## 🚀 Quick Start
 
-* [Demo](#demo)
-* [Quick Start](#quick-start)
-* [Documentation](#documentation)
-* [File Structure](#file-structure)
-* [Browser Support](#browser-support)
-* [Resources](#resources)
-* [Reporting Issues](#reporting-issues)
-* [Technical Support or Questions](#technical-support-or-questions)
-* [Licensing](#licensing)
-* [Useful Links](#useful-links)
+### Prerequisites
 
-<br />
+- Python 3.12 or higher
+- pip (Python package manager)
+- Git (for cloning the repository)
 
-## Demo
+### Installation
 
-> To authenticate use the default credentials ***test / ApS12_ZZs8*** or create a new user on the [registration page](https://creativetim-django-dashboard-black-pro.appseed.us/register/).
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/techmindsslltd-afk/Academic-Credential-Verification-SL.git
+   cd Academic-Credential-Verification-SL
+   ```
 
-- **Material Dashboard Django** [Login Page](https://www.creative-tim.com/live/material-dashboard-django)
+2. **Create a virtual environment** (recommended)
+   ```bash
+   # Windows
+   python -m venv venv
+   venv\Scripts\activate
 
-<br />
+   # Linux/Mac
+   python3 -m venv venv
+   source venv/bin/activate
+   ```
 
-## Quick start
+3. **Install dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-> UNZIP the sources or clone the private repository. After getting the code, open a terminal and navigate to the working directory, with product source code.
+4. **Set up environment variables**
+   ```bash
+   # Copy the example environment file
+   cp .env.example .env
+   
+   # Edit .env and add your configuration:
+   # - SECRET_KEY
+   # - Database credentials
+   # - Email settings
+   # - Allowed hosts
+   ```
 
-```bash
-$ # Get the code
-$ git clone https://github.com/creativetimofficial/material-dashboard-django.git
-$ cd material-dashboard-django
-$
-$ # Virtualenv modules installation (Unix based systems)
-$ virtualenv env
-$ source env/bin/activate
-$
-$ # Virtualenv modules installation (Windows based systems)
-$ # virtualenv env
-$ # .\env\Scripts\activate
-$
-$ # Install modules - SQLite Storage
-$ pip3 install -r requirements.txt
-$
-$ # Create tables
-$ python manage.py makemigrations
-$ python manage.py migrate
-$
-$ # Start the application (development mode)
-$ python manage.py runserver # default port 8000
-$
-$ # Start the app - custom port
-$ # python manage.py runserver 0.0.0.0:<your_port>
-$
-$ # Access the web app in browser: http://127.0.0.1:8000/
+5. **Run migrations**
+   ```bash
+   python manage.py makemigrations
+   python manage.py migrate
+   ```
+
+6. **Create a superuser** (optional)
+   ```bash
+   python manage.py createsuperuser
+   ```
+
+7. **Collect static files**
+   ```bash
+   python manage.py collectstatic --noinput
+   ```
+
+8. **Run the development server**
+   ```bash
+   python manage.py runserver
+   ```
+
+9. **Access the application**
+   - Open your browser and navigate to: `http://127.0.0.1:8000/`
+
+## 📁 Project Structure
+
+```
+CertChain/
+│
+├── apps/
+│   ├── accounts/          # User authentication and profile management
+│   ├── credentials/       # Credential issuance and verification
+│   ├── institutions/      # Institution management and accreditation
+│   ├── verifications/     # Verification logs and tracking
+│   ├── accreditation/     # Accreditation status management
+│   ├── home/              # Main views and public pages
+│   ├── static/             # Static files (CSS, JS, images)
+│   └── templates/          # HTML templates
+│
+├── core/                   # Project configuration
+│   ├── settings.py        # Django settings
+│   ├── urls.py            # Main URL configuration
+│   └── wsgi.py            # WSGI configuration
+│
+├── media/                  # User-uploaded files (excluded from git)
+├── staticfiles/            # Collected static files (excluded from git)
+├── requirements.txt        # Python dependencies
+├── manage.py               # Django management script
+└── README.md               # This file
 ```
 
-> Note: To use the app, please access the registration page and create a new user. After authentication, the app will unlock the private pages.
+## 🔑 User Roles
 
-<br />
+### Student
+- View issued credentials
+- Share credentials with employers
+- Download credential documents
+- View verification history
 
-## Documentation
-The documentation for the **Material Dashboard Django** is hosted at our [website](https://demos.creative-tim.com/material-dashboard-django/docs/1.0/getting-started/getting-started-django.html).
+### Institution Admin
+- Issue new credentials
+- Manage student credentials
+- Upload certificate documents
+- View institution statistics
+- Revoke credentials if needed
 
-<br />
+### Employer
+- Verify credentials by ID or hash
+- View credential details and status
+- Check institution accreditation
+- Track verification history
+- Monthly verification limits
 
-## File Structure
-Within the download you'll find the following directories and files:
+### Super Admin
+- Full system access
+- Manage all users and institutions
+- System configuration
+- Analytics and reporting
 
-```bash
-< PROJECT ROOT >
-   |
-   |-- core/                               # Implements app configuration
-   |    |-- settings.py                    # Defines Global Settings
-   |    |-- wsgi.py                        # Start the app in production
-   |    |-- urls.py                        # Define URLs served by all apps/nodes
-   |
-   |-- apps/
-   |    |
-   |    |-- home/                          # A simple app that serve HTML files
-   |    |    |-- views.py                  # Serve HTML pages for authenticated users
-   |    |    |-- urls.py                   # Define some super simple routes  
-   |    |
-   |    |-- authentication/                # Handles auth routes (login and register)
-   |    |    |-- urls.py                   # Define authentication routes  
-   |    |    |-- views.py                  # Handles login and registration  
-   |    |    |-- forms.py                  # Define auth forms (login and register) 
-   |    |
-   |    |-- static/
-   |    |    |-- <css, JS, images>         # CSS files, Javascripts files
-   |    |
-   |    |-- templates/                     # Templates used to render pages
-   |         |-- includes/                 # HTML chunks and components
-   |         |    |-- navigation.html      # Top menu component
-   |         |    |-- sidebar.html         # Sidebar component
-   |         |    |-- footer.html          # App Footer
-   |         |    |-- scripts.html         # Scripts common to all pages
-   |         |
-   |         |-- layouts/                   # Master pages
-   |         |    |-- base-fullscreen.html  # Used by Authentication pages
-   |         |    |-- base.html             # Used by common pages
-   |         |
-   |         |-- accounts/                  # Authentication pages
-   |         |    |-- login.html            # Login page
-   |         |    |-- register.html         # Register page
-   |         |
-   |         |-- home/                      # UI Kit Pages
-   |              |-- index.html            # Index page
-   |              |-- 404-page.html         # 404 page
-   |              |-- *.html                # All other pages
-   |
-   |-- requirements.txt                     # Development modules - SQLite storage
-   |
-   |-- .env                                 # Inject Configuration via Environment
-   |-- manage.py                            # Start the app - Django default start script
-   |
-   |-- ************************************************************************
-```
+## 🔐 Security Features
 
-<br />
+- **CSRF Protection** - All forms protected against cross-site request forgery
+- **Session Security** - Secure session management with timeout
+- **Password Hashing** - Bcrypt password hashing
+- **Blockchain Hashing** - SHA-256 hashing for credential integrity
+- **Document Verification** - File hash verification for uploaded certificates
+- **Role-Based Access Control** - Granular permissions per user role
 
-> The bootstrap flow
+## 🌐 API Endpoints
 
-- Django bootstrapper `manage.py` uses `core/settings.py` as the main configuration file
-- `core/settings.py` loads the app magic from `.env` file
-- Redirect the guest users to Login page
-- Unlock the pages served by *app* node for authenticated users
+### Public Endpoints
+- `GET /api/v1/institutions/` - List institutions (with filtering)
+- `POST /api/v1/credentials/verify/` - Verify a credential
+- `GET /credentials/verify/<credential_id>/` - Public verification page
 
-<br />
+### Authenticated Endpoints
+- `GET /api/v1/credentials/` - List credentials (role-based)
+- `POST /api/v1/credentials/issue/` - Issue new credential
+- `PUT /api/v1/credentials/<id>/` - Update credential
+- `POST /api/v1/credentials/<id>/revoke/` - Revoke credential
 
-## Recompile CSS
+## 🛠️ Technology Stack
 
-To recompile SCSS files, follow this setup:
+- **Backend**: Django 5.0.3
+- **Frontend**: HTML5, CSS3, JavaScript (Vanilla JS)
+- **Database**: SQLite (development) / PostgreSQL (production)
+- **API**: Django REST Framework
+- **Authentication**: JWT + Session Authentication
+- **Blockchain**: SHA-256 hashing (ready for blockchain integration)
+- **Storage**: IPFS-ready (for decentralized storage)
 
-<br />
+## 📦 Dependencies
 
-**Step #1** - Install tools
+Key dependencies include:
+- Django 5.0.3
+- Django REST Framework
+- django-filter
+- python-decouple (for environment variables)
+- Pillow (for image processing)
+- And more... (see `requirements.txt`)
 
-- [NodeJS](https://nodejs.org/en/) 12.x or higher
-- [Gulp](https://gulpjs.com/) - globally 
-    - `npm install -g gulp-cli`
-- [Yarn](https://yarnpkg.com/) (optional) 
+## 🚢 Deployment
 
-<br />
+### Production Checklist
 
-**Step #2** - Change the working directory to `assets` folder
+- [ ] Set `DEBUG = False` in settings
+- [ ] Configure proper database (PostgreSQL recommended)
+- [ ] Set up environment variables
+- [ ] Configure static file serving
+- [ ] Set up SSL/HTTPS
+- [ ] Configure email backend
+- [ ] Set up backup system
+- [ ] Configure logging
+- [ ] Set up monitoring
+
+### Docker Deployment
 
 ```bash
-$ cd apps/static/assets
+docker-compose up -d
 ```
 
-<br />
+## 🤝 Contributing
 
-**Step #3** - Install modules (this will create a classic `node_modules` directory)
+This is a proprietary project by TechMinds SL Ltd. For contributions or inquiries, please contact the development team.
 
-```bash
-$ npm install
-// OR
-$ yarn
-```
+## 📄 License
 
-<br />
+Copyright (c) 2024 - present TechMinds SL Ltd
 
-**Step #4** - Edit & Recompile SCSS files 
+All rights reserved. This software is proprietary and confidential.
 
-```bash
-$ gulp scss
-```
+## 📞 Support
 
-The generated file is saved in `static/assets/css` directory.
+For support, issues, or questions:
+- **Organization**: TechMinds SL Ltd
+- **Repository**: [Academic-Credential-Verification-SL](https://github.com/techmindsslltd-afk/Academic-Credential-Verification-SL)
 
-<br /> 
+## 🔄 Changelog
 
-## Deployment
+See [CHANGELOG.md](CHANGELOG.md) for version history and updates.
 
-The app is provided with a basic configuration to be executed in [Docker](https://www.docker.com/), [Gunicorn](https://gunicorn.org/), and [Waitress](https://docs.pylonsproject.org/projects/waitress/en/stable/).
+## 🙏 Acknowledgments
 
-### [Docker](https://www.docker.com/) execution
+- Built with Django and Django REST Framework
+- UI components inspired by Material Design principles
+- Blockchain concepts implemented for credential security
+
 ---
 
-The application can be easily executed in a docker container. The steps:
-
-> Get the code
-
-```bash
-$ git clone https://github.com/creativetimofficial/material-dashboard-django.git
-$ cd material-dashboard-django
-```
-
-> Start the app in Docker
-
-```bash
-$ sudo docker-compose pull && sudo docker-compose build && sudo docker-compose up -d
-```
-
-Visit `http://localhost:85` in your browser. The app should be up & running.
-
-<br />
-
-## Browser Support
-
-At present, we officially aim to support the last two versions of the following browsers:
-
-<img src="https://s3.amazonaws.com/creativetim_bucket/github/browser/chrome.png" width="64" height="64"> <img src="https://s3.amazonaws.com/creativetim_bucket/github/browser/firefox.png" width="64" height="64"> <img src="https://s3.amazonaws.com/creativetim_bucket/github/browser/edge.png" width="64" height="64"> <img src="https://s3.amazonaws.com/creativetim_bucket/github/browser/safari.png" width="64" height="64"> <img src="https://s3.amazonaws.com/creativetim_bucket/github/browser/opera.png" width="64" height="64">
-
-<br />
-
-## Resources
-
-- Demo: <https://www.creative-tim.com/live/material-dashboard-django>
-- Download Page: <https://www.creative-tim.com/product/material-dashboard-django>
-- Documentation: <https://demos.creative-tim.com/material-dashboard-django/docs/1.0/getting-started/getting-started-django.html>
-- License Agreement: <https://www.creative-tim.com/license>
-- Support: <https://www.creative-tim.com/contact-us>
-- Issues: [Github Issues Page](https://github.com/creativetimofficial/material-dashboard-django/issues)
-
-<br />
-
-## Reporting Issues
-
-We use GitHub Issues as the official bug tracker for the **Material Dashboard Django**. Here are some advices for our users that want to report an issue:
-
-1. Make sure that you are using the latest version of the **Material Dashboard Django**. Check the CHANGELOG from your dashboard on our [website](https://www.creative-tim.com/).
-2. Providing us reproducible steps for the issue will shorten the time it takes for it to be fixed.
-3. Some issues may be browser-specific, so specifying in what browser you encountered the issue might help.
-
-<br />
-
-## Technical Support or Questions
-
-If you have questions or need help integrating the product please [contact us](https://www.creative-tim.com/contact-us) instead of opening an issue.
-
-<br />
-
-## Licensing
-
-- Copyright 2019 - present [Creative Tim](https://www.creative-tim.com/)
-- Licensed under [Creative Tim EULA](https://www.creative-tim.com/license)
-
-<br />
-
-## Useful Links
-
-- [More products](https://www.creative-tim.com/bootstrap-themes) from Creative Tim
-- [Tutorials](https://www.youtube.com/channel/UCVyTG4sCw-rOvB9oHkzZD1w)
-- [Freebies](https://www.creative-tim.com/bootstrap-themes/free) from Creative Tim
-- [Affiliate Program](https://www.creative-tim.com/affiliates/new) (earn money)
-
-<br />
-
-## Social Media
-
-- Twitter: <https://twitter.com/CreativeTim>
-- Facebook: <https://www.facebook.com/CreativeTim>
-- Dribbble: <https://dribbble.com/creativetim>
-- Instagram: <https://www.instagram.com/CreativeTimOfficial>
-
-<br />
-
----
-[Material Dashboard Django](https://www.creative-tim.com/product/material-dashboard-django) - Provided by [Creative Tim](https://www.creative-tim.com/) and [AppSeed](https://appseed.us)
+**Made with ❤️ by TechMinds SL Ltd**
