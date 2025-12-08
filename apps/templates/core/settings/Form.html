@@ -1,0 +1,185 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} {{ contentType }} {% endblock %} 
+{% block titlePage %} {{ contentType }} {% endblock %} 
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %} 
+<style> 
+/* main.css */
+.django-ckeditor-widget {
+  width: 100%;
+}
+
+
+.ck-editor__editable {
+    /* min-height: 600px !important; */
+    width: 100% !important; 
+}
+.feedsMain{
+margin-left:10%;
+margin-right:10%;
+}
+
+@media screen and (max-width: 960px) {
+.feedsMain{
+margin-left:5%;
+margin-right:5%;
+}
+}
+@media screen and (max-width: 768px) {
+.feedsMain{
+margin-left:2%;
+margin-right:2%;
+}
+}
+
+@media screen and (max-width: 480px) {
+.feedsMain{
+margin-left:0%;
+margin-right:0%;
+}
+}
+</style>
+<div class="content feedsMain">
+				<div class="card">
+					<div class="card-header card-header-icon card-header-rose">
+						
+						<h4 class="card-title">{{ contentType }}
+							<!-- <small class="category">Complete Students details</small> --></h4>
+					</div>
+					<div class="card-body">
+						<form  id="defaultForm"
+						      action=""
+						      role="form"
+						      data-toggle="validator"
+						      method="POST"
+						      enctype="multipart/form-data">
+							   <h6 class="card-category">
+							  {% if msg %}
+								<span class="text-danger">{{ msg }}</span>
+							  
+							  {% endif %}  
+						  </h6>
+						  
+								<br />
+					{% csrf_token %} 
+              <div class="row ">
+			    <div >
+                         {{ form.media }}
+					<ul>
+						{{ form.as_ul }}
+					</ul>
+
+              <br />
+							
+								<div  class="card-footer d-flex justify-content-end py-6">
+								<button type="submit" id="save_editor"
+								        class="btn  btn-primary pull-right">Submit</button>
+								
+								</div>
+								<div class="clearfix"/>
+							
+							</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<!--  end card  -->
+			</div>
+			<!-- end col-md-12 -->
+
+<script>	
+let content;
+let editor;
+
+ClassicEditor
+    .create( document.querySelector( '#id_content' ) )
+    .then( newEditor => {
+        content = newEditor;
+        editor = newEditor; // Assign editor to the global variable
+        
+        // Now the addTextToEditor function is in the global scope
+    })
+    .catch( error => {
+        console.error( error );
+    }); 
+
+// Add text to the editor
+function addTextToEditor(text) {
+    editor.setData(text);
+}
+
+// Check if ClassicEditor instance is empty
+function isEditorEmpty(editor) {
+    const editorData = editor.getData().trim(); // Get and trim the content
+
+    return editorData === ''; // Return true if content is empty, false otherwise
+}
+
+  
+document.querySelector('#save_editor').addEventListener('click', () => {
+  Swal.fire({
+    title: "Are you sure you want to save?",
+    text: "Saving will override any existing content",
+    icon: "warning",
+    showCancelButton: true,
+    buttonsStyling: false,
+    confirmButtonText: "Yes, Save!",
+    cancelButtonText: "No, cancel",
+    customClass: {
+      confirmButton: "btn fw-bold btn-danger",
+      cancelButton: "btn fw-bold btn-active-light-primary"
+    }
+  }).then(function (result) {
+    if (result.isConfirmed) {
+      var titleInput = document.querySelector('[name="tag"]').value;
+
+      // Check if the title input is empty
+      if (titleInput === '') {
+        Swal.fire("Error Saving!", "Please enter a tag", "error");
+      } else {
+            // Proceed with saving data
+            saveData();
+         
+        }
+      
+    } else {
+      Swal.fire("Your content is safe!");
+    }
+  });
+});
+
+function saveData() {
+	if (isEditorEmpty(editor)){
+     Swal.fire("Error Saving!", "Please enter content", "error");
+	}else{	
+  var dataString = {
+    "content": editor.getData(),
+	"posttype": "{{postpk}}",
+	"tag":document.querySelector('#id_tag').value,
+    "csrfmiddlewaretoken": document.querySelector('[name="csrfmiddlewaretoken"]').value
+  };
+
+  $.ajax({
+    type: "POST",
+    url: "/save_content",
+    data: dataString,
+    success: function (data) {
+      if (data.status === 'success') {
+        Swal.fire('Saved successfully', {
+          icon: "success",
+        }).then((result) => {
+          location.replace("{% url 'content' %}");
+        });
+      } else {
+        Swal.fire("Error Saving!", "Please try again", "error");
+      }
+    }
+  });
+}
+}
+
+</script>
+{% endblock content %}

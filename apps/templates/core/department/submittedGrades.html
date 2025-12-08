@@ -1,0 +1,421 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Submitted Grades {% endblock %} 
+{% block titlePage %} Submitted Grades {% endblock %} 
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %} 
+<style>
+        .glyphicon-ok:before {
+        content: "\f00c";
+    }
+    .glyphicon-remove:before {
+        content: "\f00d";
+    }
+    .glyphicon {
+        display: inline-block;
+        font: normal normal normal 14px/1 FontAwesome;
+        font-size: inherit;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+	</style>
+	
+	{% if  canApprove %}
+				<div class="content">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card">
+					<div class="card-body">
+					
+						<div class="row">
+						<div class="col-12 ">
+						<h6>{{moduleSheet.0.course}} -- {{moduleSheet.0.year}} -- {{moduleSheet.0.module}}-- Grades</h6>
+						<div class="row" style="padding:1%">
+						<div class="col-3" style="border:1px gray solid;margin: 3%">
+						<h6> Lecturer </h6>
+						<div class="row">
+
+						<div class="col-6">
+						<div class="togglebutton">
+							<label>
+								<input {% if LecturerCA %} checked="" data-onof="ON" {% else %} data-onof="OFF" {% endif %} href="#myModal" data-toggle="modal" data-name="{{moduleSheet.0.course}} -- {{moduleSheet.0.year}}-- Grades"   data-type="lecturer_CA" data-level="{{moduleSheet.0.level.id}}" data-faculty="{{moduleSheet.0.faculty.id}}" data-department="{{moduleSheet.0.department.id}}" data-course="{{moduleSheet.0.course.id}}"   data-module="{{moduleSheet.0.module.id}}" data-lecturer="{{moduleSheet.0.lecturer.id}}" data-year="{{moduleSheet.0.year.id}}" data-typegrades="CA" data-session="{{moduleSheet.0.accademicSession.id}}"  id = "togBtn" class= "approve" type="checkbox"  {% if moduleSheet.0.HoD_approval_CA  %} disabled {% elif is_not_lecturer %}  disabled {% endif %} >
+									<span class="toggle"></span>
+									  {% if LecturerCA %} 
+											<p >CA Grades Published<p> 
+										 {% else %}
+										  <p >CA Grades  <br>not yet  Published <p>  
+										{% endif %}
+										  </label>
+						</div>			
+						</div>	
+							 
+						<div class="col-6">
+						<div class="togglebutton">
+							<label>
+								<input {% if LecturerEXAM %} checked="" data-onof="ON" {% else %} data-onof="OFF" {% endif %} href="#myModal" data-toggle="modal" data-name="{{moduleSheet.0.course}} -- {{moduleSheet.0.year}}-- Grades"  data-type="lecturer_EXAM" data-level="{{moduleSheet.0.level.id}}" data-faculty="{{moduleSheet.0.faculty.id}}" data-department="{{moduleSheet.0.department.id}}" data-course="{{moduleSheet.0.course.id}}" data-module="{{moduleSheet.0.module.id}}" data-lecturer="{{moduleSheet.0.lecturer.id}}" data-year="{{moduleSheet.0.year.id}}"  data-typegrades="EXAM" data-session="{{moduleSheet.0.accademicSession.id}}"   id = "hod" class= "approve" type="checkbox" {% if moduleSheet.0.HoD_approval_Exam  %} disabled {% elif  is_not_lecturer %}  disabled {% endif %}>
+									<span class="toggle"></span>
+									  {% if LecturerEXAM %} 
+										 <p >Exam Grades Published<p> 
+										 {% else %}
+										  <p >Exam Grades <br>not yet  Published <p> 
+										{% endif %}
+										  </label>
+							 </div>			
+							 </div>		
+						
+					 	 </div>			
+							 </div>
+							 
+						<div class="col-3" style="border:1px gray solid;margin: 3%">
+						<h6> HoD </h6>
+						<div class="row">
+
+						<div class="col-6">
+						<div class="togglebutton">
+							<label>
+								<input {% if HoDCA %} checked="" data-onof="ON" {% else %} data-onof="OFF" {% endif %} href="#myModal" data-toggle="modal" data-name="{{moduleSheet.0.course}} -- {{moduleSheet.0.year}}-- Grades"   data-type="HoD_CA" data-level="{{moduleSheet.0.level.id}}" data-faculty="{{moduleSheet.0.faculty.id}}" data-department="{{moduleSheet.0.department.id}}" data-course="{{moduleSheet.0.course.id}}" data-module="{{moduleSheet.0.module.id}}" data-lecturer="{{moduleSheet.0.lecturer.id}}" data-year="{{moduleSheet.0.year.id}}"  data-typegrades="CA" data-session="{{moduleSheet.0.accademicSession.id}}"  id = "hod1" class= "approve" type="checkbox" {% if moduleSheet.0.Dean_approval_CA  %} disabled {% elif is_not_HoD %}  disabled {% endif %} >
+									<span class="toggle"></span>
+									  {% if HoDCA %} 
+											<p >CA Grades Approved<p> 
+										 {% else %}
+										  <p >CA Grades  <br>not yet Approved<p>  
+										{% endif %}
+										  </label>
+						</div>			
+						</div>	
+							 
+						<div class="col-6">
+						<div class="togglebutton">
+							<label>
+								<input {% if HoDEXAM %} checked="" data-onof="ON" {% else %} data-onof="OFF" {% endif %} href="#myModal" data-toggle="modal" data-name="{{moduleSheet.0.course}} -- {{moduleSheet.0.year}}-- Grades"  data-type="HoD_EXAM" data-level="{{moduleSheet.0.level.id}}" data-faculty="{{moduleSheet.0.faculty.id}}" data-department="{{moduleSheet.0.department.id}}" data-course="{{moduleSheet.0.course.id}}" data-module="{{moduleSheet.0.module.id}}" data-lecturer="{{moduleSheet.0.lecturer.id}}" data-year="{{moduleSheet.0.year.id}}"  data-typegrades="EXAM" data-session="{{moduleSheet.0.accademicSession.id}}"   id = "hod" class= "approve" type="checkbox"  {% if moduleSheet.0.Dean_approval_EXAM  %} disabled {% elif is_not_HoD %}  disabled {% endif %}>
+									<span class="toggle"></span>
+									  {% if HoDEXAM %} 
+										 <p >Exam Grades Approved<p> 
+										 {% else %}
+										  <p >Exam Grades <br>not yet  Approved <p> 
+										{% endif %}
+										  </label>
+							 </div>			
+							 </div>		
+						
+					 	 </div>			
+							 </div>
+							 
+					<div class="col-3" style="border:1px gray solid;margin: 3%">
+						<h6> Dean </h6>
+						<div class="row">
+
+						<div class="col-6">
+						<div class="togglebutton">
+							<label>
+								<input {% if DeanCA %} checked="" data-onof="ON" {% else %} data-onof="OFF" {% endif %} href="#myModal" data-toggle="modal" data-name="{{moduleSheet.0.course}} -- {{moduleSheet.0.year}}-- Grades"   data-type="Dean_CA" data-level="{{moduleSheet.0.level.id}}" data-faculty="{{moduleSheet.0.faculty.id}}" data-department="{{moduleSheet.0.department.id}}" data-course="{{moduleSheet.0.course.id}}" data-module="{{moduleSheet.0.module.id}}" data-lecturer="{{moduleSheet.0.lecturer.id}}" data-year="{{moduleSheet.0.year.id}}"  data-typegrades="CA" data-session="{{moduleSheet.0.accademicSession.id}}"  id = "hod1" class= "approve" type="checkbox" {% if is_not_Dean %}  disabled {% endif %} >
+									<span class="toggle"></span>
+									  {% if DeanCA %} 
+											<p >CA Grades Approved<p> 
+										 {% else %}
+										  <p >CA Grades  <br>not yet  Approved <p>  
+										{% endif %}
+										  </label>
+						</div>			
+						</div>	
+							 
+						<div class="col-6">
+						<div class="togglebutton">
+							<label>
+								<input {% if DeanEXAM %} checked="" data-onof="ON" {% else %} data-onof="OFF" {% endif %} href="#myModal" data-toggle="modal" data-name="{{moduleSheet.0.course}} --{{moduleSheet.0.year}}-- Grades"  data-type="Dean_EXAM" data-level="{{moduleSheet.0.level.id}}" data-faculty="{{moduleSheet.0.faculty.id}}" data-department="{{moduleSheet.0.department.id}}" data-course="{{moduleSheet.0.course.id}}"  data-module="{{moduleSheet.0.module.id}}" data-lecturer="{{moduleSheet.0.lecturer.id}}" data-year="{{moduleSheet.0.year.id}}"  data-typegrades="EXAM" data-session="{{moduleSheet.0.accademicSession.id}}"   id = "hod" class= "approve" type="checkbox" {% if is_not_Dean %}  disabled {% endif %}>
+									<span class="toggle"></span>
+									  {% if DeanEXAM %} 
+										 <p >Exam Grades Approved<p> 
+										 {% else %}
+										  <p >Exam Grades <br>not yet  Approved <p> 
+										{% endif %}
+										  </label>
+							 </div>			
+							 </div>		
+						
+					 	 </div>			
+							 </div>
+							 
+						</div> 
+							</div>
+						</div>
+							</div>
+						</div>
+							</div>
+						</div>
+							</div>
+						</div>
+						{% endif %}
+<div class="content">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card">
+					<div class="card-header card-header-primary card-header-icon">
+						<h4 class="card-title">Submitted Grades</h4>
+					</div>
+					<div class="card-body">
+						<div class="row">
+						<div class="col-12 text-right">
+							 
+											
+							 
+							</div>
+						</div>  
+
+					<div class="tab-content tab-space">
+						
+						<div class="example_wrapper">
+							<div id="toolbar1"
+							     class="select">
+								<select class="form-control">
+									<option value="">Export Basic</option>
+									<option value="all">Export All</option>
+									<option value="selected">Export Selected</option>
+								</select>
+							</div>
+							<table id="fresh-table"
+							       data-toggle="table"
+							       class="table"
+							       id="table"
+							       data-toolbar="#toolbar1"
+							       data-search="true"
+							       data-show-toggle="true"
+							       data-show-fullscreen="true"
+							       data-show-columns="true"
+							       data-show-columns-toggle-all="true"
+							       data-show-export="true"
+							       data-click-to-select="true"
+							       data-minimum-count-columns="2"
+							       data-pagination="true"
+							       data-id-field="id"
+							       data-page-list="[10, 25, 50, 100, all]"
+							       data-show-footer="true"
+							       data-sort-priority='[{"sortName": "id","sortOrder":"desc"},{"sortName":"name","sortOrder":"desc"}]'
+							       data-show-multi-sort="true"
+							       data-show-jump-to="true"
+							       data-response-handler="responseHandler"
+							       data-resizable="true"
+							       data-advanced-search="true"
+							       data-id-table="advancedTable"
+							       data-show-print="true"
+							       data-filter-control="true"
+								   data-show-footer="true"
+							       data-show-search-clear-button="true">
+								<thead>
+								<th  data-field="Name"
+									    data-filter-control="input"
+										data-sortable="true">Name</th>
+									<th  data-field="Module"
+									    data-filter-control="input"
+										data-sortable="true">Modules</th>
+									<th  data-field="CA" data-filter-control="input"
+										data-sortable="true">CA</th>
+									<th  data-field="Exam" data-filter-control="input"
+										data-sortable="true">Exam</th>
+									<th  data-field="total"
+									    data-filter-control="input"
+										data-sortable="true">Total</th>
+									<th  data-field="gradePoint"
+									    data-filter-control="input"
+										data-sortable="true">Grade Point</th>
+									<th  data-field="gradeComment"
+									    data-filter-control="input"
+										data-sortable="true">Comment</th>
+									<th  data-field="Status"
+									    data-filter-control="input"
+										data-sortable="true">Module Status</th>
+									<th  data-field="Course"
+									    data-filter-control="input"
+										data-sortable="true">Course</th>
+									<th  data-field="Semester"
+									    data-filter-control="input"
+									    data-sortable="true">Semester</th>
+									<th  data-field="year"
+									    data-filter-control="input"
+										data-sortable="true">Year</th>
+									<th  data-field="Academic"
+									    data-filter-control="input"
+										data-sortable="true">Academic Session</th>
+								</thead>
+								<tbody>
+							
+									 
+									 {% for module in moduleSheet %}
+									<tr class='clickable-row'>
+										<td>{{ module.regNo}} </td>
+										<td>{{ module.module.module_name}}</td>
+										<td class="ca">{{ module.ca}}</td>
+										<td  class= "getId exam" id="{{ module.id}}" >{{ module.exam}}</td>
+										<td>{{ module.total}}</td>
+										<td>{{ module.gradePoint}}</td>
+										<td>{{ module.gradeComment}}</td>
+										<td>{{ module.moduleStatus}}</td>
+										<td>{{ module.course}}</td>
+										<td>{{ module.semester}}</td>
+										<td>{{ module.year}}</td>
+										<td>{{ module.accademicSession}}</td>
+										
+										</tr>
+										 {% endfor %}
+									</tbody>
+								</table>
+							</div>
+						
+						</div>
+						<!-- end content-->
+					</div>
+					<!--  end card  -->
+				</div>
+				<!-- end col-md-12 -->
+			</div>
+			<!-- end row -->
+		</div>
+	</div>
+<!-- Modal HTML -->
+
+<!-- Modal HTML -->
+<div id="myModal" class="modal fade">
+												<div class="modal-dialog modal-confirm">
+													<div class="modal-content">
+														<div class="modal-header flex-column">
+															<div class="icon-box">
+																<i class="material-icons">&#xE5CD;</i>
+															</div>						
+															<h4 class="modal-title w-100">Are you sure?</h4>	
+															<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+														</div>
+														<div class="modal-body">
+															<p>Do you really want to Approve/Unapprove <b id="yearTimetable"></b>? After approved by the Dean and HoD, Students would be able to view Grades.</p>
+															<!-- <p>Do you really want to delete these records? This process cannot be undone.</p>-->
+														</div>
+														<div class="modal-footer justify-content-center">
+															<button type="button" id= "Cancel" class="btn btn-secondary " data-dismiss="modal">Cancel</button>
+															<button type="button"  id="myBtn"class="ApproveButton btn btn-danger">Approve/Unapprove</button>
+														</div>
+													</div>
+												</div>
+	</div>
+	
+	
+	<input style="display:none"type="text" id="yearId"name="yearId"/>	
+   	<input style="display:none"type="text" id="className"name="className"/>	
+   	<input style="display:none"type="text" id="typegrades"name="typegrades"/>	
+  	<input style="display:none"type="text" id="session"name="session"/>	
+	
+   	<input style="display:none"type="text" id="course"name="course"/>	
+   	<input style="display:none"type="text" id="faculty"name="faculty"/>	
+  	<input style="display:none"type="text" id="department"name="department"/>
+  	<input style="display:none"type="text" id="level"name="level"/>	
+  	<input style="display:none"type="text" id="module"name="module"/>
+  	<input style="display:none"type="text" id="lecturer"name="lecturer"/>
+  	<input style="display:none"type="text" id="onof"name="onof"/>	
+  	<input style="display:none"type="text" id="type"name="type"/>	
+										
+	
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script>
+
+$(document).on('click', '.approve', function (e) {
+    e.preventDefault();
+   
+   var name = $(this).data('name');
+   var year = $(this).data('year');
+   var typegrades = $(this).data('typegrades');
+   var session = $(this).data('session');    
+   var course = $(this).data('course');
+   var faculty = $(this).data('faculty');
+   var department = $(this).data('department');
+   var level = $(this).data('level');  
+   var module = $(this).data('module');
+   var lecturer = $(this).data('lecturer'); 
+   var onof = $(this).data('onof');  
+   var type = $(this).data('type'); 
+
+   document.getElementById("yearId").value = year;
+   document.getElementById("typegrades").value = typegrades;
+   document.getElementById("session").value = session;
+   
+   document.getElementById("course").value = course;
+   document.getElementById("faculty").value = faculty;
+   document.getElementById("department").value = department;
+   document.getElementById("level").value = level;
+   document.getElementById("module").value = module;
+   document.getElementById("lecturer").value = lecturer;
+   document.getElementById("onof").value = onof;
+   document.getElementById("type").value = type;
+   var name = document.getElementById("className").value = name;
+   document.getElementById("yearTimetable").innerHTML = name;
+});
+$(document).on('click', '.ApproveButton', function (e) {
+    e.preventDefault();
+
+       var name = document.getElementById("className").value;
+	   var year = document.getElementById("yearId").value;
+	   var typegrades = document.getElementById("typegrades").value;
+	   var session = document.getElementById("session").value; 
+	   
+
+	   var course = document.getElementById("course").value;
+	   var faculty = document.getElementById("faculty").value;
+	   var department = document.getElementById("department").value;
+	   var level = document.getElementById("level").value;
+	   var module = document.getElementById("module").value;
+	   var lecturer = document.getElementById("lecturer").value;
+	   var onof = document.getElementById("onof").value;
+	   var type = document.getElementById("type").value;
+				
+	   var data = {
+	   "typegrades": typegrades, 
+	   "type": type, 
+	    "year": year,
+	    "lecturer": lecturer,
+	    "module": module,
+	    "course": course,
+	    "faculty": faculty,
+	    "department": department,
+	    "session": session,
+	    "level": level,
+	    "onof": onof,
+	   };
+	   $.ajax({ // 
+				type:'POST',
+				url: '/publiched_Grades',
+				data: data,
+				success: function(submitted) {
+				if (submitted) {
+					swal("Grades approved/Unapproved Successfully", {
+					icon: "success",
+					buttons: true,
+						 })
+						  .then((result) => {
+						   //td.html(grade);
+						   location.reload()
+                                });
+				}
+				}
+			});
+
+   
+});
+</script>	
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <script>
+    $(document).ready(function() {
+      // Javascript method's body can be found in assets/js/demos.js
+      md.initDashboardPageCharts();
+
+    });
+  </script>
+
+{% endblock javascripts %}

@@ -1,0 +1,501 @@
+{% load static %} 
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{% endblock %} </title>
+  <meta name="description" content="Verify academic credentials instantly with blockchain-powered security. Trusted by universities and employers worldwide. Prevent credential fraud in Sierra Leone and beyond.">
+  <meta name="keywords" content="blockchain, credential verification, academic certificates, Sierra Leone, university degrees, fraud prevention, UNESCO WHED">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'assets/guest/css/styles.css' %}">
+  <!-- Select2 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
+  <style>
+    /* Custom Select2 styling to match form inputs */
+    .select2-container--bootstrap-5 .select2-selection {
+      min-height: 44px;
+      border: 1px solid var(--border-color, #e5e7eb);
+      border-radius: 0.5rem;
+      background-color: var(--bg-primary, #ffffff);
+    }
+    .select2-container--bootstrap-5 .select2-selection--single .select2-selection__rendered {
+      line-height: 42px;
+      padding-left: 12px;
+      color: var(--text-primary, #111827);
+    }
+    .select2-container--bootstrap-5 .select2-selection--single .select2-selection__arrow {
+      height: 42px;
+      right: 12px;
+    }
+    .select2-container--bootstrap-5.select2-container--focus .select2-selection,
+    .select2-container--bootstrap-5.select2-container--open .select2-selection {
+      border-color: var(--accent-primary, #667eea);
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+    .select2-dropdown {
+      border: 1px solid var(--border-color, #e5e7eb);
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+    .select2-results__option {
+      padding: 8px 12px;
+    }
+    .select2-results__option--highlighted {
+      background-color: var(--accent-primary, #667eea);
+      color: white;
+    }
+    /* Ensure Select2 dropdown appears above modal */
+    .select2-container {
+      z-index: 9999 !important;
+    }
+    .select2-dropdown {
+      z-index: 10000 !important;
+    }
+    /* Fix for modal overflow */
+    .modal-overlay {
+      z-index: 1000;
+    }
+    .modal-overlay.show {
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="container navbar-inner">
+      <a href="#" class="navbar-logo" data-page="home">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+          <path d="M2 17l10 5 10-5"/>
+          <path d="M2 12l10 5 10-5"/>
+        </svg>
+        {{settings.site_name_abb}}
+      </a>
+      
+      <div class="navbar-links" id="navbar-links">
+        <a href="#" class="navbar-link active" data-page="home">Home</a>
+        <a href="#" class="navbar-link" data-page="verify">Verify</a>
+        <!-- Added new Accreditation nav link -->
+        <a href="#" class="navbar-link" data-page="accreditation">Accreditation</a>
+        <a href="#" class="navbar-link" data-page="wallet">My Wallet</a>
+        <a href="#" class="navbar-link" data-page="institutions">Institutions</a>
+        <a href="#" class="navbar-link" data-page="employers">Employers</a>
+        <a href="#" class="navbar-link" data-page="api">API</a>
+      </div>
+      
+      <div class="navbar-actions">
+        <button class="theme-toggle" id="theme-toggle" aria-label="Toggle theme">
+          <svg class="moon-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+          <svg class="sun-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="5"/>
+            <line x1="12" y1="1" x2="12" y2="3"/>
+            <line x1="12" y1="21" x2="12" y2="23"/>
+            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+            <line x1="1" y1="12" x2="3" y2="12"/>
+            <line x1="21" y1="12" x2="23" y2="12"/>
+            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+          </svg>
+        </button>
+        
+        <div style="position: relative;">
+          <button class="notification-btn" id="notification-btn" aria-label="Notifications"  style="display:none">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+            <span class="notification-badge">5</span>
+          </button>
+          
+          <div class="notification-panel" id="notification-panel">
+            <div class="notification-header">
+              <span class="notification-title">Notifications</span>
+              <button class="btn btn-ghost btn-sm">Mark all read</button>
+            </div>
+            <div class="notification-list">
+              <div class="notification-item unread">
+                <div class="notification-icon" style="color: var(--success);">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m9 12 2 2 4-4"/><circle cx="12" cy="12" r="10"/>
+                  </svg>
+                </div>
+                <div class="notification-content">
+                  <p class="notification-text">Your credential was verified by <strong>TechCorp Inc.</strong></p>
+                  <span class="notification-time">2 minutes ago</span>
+                </div>
+              </div>
+              <div class="notification-item unread">
+                <div class="notification-icon" style="color: var(--info);">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                  </svg>
+                </div>
+                <div class="notification-content">
+                  <p class="notification-text">New certificate issued from <strong>University of Sierra Leone</strong></p>
+                  <span class="notification-time">1 hour ago</span>
+                </div>
+              </div>
+              <div class="notification-item unread">
+                <div class="notification-icon" style="color: var(--warning);">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/>
+                    <line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>
+                  </svg>
+                </div>
+                <div class="notification-content">
+                  <p class="notification-text"><strong>Fraud Alert:</strong> Suspicious credential attempt blocked</p>
+                  <span class="notification-time">3 hours ago</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {% if request.user.is_authenticated %}
+        <!-- User menu (shown when logged in) -->
+        <div id="user-menu" style="display: flex; align-items: center; gap: 0.75rem;">
+          <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.25rem 0.75rem; border-radius: 0.5rem; background: var(--bg-tertiary);">
+            {% if request.user.avatar %}
+              <img src="{{ request.user.avatar.url }}" alt="{{ request.user.full_name }}" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover;">
+            {% else %}
+              <div style="width: 28px; height: 28px; border-radius: 50%; background: var(--accent-primary); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 0.75rem;">
+                {{ request.user.first_name|first|upper }}{{ request.user.last_name|first|upper }}
+              </div>
+            {% endif %}
+            <span style="font-size: 0.875rem; font-weight: 500; color: var(--text-primary);">
+              {{ request.user.full_name|default:request.user.email|truncatechars:20 }}
+            </span>
+          </div>
+          <a href="{% url 'dashboard' %}" class="btn btn-ghost btn-sm" title="Go to Dashboard" style="display: flex; align-items: center; gap: 0.5rem;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7"/>
+              <rect x="14" y="3" width="7" height="7"/>
+              <rect x="14" y="14" width="7" height="7"/>
+              <rect x="3" y="14" width="7" height="7"/>
+            </svg>
+            Dashboard
+          </a>
+          <button class="btn btn-ghost btn-sm" id="logout-btn" data-action="logout" title="Logout">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 0.5rem;">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+            Logout
+          </button>
+        </div>
+        {% else %}
+        <!-- Login/Signup buttons (shown when not logged in) -->
+        <button class="btn btn-ghost btn-sm" data-action="login" id="login-btn">Log In</button>
+        <button class="btn btn-primary btn-sm" data-action="signup" id="signup-btn">Get Started</button>
+        {% endif %}
+        <button class="mobile-menu-btn" id="mobile-menu-btn" aria-label="Toggle menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+
+
+{% block content %}{% endblock content %}
+	{% load sweetify %}
+	{% sweetify %}
+
+
+
+
+  <!-- Login Modal -->
+  <div class="modal-overlay" id="login-modal">
+    <div class="modal">
+      <button class="modal-close" data-close-modal aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/>
+        </svg>
+      </button>
+      <div class="modal-header">
+        <h2>Welcome Back</h2>
+        <p>Sign in to access your account</p>
+        <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 0.5rem; font-style: italic;">
+          Sample: admin@gmail.com / Demo@2024
+        </p>
+      </div>
+      <form class="modal-form" id="login-form" method="post" action="{% url 'login' %}">
+        {% csrf_token %}
+        <div class="input-group">
+          <label class="input-label">Email</label>
+          <input type="email" class="input" name="email" placeholder="you@example.com" id="login-email" value="admin@gmail.com" required>
+        </div>
+        <div class="input-group" style="position: relative;">
+          <label class="input-label">Password</label>
+          <input type="password" class="input" name="password" placeholder="Enter your password" id="login-password" value="Demo@2024" required style="padding-right: 45px;">
+          <button type="button" class="password-toggle" id="login-password-toggle" aria-label="Toggle password visibility" style="position: absolute; right: 12px; top: 38px; background: none; border: none; cursor: pointer; padding: 8px; color: var(--text-muted); display: flex; align-items: center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="login-password-eye">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="login-password-eye-off" style="display: none;">
+              <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+              <line x1="1" y1="1" x2="23" y2="23"/>
+            </svg>
+          </button>
+        </div>
+        <div id="login-error" class="error-message" style="display: none; color: var(--error); margin-bottom: 1rem; font-size: 0.875rem;"></div>
+        <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;" id="login-submit-btn">
+          <span class="btn-text">Sign In</span>
+          <span class="btn-spinner" style="display: none;">
+            <span class="spinner" style="width: 16px; height: 16px; border-width: 2px;"></span>
+          </span>
+        </button>
+      </form>
+      <p style="text-align: center; margin-top: 1rem; font-size: 0.875rem; color: var(--text-muted);">
+        Don't have an account? <a href="#" data-action="signup" style="color: var(--accent-primary);">Sign up</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Signup Modal -->
+  <div class="modal-overlay" id="signup-modal">
+    <div class="modal" style="max-height: 90vh; display: flex; flex-direction: column;">
+      <button class="modal-close" data-close-modal aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/>
+        </svg>
+      </button>
+      <div class="modal-header" style="flex-shrink: 0;">
+        <h2>Create Account</h2>
+        <p>Join {{settings.site_name_abb}} to get started</p>
+      </div>
+      <div style="overflow-y: auto; flex: 1; min-height: 0; max-height: calc(90vh - 200px); padding-right: 0.5rem;">
+        <form class="modal-form" id="signup-form" method="post" action="{% url 'register' %}">
+        {% csrf_token %}
+        <div class="input-group">
+          <label class="input-label">I am a...</label>
+          <select class="input select" name="role" id="signup-role" required>
+            <option value="">Select your role</option>
+            <option value="student">Graduate / Student</option>
+            <option value="employer">Employer / HR</option>
+            <option value="institution_admin">Institution Admin</option>
+          </select>
+        </div>
+        <!-- Institution selection for Students and Institution Admins -->
+        <div class="input-group" id="signup-institution-group" style="display: none;">
+          <label class="input-label">Institution <span style="color: var(--error);">*</span></label>
+          <select class="input select" name="institution_id" id="signup-institution" required style="width: 100%;">
+            <option value="">Search and select your institution...</option>
+          </select>
+          <small style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.25rem; display: block;" id="signup-institution-hint"></small>
+        </div>
+        <!-- Employer office details -->
+        <div id="signup-employer-group" style="display: none;">
+          <div class="input-group">
+            <label class="input-label">Company/Office Name <span style="color: var(--error);">*</span></label>
+            <input type="text" class="input" name="company_name" placeholder="Your company or office name" id="signup-company-name">
+          </div>
+          <div class="input-group">
+            <label class="input-label">Office Address</label>
+            <textarea class="input" name="company_address" placeholder="Your office address" id="signup-company-address" rows="2"></textarea>
+          </div>
+          <div class="input-group">
+            <label class="input-label">Office Contact</label>
+            <input type="tel" class="input" name="company_phone" placeholder="Office phone number" id="signup-company-phone">
+          </div>
+        </div>
+        <div class="input-group">
+          <label class="input-label">First Name</label>
+          <input type="text" class="input" name="first_name" placeholder="Your first name" id="signup-first-name" required>
+        </div>
+        <div class="input-group">
+          <label class="input-label">Last Name</label>
+          <input type="text" class="input" name="last_name" placeholder="Your last name" id="signup-last-name" required>
+        </div>
+        <div class="input-group">
+          <label class="input-label">Email</label>
+          <input type="email" class="input" name="email" placeholder="you@example.com" id="signup-email" required>
+        </div>
+        <div class="input-group">
+          <label class="input-label">Phone (Optional)</label>
+          <input type="tel" class="input" name="phone" placeholder="Your phone number" id="signup-phone">
+        </div>
+        <div class="input-group" style="position: relative;">
+          <label class="input-label">Password</label>
+          <input type="password" class="input" name="password" placeholder="Create a password" id="signup-password" required style="padding-right: 45px;">
+          <button type="button" class="password-toggle" id="signup-password-toggle" aria-label="Toggle password visibility" style="position: absolute; right: 12px; top: 38px; background: none; border: none; cursor: pointer; padding: 8px; color: var(--text-muted); display: flex; align-items: center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="signup-password-eye">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="signup-password-eye-off" style="display: none;">
+              <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+              <line x1="1" y1="1" x2="23" y2="23"/>
+            </svg>
+          </button>
+        </div>
+        <div class="input-group" style="position: relative;">
+          <label class="input-label">Confirm Password</label>
+          <input type="password" class="input" name="password_confirm" placeholder="Confirm your password" id="signup-password-confirm" required style="padding-right: 45px;">
+          <button type="button" class="password-toggle" id="signup-password-confirm-toggle" aria-label="Toggle password visibility" style="position: absolute; right: 12px; top: 38px; background: none; border: none; cursor: pointer; padding: 8px; color: var(--text-muted); display: flex; align-items: center;">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="signup-password-confirm-eye">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" id="signup-password-confirm-eye-off" style="display: none;">
+              <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/>
+              <line x1="1" y1="1" x2="23" y2="23"/>
+            </svg>
+          </button>
+        </div>
+        <div id="signup-error" class="error-message" style="display: none; color: var(--error); margin-bottom: 1rem; font-size: 0.875rem;"></div>
+        <button type="submit" class="btn btn-primary btn-lg" style="width: 100%;" id="signup-submit-btn">
+          <span class="btn-text">Create Account</span>
+          <span class="btn-spinner" style="display: none;">
+            <span class="spinner" style="width: 16px; height: 16px; border-width: 2px;"></span>
+          </span>
+        </button>
+        </form>
+      </div>
+      <p style="text-align: center; margin-top: 1rem; font-size: 0.875rem; color: var(--text-muted); flex-shrink: 0; padding-top: 1rem; border-top: 1px solid var(--border-color);">
+        Already have an account? <a href="#" data-action="login" style="color: var(--accent-primary);">Sign in</a>
+      </p>
+    </div>
+  </div>
+
+  <!-- Share Modal -->
+  <div class="modal-overlay" id="share-modal">
+    <div class="modal">
+      <button class="modal-close" data-close-modal aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/>
+        </svg>
+      </button>
+      <div class="modal-header">
+        <h2>Share Credential</h2>
+        <p>Share this verified credential with employers</p>
+      </div>
+      <div class="share-options">
+        <button class="share-option">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+          Email
+        </button>
+        <button class="share-option">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+          </svg>
+          LinkedIn
+        </button>
+        <button class="share-option">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect width="5" height="5" x="3" y="3" rx="1"/>
+            <rect width="5" height="5" x="16" y="3" rx="1"/>
+            <rect width="5" height="5" x="3" y="16" rx="1"/>
+            <path d="M21 16h-3a2 2 0 0 0-2 2v3"/>
+          </svg>
+          QR Code
+        </button>
+        <button class="share-option">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+          </svg>
+          Copy Link
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- QR Code Modal -->
+  <div class="modal-overlay" id="qr-modal">
+    <div class="modal">
+      <button class="modal-close" data-close-modal aria-label="Close">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="18" x2="6" y1="6" y2="18"/><line x1="6" x2="18" y1="6" y2="18"/>
+        </svg>
+      </button>
+      <div class="modal-header">
+        <h2>Credential QR Code</h2>
+        <p>Scan to verify this credential</p>
+      </div>
+      <div class="qr-display" id="qr-display">
+        <div class="qr-placeholder">
+          <svg width="200" height="200" viewBox="0 0 200 200">
+            <rect fill="var(--bg-tertiary)" width="200" height="200"/>
+            <g fill="var(--text-primary)">
+              <rect x="20" y="20" width="40" height="40"/>
+              <rect x="140" y="20" width="40" height="40"/>
+              <rect x="20" y="140" width="40" height="40"/>
+              <rect x="80" y="20" width="10" height="10"/>
+              <rect x="100" y="20" width="10" height="10"/>
+              <rect x="80" y="40" width="10" height="10"/>
+              <rect x="110" y="40" width="10" height="10"/>
+              <rect x="80" y="60" width="10" height="10"/>
+              <rect x="100" y="60" width="10" height="10"/>
+              <rect x="120" y="60" width="10" height="10"/>
+              <rect x="20" y="80" width="10" height="10"/>
+              <rect x="40" y="80" width="10" height="10"/>
+              <rect x="60" y="80" width="10" height="10"/>
+              <rect x="80" y="80" width="10" height="10"/>
+              <rect x="100" y="80" width="10" height="10"/>
+              <rect x="140" y="80" width="10" height="10"/>
+              <rect x="170" y="80" width="10" height="10"/>
+              <rect x="20" y="100" width="10" height="10"/>
+              <rect x="60" y="100" width="10" height="10"/>
+              <rect x="100" y="100" width="10" height="10"/>
+              <rect x="120" y="100" width="10" height="10"/>
+              <rect x="160" y="100" width="10" height="10"/>
+              <rect x="40" y="120" width="10" height="10"/>
+              <rect x="80" y="120" width="10" height="10"/>
+              <rect x="100" y="120" width="10" height="10"/>
+              <rect x="140" y="120" width="10" height="10"/>
+              <rect x="80" y="140" width="10" height="10"/>
+              <rect x="100" y="140" width="10" height="10"/>
+              <rect x="140" y="140" width="40" height="40"/>
+              <rect x="80" y="160" width="10" height="10"/>
+              <rect x="110" y="160" width="10" height="10"/>
+              <rect x="80" y="170" width="10" height="10"/>
+              <rect x="100" y="170" width="10" height="10"/>
+              <rect x="120" y="170" width="10" height="10"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+      <div class="qr-info">
+        <p><strong>Credential ID:</strong> <span id="qr-credential-id">CERT-2024-SL-001234</span></p>
+        <p><strong>Verification URL:</strong></p>
+        <code id="qr-url">https://certchain.io/v/CERT-2024-SL-001234</code>
+      </div>
+      <button class="btn btn-primary" style="width: 100%; margin-top: 1rem;">Download QR Code</button>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- jQuery (required for Select2) -->
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <!-- QR Scanner Library -->
+  <script src="https://cdn.jsdelivr.net/npm/qr-scanner@1.4.2/qr-scanner.umd.min.js"></script>
+  <!-- QR Code Generator Library -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
+  <!-- Select2 JS -->
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <script src="{% static 'assets/guest/js/app.js' %}"></script>
+</body>
+</html>

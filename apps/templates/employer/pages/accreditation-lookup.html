@@ -1,0 +1,612 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Accreditation Lookup - CertChain{% endblock %}
+
+{% block content %}
+{% include 'employer/accreditation-lookup.html' %}
+{% endblock %}
+
+{% block extra_js %}
+{% autoescape off %}
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+(function() {
+  'use strict';
+  
+  const searchForm = document.getElementById('accreditation-search-form');
+  const searchInput = document.getElementById('institution-search-input');
+  const countryFilter = document.getElementById('country-filter');
+  const institutionTypeFilter = document.getElementById('institution-type-filter');
+  const searchBtn = document.getElementById('search-btn');
+  const resultsContainer = document.getElementById('accreditation-results');
+  const noResultsContainer = document.getElementById('no-results');
+  const certchainResults = document.getElementById('certchain-results');
+  const whedResults = document.getElementById('whed-results');
+  const resultsCount = document.getElementById('results-count');
+  
+  if (!searchForm) return;
+  
+  // Get CSRF token
+  function getCSRFToken() {
+    const token = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
+    if (token) return token;
+    const cookies = document.cookie.split(';');
+    for (let cookie of cookies) {
+      const [name, value] = cookie.trim().split('=');
+      if (name === 'csrftoken') return value;
+    }
+    return null;
+  }
+  
+  // Format date
+  function formatDate(dateString) {
+    if (!dateString) return 'N/A';
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString('en-US', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      });
+    } catch (e) {
+      return dateString;
+    }
+  }
+  
+  // Display institution result
+  function displayInstitution(inst, container) {
+    const statusClass = inst.accreditation_status === 'Accredited' ? 'accreditation-accredited' : 
+                       inst.accreditation_status === 'Pending Review' ? 'accreditation-pending' :
+                       inst.accreditation_status === 'On Probation' ? 'accreditation-probation' :
+                       inst.accreditation_status === 'Accreditation Revoked' ? 'accreditation-revoked' : 'accreditation-not-accredited';
+    
+    const statusIcon = inst.accreditation_status === 'Accredited' ? '✅' :
+                      inst.accreditation_status === 'Pending Review' ? '⏳' :
+                      inst.accreditation_status === 'On Probation' ? '⚠️' :
+                      inst.accreditation_status === 'Accreditation Revoked' ? '🚫' : '❌';
+    
+    const html = `
+      <div class="accreditation-result-card ${statusClass}">
+        <div class="accreditation-header">
+          <div>
+            <h3 class="accreditation-institution-name">${inst.name}</h3>
+            ${inst.short_name ? `<p class="accreditation-short-name">${inst.short_name}</p>` : ''}
+          </div>
+          <div class="accreditation-status-badge ${statusClass}">
+            <span class="status-icon">${statusIcon}</span>
+            <span class="status-text">${inst.accreditation_status}</span>
+          </div>
+        </div>
+        
+        <div class="accreditation-details">
+          <div class="accreditation-detail-grid">
+            ${inst.institution_type ? `
+            <div class="accreditation-detail-item">
+              <span class="detail-label">Type:</span>
+              <span class="detail-value">${inst.institution_type}</span>
+            </div>
+            ` : ''}
+            
+            ${inst.country ? `
+            <div class="accreditation-detail-item">
+              <span class="detail-label">Country:</span>
+              <span class="detail-value">${inst.country}</span>
+            </div>
+            ` : ''}
+            
+            ${inst.city ? `
+            <div class="accreditation-detail-item">
+              <span class="detail-label">City:</span>
+              <span class="detail-value">${inst.city}</span>
+            </div>
+            ` : ''}
+            
+            ${inst.accreditation_body ? `
+            <div class="accreditation-detail-item">
+              <span class="detail-label">Accreditation Body:</span>
+              <span class="detail-value">${inst.accreditation_body}</span>
+            </div>
+            ` : ''}
+            
+            ${inst.accreditation_date ? `
+            <div class="accreditation-detail-item">
+              <span class="detail-label">Accredited Date:</span>
+              <span class="detail-value">${formatDate(inst.accreditation_date)}</span>
+            </div>
+            ` : ''}
+            
+            ${inst.accreditation_expiry ? `
+            <div class="accreditation-detail-item">
+              <span class="detail-label">Expiry Date:</span>
+              <span class="detail-value">${formatDate(inst.accreditation_expiry)}</span>
+            </div>
+            ` : ''}
+            
+            ${inst.founded_year ? `
+            <div class="accreditation-detail-item">
+              <span class="detail-label">Founded:</span>
+              <span class="detail-value">${inst.founded_year}</span>
+            </div>
+            ` : ''}
+            
+            ${inst.website ? `
+            <div class="accreditation-detail-item">
+              <span class="detail-label">Website:</span>
+              <span class="detail-value"><a href="${inst.website}" target="_blank" rel="noopener">${inst.website}</a></span>
+            </div>
+            ` : ''}
+            
+            ${inst.email ? `
+            <div class="accreditation-detail-item">
+              <span class="detail-label">Email:</span>
+              <span class="detail-value"><a href="mailto:${inst.email}">${inst.email}</a></span>
+            </div>
+            ` : ''}
+            
+            ${inst.phone ? `
+            <div class="accreditation-detail-item">
+              <span class="detail-label">Phone:</span>
+              <span class="detail-value">${inst.phone}</span>
+            </div>
+            ` : ''}
+          </div>
+          
+          ${inst.is_partner ? `
+          <div class="accreditation-badge" style="margin-top: 1rem;">
+            <span class="badge badge-success">CertChain Partner Institution</span>
+          </div>
+          ` : ''}
+          
+          ${inst.is_verified ? `
+          <div class="accreditation-badge" style="margin-top: 0.5rem;">
+            <span class="badge badge-info">Verified Institution</span>
+          </div>
+          ` : ''}
+        </div>
+      </div>
+    `;
+    
+    container.insertAdjacentHTML('beforeend', html);
+  }
+  
+  // Display WHED record
+  function displayWHEDRecord(whed, container) {
+    const html = `
+      <div class="accreditation-result-card accreditation-whed">
+        <div class="accreditation-header">
+          <div>
+            <h3 class="accreditation-institution-name">${whed.name}</h3>
+            ${whed.name_local ? `<p class="accreditation-short-name">${whed.name_local}</p>` : ''}
+            <p class="accreditation-source">UNESCO WHED Database</p>
+          </div>
+          <div class="accreditation-status-badge ${whed.is_accredited ? 'accreditation-accredited' : 'accreditation-not-accredited'}">
+            <span class="status-icon">${whed.is_accredited ? '✅' : '❌'}</span>
+            <span class="status-text">${whed.is_accredited ? 'Accredited' : 'Not Accredited'}</span>
+          </div>
+        </div>
+        
+        <div class="accreditation-details">
+          <div class="accreditation-detail-grid">
+            <div class="accreditation-detail-item">
+              <span class="detail-label">WHED ID:</span>
+              <span class="detail-value">${whed.whed_id}</span>
+            </div>
+            
+            ${whed.institution_type ? `
+            <div class="accreditation-detail-item">
+              <span class="detail-label">Type:</span>
+              <span class="detail-value">${whed.institution_type}</span>
+            </div>
+            ` : ''}
+            
+            ${whed.country ? `
+            <div class="accreditation-detail-item">
+              <span class="detail-label">Country:</span>
+              <span class="detail-value">${whed.country}</span>
+            </div>
+            ` : ''}
+            
+            ${whed.city ? `
+            <div class="accreditation-detail-item">
+              <span class="detail-label">City:</span>
+              <span class="detail-value">${whed.city}</span>
+            </div>
+            ` : ''}
+            
+            ${whed.accreditation_body ? `
+            <div class="accreditation-detail-item">
+              <span class="detail-label">Accreditation Body:</span>
+              <span class="detail-value">${whed.accreditation_body}</span>
+            </div>
+            ` : ''}
+            
+            ${whed.founded_year ? `
+            <div class="accreditation-detail-item">
+              <span class="detail-label">Founded:</span>
+              <span class="detail-value">${whed.founded_year}</span>
+            </div>
+            ` : ''}
+            
+            ${whed.website ? `
+            <div class="accreditation-detail-item">
+              <span class="detail-label">Website:</span>
+              <span class="detail-value"><a href="${whed.website}" target="_blank" rel="noopener">${whed.website}</a></span>
+            </div>
+            ` : ''}
+            
+            ${whed.email ? `
+            <div class="accreditation-detail-item">
+              <span class="detail-label">Email:</span>
+              <span class="detail-value"><a href="mailto:${whed.email}">${whed.email}</a></span>
+            </div>
+            ` : ''}
+            
+            ${whed.phone ? `
+            <div class="accreditation-detail-item">
+              <span class="detail-label">Phone:</span>
+              <span class="detail-value">${whed.phone}</span>
+            </div>
+            ` : ''}
+          </div>
+        </div>
+      </div>
+    `;
+    
+    container.insertAdjacentHTML('beforeend', html);
+  }
+  
+  // Handle form submission
+  searchForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    const query = searchInput.value.trim();
+    // Get values from Select2
+    const country = $('#country-filter').val() || '';
+    const institutionType = $('#institution-type-filter').val() || '';
+    
+    if (!query) {
+      if (typeof Swal !== 'undefined') {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Input Required',
+          text: 'Please enter an institution name to search'
+        });
+      }
+      return;
+    }
+    
+    // Show loading
+    const originalHTML = searchBtn.innerHTML;
+    searchBtn.disabled = true;
+    searchBtn.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg> Searching...';
+    
+    // Clear previous results
+    certchainResults.innerHTML = '';
+    whedResults.innerHTML = '';
+    resultsContainer.style.display = 'none';
+    noResultsContainer.style.display = 'none';
+    
+    try {
+      const csrftoken = getCSRFToken();
+      const response = await fetch(window.location.pathname, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRFToken': csrftoken
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          query: query,
+          country: country,
+          institution_type: institutionType
+        })
+      });
+      
+      const data = await response.json();
+      
+      if (!response.ok || !data.success) {
+        throw new Error(data.error || 'Search failed');
+      }
+      
+      // Display results
+      if (data.total_results === 0) {
+        noResultsContainer.style.display = 'block';
+      } else {
+        resultsContainer.style.display = 'block';
+        resultsCount.textContent = `Found ${data.total_results} result${data.total_results !== 1 ? 's' : ''}`;
+        
+        // Display CertChain institutions
+        if (data.institutions && data.institutions.length > 0) {
+          const certchainHeader = document.createElement('h3');
+          certchainHeader.textContent = 'CertChain Institutions';
+          certchainHeader.style.marginBottom = '1rem';
+          certchainHeader.style.fontSize = '1.25rem';
+          certchainHeader.style.fontWeight = '600';
+          certchainResults.appendChild(certchainHeader);
+          
+          data.institutions.forEach(inst => {
+            displayInstitution(inst, certchainResults);
+          });
+        }
+        
+        // Display WHED records
+        if (data.whed_records && data.whed_records.length > 0) {
+          const whedHeader = document.createElement('h3');
+          whedHeader.textContent = 'UNESCO WHED Records';
+          whedHeader.style.marginBottom = '1rem';
+          whedHeader.style.fontSize = '1.25rem';
+          whedHeader.style.fontWeight = '600';
+          whedHeader.style.marginTop = data.institutions && data.institutions.length > 0 ? '2rem' : '0';
+          whedResults.appendChild(whedHeader);
+          
+          data.whed_records.forEach(whed => {
+            displayWHEDRecord(whed, whedResults);
+          });
+        }
+      }
+      
+    } catch (error) {
+      console.error('Search error:', error);
+      if (typeof Swal !== 'undefined') {
+        Swal.fire({
+          icon: 'error',
+          title: 'Search Failed',
+          text: error.message || 'An error occurred while searching'
+        });
+      }
+    } finally {
+      searchBtn.disabled = false;
+      searchBtn.innerHTML = originalHTML;
+    }
+  });
+  
+})();
+</script>
+<style>
+.accreditation-search-card {
+  background: white;
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  margin-bottom: 2rem;
+}
+
+.accreditation-search-card h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.accreditation-search-card > p {
+  color: #6b7280;
+  margin-bottom: 1.5rem;
+}
+
+.search-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.accreditation-result-card {
+  background: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  margin-bottom: 1rem;
+  border-left: 4px solid #e5e7eb;
+}
+
+.accreditation-result-card.accreditation-accredited {
+  border-left-color: #10b981;
+}
+
+.accreditation-result-card.accreditation-pending {
+  border-left-color: #3b82f6;
+}
+
+.accreditation-result-card.accreditation-probation {
+  border-left-color: #f59e0b;
+}
+
+.accreditation-result-card.accreditation-revoked {
+  border-left-color: #ef4444;
+}
+
+.accreditation-result-card.accreditation-not-accredited {
+  border-left-color: #6b7280;
+}
+
+.accreditation-result-card.accreditation-whed {
+  border-left-color: #8b5cf6;
+}
+
+.accreditation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.accreditation-institution-name {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin: 0 0 0.25rem 0;
+  color: #111827;
+}
+
+.accreditation-short-name {
+  color: #6b7280;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.accreditation-source {
+  color: #8b5cf6;
+  font-size: 0.75rem;
+  font-weight: 500;
+  margin: 0.25rem 0 0 0;
+}
+
+.accreditation-status-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.accreditation-status-badge.accreditation-accredited {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.accreditation-status-badge.accreditation-pending {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+.accreditation-status-badge.accreditation-probation {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.accreditation-status-badge.accreditation-revoked {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.accreditation-status-badge.accreditation-not-accredited {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+.status-icon {
+  font-size: 1.25rem;
+}
+
+.accreditation-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+}
+
+.accreditation-detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.detail-label {
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.detail-value {
+  color: #111827;
+  word-break: break-word;
+}
+
+.detail-value a {
+  color: #4f46e5;
+  text-decoration: none;
+}
+
+.detail-value a:hover {
+  text-decoration: underline;
+}
+
+.accreditation-badge {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  font-weight: 500;
+}
+
+.badge-success {
+  background: #d1fae5;
+  color: #065f46;
+}
+
+.badge-info {
+  background: #dbeafe;
+  color: #1e40af;
+}
+
+/* Select2 Custom Styling */
+.select2-container {
+  width: 100% !important;
+}
+
+.select2-container--default .select2-selection--single {
+  height: 42px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__rendered {
+  line-height: 42px;
+  padding-left: 0;
+  color: #111827;
+}
+
+.select2-container--default .select2-selection--single .select2-selection__arrow {
+  height: 40px;
+  right: 10px;
+}
+
+.select2-container--default.select2-container--focus .select2-selection--single,
+.select2-container--default.select2-container--open .select2-selection--single {
+  border-color: #4f46e5;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.select2-dropdown {
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+.select2-container--default .select2-results__option--highlighted[aria-selected] {
+  background-color: #4f46e5;
+  color: white;
+}
+
+.select2-container--default .select2-results__option[aria-selected=true] {
+  background-color: #eef2ff;
+  color: #4f46e5;
+}
+
+.select2-search--dropdown .select2-search__field {
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 0.5rem;
+}
+
+.select2-search--dropdown .select2-search__field:focus {
+  border-color: #4f46e5;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+</style>
+{% endautoescape %}
+{% endblock %}

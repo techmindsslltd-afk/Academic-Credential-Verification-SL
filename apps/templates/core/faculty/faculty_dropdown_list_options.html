@@ -1,0 +1,20 @@
+
+ {%  if SelectedFaculty %}
+ 
+ <option value="{{ SelectedFaculty.pk }}">{{ SelectedFaculty }}</option>
+{% for faculty in  faculty %}
+
+ {% if SelectedFaculty.pk != faculty.pk %}
+<option value="{{ faculty.pk }}">{{ faculty }}</option>
+ {% endif %}
+ 
+{% endfor %}
+
+  
+  {% else %}
+<option value="">---------</option>
+{% for faculty in  faculty %}
+<option value="{{ faculty.pk }}">{{ faculty }}</option>
+{% endfor %}
+
+{% endif %}

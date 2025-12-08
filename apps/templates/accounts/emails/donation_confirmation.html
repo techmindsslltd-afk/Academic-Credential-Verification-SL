@@ -1,0 +1,108 @@
+{% extends "accounts/emails/base_email.html" %}
+{% load static %}
+
+{% block header %}
+<img src="{% if request and request.is_secure %}https{% else %}http{% endif %}://{% if request %}{{ request.get_host }}{% else %}applegod.org{% endif %}{% static 'logo/logo.jpeg' %}" alt="Apple of God" style="max-height: 50px; margin-bottom: 10px;">
+<br>
+{{ settings.site_name|default:"Apple of God Foundation" }} - Donation Confirmation
+{% endblock %}
+
+{% block content %}
+<div style="max-width: 600px; margin: 0 auto; padding: 20px; font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+    
+    <h2 style="color: #2c3e50; margin-bottom: 20px;">Thank You for Your Generous Donation!</h2>
+    
+    <p style="font-size: 16px; margin-bottom: 20px;">
+        Dear {{ donation.display_name }},
+    </p>
+    
+    <p style="font-size: 16px; margin-bottom: 20px;">
+        We are incredibly grateful for your generous donation of <strong style="color: #27ae60; font-size: 18px;">${{ donation.amount }}</strong> 
+        to {{ settings.site_name|default:"Apple of God Foundation" }}. Your contribution will directly impact the lives of children 
+        in Sierra Leone and help us continue our mission of spreading love and creating positive change.
+    </p>
+
+    <div style="background: #f8f9fa; border-left: 4px solid #27ae60; padding: 20px; margin: 20px 0; border-radius: 4px;">
+        <h3 style="color: #2c3e50; margin-top: 0;">Donation Details</h3>
+        <table style="width: 100%; border-collapse: collapse;">
+            <tr>
+                <td style="padding: 8px 0; font-weight: bold; color: #555;">Donation Amount:</td>
+                <td style="padding: 8px 0; color: #27ae60; font-weight: bold; font-size: 18px;">${{ donation.amount }}</td>
+            </tr>
+            <tr>
+                <td style="padding: 8px 0; font-weight: bold; color: #555;">Transaction ID:</td>
+                <td style="padding: 8px 0; color: #666;">{{ donation.payment_reference|default:"Processing..." }}</td>
+            </tr>
+            <tr>
+                <td style="padding: 8px 0; font-weight: bold; color: #555;">Date:</td>
+                <td style="padding: 8px 0; color: #666;">{{ donation.created_at|date:"F d, Y \a\t g:i A" }}</td>
+            </tr>
+            {% if donation.is_organization and donation.organization_name %}
+            <tr>
+                <td style="padding: 8px 0; font-weight: bold; color: #555;">Organization:</td>
+                <td style="padding: 8px 0; color: #666;">{{ donation.organization_name }}</td>
+            </tr>
+            {% endif %}
+        </table>
+    </div>
+
+    {% if donation.donation_note %}
+    <div style="background: #e8f4fd; border-left: 4px solid #3498db; padding: 20px; margin: 20px 0; border-radius: 4px;">
+        <h4 style="color: #2c3e50; margin-top: 0;">Your Message:</h4>
+        <p style="margin: 0; font-style: italic; color: #555;">"{{ donation.donation_note }}"</p>
+    </div>
+    {% endif %}
+
+    <h3 style="color: #2c3e50; margin-top: 30px;">How Your Donation Will Be Used</h3>
+    
+    <p style="font-size: 16px; margin-bottom: 15px;">
+        Your generous contribution will be used to:
+    </p>
+    
+    <ul style="color: #555; margin-bottom: 20px;">
+        <li>Provide essential school materials to children in remote communities</li>
+        <li>Support educational programs and scholarships</li>
+        <li>Fund community outreach initiatives</li>
+        <li>Help families in need with housing and nutrition assistance</li>
+        <li>Support our volunteer network and sustainable development projects</li>
+    </ul>
+
+    <div style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 25px; border-radius: 8px; text-align: center; margin: 25px 0;">
+        <h3 style="margin-top: 0; color: white;">Your Impact Matters</h3>
+        <p style="margin-bottom: 0; font-size: 16px;">
+            Every dollar you donate creates ripples of positive change that extend far beyond what we can imagine. 
+            Thank you for being part of our mission to "Let Love Lead."
+        </p>
+    </div>
+
+    <h3 style="color: #2c3e50; margin-top: 30px;">Stay Connected</h3>
+    
+    <p style="font-size: 16px; margin-bottom: 15px;">
+        We'd love to keep you updated on how your donation is making a difference:
+    </p>
+    
+    <div style="text-align: center; margin: 25px 0;">
+        <a href="{% if request and request.is_secure %}https{% else %}http{% endif %}://{% if request %}{{ request.get_host }}{% else %}applegod.org{% endif %}" 
+           style="background: #3498db; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block; margin: 5px;">
+            Visit Our Website
+        </a>
+        <a href="{% if request and request.is_secure %}https{% else %}http{% endif %}://{% if request %}{{ request.get_host }}{% else %}applegod.org{% endif %}/contact/" 
+           style="background: #27ae60; color: white; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold; display: inline-block; margin: 5px;">
+            Contact Us
+        </a>
+    </div>
+
+    <p style="font-size: 16px; margin-top: 30px; padding-top: 20px; border-top: 1px solid #eee;">
+        With heartfelt gratitude,<br>
+        <strong>The {{ settings.site_name|default:"Apple of God Foundation" }} Team</strong>
+    </p>
+
+</div>
+{% endblock %}
+
+{% block footer %}
+<p style="margin: 0 0 5px 0;">© {% now "Y" %} {{ settings.site_name|default:"Apple of God Foundation" }}. All rights reserved.</p>
+<p style="margin: 0 0 5px 0;"><strong>Email:</strong> {% if settings.email %}{{ settings.email }}{% else %}info@applegod.org{% endif %}</p>
+<p style="margin: 0 0 5px 0;"><strong>Phone:</strong> {% if settings.phone %}{{ settings.phone }}{% else %}+232-XXX-XXXX{% endif %}</p>
+<p style="margin: 0;"><strong>Website:</strong> <a href="{% if request and request.is_secure %}https{% else %}http{% endif %}://{% if request %}{{ request.get_host }}{% else %}applegod.org{% endif %}" style="color: #667eea; text-decoration: none;">{% if request %}{{ request.get_host }}{% else %}applegod.org{% endif %}</a></p>
+{% endblock %}

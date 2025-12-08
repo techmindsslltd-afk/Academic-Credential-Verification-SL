@@ -1,0 +1,165 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Add Bank {% endblock %} 
+{% block titlePage %} Add Bank {% endblock %} 
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %} 
+<div class="content">
+	<div class="container-fluid">
+		<div class="row ">
+			<div class="col-md-10 ">
+				<div class="card">
+					<div class="card-header card-header-icon card-header-rose">
+						
+						<h4 class="card-title">Create Bank 
+							<!-- <small class="category">Complete Students details</small> --></h4>
+					</div>
+					<div class="card-body">
+						<form id="defaultForm"
+						      action=""
+						      role="form"
+						      data-toggle="validator"
+						      method="POST"
+						      enctype="multipart/form-data">
+							   <h6 class="card-category">
+							  {% if msg %}
+								<span class="text-danger">{{ msg }}</span>
+							  {% else %}
+								Add New Bank
+							  {% endif %}  
+						  </h6>
+						  
+								<br />
+					{% csrf_token %} 
+              <div class="row ">
+			    <div style="margin-left: auto;margin-right: auto;" class="col-md-8 ">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Name</label>
+                    {{ form.name }}
+                  </div>
+				  <span class="text-danger">{{ form.name.errors }}</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Account  Name</label>
+                    {{ form.AccountName }}
+                  </div>
+				  <span class="text-danger">{{ form.AccountName.errors }}</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Account Number</label>
+                    {{ form.account_number }}
+                  </div>
+				  <span class="text-danger">{{ form.account_number.errors }}</span>
+                </div>
+              </div>
+              
+
+              <br />
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+					<label class="bmd-label-floating">Address</label>				  
+                    {{ form.address }}
+                  </div>
+                </div>
+              </div>
+              <span class="text-danger">{{ form.address.errors }}</span>
+
+              <br />
+			  <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+					<label class="bmd-label-floating">BBAN</label>				  
+                    {{ form.bban }}
+                  </div>
+                </div>
+              </div>
+              <span class="text-danger">{{ form.bban.errors }}</span>
+
+              <br />
+			  <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+					<label class="bmd-label-floating">SWIFT CODE</label>				  
+                    {{ form.swiftcode }}
+                  </div>
+                </div>
+              </div>
+              <span class="text-danger">{{ form.swiftcode.errors }}</span>
+
+              <br />			  
+			  <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    {{ form.campus }}
+                  </div>
+                </div>
+              </div>
+              <span class="text-danger">{{ form.campus.errors }}</span>
+
+              <br />
+			  <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    {{ form.level }}
+                  </div>
+                </div>
+              </div>
+              <span class="text-danger">{{ form.level.errors }}</span>
+
+              <br />
+			  <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    {{ form.is_active }}
+                  </div>
+                </div>
+              </div>
+              <span class="text-danger">{{ form.is_active.errors }}</span>
+
+							
+							   <input type="hidden" class="form-control" name="recordOwner" value="{% if form.instance.recordOwner %} {{ form.instance.recordOwner.id }} {% else %}{{ request.user.id }} {% endif %}">
+
+							</div>
+								</div>
+								<div  class="card-footer d-flex justify-content-end py-6">
+								<button type="submit"
+								        class="btn  btn-primary pull-right">Submit</button>
+								
+								</div>
+							
+							</div>
+						</form>
+					</div>
+				</div>
+				<!--  end card  -->
+			</div>
+			<!-- end col-md-12 -->
+		</div>
+		<!-- end row -->
+	</div>
+</div>
+{% endblock content %}
+{{ form.media.js }}
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <script>
+    $(document).ready(function() {
+      // Javascript method's body can be found in assets/js/demos.js
+      md.initDashboardPageCharts();
+
+    });
+  </script>
+
+{% endblock javascripts %}

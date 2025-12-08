@@ -1,0 +1,175 @@
+{% extends "layouts/base.html" %}
+{% load humanize %}
+
+{% block title %} Verification History{% endblock %} 
+
+{% block content %}
+{% load static %} 
+
+        <section class="content-section active" id="section-student-history">
+          <div class="section-header">
+            <div>
+              <h1 class="section-title">Verification History</h1>
+              <p class="section-subtitle">See who verified your credentials{% if total_verifications %} ({{ total_verifications }} total){% endif %}</p>
+            </div>
+          </div>
+          
+          <!-- Statistics Cards -->
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+            <div style="background: var(--bg-card, #fff); border: 1px solid var(--border-color, #e5e7eb); border-radius: 8px; padding: 1.5rem;">
+              <div style="font-size: 0.875rem; color: var(--text-muted, #6b7280); margin-bottom: 0.5rem;">Total Verifications</div>
+              <div style="font-size: 2rem; font-weight: 700; color: var(--text-primary, #111827);">{{ total_verifications }}</div>
+            </div>
+            <div style="background: var(--bg-card, #fff); border: 1px solid var(--border-color, #e5e7eb); border-radius: 8px; padding: 1.5rem;">
+              <div style="font-size: 0.875rem; color: var(--text-muted, #6b7280); margin-bottom: 0.5rem;">Valid Verifications</div>
+              <div style="font-size: 2rem; font-weight: 700; color: #10b981;">{{ valid_verifications }}</div>
+            </div>
+            <div style="background: var(--bg-card, #fff); border: 1px solid var(--border-color, #e5e7eb); border-radius: 8px; padding: 1.5rem;">
+              <div style="font-size: 0.875rem; color: var(--text-muted, #6b7280); margin-bottom: 0.5rem;">Last 30 Days</div>
+              <div style="font-size: 2rem; font-weight: 700; color: var(--text-primary, #111827);">{{ recent_verifications }}</div>
+            </div>
+          </div>
+          
+          <!-- Filters and Search -->
+          <div style="background: var(--bg-card, #fff); border: 1px solid var(--border-color, #e5e7eb); border-radius: 8px; padding: 1rem; margin-bottom: 1.5rem;">
+            <form method="get" style="display: flex; gap: 1rem; flex-wrap: wrap; align-items: end;">
+              <div style="flex: 1; min-width: 200px;">
+                <label style="display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; color: var(--text-primary, #111827);">Search</label>
+                <input type="text" name="search" value="{{ search_query }}" placeholder="Search by credential ID, verifier, or program..." 
+                       style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-color, #e5e7eb); border-radius: 6px; font-size: 0.875rem;">
+              </div>
+              <div style="min-width: 150px;">
+                <label style="display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; color: var(--text-primary, #111827);">Result</label>
+                <select name="result" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-color, #e5e7eb); border-radius: 6px; font-size: 0.875rem;">
+                  <option value="">All Results</option>
+                  <option value="valid" {% if result_filter == 'valid' %}selected{% endif %}>Valid</option>
+                  <option value="invalid" {% if result_filter == 'invalid' %}selected{% endif %}>Invalid</option>
+                  <option value="revoked" {% if result_filter == 'revoked' %}selected{% endif %}>Revoked</option>
+                  <option value="expired" {% if result_filter == 'expired' %}selected{% endif %}>Expired</option>
+                </select>
+              </div>
+              <div style="min-width: 150px;">
+                <label style="display: block; font-size: 0.875rem; font-weight: 500; margin-bottom: 0.5rem; color: var(--text-primary, #111827);">Method</label>
+                <select name="method" style="width: 100%; padding: 0.5rem; border: 1px solid var(--border-color, #e5e7eb); border-radius: 6px; font-size: 0.875rem;">
+                  <option value="">All Methods</option>
+                  <option value="credential_id" {% if method_filter == 'credential_id' %}selected{% endif %}>Credential ID</option>
+                  <option value="qr_code" {% if method_filter == 'qr_code' %}selected{% endif %}>QR Code</option>
+                  <option value="share_link" {% if method_filter == 'share_link' %}selected{% endif %}>Share Link</option>
+                  <option value="api" {% if method_filter == 'api' %}selected{% endif %}>API</option>
+                </select>
+              </div>
+              <div>
+                <button type="submit" class="btn btn-primary" style="padding: 0.5rem 1rem;">Filter</button>
+                {% if search_query or result_filter or method_filter %}
+                <a href="{% url 'student_history' %}" class="btn btn-outline" style="padding: 0.5rem 1rem; margin-left: 0.5rem;">Clear</a>
+                {% endif %}
+              </div>
+            </form>
+          </div>
+          
+          <!-- History List -->
+          {% if verification_logs %}
+          <div class="history-list">
+            {% for log in verification_logs %}
+            <div class="history-item">
+              <div class="history-icon">
+                {% if log.result == 'valid' %}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  <path d="m9 12 2 2 4-4"/>
+                </svg>
+                {% elif log.result == 'invalid' or log.result == 'revoked' %}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ef4444" stroke-width="2">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  <line x1="15" y1="9" x2="9" y2="15"/>
+                  <line x1="9" y1="9" x2="15" y2="15"/>
+                </svg>
+                {% else %}
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+                {% endif %}
+              </div>
+              <div class="history-content" style="flex: 1;">
+                <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+                  <div>
+                    <h4 style="margin: 0; font-size: 1rem; font-weight: 600; color: var(--text-primary, #111827);">
+                      {% if log.verifier_company %}{{ log.verifier_company }}
+                      {% elif log.verifier %}{{ log.verifier.full_name|default:log.verifier.email }}
+                      {% elif log.verifier_email %}{{ log.verifier_email }}
+                      {% else %}Unknown Verifier{% endif %}
+                    </h4>
+                    <p style="margin: 0.25rem 0 0 0; font-size: 0.875rem; color: var(--text-muted, #6b7280);">
+                      Verified your {% if log.credential %}{{ log.credential.get_credential_type_display }}{% else %}credential{% endif %}
+                      {% if log.credential and log.credential.program_name %} - {{ log.credential.program_name }}{% endif %}
+                    </p>
+                    {% if log.credential %}
+                    <p style="margin: 0.25rem 0 0 0; font-size: 0.75rem; color: var(--text-muted, #6b7280);">
+                      <strong>Credential ID:</strong> {{ log.credential.credential_id }}
+                      {% if log.credential.institution %} | <strong>Institution:</strong> {{ log.credential.institution.name }}{% endif %}
+                    </p>
+                    {% endif %}
+                  </div>
+                  <div style="text-align: right;">
+                    <span class="history-badge" style="display: inline-block; padding: 0.25rem 0.75rem; border-radius: 12px; font-size: 0.75rem; font-weight: 500; 
+                      {% if log.result == 'valid' %}background: #d1fae5; color: #065f46;
+                      {% elif log.result == 'invalid' or log.result == 'revoked' %}background: #fee2e2; color: #991b1b;
+                      {% elif log.result == 'expired' %}background: #fef3c7; color: #92400e;
+                      {% else %}background: #e5e7eb; color: #374151;{% endif %}">
+                      {{ log.get_result_display }}
+                    </span>
+                  </div>
+                </div>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 0.5rem; font-size: 0.75rem; color: var(--text-muted, #6b7280);">
+                  <span><strong>Method:</strong> {{ log.get_method_display }}</span>
+                  {% if log.ip_address %}<span><strong>IP:</strong> {{ log.ip_address }}</span>{% endif %}
+                  {% if log.country %}<span><strong>Location:</strong> {{ log.country }}</span>{% endif %}
+                  {% if log.response_time_ms %}<span><strong>Response Time:</strong> {{ log.response_time_ms }}ms</span>{% endif %}
+                </div>
+                <span class="history-time" style="display: block; margin-top: 0.5rem; font-size: 0.75rem; color: var(--text-muted, #6b7280);">
+                  {{ log.created_at|naturaltime }}
+                </span>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          
+          <!-- Pagination -->
+          {% if verification_logs.has_other_pages %}
+          <div style="display: flex; justify-content: center; align-items: center; gap: 0.5rem; margin-top: 2rem;">
+            {% if verification_logs.has_previous %}
+            <a href="?page={{ verification_logs.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if result_filter %}&result={{ result_filter }}{% endif %}{% if method_filter %}&method={{ method_filter }}{% endif %}" 
+               class="btn btn-outline" style="padding: 0.5rem 1rem;">Previous</a>
+            {% endif %}
+            
+            <span style="padding: 0.5rem 1rem; color: var(--text-muted, #6b7280);">
+              Page {{ verification_logs.number }} of {{ verification_logs.paginator.num_pages }}
+            </span>
+            
+            {% if verification_logs.has_next %}
+            <a href="?page={{ verification_logs.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if result_filter %}&result={{ result_filter }}{% endif %}{% if method_filter %}&method={{ method_filter }}{% endif %}" 
+               class="btn btn-outline" style="padding: 0.5rem 1rem;">Next</a>
+            {% endif %}
+          </div>
+          {% endif %}
+          
+          {% else %}
+          <div class="empty-state" style="text-align: center; padding: 3rem 1rem;">
+            <div class="empty-state-icon" style="margin: 0 auto 1rem; width: 64px; height: 64px; color: var(--text-muted, #6b7280);">
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+            </div>
+            <h3 style="margin: 0 0 0.5rem; font-size: 1.25rem; font-weight: 600; color: var(--text-primary, #111827);">No Verification History</h3>
+            <p style="margin: 0; color: var(--text-muted, #6b7280);">
+              {% if search_query or result_filter or method_filter %}
+              No verifications found matching your filters. Try adjusting your search criteria.
+              {% else %}
+              Your credentials haven't been verified yet. Verification history will appear here once someone verifies your credentials.
+              {% endif %}
+            </p>
+          </div>
+          {% endif %}
+        </section>
+
+{% endblock content %}

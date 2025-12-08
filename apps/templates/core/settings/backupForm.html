@@ -1,0 +1,150 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Backup database Files {% endblock %} 
+{% block titlePage %} General Settings  {% endblock %} 
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %} 
+			
+<style>	
+	.feedsMain{
+margin-left:10%;
+margin-right:10%;
+}
+
+@media screen and (max-width: 960px) {
+.feedsMain{
+margin-left:5%;
+margin-right:5%;
+}
+}
+@media screen and (max-width: 768px) {
+.feedsMain{
+margin-left:2%;
+margin-right:2%;
+}
+}
+
+@media screen and (max-width: 480px) {
+.feedsMain{
+margin-left:0%;
+margin-right:0%;
+}
+}
+</style>
+
+<div class="feedsMain">		
+								
+				<div class="card">
+					<div class="card-header card-header-icon card-header-rose">
+						
+						<h4 class="card-title">Back-Up 
+							<!-- <small class="category">Complete Students details</small> --></h4>
+					</div>
+					<div class="card-body">
+						<form id="downloadForm"
+						      action=""
+						      role="form"
+						      data-toggle="validator"
+						      method="POST"
+						      enctype="multipart/form-data">
+							   <h6 class="card-category">
+							  {% if msg %}
+								<span class="text-danger">{{ msg }}</span>
+							  
+							  {% endif %}  
+						  </h6>
+						  
+								<br />
+					{% csrf_token %} 
+              <div class="row ">
+			    
+              <br />
+							<button type="submit"
+							        class="btn    btn-primary ">Download Database</button>
+							<div class="clearfix"/>
+							
+							</div>
+							</div>
+						
+						
+						</form>
+						<!--begin::Separator-->
+                <div class="separator separator-dashed my-3"></div>
+                <!--end::Separator-->
+                  <div class="row ">
+			    
+              <br />
+							<button id="downloadLinkpic"
+							        class="btn    btn-primary ">Download Images</button>
+							<div class="clearfix"/>
+							
+							</div>
+							</div>
+						
+						
+					</div>
+				</div>
+				<!--  end card  -->
+			</div>
+			<!-- end col-md-12 -->
+		</div>
+		<!-- end row -->
+		<script>
+document.getElementById('downloadForm').addEventListener('submit', function(event) {
+    // Prevent the form from submitting
+    event.preventDefault();
+
+    // Run an AJAX request to get the file from the server
+    fetch('{% url "download_database_load" %}', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': '{{ csrf_token }}',
+        },
+        body: JSON.stringify({}),
+    })
+    .then(response => {
+        if (response.ok) {
+            return response.blob();
+        } else {
+            throw new Error(`Failed to download file. Status: ${response.status}`);
+        }
+    })
+    .then(blob => {
+        // Create a download link
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'backup.sql';
+
+        // Append the link to the document
+        document.body.appendChild(link);
+
+        // Trigger a click on the link
+        link.click();
+
+        // Remove the link from the document
+        document.body.removeChild(link);
+    })
+    .catch(error => {
+        console.error(error);
+        // Handle error, display a message to the user, etc.
+    });
+});
+
+
+document.getElementById('downloadLinkpic').addEventListener('click', function(event) {
+    event.preventDefault();
+
+     // Open the download URL in a new tab
+    window.open('{% url "downloadPics" %}', '_blank');
+});
+</script>
+{% endblock content %}
+{{ form.media.js }}
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+
+{% endblock javascripts %}

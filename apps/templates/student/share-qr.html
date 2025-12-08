@@ -1,0 +1,679 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Download/Share QR {% endblock %} 
+
+{% block content %}
+{% load static %} 
+
+    <section class="content-section active" id="section-share-qr">
+          <div class="section-header">
+            <div>
+              <h1 class="section-title">Download/Share QR</h1>
+              <p class="section-subtitle">Generate QR codes to share your credentials{% if credentials_count %} ({{ credentials_count }} available){% endif %}</p>
+            </div>
+          </div>
+          
+          {% if credentials %}
+          <div class="qr-share-card">
+            <div class="qr-preview" id="qr-preview">
+              <div class="qr-placeholder" id="qr-placeholder">
+                <svg width="120" height="120" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+                  <rect x="3" y="3" width="7" height="7"/>
+                  <rect x="14" y="3" width="7" height="7"/>
+                  <rect x="3" y="14" width="7" height="7"/>
+                  <rect x="14" y="14" width="7" height="7"/>
+                </svg>
+              </div>
+              <p id="qr-placeholder-text">Select a credential to generate QR code</p>
+              <div id="qr-image-container" style="display: none; text-align: center;">
+                <img id="qr-image" src="" alt="QR Code" style="max-width: 300px; width: 100%; height: auto; margin: 1rem auto; border: 2px solid #e5e7eb; border-radius: 8px; padding: 1rem; background: white; display: block;">
+              </div>
+            </div>
+            <div class="qr-options">
+              <div class="form-group">
+                <label class="form-label">Select Credential</label>
+                <select class="form-input" id="credential-select">
+                  <option value="">-- Select a credential --</option>
+                  {% for credential in credentials %}
+                  <option value="{{ credential.id }}" 
+                          data-credential-id="{{ credential.id }}"
+                          data-credential-name="{{ credential.credential_id }}"
+                          data-qr-url="{% if credential.qr_code %}{{ credential.qr_code.url }}{% endif %}"
+                          data-verification-url="{% if credential.verification_url %}{{ credential.verification_url }}{% endif %}">
+                    {{ credential.get_credential_type_display }} - {{ credential.program_name }}
+                    {% if credential.institution %} ({{ credential.institution.name }}){% endif %}
+                  </option>
+                  {% endfor %}
+                </select>
+              </div>
+              <div class="form-group" style="margin-top: 1rem;">
+                <button type="button" class="btn btn-primary" id="generate-qr-btn" style="display: none !important; width: 100%; padding: 0.75rem 1rem; font-size: 1rem; font-weight: 500; background: #4f46e5; color: white; border: none; border-radius: 8px; cursor: pointer;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 0.5rem; vertical-align: middle; display: inline-block;">
+                    <rect x="3" y="3" width="7" height="7"/>
+                    <rect x="14" y="3" width="7" height="7"/>
+                    <rect x="3" y="14" width="7" height="7"/>
+                    <rect x="14" y="14" width="7" height="7"/>
+                  </svg>
+                  Generate QR Code
+                </button>
+              </div>
+              <div class="qr-info" id="qr-info" style="display: none; margin-top: 1rem; padding: 1rem; background: var(--bg-secondary, #f5f5f5); border-radius: 8px;">
+                <p style="margin: 0.5rem 0;"><strong>Credential ID:</strong> <span id="qr-credential-id"></span></p>
+                <p style="margin: 0.5rem 0;"><strong>Verification URL:</strong></p>
+                <code id="qr-url" style="word-break: break-all; font-size: 0.875rem; display: block; padding: 0.5rem; background: white; border-radius: 4px; margin-top: 0.5rem;"></code>
+              </div>
+              <div class="qr-buttons" style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                <button class="btn btn-outline" id="download-png-btn" style="display: none;">Download PNG</button>
+                <button class="btn btn-outline" id="download-pdf-btn" style="display: none;">Download PDF</button>
+                <button class="btn btn-primary" id="share-link-btn" style="display: none;">Share Link</button>
+                <button class="btn btn-outline" id="copy-url-btn" style="display: none;">Copy URL</button>
+              </div>
+            </div>
+          </div>
+          {% else %}
+          <div class="empty-state">
+            <div class="empty-state-icon">
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7"/>
+                <rect x="14" y="3" width="7" height="7"/>
+                <rect x="3" y="14" width="7" height="7"/>
+                <rect x="14" y="14" width="7" height="7"/>
+              </svg>
+            </div>
+            <h3>No Credentials Available</h3>
+            <p>You don't have any credentials yet. Once your institution issues credentials, you'll be able to generate QR codes here.</p>
+          </div>
+          {% endif %}
+        </section>
+
+{% endblock content %}
+
+{% block extra_js %}
+{% autoescape off %}
+<script>
+// Share QR Page JavaScript
+console.log('Share QR page script loaded');
+(function() {
+  console.log('Share QR page script executing...');
+  
+  // Wait for DOM to be fully loaded
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initShareQR);
+  } else {
+    initShareQR();
+  }
+  
+  function initShareQR() {
+    console.log('Initializing Share QR functionality...');
+    
+    const credentialSelect = document.getElementById('credential-select');
+    const qrPlaceholder = document.getElementById('qr-placeholder');
+    const qrPlaceholderText = document.getElementById('qr-placeholder-text');
+    const qrImage = document.getElementById('qr-image');
+    const qrImageContainer = document.getElementById('qr-image-container');
+    const qrInfo = document.getElementById('qr-info');
+    const qrCredentialId = document.getElementById('qr-credential-id');
+    const qrUrl = document.getElementById('qr-url');
+    const downloadPngBtn = document.getElementById('download-png-btn');
+    const downloadPdfBtn = document.getElementById('download-pdf-btn');
+    const shareLinkBtn = document.getElementById('share-link-btn');
+    const copyUrlBtn = document.getElementById('copy-url-btn');
+    
+    const generateQrBtn = document.getElementById('generate-qr-btn');
+    
+    console.log('Elements found:', {
+      credentialSelect: !!credentialSelect,
+      qrPlaceholder: !!qrPlaceholder,
+      qrImage: !!qrImage,
+      qrImageContainer: !!qrImageContainer,
+      generateQrBtn: !!generateQrBtn
+    });
+    
+    let currentCredentialId = null;
+    let currentQrUrl = null;
+    let currentVerificationUrl = null;
+    let currentCredentialName = null;
+    
+    if (!credentialSelect) {
+      console.error('Credential select element not found!');
+      return;
+    }
+    
+    // Function to generate QR code
+    async function generateQRCode() {
+      if (!currentCredentialId) {
+        if (typeof Swal !== 'undefined') {
+          Swal.fire({
+            icon: 'warning',
+            title: 'No Credential Selected',
+            text: 'Please select a credential first.',
+            confirmButtonColor: '#4f46e5'
+          });
+        }
+        return;
+      }
+      
+      // Show loading
+      qrPlaceholder.style.display = 'block';
+      qrPlaceholderText.textContent = 'Generating QR code...';
+      qrPlaceholderText.style.display = 'block';
+      qrImageContainer.style.display = 'none';
+      
+      // Disable button while loading
+      if (generateQrBtn) {
+        generateQrBtn.disabled = true;
+        generateQrBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 0.5rem; vertical-align: middle; animation: spin 1s linear infinite;"><circle cx="12" cy="12" r="10"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>Generating...';
+      }
+      
+      // Hide buttons while loading
+      downloadPngBtn.style.display = 'none';
+      downloadPdfBtn.style.display = 'none';
+      shareLinkBtn.style.display = 'none';
+      copyUrlBtn.style.display = 'none';
+      qrInfo.style.display = 'none';
+      
+      try {
+        console.log('Fetching QR code for credential:', currentCredentialId);
+        
+        // Get CSRF token
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || 
+                         document.cookie.match(/csrftoken=([^;]+)/)?.[1]
+        
+        // Get JWT token from localStorage
+        const accessToken = localStorage.getItem('access_token')
+        
+        const headers = {
+          'Content-Type': 'application/json',
+        }
+        
+        if (csrftoken) {
+          headers['X-CSRFToken'] = csrftoken
+        }
+        
+        if (accessToken) {
+          headers['Authorization'] = `Bearer ${accessToken}`
+        }
+        
+        // Fetch QR code from API (will generate if not exists)
+        const apiUrl = `/credentials/${currentCredentialId}/qr/`;
+        console.log('API URL:', apiUrl);
+        
+        const response = await fetch(apiUrl, {
+          method: 'GET',
+          headers: headers,
+          credentials: 'include'
+        })
+        
+        console.log('Response status:', response.status);
+        
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('Error response:', errorText);
+          let errorData;
+          try {
+            errorData = JSON.parse(errorText);
+          } catch (e) {
+            errorData = { error: errorText || `Server error: ${response.status}` };
+          }
+          throw new Error(errorData.error || errorData.detail || `Failed to load QR code: ${response.status}`)
+        }
+        
+        const data = await response.json()
+        console.log('QR code data:', data);
+        
+        currentQrUrl = data.qr_code_url || null
+        currentVerificationUrl = data.verification_url || null
+        
+        console.log('QR URL:', currentQrUrl);
+        console.log('Verification URL:', currentVerificationUrl);
+        
+        // If no QR code image, use fallback
+        if (!currentQrUrl && currentVerificationUrl) {
+          currentQrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(currentVerificationUrl)}`
+          console.log('Using fallback QR URL:', currentQrUrl);
+        }
+        
+        // Display QR code
+        if (currentQrUrl) {
+          qrImage.onload = function() {
+            console.log('QR code image loaded successfully');
+            qrImageContainer.style.display = 'block';
+            qrPlaceholder.style.display = 'none';
+            qrPlaceholderText.style.display = 'none';
+          };
+          qrImage.onerror = function() {
+            console.error('Failed to load QR code image from:', currentQrUrl);
+            qrPlaceholderText.textContent = 'Failed to load QR code image. Using fallback...';
+            qrPlaceholderText.style.display = 'block';
+            qrPlaceholder.style.display = 'block';
+            qrImageContainer.style.display = 'none';
+            
+            // Try fallback if image fails to load and we haven't already used fallback
+            if (currentVerificationUrl && !currentQrUrl.includes('api.qrserver.com')) {
+              console.log('Trying fallback QR code generator...');
+              currentQrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(currentVerificationUrl)}`;
+              qrImage.src = currentQrUrl;
+            } else {
+              qrPlaceholderText.textContent = 'QR code image not available. Please try again.';
+            }
+          };
+          
+          // Set image source
+          console.log('Setting QR image source to:', currentQrUrl);
+          qrImage.src = currentQrUrl;
+          
+          // If image is already cached, onload might not fire, so check complete
+          if (qrImage.complete && qrImage.naturalHeight !== 0) {
+            console.log('QR code image already loaded (cached)');
+            qrImageContainer.style.display = 'block';
+            qrPlaceholder.style.display = 'none';
+            qrPlaceholderText.style.display = 'none';
+          }
+        } else {
+          qrPlaceholderText.textContent = 'QR code not available'
+          qrPlaceholderText.style.display = 'block';
+          console.warn('No QR code URL available');
+        }
+        
+        // Show info and buttons
+        if (currentVerificationUrl) {
+          qrCredentialId.textContent = currentCredentialName || 'N/A'
+          qrUrl.textContent = currentVerificationUrl
+          qrInfo.style.display = 'block'
+          
+          // Show download and action buttons
+          if (downloadPngBtn) downloadPngBtn.style.display = 'inline-block'
+          if (downloadPdfBtn) downloadPdfBtn.style.display = 'inline-block'
+          if (shareLinkBtn) shareLinkBtn.style.display = 'inline-block'
+          if (copyUrlBtn) copyUrlBtn.style.display = 'inline-block'
+          
+          console.log('QR code generated successfully. Buttons should be visible now.');
+        } else {
+          console.warn('No verification URL available, buttons will not be shown');
+        }
+        
+        // Re-enable button
+        if (generateQrBtn) {
+          generateQrBtn.disabled = false;
+          generateQrBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 0.5rem; vertical-align: middle;"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Generate QR Code';
+        }
+        
+      } catch (error) {
+        console.error('Error loading QR code:', error)
+        qrPlaceholderText.textContent = 'Error loading QR code. Please try again.'
+        qrPlaceholderText.style.display = 'block'
+        
+        // Re-enable button
+        if (generateQrBtn) {
+          generateQrBtn.disabled = false;
+          generateQrBtn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 0.5rem; vertical-align: middle;"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>Generate QR Code';
+        }
+        
+        if (typeof Swal !== 'undefined') {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: error.message || 'Failed to load QR code. Please try again.',
+            confirmButtonColor: '#4f46e5'
+          })
+        } else {
+          alert('Error: ' + (error.message || 'Failed to load QR code'))
+        }
+      }
+    }
+    
+    console.log('Credential select found, attaching event listener...');
+    console.log('Number of options:', credentialSelect.options.length);
+    
+    credentialSelect.addEventListener('change', function() {
+      console.log('Credential select changed!');
+      const selectedOption = this.options[this.selectedIndex];
+      console.log('Selected option:', selectedOption);
+      console.log('Selected value:', selectedOption ? selectedOption.value : 'none');
+      
+      if (!selectedOption || !selectedOption.value) {
+        // Reset to placeholder
+        qrPlaceholder.style.display = 'block';
+        qrPlaceholderText.style.display = 'block';
+        qrPlaceholderText.textContent = 'Select a credential to generate QR code';
+        qrImageContainer.style.display = 'none';
+        qrInfo.style.display = 'none';
+        downloadPngBtn.style.display = 'none';
+        downloadPdfBtn.style.display = 'none';
+        shareLinkBtn.style.display = 'none';
+        copyUrlBtn.style.display = 'none';
+        if (generateQrBtn) {
+          generateQrBtn.style.display = 'none';
+        }
+        return;
+      }
+      
+      // Store credential info
+      currentCredentialId = selectedOption.value;
+      currentCredentialName = selectedOption.getAttribute('data-credential-name');
+      
+      console.log('Credential selected:', {
+        id: currentCredentialId,
+        name: currentCredentialName,
+        generateBtnExists: !!generateQrBtn
+      });
+      
+      // Show generate button - use setProperty with important flag
+      if (generateQrBtn) {
+        generateQrBtn.style.setProperty('display', 'block', 'important');
+        generateQrBtn.disabled = false;
+        generateQrBtn.style.visibility = 'visible';
+        generateQrBtn.style.opacity = '1';
+        console.log('Generate QR button displayed with !important');
+      } else {
+        console.error('Generate QR button element not found!');
+      }
+      
+      // Reset QR display
+      qrPlaceholder.style.display = 'block';
+      qrPlaceholderText.style.display = 'block';
+      qrPlaceholderText.textContent = 'Click "Generate QR Code" to create QR code';
+      qrImageContainer.style.display = 'none';
+      qrInfo.style.display = 'none';
+      downloadPngBtn.style.display = 'none';
+      downloadPdfBtn.style.display = 'none';
+      shareLinkBtn.style.display = 'none';
+      copyUrlBtn.style.display = 'none';
+    });
+    
+    // Generate QR button click handler
+    if (generateQrBtn) {
+      generateQrBtn.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        console.log('Generate QR button clicked!');
+        generateQRCode();
+      });
+      console.log('Generate QR button event listener attached');
+    } else {
+      console.error('Cannot attach event listener - Generate QR button not found!');
+    }
+    
+    // Check if credential is already selected on page load
+    setTimeout(function() {
+      if (credentialSelect && credentialSelect.value) {
+        console.log('Credential already selected on page load:', credentialSelect.value);
+        const selectedOption = credentialSelect.options[credentialSelect.selectedIndex];
+        if (selectedOption && selectedOption.value) {
+          currentCredentialId = selectedOption.value;
+          currentCredentialName = selectedOption.getAttribute('data-credential-name');
+          if (generateQrBtn) {
+            generateQrBtn.style.setProperty('display', 'block', 'important');
+            generateQrBtn.style.visibility = 'visible';
+            generateQrBtn.style.opacity = '1';
+            console.log('Generate QR button shown for pre-selected credential');
+          }
+        }
+      }
+    }, 200);
+    
+    // Also try to show button immediately if credential is already selected on page load
+    setTimeout(function() {
+      if (credentialSelect && credentialSelect.value) {
+        console.log('Credential already selected on page load, showing button...');
+        if (generateQrBtn) {
+          generateQrBtn.style.display = 'block';
+          generateQrBtn.style.setProperty('display', 'block', 'important');
+          currentCredentialId = credentialSelect.value;
+          currentCredentialName = credentialSelect.options[credentialSelect.selectedIndex].getAttribute('data-credential-name');
+        }
+      }
+    }, 100);
+  }
+  
+  // Download PNG
+  if (downloadPngBtn) {
+    downloadPngBtn.addEventListener('click', function() {
+      if (currentQrUrl) {
+        const link = document.createElement('a')
+        link.href = currentQrUrl
+        link.download = `qr_code_${currentCredentialName || 'credential'}.png`
+        document.body.appendChild(link)
+        link.click()
+        document.body.removeChild(link)
+        
+        if (typeof Swal !== 'undefined') {
+          Swal.fire({
+            icon: 'success',
+            title: 'Download Started!',
+            text: 'QR code download started',
+            timer: 2000,
+            showConfirmButton: false
+          })
+        }
+      }
+    })
+  }
+  
+  // Download PDF (generate PDF with QR code)
+  if (downloadPdfBtn) {
+    downloadPdfBtn.addEventListener('click', function() {
+      if (currentQrUrl && currentVerificationUrl) {
+        // Use jsPDF and html2canvas if available, or open in new window for printing
+        if (typeof window.jsPDF !== 'undefined' && typeof html2canvas !== 'undefined') {
+          // Generate PDF with QR code
+          html2canvas(qrImage).then(canvas => {
+            const imgData = canvas.toDataURL('image/png')
+            const pdf = new jsPDF()
+            pdf.addImage(imgData, 'PNG', 10, 10, 190, 190)
+            pdf.text('Credential ID: ' + (currentCredentialName || 'N/A'), 10, 210)
+            pdf.text('Verification URL: ' + currentVerificationUrl, 10, 220)
+            pdf.save(`qr_code_${currentCredentialName || 'credential'}.pdf`)
+          })
+        } else {
+          // Fallback: open in new window for printing
+          const printWindow = window.open('', '_blank')
+          printWindow.document.write(`
+            <html>
+              <head><title>QR Code - ${currentCredentialName || 'Credential'}</title></head>
+              <body style="text-align: center; padding: 2rem;">
+                <h2>Credential QR Code</h2>
+                <img src="${currentQrUrl}" alt="QR Code" style="max-width: 300px;">
+                <p><strong>Credential ID:</strong> ${currentCredentialName || 'N/A'}</p>
+                <p><strong>Verification URL:</strong><br><code style="word-break: break-all;">${currentVerificationUrl}</code></p>
+                <script>window.onload = function() { window.print(); }</script>
+              </body>
+            </html>
+          `)
+          printWindow.document.close()
+        }
+      }
+    })
+  }
+  
+  // Share Link
+  if (shareLinkBtn) {
+    shareLinkBtn.addEventListener('click', async function() {
+      if (!currentCredentialId) return
+      
+      // Show share dialog with options
+      if (typeof Swal !== 'undefined') {
+        const result = await Swal.fire({
+          title: 'Share Credential',
+          html: `
+            <p>Generate a shareable link for this credential.</p>
+            <div class="form-group" style="text-align: left; margin-top: 1rem;">
+              <label for="share-email" class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Share with Email (Optional)</label>
+              <input type="email" id="share-email" class="swal2-input" placeholder="recipient@example.com" style="width: 100%;">
+            </div>
+            <div class="form-group" style="text-align: left; margin-top: 1rem;">
+              <label for="share-expires" class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Expires In (Days, Optional)</label>
+              <input type="number" id="share-expires" class="swal2-input" value="30" min="1" style="width: 100%;">
+            </div>
+            <div class="form-group" style="text-align: left; margin-top: 1rem;">
+              <label class="form-label" style="display: block; margin-bottom: 0.5rem; font-weight: 500;">Privacy Settings</label>
+              <div style="display: flex; gap: 1rem; margin-top: 0.5rem;">
+                <label class="checkbox-label" style="display: flex; align-items: center; gap: 0.5rem;">
+                  <input type="checkbox" id="hide-grade" class="checkbox-input"> Hide Grade
+                </label>
+                <label class="checkbox-label" style="display: flex; align-items: center; gap: 0.5rem;">
+                  <input type="checkbox" id="hide-student-id" class="checkbox-input"> Hide Student ID
+                </label>
+              </div>
+            </div>
+          `,
+          showCancelButton: true,
+          confirmButtonText: 'Generate Link',
+          confirmButtonColor: '#4f46e5',
+          cancelButtonText: 'Cancel',
+          focusConfirm: false,
+          preConfirm: () => {
+            const email = Swal.getPopup().querySelector('#share-email').value;
+            const expires_in_days = Swal.getPopup().querySelector('#share-expires').value;
+            const hide_grade = Swal.getPopup().querySelector('#hide-grade').checked;
+            const hide_student_id = Swal.getPopup().querySelector('#hide-student-id').checked;
+            return { email, expires_in_days, hide_grade, hide_student_id };
+          }
+        })
+        
+        if (result.isConfirmed && result.value) {
+          const { email, expires_in_days, hide_grade, hide_student_id } = result.value
+          
+          try {
+            // Get CSRF token
+            const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || 
+                             document.cookie.match(/csrftoken=([^;]+)/)?.[1]
+            
+            // Get JWT token from localStorage
+            const accessToken = localStorage.getItem('access_token')
+            
+            const headers = {
+              'Content-Type': 'application/json',
+            }
+            
+            if (csrftoken) {
+              headers['X-CSRFToken'] = csrftoken
+            }
+            
+            if (accessToken) {
+              headers['Authorization'] = `Bearer ${accessToken}`
+            }
+            
+            // Create share link via API
+            const response = await fetch('/credentials/share/', {
+              method: 'POST',
+              headers: headers,
+              credentials: 'include',
+              body: JSON.stringify({
+                credential: currentCredentialId,
+                shared_with_email: email || null,
+                expires_in_days: expires_in_days ? parseInt(expires_in_days) : 30,
+                max_views: 100,
+                hide_grade: hide_grade,
+                hide_student_id: hide_student_id
+              })
+            })
+            
+            if (!response.ok) {
+              let errorData
+              try {
+                errorData = await response.json()
+              } catch (e) {
+                throw new Error(`Server error: ${response.status} ${response.statusText}`)
+              }
+              throw new Error(errorData.detail || errorData.error || `Failed to create share link: ${response.status}`)
+            }
+            
+            const data = await response.json()
+            
+            if (data.share_token) {
+              const shareUrl = `${window.location.origin}/credentials/share/${data.share_token}/`
+              
+              Swal.fire({
+                icon: 'success',
+                title: 'Share Link Generated!',
+                html: `
+                  <p>Copy this link to share your credential:</p>
+                  <div style="background: var(--bg-secondary, #f5f5f5); padding: 0.75rem; border-radius: 8px; display: flex; align-items: center; gap: 0.5rem; margin: 1rem 0;">
+                    <input type="text" value="${shareUrl}" id="share-link-input" readonly style="flex-grow: 1; border: none; background: transparent; color: var(--text-primary, #333); font-family: monospace; font-size: 0.875rem;">
+                    <button class="btn btn-sm btn-primary" id="copy-share-link-btn" style="padding: 0.5rem 1rem; background: #4f46e5; color: white; border: none; border-radius: 4px; cursor: pointer;">Copy</button>
+                  </div>
+                  ${data.expires_at ? `<p style="font-size: 0.8rem; color: #666; margin-top: 0.5rem;">Link expires: ${new Date(data.expires_at).toLocaleString()}</p>` : ''}
+                `,
+                confirmButtonText: 'Done',
+                confirmButtonColor: '#4f46e5',
+                didOpen: () => {
+                  document.getElementById('copy-share-link-btn')?.addEventListener('click', () => {
+                    const input = document.getElementById('share-link-input')
+                    if (input) {
+                      input.select()
+                      document.execCommand('copy')
+                      navigator.clipboard.writeText(shareUrl).then(() => {
+                        Swal.fire({
+                          icon: 'success',
+                          title: 'Copied!',
+                          text: 'Share link copied to clipboard',
+                          timer: 2000,
+                          showConfirmButton: false
+                        })
+                      })
+                    }
+                  })
+                }
+              })
+            }
+          } catch (error) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: error.message || 'Failed to create share link. Please try again.'
+            })
+          }
+        }
+      } else {
+        // Fallback: copy verification URL
+        if (currentVerificationUrl) {
+          navigator.clipboard.writeText(currentVerificationUrl).then(() => {
+            alert('Verification URL copied to clipboard!')
+          })
+        }
+      }
+    })
+  }
+  
+  // Copy URL
+  if (copyUrlBtn) {
+    copyUrlBtn.addEventListener('click', function() {
+      if (currentVerificationUrl) {
+        navigator.clipboard.writeText(currentVerificationUrl).then(() => {
+          if (typeof Swal !== 'undefined') {
+            Swal.fire({
+              icon: 'success',
+              title: 'Copied!',
+              text: 'Verification URL copied to clipboard',
+              timer: 2000,
+              showConfirmButton: false
+            })
+          } else {
+            alert('Verification URL copied to clipboard!')
+          }
+        }).catch(() => {
+          // Fallback
+          const input = document.createElement('input')
+          input.value = currentVerificationUrl
+          document.body.appendChild(input)
+          input.select()
+          document.execCommand('copy')
+          document.body.removeChild(input)
+          if (typeof Swal !== 'undefined') {
+            Swal.fire({
+              icon: 'success',
+              title: 'Copied!',
+              text: 'Verification URL copied to clipboard',
+              timer: 2000,
+              showConfirmButton: false
+            })
+          }
+        })
+      }
+    })
+  }
+})()
+</script>
+{% endautoescape %}
+{% endblock extra_js %}

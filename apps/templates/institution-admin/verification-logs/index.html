@@ -1,0 +1,496 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Verification Logs {% endblock %} 
+
+{% block content %}
+{% load static %}
+  <section class="content-section active" id="section-verification-logs">
+    <div class="section-header">
+      <div>
+        <h1 class="section-title">Verification Logs</h1>
+        <p class="section-subtitle">Track all credential verification requests for your institution</p>
+      </div>
+      <div class="section-actions">
+        <button class="btn btn-outline" id="filter-btn" onclick="openFilterModal()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+          </svg>
+          Filter
+        </button>
+      </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+      <div class="data-table-card" style="padding: 1.5rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <p style="margin: 0; font-size: 0.875rem; color: var(--text-muted); font-weight: 500;">Total Verifications</p>
+            <h3 style="margin: 0.5rem 0 0 0; font-size: 2rem; font-weight: 700; color: var(--text-primary);">{{ total_logs }}</h3>
+          </div>
+          <div style="width: 48px; height: 48px; border-radius: 12px; background: var(--accent-primary); opacity: 0.1; display: flex; align-items: center; justify-content: center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <path d="M14 2v6h6"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      
+      <div class="data-table-card" style="padding: 1.5rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <p style="margin: 0; font-size: 0.875rem; color: var(--text-muted); font-weight: 500;">Valid</p>
+            <h3 style="margin: 0.5rem 0 0 0; font-size: 2rem; font-weight: 700; color: var(--success, #10b981);">{{ valid_logs }}</h3>
+          </div>
+          <div style="width: 48px; height: 48px; border-radius: 12px; background: var(--success, #10b981); opacity: 0.1; display: flex; align-items: center; justify-content: center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--success, #10b981)" stroke-width="2">
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              <path d="m9 12 2 2 4-4"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      
+      <div class="data-table-card" style="padding: 1.5rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <p style="margin: 0; font-size: 0.875rem; color: var(--text-muted); font-weight: 500;">Invalid</p>
+            <h3 style="margin: 0.5rem 0 0 0; font-size: 2rem; font-weight: 700; color: var(--error, #ef4444);">{{ invalid_logs }}</h3>
+          </div>
+          <div style="width: 48px; height: 48px; border-radius: 12px; background: var(--error, #ef4444); opacity: 0.1; display: flex; align-items: center; justify-content: center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--error, #ef4444)" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="15" y1="9" x2="9" y2="15"/>
+              <line x1="9" y1="9" x2="15" y2="15"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      
+      <div class="data-table-card" style="padding: 1.5rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <p style="margin: 0; font-size: 0.875rem; color: var(--text-muted); font-weight: 500;">Revoked</p>
+            <h3 style="margin: 0.5rem 0 0 0; font-size: 2rem; font-weight: 700; color: var(--warning, #f59e0b);">{{ revoked_logs }}</h3>
+          </div>
+          <div style="width: 48px; height: 48px; border-radius: 12px; background: var(--warning, #f59e0b); opacity: 0.1; display: flex; align-items: center; justify-content: center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--warning, #f59e0b)" stroke-width="2">
+              <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+              <line x1="12" y1="9" x2="12" y2="13"/>
+              <line x1="12" y1="17" x2="12.01" y2="17"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Search Bar -->
+    <div style="margin-bottom: 1.5rem;">
+      <form method="get" action="{% url 'institution_admin_verification_logs' %}" style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+        <div style="position: relative; flex: 1; max-width: 400px; min-width: 250px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none;">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.3-4.3"/>
+          </svg>
+          <input 
+            type="text" 
+            name="search" 
+            value="{{ search_query }}"
+            placeholder="Search by credential ID, verifier email, or holder name..." 
+            class="input"
+            style="padding-left: 2.5rem; width: 100%;"
+            autocomplete="off"
+          >
+          {% if search_query %}
+          <a href="{% url 'institution_admin_verification_logs' %}{% if filter_method or filter_result or filter_date_from or filter_date_to %}?{% if filter_method %}method={{ filter_method }}{% endif %}{% if filter_result %}{% if filter_method %}&{% endif %}result={{ filter_result }}{% endif %}{% if filter_date_from %}{% if filter_method or filter_result %}&{% endif %}date_from={{ filter_date_from }}{% endif %}{% if filter_date_to %}{% if filter_method or filter_result or filter_date_from %}&{% endif %}date_to={{ filter_date_to }}{% endif %}{% endif %}" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); text-decoration: none; padding: 4px;" title="Clear search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </a>
+          {% endif %}
+        </div>
+        {% if filter_method or filter_result or filter_date_from or filter_date_to %}
+        <input type="hidden" name="method" value="{{ filter_method }}">
+        <input type="hidden" name="result" value="{{ filter_result }}">
+        <input type="hidden" name="date_from" value="{{ filter_date_from }}">
+        <input type="hidden" name="date_to" value="{{ filter_date_to }}">
+        {% endif %}
+        <button type="submit" class="btn btn-primary" style="white-space: nowrap;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+          </svg>
+          Search
+        </button>
+      </form>
+      
+      <!-- Active Filters Display -->
+      {% if filter_method or filter_result or filter_date_from or filter_date_to %}
+      <div style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
+        <span style="font-size: 0.875rem; color: var(--text-muted); font-weight: 500;">Active filters:</span>
+        {% if filter_method %}
+        <span class="status-badge info" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+          Method: {{ filter_method|title }}
+          <a href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if filter_result %}result={{ filter_result }}{% if filter_date_from or filter_date_to %}&{% endif %}{% endif %}{% if filter_date_from %}date_from={{ filter_date_from }}{% if filter_date_to %}&{% endif %}{% endif %}{% if filter_date_to %}date_to={{ filter_date_to }}{% endif %}" style="color: inherit; text-decoration: none; font-weight: bold;" title="Remove filter">×</a>
+        </span>
+        {% endif %}
+        {% if filter_result %}
+        <span class="status-badge info" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+          Result: {{ filter_result|title }}
+          <a href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if filter_method %}method={{ filter_method }}{% if filter_date_from or filter_date_to %}&{% endif %}{% endif %}{% if filter_date_from %}date_from={{ filter_date_from }}{% if filter_date_to %}&{% endif %}{% endif %}{% if filter_date_to %}date_to={{ filter_date_to }}{% endif %}" style="color: inherit; text-decoration: none; font-weight: bold;" title="Remove filter">×</a>
+        </span>
+        {% endif %}
+        {% if filter_date_from or filter_date_to %}
+        <span class="status-badge info" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+          Date: {% if filter_date_from %}{{ filter_date_from }}{% endif %}{% if filter_date_from and filter_date_to %} - {% endif %}{% if filter_date_to %}{{ filter_date_to }}{% endif %}
+          <a href="?{% if search_query %}search={{ search_query }}{% if filter_method or filter_result %}&{% endif %}{% endif %}{% if filter_method %}method={{ filter_method }}{% if filter_result %}&{% endif %}{% endif %}{% if filter_result %}result={{ filter_result }}{% endif %}" style="color: inherit; text-decoration: none; font-weight: bold;" title="Remove filter">×</a>
+        </span>
+        {% endif %}
+        <a href="{% url 'institution_admin_verification_logs' %}{% if search_query %}?search={{ search_query }}{% endif %}" style="font-size: 0.875rem; color: var(--accent-primary); text-decoration: none; font-weight: 500;">Clear all filters</a>
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="data-table-card">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Credential ID</th>
+            <th>Holder</th>
+            <th>Verifier</th>
+            <th>Method</th>
+            <th>Result</th>
+            <th>IP Address</th>
+            <th>Country</th>
+            <th>Date & Time</th>
+            <th>Response Time</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if verification_logs %}
+            {% for log in verification_logs %}
+            <tr>
+              <td>
+                <div class="table-cell-main">
+                  <div>
+                    <div class="table-cell-title" style="font-family: monospace; font-size: 0.875rem;">
+                      {% if log.credential %}
+                        {{ log.credential.credential_id }}
+                      {% else %}
+                        {{ log.credential_id_searched|default:"—" }}
+                      {% endif %}
+                    </div>
+                    {% if log.credential %}
+                    <div class="table-cell-subtitle">{{ log.credential.program_name|default:"—" }}</div>
+                    {% endif %}
+                  </div>
+                </div>
+              </td>
+              <td>
+                {% if log.credential %}
+                  <div class="table-cell-title">{{ log.credential.holder_name|default:"—" }}</div>
+                  {% if log.credential.holder %}
+                  <div class="table-cell-subtitle">{{ log.credential.holder.email }}</div>
+                  {% endif %}
+                {% else %}
+                  <span style="color: var(--text-muted);">—</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if log.verifier %}
+                  <div class="table-cell-title">{{ log.verifier.full_name }}</div>
+                  <div class="table-cell-subtitle">{{ log.verifier.email }}</div>
+                {% elif log.verifier_email %}
+                  <div class="table-cell-title">{{ log.verifier_email }}</div>
+                  {% if log.verifier_company %}
+                  <div class="table-cell-subtitle">{{ log.verifier_company }}</div>
+                  {% endif %}
+                {% else %}
+                  <span style="color: var(--text-muted);">Anonymous</span>
+                {% endif %}
+              </td>
+              <td>
+                <span class="status-badge info">{{ log.get_method_display }}</span>
+              </td>
+              <td>
+                {% if log.result == 'valid' %}
+                  <span class="status-badge success">Valid</span>
+                {% elif log.result == 'invalid' %}
+                  <span class="status-badge error">Invalid</span>
+                {% elif log.result == 'revoked' %}
+                  <span class="status-badge warning">Revoked</span>
+                {% elif log.result == 'expired' %}
+                  <span class="status-badge warning">Expired</span>
+                {% elif log.result == 'not_found' %}
+                  <span class="status-badge error">Not Found</span>
+                {% else %}
+                  <span class="status-badge error">Error</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if log.ip_address %}
+                  <span style="font-family: monospace; font-size: 0.875rem;">{{ log.ip_address }}</span>
+                {% else %}
+                  <span style="color: var(--text-muted);">—</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if log.country %}
+                  {{ log.country }}
+                {% else %}
+                  <span style="color: var(--text-muted);">—</span>
+                {% endif %}
+              </td>
+              <td>
+                <div class="table-cell-title">{{ log.created_at|date:"M d, Y" }}</div>
+                <div class="table-cell-subtitle">{{ log.created_at|date:"H:i:s" }}</div>
+              </td>
+              <td>
+                {% if log.response_time_ms %}
+                  <span style="font-size: 0.875rem;">{{ log.response_time_ms }}ms</span>
+                {% else %}
+                  <span style="color: var(--text-muted);">—</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="9" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 1rem;">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <path d="M14 2v6h6"/>
+                </svg>
+                <p style="margin: 0; font-size: 1.125rem; font-weight: 600;">No verification logs found</p>
+                <p style="margin: 0.5rem 0 0 0; font-size: 0.875rem;">Verification logs will appear here when credentials are verified</p>
+              </td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    {% if verification_logs.has_other_pages %}
+    <div class="pagination-container">
+      <span class="pagination-info">
+        Showing {{ verification_logs.start_index }} to {{ verification_logs.end_index }} of {{ verification_logs.paginator.count }} verification logs
+      </span>
+      <div class="pagination-controls">
+        {% if verification_logs.has_previous %}
+          <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}{% if filter_method %}&method={{ filter_method }}{% endif %}{% if filter_result %}&result={{ filter_result }}{% endif %}{% if filter_date_from %}&date_from={{ filter_date_from }}{% endif %}{% if filter_date_to %}&date_to={{ filter_date_to }}{% endif %}" class="pagination-btn" title="First Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="11 17 6 12 11 7"></polyline><polyline points="18 17 13 12 18 7"></polyline></svg>
+          </a>
+          <a href="?page={{ verification_logs.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if filter_method %}&method={{ filter_method }}{% endif %}{% if filter_result %}&result={{ filter_result }}{% endif %}{% if filter_date_from %}&date_from={{ filter_date_from }}{% endif %}{% if filter_date_to %}&date_to={{ filter_date_to }}{% endif %}" class="pagination-btn" title="Previous Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </a>
+        {% else %}
+          <span class="pagination-btn disabled" title="First Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="11 17 6 12 11 7"></polyline><polyline points="18 17 13 12 18 7"></polyline></svg>
+          </span>
+          <span class="pagination-btn disabled" title="Previous Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </span>
+        {% endif %}
+
+        {% for i in verification_logs.paginator.page_range %}
+          {% if verification_logs.number == i %}
+            <span class="pagination-btn active">{{ i }}</span>
+          {% elif i > verification_logs.number|add:'-3' and i < verification_logs.number|add:'3' %}
+            <a href="?page={{ i }}{% if search_query %}&search={{ search_query }}{% endif %}{% if filter_method %}&method={{ filter_method }}{% endif %}{% if filter_result %}&result={{ filter_result }}{% endif %}{% if filter_date_from %}&date_from={{ filter_date_from }}{% endif %}{% if filter_date_to %}&date_to={{ filter_date_to }}{% endif %}" class="pagination-btn">{{ i }}</a>
+          {% endif %}
+        {% endfor %}
+
+        {% if verification_logs.has_next %}
+          <a href="?page={{ verification_logs.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if filter_method %}&method={{ filter_method }}{% endif %}{% if filter_result %}&result={{ filter_result }}{% endif %}{% if filter_date_from %}&date_from={{ filter_date_from }}{% endif %}{% if filter_date_to %}&date_to={{ filter_date_to }}{% endif %}" class="pagination-btn" title="Next Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </a>
+          <a href="?page={{ verification_logs.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}{% if filter_method %}&method={{ filter_method }}{% endif %}{% if filter_result %}&result={{ filter_result }}{% endif %}{% if filter_date_from %}&date_from={{ filter_date_from }}{% endif %}{% if filter_date_to %}&date_to={{ filter_date_to }}{% endif %}" class="pagination-btn" title="Last Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="13 17 18 12 13 7"></polyline><polyline points="6 17 11 12 6 7"></polyline></svg>
+          </a>
+        {% else %}
+          <span class="pagination-btn disabled" title="Next Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </span>
+          <span class="pagination-btn disabled" title="Last Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="13 17 18 12 13 7"></polyline><polyline points="6 17 11 12 6 7"></polyline></svg>
+          </span>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+  </section>
+
+  <!-- Filter Modal -->
+  <div id="filter-modal" class="modal" style="display: none;">
+    <div class="modal-overlay" onclick="closeFilterModal()"></div>
+    <div class="modal-content" style="max-width: 500px;">
+      <div class="modal-header">
+        <h2 class="modal-title">Filter Verification Logs</h2>
+        <button class="modal-close" onclick="closeFilterModal()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <form method="get" action="{% url 'institution_admin_verification_logs' %}" id="filter-form">
+        <div class="modal-body" style="padding: 1.5rem;">
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Verification Method</label>
+            <select name="method" class="input select">
+              <option value="">All Methods</option>
+              {% for value, label in verification_methods %}
+              <option value="{{ value }}" {% if filter_method == value %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Verification Result</label>
+            <select name="result" class="input select">
+              <option value="">All Results</option>
+              {% for value, label in verification_results %}
+              <option value="{{ value }}" {% if filter_result == value %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+            <div class="form-group">
+              <label class="form-label">Date From</label>
+              <input type="date" name="date_from" class="input" value="{{ filter_date_from }}">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Date To</label>
+              <input type="date" name="date_to" class="input" value="{{ filter_date_to }}">
+            </div>
+          </div>
+          
+          {% if search_query %}
+          <input type="hidden" name="search" value="{{ search_query }}">
+          {% endif %}
+        </div>
+        <div class="modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 0.75rem;">
+          <button type="button" class="btn btn-outline" onclick="clearFilters()">Clear All</button>
+          <button type="submit" class="btn btn-primary">Apply Filters</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Modal Functions
+    function openFilterModal() {
+      document.getElementById('filter-modal').style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeFilterModal() {
+      document.getElementById('filter-modal').style.display = 'none';
+      document.body.style.overflow = '';
+    }
+    
+    function clearFilters() {
+      window.location.href = "{% url 'institution_admin_verification_logs' %}";
+    }
+    
+    // Close modals on ESC key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeFilterModal();
+      }
+    });
+  </script>
+
+  <style>
+    /* Modal Styles */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    
+    .modal-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+    }
+    
+    .modal-content {
+      position: relative;
+      background: var(--bg-card, #fff);
+      border-radius: var(--radius-lg, 12px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      width: 100%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .modal-title {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    
+    .modal-close {
+      background: none;
+      border: none;
+      padding: 0.5rem;
+      cursor: pointer;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s;
+    }
+    
+    .modal-close:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+    
+    .modal-body {
+      flex: 1;
+      overflow-y: auto;
+    }
+    
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      font-size: 0.875rem;
+      color: var(--text-primary);
+    }
+  </style>
+
+{% endblock content %}

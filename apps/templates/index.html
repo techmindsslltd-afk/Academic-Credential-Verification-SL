@@ -1,0 +1,1696 @@
+{% extends "layouts/guest.html" %}
+{% load humanize %}
+
+{% block title %} {{settings.site_name_abb}} - Blockchain Academic Credential Verification {% endblock %} 
+
+{% block content %}
+{% load static %}
+  <!-- Home Page -->
+  <div id="page-home" class="page active">
+    <section class="hero">
+      <div class="hero-decoration hero-decoration-1"></div>
+      <div class="hero-decoration hero-decoration-2"></div>
+      <div class="hero-decoration hero-decoration-3"></div>
+      <div class="hero-decoration hero-decoration-4"></div>
+      
+      <div class="container">
+        <div class="hero-badge">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+          <span>Blockchain Secured</span> · UNESCO WHED Verified · Global Coverage
+        </div>
+        <h1>Verify Academic Credentials<br>From Any University Worldwide</h1>
+        <p class="hero-subtitle">
+          The complete dual-verification platform for academic credentials. Blockchain security for partner institutions, 
+          plus global accreditation lookup for any university worldwide. Eliminate fraud and speed up hiring.
+        </p>
+        <div class="hero-actions">
+          <button class="btn btn-primary btn-lg" data-page="verify">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+            </svg>
+            Verify a Credential
+          </button>
+          <button class="btn btn-secondary btn-lg" data-page="accreditation">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="m9 12 2 2 4-4"/>
+            </svg>
+            Check Accreditation
+          </button>
+        </div>
+        
+        <!-- Added dual verification highlight -->
+        <div class="dual-verify-highlight">
+          <div class="dual-verify-item">
+            <div class="dual-verify-icon blockchain">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 17l10 5 10-5"/>
+                <path d="M2 12l10 5 10-5"/>
+              </svg>
+            </div>
+            <div class="dual-verify-text">
+              <strong>Partner Institutions</strong>
+              <span>Instant blockchain verification</span>
+            </div>
+          </div>
+          <div class="dual-verify-divider">+</div>
+          <div class="dual-verify-item">
+            <div class="dual-verify-icon global">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="2" y1="12" x2="22" y2="12"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+            </div>
+            <div class="dual-verify-text">
+              <strong>Global Universities</strong>
+              <span>UNESCO WHED accreditation lookup</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="trusted-by">
+          <div class="trusted-by-label">Trusted by leading institutions in Sierra Leone and beyond</div>
+          <div class="trusted-logos">
+            <span class="trusted-logo">University of Sierra Leone</span>
+            <span class="trusted-logo">Njala University</span>
+            <span class="trusted-logo">Limkokwing</span>
+            <span class="trusted-logo">IPAM</span>
+            <span class="trusted-logo">BlueCrest</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container">
+      <div class="stats">
+        <div class="stat-item">
+          <div class="stat-value"><span class="counter" data-target="{{ credentials_verified_annually|default:0 }}">0</span><span class="counter-suffix">+</span></div>
+          <div class="stat-label">credentials verified annually</div>
+          <div class="stat-company">ACROSS ALL INSTITUTIONS</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value"><span class="counter" data-target="{{ universities_in_database|default:0 }}">0</span><span class="counter-suffix">+</span></div>
+          <div class="stat-label">universities in database</div>
+          <div class="stat-company">UNESCO WHED INTEGRATED</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value"><span class="counter" data-target="{{ countries_covered|default:0 }}">0</span></div>
+          <div class="stat-label">countries covered</div>
+          <div class="stat-company">GLOBAL ACCREDITATION</div>
+        </div>
+        <div class="stat-item">
+          <div class="stat-value"><span class="counter" data-target="{{ fraudulent_credentials|default:0 }}">0</span></div>
+          <div class="stat-label">fraudulent credentials passed</div>
+          <div class="stat-company">SINCE 2020</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- New Dual Verification System Section -->
+    <section class="section dual-system-section">
+      <div class="container">
+        <div style="text-align: center; margin-bottom: 3rem;">
+          <span class="badge badge-accent" style="margin-bottom: 1rem;">Dual Verification System</span>
+          <h2>Verify Credentials From Any University</h2>
+          <p style="font-size: 1.125rem; margin-top: 1rem; max-width: 700px; margin-left: auto; margin-right: auto;">
+            Not all universities can join the platform immediately. Our dual system ensures you can verify credentials 
+            from both partner institutions and non-participating universities worldwide.
+          </p>
+        </div>
+        
+        <div class="dual-system-grid">
+          <div class="dual-system-card partner">
+            <div class="dual-system-header">
+              <div class="dual-system-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                  <path d="M2 17l10 5 10-5"/>
+                  <path d="M2 12l10 5 10-5"/>
+                </svg>
+              </div>
+              <span class="dual-system-label">Partner Institutions</span>
+            </div>
+            <h3>Blockchain Verification</h3>
+            <p>Credentials from partner universities are cryptographically hashed and stored on immutable blockchain ledger for instant verification.</p>
+            <ul class="dual-system-features">
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 12 2 2 4-4"/></svg>
+                Instant cryptographic verification
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 12 2 2 4-4"/></svg>
+                Tamper-proof blockchain record
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 12 2 2 4-4"/></svg>
+                IPFS decentralized storage
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 12 2 2 4-4"/></svg>
+                Real-time revocation status
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 12 2 2 4-4"/></svg>
+                Digital credential wallet
+              </li>
+            </ul>
+            <button class="btn btn-primary" data-page="institutions">Join as Institution</button>
+          </div>
+          
+          <div class="dual-system-card global">
+            <div class="dual-system-header">
+              <div class="dual-system-icon">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="2" y1="12" x2="22" y2="12"/>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                </svg>
+              </div>
+              <span class="dual-system-label">Non-Partner Universities</span>
+            </div>
+            <h3>Global Accreditation Lookup</h3>
+            <p>For institutions not yet on the platform, we cross-reference international accreditation databases to verify legitimacy.</p>
+            <ul class="dual-system-features">
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 12 2 2 4-4"/></svg>
+                UNESCO WHED database lookup
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 12 2 2 4-4"/></svg>
+                Regional accreditation bodies
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 12 2 2 4-4"/></svg>
+                Government recognition status
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 12 2 2 4-4"/></svg>
+                Official verification guidance
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 12 2 2 4-4"/></svg>
+                Direct institution contact info
+              </li>
+            </ul>
+            <button class="btn btn-teal" data-page="accreditation">Check Accreditation</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Global Network Section -->
+    <section class="section">
+      <div class="container">
+        <div style="text-align: center; margin-bottom: 3rem;">
+          <span class="badge badge-accent" style="margin-bottom: 1rem;">Global Coverage</span>
+          <h2>A Worldwide Verification Network</h2>
+          <p style="font-size: 1.125rem; margin-top: 1rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+            Our decentralized network spans across continents, ensuring your credentials are verifiable anywhere.
+          </p>
+        </div>
+        
+        <div class="network-map">
+          <div class="network-map-bg"></div>
+          <div class="network-stats">
+            <div class="network-stat">
+              <div class="network-stat-value">{{ countries_covered|default:195 }}</div>
+              <div class="network-stat-label">Countries in Database</div>
+            </div>
+            <div class="network-stat">
+              <div class="network-stat-value">{{ whed_institutions|default:18000|intcomma }}+</div>
+              <div class="network-stat-label">Universities Listed (WHED)</div>
+            </div>
+            <div class="network-stat">
+              <div class="network-stat-value">{{ partner_institutions|default:0|intcomma }}+</div>
+              <div class="network-stat-label">Partner Institutions</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="section" style="background-color: var(--bg-tertiary);">
+      <div class="container">
+        <div style="text-align: center; margin-bottom: 3rem;">
+          <span class="badge badge-accent" style="margin-bottom: 1rem;">Features</span>
+          <h2>Everything you need for credential verification</h2>
+          <p style="font-size: 1.125rem; margin-top: 1rem; max-width: 600px; margin-left: auto; margin-right: auto;">
+            From issuance to verification, we provide a complete ecosystem for academic credentials.
+          </p>
+        </div>
+        
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+                <line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/>
+                <line x1="3" x2="21" y1="10" y2="10"/><path d="m9 16 2 2 4-4"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Instant Verification</h3>
+            <p class="feature-description">
+              Verify any credential in seconds using credential ID, QR code, or blockchain hash. No more waiting weeks.
+            </p>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="2" y1="12" x2="22" y2="12"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">UNESCO WHED Integration</h3>
+            <p class="feature-description">
+              Cross-reference any university against the World Higher Education Database for accreditation status.
+            </p>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                <path d="m9 12 2 2 4-4"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Tamper-Proof Security</h3>
+            <p class="feature-description">
+              Every credential is cryptographically hashed and stored on an immutable blockchain ledger.
+            </p>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect width="7" height="7" x="3" y="3" rx="1"/>
+                <rect width="7" height="7" x="14" y="3" rx="1"/>
+                <rect width="7" height="7" x="14" y="14" rx="1"/>
+                <rect width="7" height="7" x="3" y="14" rx="1"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">QR Code & Links</h3>
+            <p class="feature-description">
+              Graduates share credentials via unique QR codes and shareable links. Employers simply scan to verify.
+            </p>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect width="20" height="14" x="2" y="7" rx="2" ry="2"/>
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">Digital Wallet</h3>
+            <p class="feature-description">
+              Students receive a secure digital wallet containing all their verifiable credentials for portability.
+            </p>
+          </div>
+          
+          <div class="feature-card">
+            <div class="feature-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 12V7H5a2 2 0 0 1 0-4h14v4"/>
+                <path d="M3 5v14a2 2 0 0 0 2 2h16v-5"/>
+                <path d="M18 12a2 2 0 0 0 0 4h4v-4Z"/>
+              </svg>
+            </div>
+            <h3 class="feature-title">REST API</h3>
+            <p class="feature-description">
+              Integrate with existing HR systems, student databases, and recruitment platforms seamlessly.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="section">
+      <div class="container">
+        <div style="text-align: center; margin-bottom: 4rem;">
+          <span class="badge badge-info" style="margin-bottom: 1rem;">Process</span>
+          <h2>How It Works</h2>
+          <p style="font-size: 1.125rem; margin-top: 1rem;">
+            From issuance to verification in four simple steps
+          </p>
+        </div>
+        
+        <div class="steps">
+          <div class="step">
+            <div class="step-number">1</div>
+            <h4 class="step-title">Institution Issues</h4>
+            <p class="step-description">University creates and signs the credential with their verified institutional key</p>
+          </div>
+          <div class="step">
+            <div class="step-number">2</div>
+            <h4 class="step-title">Blockchain Stamp</h4>
+            <p class="step-description">Credential hash recorded on distributed ledger with IPFS backup</p>
+          </div>
+          <div class="step">
+            <div class="step-number">3</div>
+            <h4 class="step-title">Graduate Receives</h4>
+            <p class="step-description">Student gets digital credential in their wallet with QR code and verification link</p>
+          </div>
+          <div class="step">
+            <div class="step-number">4</div>
+            <h4 class="step-title">Employer Verifies</h4>
+            <p class="step-description">Instant verification without contacting the institution</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Quick Verify & Activity -->
+    <section class="section" style="background-color: var(--bg-tertiary);">
+      <div class="container">
+        <div class="home-verify-grid">
+          <div class="verify-section">
+            <div class="verify-header">
+              <h2>Ready to verify a credential?</h2>
+              <p style="margin-top: 0.5rem; color: var(--text-muted);">
+                Enter a credential ID, scan QR, or search by name
+              </p>
+            </div>
+            
+            <div class="verify-content">
+              <div class="verify-input-container">
+                <input type="text" class="input" placeholder="e.g., CERT-2024-SL-001234" id="quick-verify-input">
+                <button class="btn btn-accent" id="quick-verify-btn">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+                  </svg>
+                  Verify
+                </button>
+              </div>
+              <p style="text-align: center; font-size: 0.875rem; color: var(--text-muted);">
+                Try: <code style="background: var(--bg-tertiary); padding: 0.125rem 0.5rem; border-radius: 4px; font-family: var(--font-mono);">CERT-2024-SL-001234</code>
+              </p>
+            </div>
+          </div>
+          
+          <div class="activity-feed">
+            <div class="activity-feed-header">
+              <span class="activity-feed-title">
+                <span class="live-dot"></span>
+                Live Verifications
+              </span>
+              <span style="font-size: 0.75rem; color: var(--text-muted);">Real-time</span>
+            </div>
+            <div id="activity-list"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <div class="footer-grid">
+          <div class="footer-brand">
+            <a href="#" class="footer-logo" data-page="home">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                <path d="M2 17l10 5 10-5"/>
+                <path d="M2 12l10 5 10-5"/>
+              </svg>
+              {{settings.site_name_abb}}
+            </a>
+            <p>Blockchain-powered academic credential verification for Sierra Leone and the world.</p>
+          </div>
+          <div class="footer-links">
+            <h4>Platform</h4>
+            <a href="#" data-page="verify">Verify Credentials</a>
+            <a href="#" data-page="accreditation">Check Accreditation</a>
+            <a href="#" data-page="wallet">Digital Wallet</a>
+            <a href="#" data-page="api">API Documentation</a>
+          </div>
+          <div class="footer-links">
+            <h4>For Users</h4>
+            <a href="#" data-page="institutions">Institutions</a>
+            <a href="#" data-page="employers">Employers</a>
+            <a href="#" data-page="graduates">Graduates</a>
+            <a href="#">Pricing</a>
+          </div>
+          <div class="footer-links">
+            <h4>Resources</h4>
+            <a href="#">Help Center</a>
+            <a href="#">Documentation</a>
+            <a href="#">Privacy Policy</a>
+            <a href="#">Terms of Service</a>
+          </div>
+        </div>
+        <div class="footer-bottom">
+          <p>&copy; 2025 {{settings.site_name_abb}}. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- Verify Page -->
+  <div id="page-verify" class="page">
+    <section class="section" style="padding-top: 8rem;">
+      <div class="container">
+        <div class="page-header">
+          <span class="badge badge-accent">Verification Portal</span>
+          <h1>Verify Academic Credentials</h1>
+          <p>Enter a credential ID, scan a QR code, search by name, or check blockchain hash</p>
+        </div>
+        
+        <div class="verify-portal">
+          <div class="verify-tabs">
+            <button class="verify-tab active" data-tab="id">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+                <line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/>
+                <line x1="3" x2="21" y1="10" y2="10"/>
+              </svg>
+              Credential ID
+            </button>
+            <button class="verify-tab" data-tab="qr">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect width="5" height="5" x="3" y="3" rx="1"/>
+                <rect width="5" height="5" x="16" y="3" rx="1"/>
+                <rect width="5" height="5" x="3" y="16" rx="1"/>
+                <path d="M21 16h-3a2 2 0 0 0-2 2v3"/>
+                <path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/>
+                <path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/>
+                <path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/>
+              </svg>
+              QR Code
+            </button>
+            <button class="verify-tab" data-tab="search">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+              </svg>
+              Search
+            </button>
+            <button class="verify-tab" data-tab="hash">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="4" x2="20" y1="9" y2="9"/>
+                <line x1="4" x2="20" y1="15" y2="15"/>
+                <line x1="10" x2="8" y1="3" y2="21"/>
+                <line x1="16" x2="14" y1="3" y2="21"/>
+              </svg>
+              Blockchain Hash
+            </button>
+          </div>
+          
+          <div class="verify-tab-content">
+            <div id="tab-id" class="tab-panel">
+              <div class="input-group">
+                <label class="input-label">Credential ID</label>
+                <div class="input-with-icon">
+                  <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect width="18" height="18" x="3" y="4" rx="2" ry="2"/>
+                    <line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/>
+                    <line x1="3" x2="21" y1="10" y2="10"/>
+                  </svg>
+                  <input type="text" class="input" placeholder="Enter credential ID (e.g., CERT-2024-SL-001234)" id="verify-id-input">
+                </div>
+              </div>
+              <button class="btn btn-accent btn-lg" style="width: 100%;" id="verify-by-id-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="m9 12 2 2 4-4"/><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+                Verify Credential
+              </button>
+              <p style="text-align: center; margin-top: 1rem; font-size: 0.875rem; color: var(--text-muted);">
+                Demo IDs: <code>CERT-2025-SL-40CBD7</code> (valid), <code>CERT-2023-LK-009012</code> (revoked)
+              </p>
+            </div>
+            
+            <div id="tab-qr" class="tab-panel hidden">
+              <div class="qr-scanner-container">
+                <div class="qr-scanner" id="qr-scanner">
+                  <div style="text-align: center;">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5">
+                      <rect width="5" height="5" x="3" y="3" rx="1"/>
+                      <rect width="5" height="5" x="16" y="3" rx="1"/>
+                      <rect width="5" height="5" x="3" y="16" rx="1"/>
+                      <path d="M21 16h-3a2 2 0 0 0-2 2v3"/>
+                    </svg>
+                    <p style="margin-top: 1rem; font-size: 0.875rem; color: var(--text-muted);">Click to start camera</p>
+                  </div>
+                </div>
+                <button class="btn btn-accent btn-lg" style="width: 100%;" id="start-qr-scan">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+                    <circle cx="12" cy="13" r="4"/>
+                  </svg>
+                  Start Camera Scan
+                </button>
+              </div>
+            </div>
+            
+            <div id="tab-search" class="tab-panel hidden">
+              <div class="search-form">
+                <div class="input-group">
+                  <label class="input-label">Holder Name</label>
+                  <input type="text" class="input" placeholder="Full name as on credential" id="search-name">
+                </div>
+                <div class="input-group">
+                  <label class="input-label">Institution</label>
+                  <select class="input select" id="search-institution">
+                    <option value="">Select institution...</option>
+                    <option value="usl">University of Sierra Leone</option>
+                    <option value="njala">Njala University</option>
+                    <option value="limkokwing">Limkokwing University</option>
+                    <option value="ipam">IPAM</option>
+                    <option value="bluecrest">BlueCrest College</option>
+                    <option value="other">Other (Global Search)</option>
+                  </select>
+                </div>
+                <div class="input-group">
+                  <label class="input-label">Year of Graduation</label>
+                  <input type="number" class="input" placeholder="e.g., 2024" id="search-year" min="1900" max="2030">
+                </div>
+                <button class="btn btn-accent btn-lg" style="width: 100%;" id="search-btn">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+                  </svg>
+                  Search Credentials
+                </button>
+              </div>
+            </div>
+            
+            <div id="tab-hash" class="tab-panel hidden">
+              <div class="input-group">
+                <label class="input-label">Blockchain Hash (SHA-256)</label>
+                <textarea class="input" rows="3" placeholder="Paste the full blockchain hash here..." id="verify-hash-input" style="font-family: var(--font-mono); font-size: 0.8125rem;"></textarea>
+              </div>
+              <button class="btn btn-accent btn-lg" style="width: 100%;" id="verify-by-hash-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="4" x2="20" y1="9" y2="9"/>
+                  <line x1="4" x2="20" y1="15" y2="15"/>
+                  <line x1="10" x2="8" y1="3" y2="21"/>
+                  <line x1="16" x2="14" y1="3" y2="21"/>
+                </svg>
+                Verify by Hash
+              </button>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Verification Result -->
+        <div class="verify-result" id="verify-result">
+          <div class="result-header">
+            <div class="result-icon" id="result-icon"></div>
+            <div class="result-info">
+              <h3 id="result-title"></h3>
+              <p id="result-subtitle"></p>
+            </div>
+            <span class="badge" id="result-badge"></span>
+          </div>
+          <div class="result-details" id="result-details"></div>
+          <div class="result-actions">
+            <button class="btn btn-secondary" id="share-credential-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                <line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/>
+                <line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/>
+              </svg>
+              Share
+            </button>
+            <button class="btn btn-secondary" id="download-cert-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" x2="12" y1="15" y2="3"/>
+              </svg>
+              Download PDF
+            </button>
+            <button class="btn btn-primary" id="verify-another-btn">
+              Verify Another
+            </button>
+          </div>
+        </div>
+        
+        <!-- Timeline Section -->
+        <div class="timeline-section hidden" id="credential-timeline-section">
+          <h3 style="margin-bottom: 1.5rem;">Credential Timeline</h3>
+          <div class="timeline" id="credential-timeline"></div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- New Global Accreditation Page -->
+  <div id="page-accreditation" class="page">
+    <section class="section" style="padding-top: 8rem;">
+      <div class="container">
+        <div class="page-header">
+          <span class="badge badge-teal">Global Accreditation Verification Layer</span>
+          <h1>Check Institution Accreditation</h1>
+          <p>Verify if any university worldwide is accredited and legally recognized to grant degrees</p>
+        </div>
+        
+        <!-- Enhanced UNESCO WHED Integration Portal -->
+        <div class="accreditation-portal">
+          <!-- WHED Stats Banner -->
+          <div class="whed-stats-banner">
+            <div class="whed-logo">
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="2" y1="12" x2="22" y2="12"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+              <div>
+                <span class="whed-title">UNESCO WHED</span>
+                <span class="whed-subtitle">World Higher Education Database</span>
+              </div>
+            </div>
+            <div class="whed-stats">
+              <div class="whed-stat">
+                <span class="whed-stat-value">{{ whed_institutions|default:21000|intcomma }}+</span>
+                <span class="whed-stat-label">Institutions</span>
+              </div>
+              <div class="whed-stat">
+                <span class="whed-stat-value">{{ whed_countries|default:196 }}</span>
+                <span class="whed-stat-label">Countries</span>
+              </div>
+              <div class="whed-stat">
+                <span class="whed-stat-value">{{ whed_accreditation_bodies|default:4500|intcomma }}+</span>
+                <span class="whed-stat-label">Accreditation Bodies</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="accreditation-search-box">
+            <div class="search-box-header">
+              <h3>Search Institution Database</h3>
+              <div class="search-mode-toggle">
+                <button class="search-mode-btn active" data-mode="basic">Basic</button>
+                <button class="search-mode-btn" data-mode="advanced">Advanced</button>
+              </div>
+            </div>
+            <p style="color: var(--text-muted); margin-bottom: 1.5rem;">Cross-reference against UNESCO WHED, regional accreditation bodies, and government registries</p>
+            
+            <!-- Basic Search Form -->
+            <div class="accreditation-search-form" id="basic-search-form">
+              <div class="input-group">
+                <label class="input-label">Institution Name</label>
+                <div class="input-with-icon search-autocomplete-wrapper">
+                  <svg class="icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                    <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                  </svg>
+                  <input type="text" class="input" placeholder="Start typing institution name..." id="accred-institution-input" autocomplete="off">
+                  <!-- Autocomplete Dropdown -->
+                  <div class="search-autocomplete-dropdown" id="accred-autocomplete">
+                    <div class="autocomplete-loading">
+                      <span class="spinner-small"></span> Searching UNESCO WHED...
+                    </div>
+                    <ul class="autocomplete-results" id="accred-autocomplete-results"></ul>
+                  </div>
+                </div>
+              </div>
+              
+              <div class="accreditation-search-row">
+                <div class="input-group">
+                  <label class="input-label">Country</label>
+                  <select class="input select" id="accred-country">
+                    <option value="">All Countries</option>
+                    {% if unique_countries %}
+                      {% for country in unique_countries %}
+                        <option value="{{ country }}">{{ country }}</option>
+                      {% endfor %}
+                    {% else %}
+                      <optgroup label="Africa">
+                        <option value="Sierra Leone">Sierra Leone</option>
+                        <option value="Nigeria">Nigeria</option>
+                        <option value="Ghana">Ghana</option>
+                        <option value="Kenya">Kenya</option>
+                        <option value="South Africa">South Africa</option>
+                      </optgroup>
+                    {% endif %}
+                  </select>
+                </div>
+                <div class="input-group">
+                  <label class="input-label">Institution Type</label>
+                  <select class="input select" id="accred-type">
+                    <option value="">All Types</option>
+                    {% if institution_types %}
+                      {% for value, label in institution_types %}
+                        <option value="{{ value }}">{{ label }}</option>
+                      {% endfor %}
+                    {% else %}
+                      <option value="public">Public University</option>
+                      <option value="private">Private University</option>
+                      <option value="community">Community College</option>
+                      <option value="technical">Technical Institute</option>
+                      <option value="research">Research University</option>
+                    {% endif %}
+                  </select>
+                </div>
+              </div>
+              
+              <button class="btn btn-teal btn-lg" style="width: 100%;" id="accred-search-btn">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+                </svg>
+                Search Accreditation Database
+              </button>
+            </div>
+            
+            <!-- Advanced Search Form (Hidden by default) -->
+            <div class="accreditation-search-form hidden" id="advanced-search-form">
+              <div class="advanced-search-grid">
+                <div class="input-group">
+                  <label class="input-label">Institution Name</label>
+                  <input type="text" class="input" placeholder="Full or partial name" id="adv-institution-name">
+                </div>
+                <div class="input-group">
+                  <label class="input-label">WHED ID</label>
+                  <input type="text" class="input" placeholder="e.g., IAU-012345" id="adv-whed-id">
+                </div>
+                <div class="input-group">
+                  <label class="input-label">Country</label>
+                  <select class="input select" id="adv-country">
+                    <option value="">All Countries</option>
+                    <optgroup label="Africa">
+                      <option value="SL">Sierra Leone</option>
+                      <option value="NG">Nigeria</option>
+                      <option value="GH">Ghana</option>
+                      <option value="KE">Kenya</option>
+                      <option value="ZA">South Africa</option>
+                    </optgroup>
+                    <optgroup label="Americas">
+                      <option value="US">United States</option>
+                      <option value="CA">Canada</option>
+                      <option value="BR">Brazil</option>
+                    </optgroup>
+                    <optgroup label="Europe">
+                      <option value="GB">United Kingdom</option>
+                      <option value="DE">Germany</option>
+                      <option value="FR">France</option>
+                    </optgroup>
+                    <optgroup label="Asia Pacific">
+                      <option value="IN">India</option>
+                      <option value="CN">China</option>
+                      <option value="AU">Australia</option>
+                    </optgroup>
+                  </select>
+                </div>
+                <div class="input-group">
+                  <label class="input-label">City</label>
+                  <input type="text" class="input" placeholder="City name" id="adv-city">
+                </div>
+                <div class="input-group">
+                  <label class="input-label">Institution Type</label>
+                  <select class="input select" id="adv-type">
+                    <option value="">All Types</option>
+                    <option value="public">Public</option>
+                    <option value="private">Private</option>
+                    <option value="community">Community College</option>
+                    <option value="technical">Technical Institute</option>
+                  </select>
+                </div>
+                <div class="input-group">
+                  <label class="input-label">Founded Year</label>
+                  <div class="year-range">
+                    <input type="number" class="input" placeholder="From" id="adv-year-from" min="1000" max="2025">
+                    <span>to</span>
+                    <input type="number" class="input" placeholder="To" id="adv-year-to" min="1000" max="2025">
+                  </div>
+                </div>
+                <div class="input-group">
+                  <label class="input-label">Accreditation Body</label>
+                  <select class="input select" id="adv-accred-body">
+                    <option value="">All Bodies</option>
+                    <optgroup label="International">
+                      <option value="aacsb">AACSB International</option>
+                      <option value="equis">EQUIS</option>
+                      <option value="amba">AMBA</option>
+                      <option value="abet">ABET</option>
+                    </optgroup>
+                    <optgroup label="Regional - Africa">
+                      <option value="aau">Association of African Universities</option>
+                      <option value="tec-sl">TEC Sierra Leone</option>
+                      <option value="nuc">NUC Nigeria</option>
+                    </optgroup>
+                    <optgroup label="Regional - USA">
+                      <option value="neche">NECHE</option>
+                      <option value="msche">MSCHE</option>
+                      <option value="hlc">HLC</option>
+                      <option value="wasc">WASC</option>
+                    </optgroup>
+                    <optgroup label="Regional - Europe">
+                      <option value="qaa">QAA (UK)</option>
+                      <option value="acquin">ACQUIN (Germany)</option>
+                    </optgroup>
+                  </select>
+                </div>
+                <div class="input-group">
+                  <label class="input-label">Degree Level</label>
+                  <select class="input select" id="adv-degree-level">
+                    <option value="">All Levels</option>
+                    <option value="diploma">Diploma</option>
+                    <option value="associate">Associate</option>
+                    <option value="bachelor">Bachelor's</option>
+                    <option value="master">Master's</option>
+                    <option value="doctorate">Doctorate</option>
+                    <option value="professional">Professional</option>
+                  </select>
+                </div>
+              </div>
+              
+              <div class="advanced-search-options">
+                <label class="checkbox-label">
+                  <input type="checkbox" id="adv-partner-only">
+                  <span>{{settings.site_name_abb}} Partners Only</span>
+                </label>
+                <label class="checkbox-label">
+                  <input type="checkbox" id="adv-accredited-only" checked>
+                  <span>Accredited Institutions Only</span>
+                </label>
+              </div>
+              
+              <div class="advanced-search-actions">
+                <button class="btn btn-secondary" id="adv-reset-btn">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/>
+                    <path d="M3 3v5h5"/>
+                  </svg>
+                  Reset Filters
+                </button>
+                <button class="btn btn-teal btn-lg" id="adv-search-btn">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+                  </svg>
+                  Search Database
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Search Results List (for multiple results) -->
+          <div class="accreditation-results-list hidden" id="accreditation-results-list">
+            <div class="results-header">
+              <h3>Search Results</h3>
+              <span class="results-count" id="results-count">0 institutions found</span>
+            </div>
+            <div class="results-filters">
+              <button class="filter-chip active" data-filter="all">All</button>
+              <button class="filter-chip" data-filter="accredited">Accredited</button>
+              <button class="filter-chip" data-filter="partner">{{settings.site_name_abb}} Partners</button>
+            </div>
+            <div class="results-grid" id="results-grid"></div>
+            <div class="results-pagination" id="results-pagination"></div>
+          </div>
+          
+          <!-- Accreditation Result (Single Institution Detail) -->
+          <div class="accreditation-result hidden" id="accreditation-result">
+            <button class="back-to-results hidden" id="back-to-results">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="m15 18-6-6 6-6"/>
+              </svg>
+              Back to Results
+            </button>
+            
+            <div class="accred-result-header">
+              <div class="accred-result-icon" id="accred-result-icon"></div>
+              <div class="accred-result-info">
+                <h3 id="accred-result-title"></h3>
+                <p id="accred-result-subtitle"></p>
+              </div>
+              <span class="badge" id="accred-result-badge"></span>
+            </div>
+            
+            <!-- Institution Profile Tabs -->
+            <div class="institution-tabs">
+              <button class="inst-tab active" data-tab="overview">Overview</button>
+              <button class="inst-tab" data-tab="accreditation">Accreditation</button>
+              <button class="inst-tab" data-tab="programs">Programs</button>
+              <button class="inst-tab" data-tab="verification">Verification</button>
+            </div>
+            
+            <!-- Overview Tab -->
+            <div class="inst-tab-content active" id="tab-overview">
+              <div class="accred-details-grid" id="accred-details"></div>
+              
+              <div class="institution-map" id="institution-map">
+                <div class="map-placeholder">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
+                    <circle cx="12" cy="10" r="3"/>
+                  </svg>
+                  <span>Map Location</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Accreditation Tab -->
+            <div class="inst-tab-content" id="tab-accreditation">
+              <div class="accred-timeline" id="accred-timeline"></div>
+            </div>
+            
+            <!-- Programs Tab -->
+            <div class="inst-tab-content" id="tab-programs">
+              <div class="programs-list" id="programs-list"></div>
+            </div>
+            
+            <!-- Verification Tab -->
+            <div class="inst-tab-content" id="tab-verification">
+              <div class="accred-verification-guidance" id="accred-guidance"></div>
+            </div>
+            
+            <div class="accred-actions">
+              <button class="btn btn-secondary" id="accred-view-whed">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                  <polyline points="15 3 21 3 21 9"/>
+                  <line x1="10" x2="21" y1="14" y2="3"/>
+                </svg>
+                View on UNESCO WHED
+              </button>
+              <button class="btn btn-secondary" id="accred-download-report">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="7 10 12 15 17 10"/>
+                  <line x1="12" x2="12" y1="15" y2="3"/>
+                </svg>
+                Download Report
+              </button>
+              <button class="btn btn-secondary" id="accred-contact-inst">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                  <polyline points="22,6 12,13 2,6"/>
+                </svg>
+                Contact Institution
+              </button>
+              <button class="btn btn-teal" id="accred-request-join">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                  <circle cx="9" cy="7" r="4"/>
+                  <line x1="19" x2="19" y1="8" y2="14"/>
+                  <line x1="22" x2="16" y1="11" y2="11"/>
+                </svg>
+                Request to Join {{settings.site_name_abb}}
+              </button>
+            </div>
+          </div>
+          
+          <!-- Accreditation Bodies Info -->
+          <div class="accreditation-bodies">
+            <h3>Our Accreditation Sources</h3>
+            <div class="accred-bodies-grid">
+              <div class="accred-body-card">
+                <div class="accred-body-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="2" y1="12" x2="22" y2="12"/>
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                  </svg>
+                </div>
+                <h4>UNESCO WHED</h4>
+                <p>World Higher Education Database - 18,000+ institutions from 195 countries</p>
+              </div>
+              <div class="accred-body-card">
+                <div class="accred-body-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                    <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                  </svg>
+                </div>
+                <h4>Regional Bodies</h4>
+                <p>AAU (Africa), AACSB, EQUIS, AMBA and regional accreditation agencies</p>
+              </div>
+              <div class="accred-body-card">
+                <div class="accred-body-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  </svg>
+                </div>
+                <h4>Government Registries</h4>
+                <p>National education ministry databases and official recognition lists</p>
+              </div>
+              <div class="accred-body-card">
+                <div class="accred-body-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <path d="m9 15 2 2 4-4"/>
+                  </svg>
+                </div>
+                <h4>Quality Assurance</h4>
+                <p>INQAAHE members and international quality assurance networks</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- New Digital Wallet Page -->
+  <div id="page-wallet" class="page">
+    <section class="section" style="padding-top: 8rem;">
+      <div class="container">
+        <div class="page-header">
+          <span class="badge badge-accent">Digital Credential Wallet</span>
+          <h1>Your Portable Digital Identity</h1>
+          <p>Store, manage, and share your verified academic credentials securely</p>
+        </div>
+        
+        <!-- Wallet Login Prompt (shown when not logged in) -->
+        <div class="wallet-login-prompt" id="wallet-login-prompt">
+          <div class="wallet-login-card">
+            <div class="wallet-login-icon">
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <rect width="20" height="14" x="2" y="7" rx="2" ry="2"/>
+                <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+              </svg>
+            </div>
+            <h2>Access Your Digital Wallet</h2>
+            <p>Sign in to view and manage your verified academic credentials</p>
+            <div class="wallet-login-actions">
+              <button class="btn btn-primary btn-lg" data-action="login">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                  <polyline points="10 17 15 12 10 7"/>
+                  <line x1="15" x2="3" y1="12" y2="12"/>
+                </svg>
+                Sign In
+              </button>
+              <button class="btn btn-secondary btn-lg" data-action="signup">Create Account</button>
+            </div>
+            <p style="margin-top: 1.5rem; font-size: 0.875rem; color: var(--text-muted);">
+              Or <a href="#" id="demo-wallet-link" style="color: var(--accent-primary); text-decoration: underline;">view demo wallet</a>
+            </p>
+          </div>
+        </div>
+        
+        <!-- Wallet Dashboard (shown when logged in or demo) -->
+        <div class="wallet-dashboard hidden" id="wallet-dashboard">
+          <div class="wallet-header">
+            <div class="wallet-user-info">
+              <div class="wallet-avatar" id="wallet-avatar">
+                {% if user.is_authenticated %}
+                  {% if user.first_name or user.last_name %}
+                    {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+                  {% else %}
+                    {{ user.email|first|upper }}
+                  {% endif %}
+                {% endif %}
+              </div>
+              <div class="wallet-user-details" id="wallet-user-details">
+                <h3 id="wallet-user-name">
+                  {% if user.is_authenticated %}
+                    {% if user.get_full_name %}
+                      {{ user.get_full_name }}
+                    {% elif user.first_name or user.last_name %}
+                      {{ user.first_name }} {{ user.last_name }}
+                    {% else %}
+                      {{ user.email }}
+                    {% endif %}
+                  {% endif %}
+                </h3>
+                <p id="wallet-user-email">
+                  {% if user.is_authenticated %}
+                    {{ user.email }}
+                  {% endif %}
+                </p>
+              </div>
+            </div>
+            <div class="wallet-stats">
+              <div class="wallet-stat">
+                <span class="wallet-stat-value">{{ wallet_stats.credentials_count|default:0 }}</span>
+                <span class="wallet-stat-label">Credentials</span>
+              </div>
+              <div class="wallet-stat">
+                <span class="wallet-stat-value">{{ wallet_stats.verifications_count|default:0 }}</span>
+                <span class="wallet-stat-label">Verifications</span>
+              </div>
+              <div class="wallet-stat">
+                <span class="wallet-stat-value">{{ wallet_stats.shares_count|default:0 }}</span>
+                <span class="wallet-stat-label">Shares</span>
+              </div>
+            </div>
+          </div>
+          
+          <div class="wallet-actions-bar">
+            <h3>My Credentials</h3>
+            <div class="wallet-actions-btns">
+              <button class="btn btn-secondary btn-sm" id="wallet-download-all-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                  <polyline points="7 10 12 15 17 10"/>
+                  <line x1="12" x2="12" y1="15" y2="3"/>
+                </svg>
+                Download All
+              </button>
+              <button class="btn btn-primary btn-sm" id="wallet-request-new-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="12" x2="12" y1="5" y2="19"/>
+                  <line x1="5" x2="19" y1="12" y2="12"/>
+                </svg>
+                Request New Credential
+              </button>
+            </div>
+          </div>
+          
+          <div class="wallet-credentials-grid">
+            {% if user.is_authenticated and wallet_credentials %}
+              {% for cred in wallet_credentials %}
+              <div class="wallet-credential-card {% if cred.status != 'issued' %}pending{% endif %}" data-credential-id="{{ cred.credential_id }}" data-credential-uuid="{{ cred.id }}">
+                <div class="credential-card-header">
+                  <div class="credential-institution-logo">
+                    {% if cred.institution.short_name %}
+                      {{ cred.institution.short_name|upper|truncatewords:1 }}
+                    {% else %}
+                      {{ cred.institution.name|truncatewords:1|upper|slice:":3" }}
+                    {% endif %}
+                  </div>
+                  <div class="credential-status-badge {% if cred.status == 'issued' %}valid{% elif cred.status == 'pending' or cred.status == 'draft' %}pending{% else %}revoked{% endif %}">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="{% if cred.status == 'issued' %}3{% else %}2{% endif %}">
+                      {% if cred.status == 'issued' %}
+                        <path d="m9 12 2 2 4-4"/>
+                      {% elif cred.status == 'pending' or cred.status == 'draft' %}
+                        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+                      {% else %}
+                        <path d="M18 6L6 18M6 6l12 12"/>
+                      {% endif %}
+                    </svg>
+                    {% if cred.status == 'issued' %}Verified{% elif cred.status == 'pending' or cred.status == 'draft' %}Pending{% else %}Revoked{% endif %}
+                  </div>
+                </div>
+                <div class="credential-card-body">
+                  <h4>{{ cred.degree_level|default:cred.credential_type|title }}</h4>
+                  <p class="credential-program">{{ cred.program_name|default:"N/A" }}</p>
+                  <p class="credential-institution">{{ cred.institution.name }}</p>
+                  <div class="credential-meta">
+                    {% if cred.grade %}<span>{{ cred.grade }}</span>{% endif %}
+                    <span>
+                      {% if cred.completion_date %}
+                        {{ cred.completion_date|date:"M Y" }}
+                      {% elif cred.issue_date %}
+                        {{ cred.issue_date|date:"M Y" }}
+                      {% else %}
+                        Pending
+                      {% endif %}
+                    </span>
+                  </div>
+                </div>
+                <div class="credential-card-footer">
+                  <div class="credential-id">{{ cred.credential_id }}</div>
+                  <div class="credential-actions">
+                    <button class="btn btn-icon btn-ghost" title="View QR Code" data-action="view-qr" data-credential-id="{{ cred.credential_id }}">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect width="5" height="5" x="3" y="3" rx="1"/>
+                        <rect width="5" height="5" x="16" y="3" rx="1"/>
+                        <rect width="5" height="5" x="3" y="16" rx="1"/>
+                        <path d="M21 16h-3a2 2 0 0 0-2 2v3"/>
+                      </svg>
+                    </button>
+                    <button class="btn btn-icon btn-ghost" title="Share" data-action="share" data-credential-id="{{ cred.credential_id }}">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                        <line x1="8.59" x2="15.42" y1="13.51" y2="17.49"/>
+                        <line x1="15.41" x2="8.59" y1="6.51" y2="10.49"/>
+                      </svg>
+                    </button>
+                    <button class="btn btn-icon btn-ghost" title="Download" data-action="download" data-credential-id="{{ cred.credential_id }}">
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" x2="12" y1="15" y2="3"/>
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+                {% if cred.status == 'issued' %}
+                <div class="credential-blockchain-info">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                    <path d="M2 17l10 5 10-5"/>
+                  </svg>
+                  <span>Blockchain Secured</span>
+                </div>
+                {% endif %}
+              </div>
+              {% endfor %}
+            {% else %}
+            <!-- Placeholder cards for demo or when no credentials - will be rendered by JavaScript -->
+            {% endif %}
+          </div>
+          
+          <!-- Share Link Generator -->
+          <div class="wallet-share-section">
+            <h3>Quick Share</h3>
+            <p style="color: var(--text-muted); margin-bottom: 1rem;">Generate a shareable link or QR code for employers</p>
+            <div class="share-link-box">
+              <input type="text" class="input" value="" readonly id="share-link-input" placeholder="{% if user.is_authenticated %}Share link will appear here{% else %}Login to generate share link{% endif %}">
+              <button class="btn btn-accent" id="copy-share-link">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect width="14" height="14" x="8" y="8" rx="2" ry="2"/>
+                  <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
+                </svg>
+                Copy Link
+              </button>
+              <button class="btn btn-secondary" id="generate-qr-all">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect width="5" height="5" x="3" y="3" rx="1"/>
+                  <rect width="5" height="5" x="16" y="3" rx="1"/>
+                  <rect width="5" height="5" x="3" y="16" rx="1"/>
+                </svg>
+                QR Code
+              </button>
+            </div>
+          </div>
+          
+          <!-- Recent Activity -->
+          <div class="wallet-activity-section">
+            <h3>Recent Activity</h3>
+            <div class="wallet-activity-list">
+              <div class="wallet-activity-item">
+                <div class="activity-icon success">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m9 12 2 2 4-4"/><circle cx="12" cy="12" r="10"/>
+                  </svg>
+                </div>
+                <div class="activity-content">
+                  <p><strong>TechCorp Inc.</strong> verified your BSc credential</p>
+                  <span>2 hours ago</span>
+                </div>
+              </div>
+              <div class="wallet-activity-item">
+                <div class="activity-icon info">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+                  </svg>
+                </div>
+                <div class="activity-content">
+                  <p>You shared credentials with <strong>GlobalBank HR</strong></p>
+                  <span>Yesterday</span>
+                </div>
+              </div>
+              <div class="wallet-activity-item">
+                <div class="activity-icon success">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                  </svg>
+                </div>
+                <div class="activity-content">
+                  <p>New credential added: <strong>Data Science Certificate</strong></p>
+                  <span>3 days ago</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Institutions Page -->
+  <div id="page-institutions" class="page">
+    <section class="section" style="padding-top: 8rem;">
+      <div class="container">
+        <div class="page-header">
+          <span class="badge badge-accent">For Institutions</span>
+          <h1>Join the {{settings.site_name_abb}} Network</h1>
+          <p>Issue tamper-proof digital credentials and become part of the global verification network</p>
+        </div>
+        
+        <div class="institution-benefits">
+          <div class="benefit-card">
+            <div class="benefit-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+            </div>
+            <h3>Fraud Prevention</h3>
+            <p>Eliminate credential fraud with immutable blockchain records that cannot be tampered with</p>
+          </div>
+          <div class="benefit-card">
+            <div class="benefit-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+            </div>
+            <h3>Save Time</h3>
+            <p>Reduce verification requests by 90% - employers verify credentials instantly</p>
+          </div>
+          <div class="benefit-card">
+            <div class="benefit-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="2" y1="12" x2="22" y2="12"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+            </div>
+            <h3>Global Recognition</h3>
+            <p>Your credentials become instantly verifiable by employers worldwide</p>
+          </div>
+          <div class="benefit-card">
+            <div class="benefit-icon">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+              </svg>
+            </div>
+            <h3>Graduate Success</h3>
+            <p>Help your graduates stand out with verified, shareable digital credentials</p>
+          </div>
+        </div>
+        
+        <!-- Onboarding Steps -->
+        <div class="onboarding-section">
+          <h2 style="text-align: center; margin-bottom: 2rem;">How to Join</h2>
+          <div class="onboarding-steps">
+            <div class="onboarding-step">
+              <div class="onboarding-step-number">1</div>
+              <h4>Apply</h4>
+              <p>Submit your institution details and accreditation documents</p>
+            </div>
+            <div class="onboarding-step">
+              <div class="onboarding-step-number">2</div>
+              <h4>Verify</h4>
+              <p>We verify your accreditation status against UNESCO WHED and regional bodies</p>
+            </div>
+            <div class="onboarding-step">
+              <div class="onboarding-step-number">3</div>
+              <h4>Setup</h4>
+              <p>Receive your institutional key and access to the issuance dashboard</p>
+            </div>
+            <div class="onboarding-step">
+              <div class="onboarding-step-number">4</div>
+              <h4>Issue</h4>
+              <p>Start issuing blockchain-secured credentials to your graduates</p>
+            </div>
+          </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 3rem;">
+          <button class="btn btn-primary btn-lg" data-action="signup">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+              <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+            </svg>
+            Apply as Institution
+          </button>
+          <p style="margin-top: 1rem; font-size: 0.875rem; color: var(--text-muted);">
+            Free for accredited institutions in Sierra Leone
+          </p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- Employers Page -->
+  <div id="page-employers" class="page">
+    <section class="section" style="padding-top: 8rem;">
+      <div class="container">
+        <div class="page-header">
+          <span class="badge badge-coral">For Employers</span>
+          <h1>Hire with Confidence</h1>
+          <p>Verify academic credentials instantly and eliminate hiring risks from fraudulent qualifications</p>
+        </div>
+        
+        <div class="employer-features">
+          <div class="employer-feature">
+            <div class="employer-feature-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10"/>
+                <polyline points="12 6 12 12 16 14"/>
+              </svg>
+            </div>
+            <div class="employer-feature-content">
+              <h3>Instant Verification</h3>
+              <p>Verify any credential in seconds instead of weeks. No need to contact universities or wait for postal responses.</p>
+            </div>
+          </div>
+          
+          <div class="employer-feature">
+            <div class="employer-feature-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <circle cx="12" cy="12" r="10"/>
+                <line x1="2" y1="12" x2="22" y2="12"/>
+                <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+              </svg>
+            </div>
+            <div class="employer-feature-content">
+              <h3>Global Coverage</h3>
+              <p>Verify credentials from partner institutions instantly, or check accreditation status of any university worldwide via UNESCO WHED.</p>
+            </div>
+          </div>
+          
+          <div class="employer-feature">
+            <div class="employer-feature-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                <path d="m9 12 2 2 4-4"/>
+              </svg>
+            </div>
+            <div class="employer-feature-content">
+              <h3>Fraud Protection</h3>
+              <p>Blockchain verification ensures credentials cannot be forged. Protect your organization from hiring based on fake qualifications.</p>
+            </div>
+          </div>
+          
+          <div class="employer-feature">
+            <div class="employer-feature-icon">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                <polyline points="14 2 14 8 20 8"/>
+              </svg>
+            </div>
+            <div class="employer-feature-content">
+              <h3>Bulk Verification</h3>
+              <p>Upload a CSV of candidate credentials and verify hundreds at once. Perfect for large recruitment drives.</p>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Quick Verify for Employers -->
+        <div class="employer-verify-section">
+          <h3>Quick Verification</h3>
+          <div class="employer-verify-box">
+            <input type="text" class="input" placeholder="Enter credential ID or paste verification link" id="employer-verify-input">
+            <button class="btn btn-coral btn-lg" id="employer-verify-btn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="m9 12 2 2 4-4"/><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+              Verify Now
+            </button>
+          </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 3rem;">
+          <button class="btn btn-primary btn-lg" data-action="signup">
+            Create Employer Account
+          </button>
+          <p style="margin-top: 1rem; font-size: 0.875rem; color: var(--text-muted);">
+            Free to verify · No subscription required
+          </p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- API Page -->
+  <div id="page-api" class="page">
+    <section class="section" style="padding-top: 8rem;">
+      <div class="container">
+        <div class="page-header">
+          <span class="badge badge-info">Developer API</span>
+          <h1>Integrate {{settings.site_name_abb}}</h1>
+          <p>RESTful API for credential verification, issuance, and accreditation lookup</p>
+        </div>
+        
+        <div class="api-features">
+          <div class="api-feature-card">
+            <h3>Verification API</h3>
+            <p>Verify credentials by ID, hash, or holder name</p>
+            <code>GET /api/v1/verify/{credential_id}</code>
+          </div>
+          <div class="api-feature-card">
+            <h3>Issuance API</h3>
+            <p>Issue new credentials (institutions only)</p>
+            <code>POST /api/v1/credentials/issue</code>
+          </div>
+          <div class="api-feature-card">
+            <h3>Accreditation API</h3>
+            <p>Check institution accreditation status globally</p>
+            <code>GET /api/v1/accreditation/{institution}</code>
+          </div>
+          <div class="api-feature-card">
+            <h3>Bulk API</h3>
+            <p>Verify multiple credentials in a single request</p>
+            <code>POST /api/v1/verify/bulk</code>
+          </div>
+        </div>
+        
+        <div class="api-example">
+          <h3>Example Response</h3>
+          <pre><code>{
+  "status": "verified",
+  "credential": {
+    "id": "CERT-2024-SL-001234",
+    "holder": "Aminata Kamara",
+    "institution": {
+      "name": "University of Sierra Leone",
+      "accredited": true,
+      "whed_id": "IAU-012345"
+    },
+    "degree": "Bachelor of Science",
+    "program": "Computer Science",
+    "issued": "2024-12-15",
+    "blockchain_hash": "0x7f8b5c9a2e4d6f8b...",
+    "ipfs_hash": "QmXoypizjW3WknFiJnKL..."
+  },
+  "verification_method": "blockchain",
+  "verified_at": "2024-12-20T14:30:00Z"
+}</code></pre>
+        </div>
+        
+        <div style="text-align: center; margin-top: 2rem;">
+          <button class="btn btn-primary btn-lg">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+              <polyline points="14 2 14 8 20 8"/>
+            </svg>
+            View Full Documentation
+          </button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+<script>
+// Accreditation Search Functionality
+document.addEventListener('DOMContentLoaded', function() {
+  const accredSearchBtn = document.getElementById('accred-search-btn');
+  const accredInstitutionInput = document.getElementById('accred-institution-input');
+  const accredCountry = document.getElementById('accred-country');
+  const accredType = document.getElementById('accred-type');
+  const resultsList = document.getElementById('accreditation-results-list');
+  const resultsGrid = document.getElementById('results-grid');
+  const resultsCount = document.getElementById('results-count');
+  
+  if (accredSearchBtn && accredInstitutionInput) {
+    accredSearchBtn.addEventListener('click', async function() {
+      const institutionName = accredInstitutionInput.value.trim();
+      const country = accredCountry ? accredCountry.value : '';
+      const institutionType = accredType ? accredType.value : '';
+      
+      if (!institutionName) {
+        alert('Please enter an institution name');
+        return;
+      }
+      
+      // Show loading
+      accredSearchBtn.disabled = true;
+      accredSearchBtn.innerHTML = '<span class="spinner-small"></span> Searching...';
+      
+      try {
+        // Get CSRF token
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || 
+                         document.cookie.match(/csrftoken=([^;]+)/)?.[1];
+        
+        const response = await fetch('/api/public/accreditation/search/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken || ''
+          },
+          body: JSON.stringify({
+            institution_name: institutionName,
+            country: country,
+            institution_type: institutionType
+          })
+        });
+        
+        const data = await response.json();
+        
+        if (data.success) {
+          // Show results
+          if (resultsList) {
+            resultsList.classList.remove('hidden');
+          }
+          
+          if (resultsCount) {
+            resultsCount.textContent = `${data.total_results} institutions found`;
+          }
+          
+          // Display results
+          if (resultsGrid) {
+            resultsGrid.innerHTML = '';
+            
+            // Display {{settings.site_name_abb}} institutions
+            if (data.institutions && data.institutions.length > 0) {
+              data.institutions.forEach(inst => {
+                const card = document.createElement('div');
+                card.className = 'result-card';
+                card.innerHTML = `
+                  <div class="result-card-header">
+                    <h4>${inst.name}</h4>
+                    ${inst.is_partner ? '<span class="badge badge-teal">Partner</span>' : ''}
+                  </div>
+                  <div class="result-card-body">
+                    ${inst.country ? `<p><strong>Country:</strong> ${inst.country}</p>` : ''}
+                    ${inst.city ? `<p><strong>City:</strong> ${inst.city}</p>` : ''}
+                    ${inst.institution_type ? `<p><strong>Type:</strong> ${inst.institution_type}</p>` : ''}
+                    <p><strong>Accreditation Status:</strong> ${inst.accreditation_status}</p>
+                    ${inst.is_verified ? '<p><span class="badge badge-success">Verified Institution</span></p>' : ''}
+                  </div>
+                `;
+                resultsGrid.appendChild(card);
+              });
+            }
+            
+            // Display WHED records if any
+            if (data.whed_records && data.whed_records.length > 0) {
+              data.whed_records.forEach(whed => {
+                const card = document.createElement('div');
+                card.className = 'result-card';
+                card.innerHTML = `
+                  <div class="result-card-header">
+                    <h4>${whed.name}</h4>
+                    <span class="badge badge-info">UNESCO WHED</span>
+                  </div>
+                  <div class="result-card-body">
+                    ${whed.country ? `<p><strong>Country:</strong> ${whed.country}</p>` : ''}
+                    ${whed.city ? `<p><strong>City:</strong> ${whed.city}</p>` : ''}
+                    ${whed.accreditation_body ? `<p><strong>Accreditation Body:</strong> ${whed.accreditation_body}</p>` : ''}
+                  </div>
+                `;
+                resultsGrid.appendChild(card);
+              });
+            }
+            
+            if (data.total_results === 0) {
+              resultsGrid.innerHTML = '<div class="no-results"><p>No institutions found. Try a different search term.</p></div>';
+            }
+          }
+        } else {
+          alert('Error: ' + (data.error || 'Failed to search'));
+        }
+      } catch (error) {
+        console.error('Search error:', error);
+        alert('An error occurred while searching. Please try again.');
+      } finally {
+        accredSearchBtn.disabled = false;
+        accredSearchBtn.innerHTML = `
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+          </svg>
+          Search Accreditation Database
+        `;
+      }
+    });
+  }
+});
+</script>
+
+{% endblock content %}

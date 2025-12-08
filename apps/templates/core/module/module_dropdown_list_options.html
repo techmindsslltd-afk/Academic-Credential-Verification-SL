@@ -1,0 +1,19 @@
+ {%  if SelectedModule %}
+ 
+ <option value="{{ SelectedModule.pk }}">{{ SelectedModule.module_name }}</option>
+{% for module in  module %}
+
+ {% if SelectedModule.pk != module.pk %}
+<option value="{{ module.pk }}">{{ module.module_name }}</option>
+ {% endif %}
+ 
+{% endfor %}
+
+  
+  {% else %}
+<option value="">---------</option>
+{% for module in  module %}
+<option value="{{ module.pk }}">{{ module }}</option>
+{% endfor %}
+
+{% endif %}

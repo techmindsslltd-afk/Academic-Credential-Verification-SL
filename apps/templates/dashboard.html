@@ -1,0 +1,53 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Dashboard - CertChain {% endblock %} 
+
+{% block content %}
+{% load static %}
+        
+    
+	
+		{% if  request.user.role == "super_admin"    %}
+        <!-- ==================== -->
+        <!-- SUPERADMIN SECTIONS -->
+        <!-- ==================== -->		
+			{% include 'super-admin/dashboard.html' %}
+			
+		{% elif  request.user.role ==  "institution_admin"    %}	
+
+        <!-- ========================= -->
+        <!-- INSTITUTION ADMIN SECTIONS -->
+        <!-- ========================= -->		
+			{% include 'institution-admin/dashboard.html' %}
+			
+		{% elif  request.user.role ==  "student"    %}	
+        <!-- ================ -->
+        <!-- STUDENT SECTIONS -->
+        <!-- ================ -->		
+			{% include 'student/wallet-content.html' %}
+			
+		{% elif  request.user.role ==  "employer"    %}	 
+		
+        <!-- ================= -->
+        <!-- EMPLOYER SECTIONS -->
+        <!-- ================= -->
+			{% include 'employer/verify-credentials.html' %}
+			
+			
+		{% else %}
+			<h1> No User Role Identify </h1>
+		{% endif  %}
+      
+   
+  
+    
+        
+  
+    
+  
+   
+
+ 
+ 
+  
+{% endblock content %}

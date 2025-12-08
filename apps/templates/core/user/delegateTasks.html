@@ -1,0 +1,856 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} {{ userTpye }} {% endblock %} 
+{% block titlePage %} userTpye {% endblock %} 
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %} 
+{% load static %}
+				<div class="card">
+					<div class="card-header card-header-primary card-header-icon">
+						
+						<h4 class="card-title">{{ userTpye }}</h4>
+						
+						
+					</div>
+						
+					 
+						<div class="card-body">
+						<ul class="nav nav-tabs nav-pills nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bold">
+								<!--begin::Nav item-->
+
+								<li class="nav-item mt-2">
+									<a class="nav-link active btn btn-active-light btn-color-gray-600 btn-active-color-primary rounded-bottom-0" data-bs-toggle="tab" href="#kt_tab_pane_1">
+									Doctors
+									</a>
+								</li>
+
+								<!--end::Nav item-->
+								<!--begin::Nav item-->
+								<li class="nav-item mt-2">
+									<a class="nav-link btn btn-active-light btn-color-gray-600 btn-active-color-primary rounded-bottom-0" data-bs-toggle="tab" href="#kt_tab_pane_2">
+										Nurces     
+									</a>
+								</li>
+								<li class="nav-item mt-2">
+									<a class="nav-link btn btn-active-light btn-color-gray-600 btn-active-color-primary rounded-bottom-0" data-bs-toggle="tab" href="#kt_tab_pane_3">
+										Others      
+									</a>
+								</li>
+						</ul>
+					<div class="tab-content" id="myTabContent">
+						<div class="tab-pane fade show active" id="kt_tab_pane_1" role="tabpanel">
+						 
+						<div class="table-responsive">
+							<div id="toolbar"
+							     class="select">
+								<select class="form-control">
+									<option value="">Export Basic</option>
+									<option value="all">Export All</option>
+									<option value="selected">Export Selected</option>
+								</select>
+							</div>
+							<table id="fresh-table"
+							       data-toggle="table"
+							       class="table"
+							       id="table"
+							       data-toolbar="#toolbar"
+							       data-search="true"
+							       data-show-toggle="true"
+							       data-show-fullscreen="true"
+							       data-show-columns="true"
+							       data-show-columns-toggle-all="true"
+							       data-show-export="true"
+							       data-click-to-select="true"
+							       data-minimum-count-columns="2"
+							       data-pagination="true"
+							       data-id-field="id"
+							       data-toolbar="#toolbar"
+							       data-page-list="[10, 25, 50, 100, all]"
+							       data-show-footer="true"
+							       data-sort-priority='[{"sortName": "id","sortOrder":"desc"},{"sortName":"name","sortOrder":"desc"}]'
+							       data-show-multi-sort="true"
+							       data-show-jump-to="true"
+							       data-response-handler="responseHandler"
+							       data-resizable="true"
+							       data-advanced-search="true"
+							       data-id-table="advancedTable"
+							       data-show-print="true"
+							       data-filter-control="true"
+								   data-show-footer="true"
+							       data-show-search-clear-button="true">
+								<thead>
+									<th scope="col" data-field="Name"
+									    data-filter-control="input"
+									    data-sortable="true">Name</th>
+									<th scope="col" data-field="Tuition">OB/GYN</th>
+									<th scope="col" data-field="Structure">Embryologist</th>
+									<th scope="col" data-field="Scholarship">Sonogram</th>
+								</thead>
+								<tbody>
+								 {% for object in doctors %}
+									<tr class='clickable-row'>
+									
+									<td class="d-flex align-items-center">
+									 
+										<!--begin:: Avatar -->
+										<div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+											<a {% if object.file or object.file.url != '/media/False' or object.file or object.file.url != '' %}data-bs-toggle="modal"{% endif %} href="#myModalImage" onclick=" {% if object.file or object.file.url != '/media/False' %}document.getElementById('myImage').src='{{ object.file.url}}'{% endif %};document.getElementById('myModalImageleLabel').innerHTML='{{ object.full_name}}'" href="#">
+											   {% if object.file %}
+												<div class="symbol-label">
+													<img src="{{ object.file.url}}" alt="" class="w-100" />
+												</div>
+												{% else %}
+												<div class="symbol-label fs-3  {% if forloop.counter|divisibleby:2 %}bg-light-danger text-danger {% elif forloop.counter|divisibleby:3 %}bg-light-danger text--danger {% else %}bg-light-success text-success {% endif %} ">{{ object.full_name|make_list|first }}</div>
+												{% endif %}
+											</a>
+										</div>
+										
+										<!--end::Avatar-->
+										<!--begin::User details-->
+										<div class="d-flex flex-column">
+											<a href="{% url 'show_user' object.id %}" class="text-gray-800 text-hover-primary mb-1">{{object.full_name}}</a>
+											<span>{% if object.email %} {{object.email}}<br> {% endif %}{% if object.telephone %} {{object.telephone}}<br> {% endif %}{% if object.address %} {{object.address}}<br> {% endif %} {% if object.gender %} {{object.gender}}<br> {% endif %} </span>
+										<br>
+										<a  class="btn btn-light" title="View"
+																		data-toggle="tooltip">{{ object.groups.all.0}} 
+																	</a>
+										</div>
+										<!--begin::User details-->
+									</td>
+										<td>
+										 {% if object.OB_GYN %} 
+										<p id="OB_GYN_status_{{object.id}}"><span class="badge badge-light-success"> Assign </span></p>
+										{% else %}
+										<p id="OB_GYN_status_{{object.id}}"><span class="badge badge-light-danger">Unassign</span></p>
+										{% endif %}
+										<div class="" Style="cursor:default;"> 
+
+											<a  style="cursor:pointer;"class="btn btn-sm {% if  object.OB_GYN %} btn-success{% else %}  btn-primary  {% endif %}   me-3" id="OB_GYN_user_{{object.id}}"  onclick="confirm_OB_GYN_('{{object.id}}')"  >
+												<i class="ki-duotone ki-check fs-3 d-none"></i>                            
+												<!--begin::Indicator OB_GYNel-->
+												<span id="indicator_OB_GYN_{{object.id}}" class="indicator-OB_GYNel">
+													{% if  object.OB_GYN %}Unassign{% else %}Assign {% endif %} </span>
+												<!--end::Indicator OB_GYNel-->
+
+												<!--begin::Indicator progress-->
+												<span class="indicator-progress">
+													Please wait...    <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+												</span>
+												<!--end::Indicator progress-->                        
+											</a>
+										</div>
+										</td>
+										<td>
+										{% if object.Embryologist %} 
+										<p id="embryologist_status_{{object.id}}"><span class="badge badge-light-success"> Assign </span></p>
+										{% else %}
+										<p id="embryologist_status_{{object.id}}"><span class="badge badge-light-danger">Unassign</span></p>
+										{% endif %}
+										<div class="" Style="cursor:default;"> 
+
+											<a  style="cursor:pointer;"class="btn btn-sm {% if  object.Embryologist %} btn-success{% else %}  btn-primary  {% endif %}   me-3" id="embryologist_user_{{object.id}}"  onclick="confirm_embryologist_('{{object.id}}')"  >
+												<i class="ki-duotone ki-check fs-3 d-none"></i>                            
+												<!--begin::Indicator embryologistel-->
+												<span id="indicator_embryologist_{{object.id}}" class="indicator-embryologistel">
+													{% if  object.Embryologist %}Unassign{% else %}Assign {% endif %} </span>
+												<!--end::Indicator embryologistel-->
+
+												<!--begin::Indicator progress-->
+												<span class="indicator-progress">
+													Please wait...    <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+												</span>
+												<!--end::Indicator progress-->                        
+											</a>
+										</div>
+										
+										</td>
+
+										<td>
+										
+										    {% if object.sonogram %} 
+										<p id="sonogram_status_{{object.id}}"><span class="badge badge-light-success"> Assign </span></p>
+										{% else %}
+										<p id="sonogram_status_{{object.id}}"><span class="badge badge-light-danger">Unassign</span></p>
+										{% endif %}
+										<div class="" Style="cursor:default;"> 
+
+											<a  style="cursor:pointer;"class="btn btn-sm {% if  object.sonogram %} btn-success{% else %}  btn-primary  {% endif %}   me-3" id="sonogram_user_{{object.id}}"  onclick="confirm_sonogram('{{object.id}}')"  >
+												<i class="ki-duotone ki-check fs-3 d-none"></i>                            
+												<!--begin::Indicator sonogramel-->
+												<span id="indicator_sonogram_{{object.id}}" class="indicator-sonogramel">
+													{% if  object.sonogram %}Unassign{% else %}Assign {% endif %} </span>
+												<!--end::Indicator sonogramel-->
+
+												<!--begin::Indicator progress-->
+												<span class="indicator-progress">
+													Please wait...    <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+												</span>
+												<!--end::Indicator progress-->                        
+											</a>
+										</div>
+										
+										</td>
+										
+										
+										</tr>
+										 {% endfor %}
+										 
+									</tbody>
+								</table>
+							</div>
+						</div>
+						
+			    <div class="tab-pane fade" id="kt_tab_pane_2" role="tabpanel">
+				 <div class="table-responsive">
+							<div id="toolbar2"
+							     class="select">
+								<select class="form-control">
+									<option value="">Export Basic</option>
+									<option value="all">Export All</option>
+									<option value="selected">Export Selected</option>
+								</select>
+							</div>
+							<table id="fresh-table"
+							       data-toggle="table"
+							       class="table"
+							       id="table"
+							       data-toolbar="#toolbar2"
+							       data-search="true"
+							       data-show-toggle="true"
+							       data-show-fullscreen="true"
+							       data-show-columns="true"
+							       data-show-columns-toggle-all="true"
+							       data-show-export="true"
+							       data-click-to-select="true"
+							       data-minimum-count-columns="2"
+							       data-pagination="true"
+							       data-id-field="id"
+							       data-toolbar="#toolbar"
+							       data-page-list="[10, 25, 50, 100, all]"
+							       data-show-footer="true"
+							       data-sort-priority='[{"sortName": "id","sortOrder":"desc"},{"sortName":"name","sortOrder":"desc"}]'
+							       data-show-multi-sort="true"
+							       data-show-jump-to="true"
+							       data-response-handler="responseHandler"
+							       data-resizable="true"
+							       data-advanced-search="true"
+							       data-id-table="advancedTable"
+							       data-show-print="true"
+							       data-filter-control="true"
+								   data-show-footer="true"
+							       data-show-search-clear-button="true">
+								<thead>
+									<th scope="col" data-field="Name"
+									    data-filter-control="input"
+									    data-sortable="true">Name</th>
+									<th scope="col" data-field="Tuition">Lab</th>
+									<th scope="col" data-field="Structure">Vital Signs</th>
+									<th scope="col" data-field="Receptionist">Receptionist</th>
+								</thead>
+								<tbody>
+								 {% for object in nurses %}
+									<tr class='clickable-row'>
+									
+										<td class="d-flex align-items-center">
+										 
+												<!--begin:: Avatar -->
+												<div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+													<a {% if object.file or object.file.url != '/media/False' or object.file or object.file.url != '' %}data-bs-toggle="modal"{% endif %} href="#myModalImage" onclick=" {% if object.file or object.file.url != '/media/False' %}document.getElementById('myImage').src='{{ object.file.url}}'{% endif %};document.getElementById('myModalImageleLabel').innerHTML='{{ object.full_name}}'" href="#">
+													   {% if object.file %}
+														<div class="symbol-label">
+															<img src="{{ object.file.url}}" alt="" class="w-100" />
+														</div>
+														{% else %}
+														<div class="symbol-label fs-3  {% if forloop.counter|divisibleby:2 %}bg-light-danger text-danger {% elif forloop.counter|divisibleby:3 %}bg-light-danger text--danger {% else %}bg-light-success text-success {% endif %} ">{{ object.full_name|make_list|first }}</div>
+														{% endif %}
+													</a>
+												</div>
+												
+												<!--end::Avatar-->
+												<!--begin::User details-->
+												<div class="d-flex flex-column">
+													<a href="{% url 'show_user' object.id %}" class="text-gray-800 text-hover-primary mb-1">{{object.full_name}}</a>
+													<span>{% if object.email %} {{object.email}}<br> {% endif %}{% if object.telephone %} {{object.telephone}}<br> {% endif %}{% if object.address %} {{object.address}}<br> {% endif %} {% if object.gender %} {{object.gender}}<br> {% endif %} </span>
+												<br>
+												<a  class="btn btn-light" title="View"
+																		data-toggle="tooltip">{{ object.groups.all.0}} 
+																	</a>
+												</div>
+												<!--begin::User details-->
+										</td>
+										<td>
+										{% if object.lab_draw_blood %} 
+										<p id="lab_status_{{object.id}}"><span class="badge badge-light-success"> Assign </span></p>
+										{% else %}
+										<p id="lab_status_{{object.id}}"><span class="badge badge-light-danger">Unassign</span></p>
+										{% endif %}
+										<div class="" Style="cursor:default;"> 
+
+											<a  style="cursor:pointer;"class="btn btn-sm {% if  object.lab_draw_blood %} btn-success{% else %}  btn-primary  {% endif %}   me-3" id="lab_user_{{object.id}}"  onclick="confirm_lab_('{{object.id}}')"  >
+												<i class="ki-duotone ki-check fs-3 d-none"></i>                            
+												<!--begin::Indicator label-->
+												<span id="indicator_lab_{{object.id}}" class="indicator-label">
+													{% if  object.lab_draw_blood %}Unassign{% else %}Assign {% endif %} </span>
+												<!--end::Indicator label-->
+
+												<!--begin::Indicator progress-->
+												<span class="indicator-progress">
+													Please wait...    <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+												</span>
+												<!--end::Indicator progress-->                        
+											</a>
+										</div>
+										
+										</td>
+										<td>
+										{% if object.vital_crud %} 
+											<p id="vital_status_{{object.id}}"><span class="badge badge-light-success"> Assign </span></p>
+											{% else %}
+											<p id="vital_status_{{object.id}}"><span class="badge badge-light-danger">Unassign</span></p>
+											{% endif %}
+											<div class="" Style="cursor:default;"> 
+
+												<a  style="cursor:pointer;"class="btn btn-sm {% if object.vital_crud %} btn-success{% else %}  btn-primary  {% endif %}   me-3" id="vital_user_{{object.id}}"  onclick="confirm_vital_('{{object.id}}')"  >
+													<i class="ki-duotone ki-check fs-3 d-none"></i>                            
+													<!--begin::Indicator vitalel-->
+													<span id="indicator_vital_{{object.id}}" class="indicator-vitalel">
+														{% if object.vital_crud %}Unassign{% else %}Assign {% endif %} </span>
+													<!--end::Indicator vitalel-->
+
+													<!--begin::Indicator progress-->
+													<span class="indicator-progress">
+														Please wait...    <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+													</span>
+													<!--end::Indicator progress-->                        
+												</a>
+											</div>
+	
+										
+										</td>
+
+											<td>
+										
+											{% if object.Receptionist %} 
+										<p id="receptionist_status_{{object.id}}"><span class="badge badge-light-success"> Assign </span></p>
+										{% else %}
+										<p id="receptionist_status_{{object.id}}"><span class="badge badge-light-danger">Unassign</span></p>
+										{% endif %}
+										<div class="" Style="cursor:default;"> 
+
+											<a  style="cursor:pointer;"class="btn btn-sm {% if  object.Receptionist %} btn-success{% else %}  btn-primary  {% endif %}   me-3" id="receptionist_user_{{object.id}}"  onclick="confirm_receptionist_('{{object.id}}')"  >
+												<i class="ki-duotone ki-check fs-3 d-none"></i>                            
+												<!--begin::Indicator receptionistel-->
+												<span id="indicator_receptionist_{{object.id}}" class="indicator-receptionistel">
+													{% if  object.Receptionist %}Unassign{% else %}Assign {% endif %} </span>
+												<!--end::Indicator receptionistel-->
+
+												<!--begin::Indicator progress-->
+												<span class="indicator-progress">
+													Please wait...    <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+												</span>
+												<!--end::Indicator progress-->                        
+											</a>
+										</div>
+										
+										</td>
+
+										</tr>
+										 {% endfor %}
+										 
+									</tbody>
+								</table>
+							</div>
+					  
+					  </div>
+			<div class="tab-pane fade" id="kt_tab_pane_3" role="tabpanel">
+				 <div class="table-responsive">
+							<div id="toolbar2"
+							     class="select">
+								<select class="form-control">
+									<option value="">Export Basic</option>
+									<option value="all">Export All</option>
+									<option value="selected">Export Selected</option>
+								</select>
+							</div>
+							<table id="fresh-table"
+							       data-toggle="table"
+							       class="table"
+							       id="table"
+							       data-toolbar="#toolbar2"
+							       data-search="true"
+							       data-show-toggle="true"
+							       data-show-fullscreen="true"
+							       data-show-columns="true"
+							       data-show-columns-toggle-all="true"
+							       data-show-export="true"
+							       data-click-to-select="true"
+							       data-minimum-count-columns="2"
+							       data-pagination="true"
+							       data-id-field="id"
+							       data-toolbar="#toolbar"
+							       data-page-list="[10, 25, 50, 100, all]"
+							       data-show-footer="true"
+							       data-sort-priority='[{"sortName": "id","sortOrder":"desc"},{"sortName":"name","sortOrder":"desc"}]'
+							       data-show-multi-sort="true"
+							       data-show-jump-to="true"
+							       data-response-handler="responseHandler"
+							       data-resizable="true"
+							       data-advanced-search="true"
+							       data-id-table="advancedTable"
+							       data-show-print="true"
+							       data-filter-control="true"
+								   data-show-footer="true"
+							       data-show-search-clear-button="true">
+								<thead>
+									<th scope="col" data-field="Name"
+									    data-filter-control="input"
+									    data-sortable="true">Name</th>
+									<th scope="col" data-field="Tuition">Lab</th>
+									<th scope="col" data-field="Structure">Vital Signs</th>
+									<th scope="col" data-field="Receptionist">Receptionist</th>
+								</thead>
+								<tbody>
+								 {% for object in allothers %}
+									<tr class='clickable-row'>
+									<td class="d-flex align-items-center">
+									 
+										<!--begin:: Avatar -->
+										<div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+											<a {% if object.file or object.file.url != '/media/False' or object.file or object.file.url != '' %}data-bs-toggle="modal"{% endif %} href="#myModalImage" onclick=" {% if object.file or object.file.url != '/media/False' %}document.getElementById('myImage').src='{{ object.file.url}}'{% endif %};document.getElementById('myModalImageleLabel').innerHTML='{{ object.full_name}}'" href="#">
+											   {% if object.file %}
+												<div class="symbol-label">
+													<img src="{{ object.file.url}}" alt="" class="w-100" />
+												</div>
+												{% else %}
+												<div class="symbol-label fs-3  {% if forloop.counter|divisibleby:2 %}bg-light-danger text-danger {% elif forloop.counter|divisibleby:3 %}bg-light-danger text--danger {% else %}bg-light-success text-success {% endif %} ">{{ object.full_name|make_list|first }}</div>
+												{% endif %}
+											</a>
+										</div>
+										
+										<!--end::Avatar-->
+										<!--begin::User details-->
+										<div class="d-flex flex-column">
+											<a href="{% url 'show_user' object.id %}" class="text-gray-800 text-hover-primary mb-1">{{object.full_name}}</a>
+											<span>{% if object.email %} {{object.email}}<br> {% endif %}{% if object.telephone %} {{object.telephone}}<br> {% endif %}{% if object.address %} {{object.address}}<br> {% endif %} {% if object.gender %} {{object.gender}}<br> {% endif %} </span>
+										<br>
+										<a  class="btn btn-light" title="View"
+																		data-toggle="tooltip">{{ object.groups.all.0}} 
+																	</a>
+										</div>
+										<!--begin::User details-->
+									</td>
+										<td>
+										<div class="togglebutton">
+										<label>
+										<input type="checkbox" href="#myModal" data-toggle="modal" {% if object.lab_draw_blood %} data-ofon="On"  checked="" {% else %} data-ofon="off" {% endif %} class="delegateTask" data-id="{{ object.id }} " data-name="{{ object.full_name }}" data-role="lab_draw_blood"    >
+										<span class="toggle"></span>
+											{% if object.lab_draw_blood %} 
+											<p>User assigned <p> 
+										 {% else %}
+										 <p>User  not assigned<p>
+											{% endif %}
+										  </label>
+										</div>	
+										
+										</td>
+										<td>
+										
+										<div class="togglebutton">
+										<label>
+										<input type="checkbox" href="#myModal" data-toggle="modal" {% if object.vital_crud %} data-ofon="On"  checked="" {% else %} data-ofon="off" {% endif %} class="delegateTask"  data-id="{{ object.id }} " data-name="{{ object.full_name }}" data-role="vital_crud"    >
+										<span class="toggle"></span>
+											{% if object.vital_crud %} 
+											<p>User assigned<p> 
+										 {% else %}
+										 <p>User  not assigned<p>
+											{% endif %}
+										  </label>
+										</div>
+										
+										</td>
+
+											<td>
+										
+										<div class="togglebutton">
+										<label>
+										<input type="checkbox" href="#myModal" data-toggle="modal" {% if object.Receptionist %} data-ofon="On"  checked="" {% else %} data-ofon="off" {% endif %} class="delegateTask"  data-id="{{ object.id }} " data-name="{{ object.full_name }}" data-role="Receptionist">
+										<span class="toggle"></span>
+											{% if object.Receptionist %} 
+											<p>User assigned<p> 
+										 {% else %}
+										 <p>User  not assigned<p>
+											{% endif %}
+										  </label>
+										</div>
+										
+										</td>
+
+										</tr>
+										 {% endfor %}
+										 
+									</tbody>
+								</table>
+							</div>
+					  
+					  </div>
+					 
+					</div>
+					
+						</div>
+					<!--  end card  -->
+					
+					
+					
+						</div>
+					
+				
+	<!--begin::Modal - New Product-->
+<div class="modal fade" id="myModalImage"    aria-hidden="true">
+	<!--begin::Modal dialog-->
+	<div class="modal-dialog modal-dialog-centered modal-sm">
+		<!--begin::Modal content-->
+		<div class="modal-content">
+			<!--begin::Modal header-->
+			<div class="modal-header border-0 ">
+				<!--begin::Edit-->
+				  <h5 class="modal-title" id="myModalImageleLabel">Modal 1</h5>
+				<!--begin::Close-->
+				<div class="btn btn-icon btn-sm btn-color-gray-500 btn-active-icon-primary" data-bs-toggle="tooltip" title="Hide Photo" data-bs-dismiss="modal">
+					<!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+					<span class="svg-icon svg-icon-1">
+						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor" />
+							<rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
+						</svg>
+					</span>
+					<!--end::Svg Icon-->
+				</div>
+				<!--end::Close-->
+			</div>
+			<!--end::Modal header-->
+			<!--begin::Modal body-->
+			<div class="modal-body pt-0 pb-20 px-lg-17">
+				<!--begin::Row-->
+				<div class="">
+					<img id="myImage"
+					     src=""
+						 
+						 style="margin-left:auto; margin-right:auto;width:100%; height:100%; display:block;"
+					     class=" img-thumbnail thumbnail zoom"/>
+					
+					
+				</div>
+				
+				
+
+			</div>
+				<!--end::Row-->
+			</div>
+			<!--end::Modal body-->
+		</div>
+	</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
+  	<input style="display:none"type="text" id="role"name="role"/>	
+   	<input style="display:none"type="text"  id="userID"name="userID"/>	
+   	<input style="display:none"type="text"  id="ofon"name="ofon"/>
+	
+<form>
+{% csrf_token %} 
+
+</form>
+<script>   
+function confirm_embryologist_(dataId) {
+    // Show indicator
+    const embryologist_user = document.querySelector('#embryologist_user_' + dataId);
+    embryologist_user.setAttribute('data-kt-indicator', 'on');
+
+    // Disable button to avoid multiple clicks
+    embryologist_user.disabled = true;
+
+    // Build data object
+    var data = {
+        "id": dataId,
+		"csrfmiddlewaretoken": document.querySelector('[name="csrfmiddlewaretoken"]').value,
+    };
+
+   $.ajax({
+	type: 'POST',
+	url: '/delegateTask_for_embryologist/' + dataId,
+	data: data,
+	success: function (response) { // Use success instead of danger
+		if (response) {
+			setTimeout(function () {
+				embryologist_user.removeAttribute('data-kt-indicator');
+				if (response.status === "Assign") {
+					embryologist_user.classList.add("btn-success");
+					embryologist_user.classList.remove("btn-primary");  // Remove btn-danger class
+					embryologist_user.classList.remove("btn-danger");
+					embryologist_user.querySelector("i").classList.remove("d-none");
+					embryologist_user.querySelector("#indicator_embryologist_"+ dataId).innerHTML = 'Assign';
+					document.querySelector("#embryologist_status_" + dataId).innerHTML = '<span class="badge badge-light-success"> Assign </span>';
+				} else {
+					embryologist_user.classList.add("btn-danger");
+					embryologist_user.classList.remove("btn-success");  // Remove btn-success class
+					embryologist_user.querySelector("i").classList.add("d-none");
+					embryologist_user.querySelector("#indicator_embryologist_"+ dataId).innerHTML = 'Unassign';
+					document.querySelector("#embryologist_status_" + dataId).innerHTML = '<span class="badge badge-light-danger"> Unassign </span>';
+				}
+				embryologist_user.disabled = false;
+				Swal.fire({
+					title: response.status === "Assign" ? "User Assigned" : "User Unassigned",
+				});
+			}, 1000);
+		}
+		}
+	});
+
+}
+
+	function confirm_lab_(dataId) {
+    // Show indicator
+    const lab_user = document.querySelector('#lab_user_' + dataId);
+    lab_user.setAttribute('data-kt-indicator', 'on');
+
+    // Disable button to avoid multiple clicks
+    lab_user.disabled = true;
+
+    // Build data object
+    var data = {
+        "id": dataId,
+		"csrfmiddlewaretoken": document.querySelector('[name="csrfmiddlewaretoken"]').value,
+    };
+
+   $.ajax({
+	type: 'POST',
+	url: '/delegateTask_for_lab/' + dataId,
+	data: data,
+	success: function (response) { // Use success instead of danger
+		if (response) {
+			setTimeout(function () {
+				lab_user.removeAttribute('data-kt-indicator');
+				if (response.status === "Assign") {
+					lab_user.classList.add("btn-success");
+					lab_user.classList.remove("btn-primary");  // Remove btn-danger class
+					lab_user.classList.remove("btn-danger");
+					lab_user.querySelector("i").classList.remove("d-none");
+					lab_user.querySelector("#indicator_lab_"+ dataId).innerHTML = 'Assign';
+					document.querySelector("#lab_status_" + dataId).innerHTML = '<span class="badge badge-light-success"> Assign </span>';
+				} else {
+					lab_user.classList.add("btn-danger");
+					lab_user.classList.remove("btn-success");  // Remove btn-success class
+					lab_user.querySelector("i").classList.add("d-none");
+					lab_user.querySelector("#indicator_lab_"+ dataId).innerHTML = 'Unassign';
+					document.querySelector("#lab_status_" + dataId).innerHTML = '<span class="badge badge-light-danger"> Unassign </span>';
+				}
+				lab_user.disabled = false;
+				Swal.fire({
+					title: response.status === "Assign" ? "User Assigned" : "User Unassigned",
+				});
+			}, 1000);
+		}
+		}
+	});
+
+}
+
+function confirm_vital_(dataId) {
+    // Show indicator
+    const vital_user = document.querySelector('#vital_user_' + dataId);
+    vital_user.setAttribute('data-kt-indicator', 'on');
+
+    // Disable button to avoid multiple clicks
+    vital_user.disabled = true;
+
+    // Build data object
+    var data = {
+        "id": dataId,
+		"csrfmiddlewaretoken": document.querySelector('[name="csrfmiddlewaretoken"]').value,
+    };
+
+   $.ajax({
+	type: 'POST',
+	url: '/delegateTask_for_vital/' + dataId,
+	data: data,
+	success: function (response) { // Use success instead of danger
+		if (response) {
+			setTimeout(function () {
+				vital_user.removeAttribute('data-kt-indicator');
+				if (response.status === "Assign") {
+					vital_user.classList.add("btn-success");
+					vital_user.classList.remove("btn-primary");  // Remove btn-danger class
+					vital_user.classList.remove("btn-danger");
+					vital_user.querySelector("i").classList.remove("d-none");
+					vital_user.querySelector("#indicator_vital_"+ dataId).innerHTML = 'Assign';
+					document.querySelector("#vital_status_"+dataId).innerHTML = '<span class="badge badge-light-success"> Assign </span>';
+				} else {
+					vital_user.classList.add("btn-danger");
+					vital_user.classList.remove("btn-success");  // Remove btn-success class
+					vital_user.querySelector("i").classList.add("d-none");
+					vital_user.querySelector("#indicator_vital_"+ dataId).innerHTML = 'Unassign';
+					document.querySelector("#vital_status_"+dataId).innerHTML = '<span class="badge badge-light-danger"> Unassign </span>';
+				}
+				vital_user.disabled = false;
+				Swal.fire({
+					title: response.status === "Assign" ? "User Assigned" : "User Unassigned",
+				});
+			}, 1000);
+		}
+		}
+	});
+
+}
+function confirm_receptionist_(dataId) {
+    // Show indicator
+    const receptionist_user = document.querySelector('#receptionist_user_' + dataId);
+    receptionist_user.setAttribute('data-kt-indicator', 'on');
+
+    // Disable button to avoid multiple clicks
+    receptionist_user.disabled = true;
+
+    // Build data object
+    var data = {
+        "id": dataId,
+		"csrfmiddlewaretoken": document.querySelector('[name="csrfmiddlewaretoken"]').value,
+    };
+
+   $.ajax({
+	type: 'POST',
+	url: '/delegateTask_for_receptionist/' + dataId,
+	data: data,
+	success: function (response) { // Use success instead of danger
+		if (response) {
+			setTimeout(function () {
+				receptionist_user.removeAttribute('data-kt-indicator');
+				if (response.status === "Assign") {
+					receptionist_user.classList.add("btn-success");
+					receptionist_user.classList.remove("btn-primary");  // Remove btn-danger class
+					receptionist_user.classList.remove("btn-danger");
+					receptionist_user.querySelector("i").classList.remove("d-none");
+					receptionist_user.querySelector("#indicator_receptionist_"+ dataId).innerHTML = 'Assign';
+					document.querySelector("#receptionist_status_" + dataId).innerHTML = '<span class="badge badge-light-success"> Assign </span>';
+				} else {
+					receptionist_user.classList.add("btn-danger");
+					receptionist_user.classList.remove("btn-success");  // Remove btn-success class
+					receptionist_user.querySelector("i").classList.add("d-none");
+					receptionist_user.querySelector("#indicator_receptionist_"+ dataId).innerHTML = 'Unassign';
+					document.querySelector("#receptionist_status_" + dataId).innerHTML = '<span class="badge badge-light-danger"> Unassign </span>';
+				}
+				receptionist_user.disabled = false;
+				Swal.fire({
+					title: response.status === "Assign" ? "User Assigned" : "User Unassigned",
+				});
+			}, 1000);
+		}
+		}
+	});
+
+}
+
+
+	function confirm_OB_GYN_(dataId) {
+    // Show indicator
+    const OB_GYN_user = document.querySelector('#OB_GYN_user_' + dataId);
+    OB_GYN_user.setAttribute('data-kt-indicator', 'on');
+
+    // Disable button to avoid multiple clicks
+    OB_GYN_user.disabled = true;
+
+    // Build data object
+    var data = {
+        "id": dataId,
+		"csrfmiddlewaretoken": document.querySelector('[name="csrfmiddlewaretoken"]').value,
+    };
+
+   $.ajax({
+	type: 'POST',
+	url: '/delegateTask_for_OB_GYN/' + dataId,
+	data: data,
+	success: function (response) { // Use success instead of danger
+		if (response) {
+			setTimeout(function () {
+				OB_GYN_user.removeAttribute('data-kt-indicator');
+				if (response.status === "Assign") {
+					OB_GYN_user.classList.add("btn-success");
+					OB_GYN_user.classList.remove("btn-primary");  // Remove btn-danger class
+					OB_GYN_user.classList.remove("btn-danger");
+					OB_GYN_user.querySelector("i").classList.remove("d-none");
+					OB_GYN_user.querySelector("#indicator_OB_GYN_"+ dataId).innerHTML = 'Assign';
+					document.querySelector("#OB_GYN_status_" + dataId).innerHTML = '<span class="badge badge-light-success"> Assign </span>';
+				} else {
+					OB_GYN_user.classList.add("btn-danger");
+					OB_GYN_user.classList.remove("btn-success");  // Remove btn-success class
+					OB_GYN_user.querySelector("i").classList.add("d-none");
+					OB_GYN_user.querySelector("#indicator_OB_GYN_"+ dataId).innerHTML = 'Unassign';
+					document.querySelector("#OB_GYN_status_" + dataId).innerHTML = '<span class="badge badge-light-danger"> Unassign </span>';
+				}
+				OB_GYN_user.disabled = false;
+				Swal.fire({
+					title: response.status === "Assign" ? "User Assigned" : "User Unassigned",
+				});
+			}, 1000);
+		}
+		}
+	});
+
+}
+function confirm_sonogram(dataId) {
+    // Show indicator
+    const sonogram_user = document.querySelector('#sonogram_user_' + dataId);
+    sonogram_user.setAttribute('data-kt-indicator', 'on');
+
+    // Disable button to avoid multiple clicks
+    sonogram_user.disabled = true;
+
+    // Build data object
+    var data = {
+        "id": dataId,
+		"csrfmiddlewaretoken": document.querySelector('[name="csrfmiddlewaretoken"]').value,
+    };
+
+   $.ajax({
+	type: 'POST',
+	url: '/delegateTask_for_sonogram/' + dataId,
+	data: data,
+	success: function (response) { // Use success instead of danger
+		if (response) {
+			setTimeout(function () {
+				sonogram_user.removeAttribute('data-kt-indicator');
+				if (response.status === "Assign") {
+					sonogram_user.classList.add("btn-success");
+					sonogram_user.classList.remove("btn-primary");  // Remove btn-danger class
+					sonogram_user.classList.remove("btn-danger");
+					sonogram_user.querySelector("i").classList.remove("d-none");
+					sonogram_user.querySelector("#indicator_sonogram_"+ dataId).innerHTML = 'Assign';
+					document.querySelector("#sonogram_status_" + dataId).innerHTML = '<span class="badge badge-light-success"> Assign </span>';
+				} else {
+					sonogram_user.classList.add("btn-danger");
+					sonogram_user.classList.remove("btn-success");  // Remove btn-success class
+					sonogram_user.querySelector("i").classList.add("d-none");
+					sonogram_user.querySelector("#indicator_sonogram_"+ dataId).innerHTML = 'Unassign';
+					document.querySelector("#sonogram_status_" + dataId).innerHTML = '<span class="badge badge-light-danger"> Unassign </span>';
+				}
+				sonogram_user.disabled = false;
+				Swal.fire({
+					title: response.status === "Assign" ? "User Assigned" : "User Unassigned",
+				});
+			}, 1000);
+		}
+		}
+	});
+
+}
+
+</script>	
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+
+
+{% endblock javascripts %}

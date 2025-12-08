@@ -1,0 +1,450 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Profile Settings {% endblock %} 
+
+{% block content %}
+{% load static %} 
+
+<section class="content-section active" id="section-student-profile">
+  <div class="section-header">
+    <div>
+      <h1 class="section-title">Profile Settings</h1>
+      <p class="section-subtitle">Manage your personal information and account settings</p>
+    </div>
+  </div>
+
+  <div style="display: grid; grid-template-columns: 1fr 2fr; gap: 1.5rem; margin-top: 1.5rem;">
+    <!-- Profile Card -->
+    <div class="data-table-card">
+      <div style="text-align: center; padding: 2rem 1.5rem;">
+        <div style="position: relative; display: inline-block; margin-bottom: 1rem;">
+          {% if user.avatar %}
+            <img src="{{ user.avatar.url }}" alt="{{ user.full_name }}" style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid var(--accent-primary, #4f46e5);">
+          {% else %}
+            <div style="width: 120px; height: 120px; border-radius: 50%; background: var(--accent-primary, #4f46e5); display: flex; align-items: center; justify-content: center; color: white; font-size: 2.5rem; font-weight: 600; border: 4px solid var(--accent-primary, #4f46e5); margin: 0 auto;">
+              {{ user.first_name|first|upper }}{{ user.last_name|first|upper }}
+            </div>
+          {% endif %}
+          <label for="avatar-upload" style="position: absolute; bottom: 0; right: 0; background: var(--accent-primary, #4f46e5); color: white; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; cursor: pointer; border: 3px solid var(--bg-card, #fff); box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+              <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+            </svg>
+          </label>
+          <input type="file" id="avatar-upload" accept="image/*" style="display: none;">
+        </div>
+        <h2 style="margin: 0.5rem 0 0.25rem 0; font-size: 1.5rem; font-weight: 600;">{{ user.full_name }}</h2>
+        <p style="margin: 0; color: var(--text-muted, #6b7280); font-size: 0.875rem;">{{ user.get_role_display }}</p>
+        {% if student_profile.student_id %}
+        <p style="margin: 0.5rem 0 0 0; color: var(--text-primary, #111827); font-size: 0.875rem; font-weight: 500;">Student ID: {{ student_profile.student_id }}</p>
+        {% endif %}
+        {% if institution %}
+        <p style="margin: 0.5rem 0 0 0; color: var(--text-muted, #6b7280); font-size: 0.875rem;">{{ institution.name }}</p>
+        {% endif %}
+        {% if student_profile.program %}
+        <p style="margin: 0.5rem 0 0 0; color: var(--text-muted, #6b7280); font-size: 0.875rem;">{{ student_profile.program }}</p>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Profile Forms -->
+    <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+      <!-- Personal Information -->
+      <div class="data-table-card">
+        <div style="padding: 1.5rem; border-bottom: 1px solid var(--border-color, #e5e7eb);">
+          <h3 style="margin: 0; font-size: 1.125rem; font-weight: 600;">Personal Information</h3>
+          <p style="margin: 0.5rem 0 0 0; color: var(--text-muted, #6b7280); font-size: 0.875rem;">Update your personal details</p>
+        </div>
+        <form id="personal-info-form" style="padding: 1.5rem;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+            <div class="form-group">
+              <label class="form-label">First Name <span style="color: #ef4444;">*</span></label>
+              <input type="text" id="first-name" name="first_name" class="input" value="{{ user.first_name }}" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Last Name <span style="color: #ef4444;">*</span></label>
+              <input type="text" id="last-name" name="last_name" class="input" value="{{ user.last_name }}" required>
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Email <span style="color: #ef4444;">*</span></label>
+            <input type="email" id="email" name="email" class="input" value="{{ user.email }}" required>
+          </div>
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Phone</label>
+            <input type="text" id="phone" name="phone" class="input" value="{{ user.phone }}">
+          </div>
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Date of Birth</label>
+            <input type="date" id="date-of-birth" name="date_of_birth" class="input" value="{% if student_profile.date_of_birth %}{{ student_profile.date_of_birth|date:'Y-m-d' }}{% endif %}">
+          </div>
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Nationality</label>
+            <input type="text" id="nationality" name="nationality" class="input" value="{{ student_profile.nationality }}" placeholder="e.g., Sierra Leonean">
+          </div>
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Address</label>
+            <textarea id="address" name="address" class="input" rows="3" placeholder="Enter your address">{{ student_profile.address }}</textarea>
+          </div>
+          <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+            <button type="button" class="btn btn-outline" onclick="resetPersonalForm()">Reset</button>
+            <button type="submit" class="btn btn-primary" id="personal-save-btn">
+              <span class="btn-text">Save Changes</span>
+              <span class="btn-spinner" style="display: none;">
+                <span class="spinner" style="width: 16px; height: 16px; border-width: 2px;"></span>
+              </span>
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Academic Information (Read-only) -->
+      {% if institution or student_profile.program %}
+      <div class="data-table-card">
+        <div style="padding: 1.5rem; border-bottom: 1px solid var(--border-color, #e5e7eb);">
+          <h3 style="margin: 0; font-size: 1.125rem; font-weight: 600;">Academic Information</h3>
+          <p style="margin: 0.5rem 0 0 0; color: var(--text-muted, #6b7280); font-size: 0.875rem;">Your academic details (managed by your institution)</p>
+        </div>
+        <div style="padding: 1.5rem;">
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+            {% if student_profile.student_id %}
+            <div class="form-group">
+              <label class="form-label">Student ID</label>
+              <input type="text" class="input" value="{{ student_profile.student_id }}" readonly style="background: var(--bg-secondary, #f5f5f5);">
+            </div>
+            {% endif %}
+            {% if institution %}
+            <div class="form-group">
+              <label class="form-label">Institution</label>
+              <input type="text" class="input" value="{{ institution.name }}" readonly style="background: var(--bg-secondary, #f5f5f5);">
+            </div>
+            {% endif %}
+          </div>
+          {% if student_profile.program %}
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Program</label>
+            <input type="text" class="input" value="{{ student_profile.program }}" readonly style="background: var(--bg-secondary, #f5f5f5);">
+          </div>
+          {% endif %}
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            {% if student_profile.enrollment_date %}
+            <div class="form-group">
+              <label class="form-label">Enrollment Date</label>
+              <input type="text" class="input" value="{{ student_profile.enrollment_date|date:'F d, Y' }}" readonly style="background: var(--bg-secondary, #f5f5f5);">
+            </div>
+            {% endif %}
+            {% if student_profile.graduation_date %}
+            <div class="form-group">
+              <label class="form-label">Graduation Date</label>
+              <input type="text" class="input" value="{{ student_profile.graduation_date|date:'F d, Y' }}" readonly style="background: var(--bg-secondary, #f5f5f5);">
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      {% endif %}
+
+      <!-- Password Change -->
+      <div class="data-table-card">
+        <div style="padding: 1.5rem; border-bottom: 1px solid var(--border-color, #e5e7eb);">
+          <h3 style="margin: 0; font-size: 1.125rem; font-weight: 600;">Change Password</h3>
+          <p style="margin: 0.5rem 0 0 0; color: var(--text-muted, #6b7280); font-size: 0.875rem;">Update your password to keep your account secure</p>
+        </div>
+        <form id="password-change-form" style="padding: 1.5rem;">
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Current Password <span style="color: #ef4444;">*</span></label>
+            <input type="password" id="current-password" name="current_password" class="input" required>
+          </div>
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">New Password <span style="color: #ef4444;">*</span></label>
+            <input type="password" id="new-password" name="new_password" class="input" required minlength="8">
+            <small style="color: var(--text-muted, #6b7280); font-size: 0.75rem;">Must be at least 8 characters long</small>
+          </div>
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Confirm New Password <span style="color: #ef4444;">*</span></label>
+            <input type="password" id="confirm-password" name="confirm_password" class="input" required>
+          </div>
+          <div style="display: flex; justify-content: flex-end; gap: 0.75rem; margin-top: 1.5rem;">
+            <button type="button" class="btn btn-outline" onclick="resetPasswordForm()">Reset</button>
+            <button type="submit" class="btn btn-primary" id="password-save-btn">
+              <span class="btn-text">Change Password</span>
+              <span class="btn-spinner" style="display: none;">
+                <span class="spinner" style="width: 16px; height: 16px; border-width: 2px;"></span>
+              </span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% endblock content %}
+
+{% block extra_js %}
+{% autoescape off %}
+<script>
+// Student Profile Page JavaScript
+(function() {
+  console.log('Student profile page script loaded');
+  
+  // Avatar upload
+  const avatarUpload = document.getElementById('avatar-upload');
+  if (avatarUpload) {
+    avatarUpload.addEventListener('change', async function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+      
+      if (file.size > 5 * 1024 * 1024) { // 5MB limit
+        if (typeof Swal !== 'undefined') {
+          Swal.fire({
+            icon: 'error',
+            title: 'File Too Large',
+            text: 'Please select an image smaller than 5MB',
+            confirmButtonColor: '#4f46e5'
+          });
+        }
+        return;
+      }
+      
+      const formData = new FormData();
+      formData.append('avatar', file);
+      
+      try {
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || 
+                         document.cookie.match(/csrftoken=([^;]+)/)?.[1];
+        
+        const response = await fetch('/api/v1/auth/profile/', {
+          method: 'PATCH',
+          headers: {
+            'X-CSRFToken': csrftoken
+          },
+          credentials: 'include',
+          body: formData
+        });
+        
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.detail || error.error || 'Failed to upload avatar');
+        }
+        
+        const data = await response.json();
+        if (data.avatar) {
+          // Reload page to show new avatar
+          window.location.reload();
+        }
+      } catch (error) {
+        console.error('Error uploading avatar:', error);
+        if (typeof Swal !== 'undefined') {
+          Swal.fire({
+            icon: 'error',
+            title: 'Upload Failed',
+            text: error.message || 'Failed to upload avatar. Please try again.',
+            confirmButtonColor: '#4f46e5'
+          });
+        }
+      }
+    });
+  }
+  
+  // Personal info form
+  const personalForm = document.getElementById('personal-info-form');
+  if (personalForm) {
+    const originalValues = {
+      first_name: document.getElementById('first-name').value,
+      last_name: document.getElementById('last-name').value,
+      email: document.getElementById('email').value,
+      phone: document.getElementById('phone').value,
+      date_of_birth: document.getElementById('date-of-birth').value,
+      nationality: document.getElementById('nationality').value,
+      address: document.getElementById('address').value
+    };
+    
+    personalForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const saveBtn = document.getElementById('personal-save-btn');
+      const btnText = saveBtn.querySelector('.btn-text');
+      const btnSpinner = saveBtn.querySelector('.btn-spinner');
+      
+      saveBtn.disabled = true;
+      btnText.style.display = 'none';
+      btnSpinner.style.display = 'inline-block';
+      
+      const formData = {
+        first_name: document.getElementById('first-name').value,
+        last_name: document.getElementById('last-name').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        date_of_birth: document.getElementById('date-of-birth').value || null,
+        nationality: document.getElementById('nationality').value,
+        address: document.getElementById('address').value
+      };
+      
+      try {
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || 
+                         document.cookie.match(/csrftoken=([^;]+)/)?.[1];
+        
+        const response = await fetch('/api/v1/auth/profile/', {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken
+          },
+          credentials: 'include',
+          body: JSON.stringify(formData)
+        });
+        
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.detail || error.error || 'Failed to update profile');
+        }
+        
+        const data = await response.json();
+        
+        if (typeof Swal !== 'undefined') {
+          Swal.fire({
+            icon: 'success',
+            title: 'Profile Updated!',
+            text: 'Your personal information has been updated successfully.',
+            timer: 2000,
+            showConfirmButton: false,
+            confirmButtonColor: '#4f46e5'
+          });
+        }
+        
+        // Update original values
+        Object.assign(originalValues, formData);
+        
+      } catch (error) {
+        console.error('Error updating profile:', error);
+        if (typeof Swal !== 'undefined') {
+          Swal.fire({
+            icon: 'error',
+            title: 'Update Failed',
+            text: error.message || 'Failed to update profile. Please try again.',
+            confirmButtonColor: '#4f46e5'
+          });
+        }
+      } finally {
+        saveBtn.disabled = false;
+        btnText.style.display = 'inline';
+        btnSpinner.style.display = 'none';
+      }
+    });
+    
+    window.resetPersonalForm = function() {
+      document.getElementById('first-name').value = originalValues.first_name;
+      document.getElementById('last-name').value = originalValues.last_name;
+      document.getElementById('email').value = originalValues.email;
+      document.getElementById('phone').value = originalValues.phone;
+      document.getElementById('date-of-birth').value = originalValues.date_of_birth;
+      document.getElementById('nationality').value = originalValues.nationality;
+      document.getElementById('address').value = originalValues.address;
+    };
+  }
+  
+  // Password change form
+  const passwordForm = document.getElementById('password-change-form');
+  if (passwordForm) {
+    passwordForm.addEventListener('submit', async function(e) {
+      e.preventDefault();
+      
+      const newPassword = document.getElementById('new-password').value;
+      const confirmPassword = document.getElementById('confirm-password').value;
+      
+      if (newPassword !== confirmPassword) {
+        if (typeof Swal !== 'undefined') {
+          Swal.fire({
+            icon: 'error',
+            title: 'Password Mismatch',
+            text: 'New password and confirm password do not match.',
+            confirmButtonColor: '#4f46e5'
+          });
+        }
+        return;
+      }
+      
+      if (newPassword.length < 8) {
+        if (typeof Swal !== 'undefined') {
+          Swal.fire({
+            icon: 'error',
+            title: 'Password Too Short',
+            text: 'Password must be at least 8 characters long.',
+            confirmButtonColor: '#4f46e5'
+          });
+        }
+        return;
+      }
+      
+      const saveBtn = document.getElementById('password-save-btn');
+      const btnText = saveBtn.querySelector('.btn-text');
+      const btnSpinner = saveBtn.querySelector('.btn-spinner');
+      
+      saveBtn.disabled = true;
+      btnText.style.display = 'none';
+      btnSpinner.style.display = 'inline-block';
+      
+      const formData = {
+        current_password: document.getElementById('current-password').value,
+        new_password: newPassword
+      };
+      
+      try {
+        const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || 
+                         document.cookie.match(/csrftoken=([^;]+)/)?.[1];
+        
+        const response = await fetch('/api/v1/auth/change-password/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrftoken
+          },
+          credentials: 'include',
+          body: JSON.stringify(formData)
+        });
+        
+        if (!response.ok) {
+          const error = await response.json();
+          throw new Error(error.detail || error.error || 'Failed to change password');
+        }
+        
+        if (typeof Swal !== 'undefined') {
+          Swal.fire({
+            icon: 'success',
+            title: 'Password Changed!',
+            text: 'Your password has been updated successfully.',
+            timer: 2000,
+            showConfirmButton: false,
+            confirmButtonColor: '#4f46e5'
+          });
+        }
+        
+        // Reset form
+        passwordForm.reset();
+        
+      } catch (error) {
+        console.error('Error changing password:', error);
+        if (typeof Swal !== 'undefined') {
+          Swal.fire({
+            icon: 'error',
+            title: 'Password Change Failed',
+            text: error.message || 'Failed to change password. Please check your current password and try again.',
+            confirmButtonColor: '#4f46e5'
+          });
+        }
+      } finally {
+        saveBtn.disabled = false;
+        btnText.style.display = 'inline';
+        btnSpinner.style.display = 'none';
+      }
+    });
+    
+    window.resetPasswordForm = function() {
+      passwordForm.reset();
+    };
+  }
+})();
+</script>
+{% endautoescape %}
+{% endblock extra_js %}

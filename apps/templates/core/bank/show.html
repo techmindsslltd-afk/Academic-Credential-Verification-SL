@@ -1,0 +1,176 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} {{course.name }} {% endblock %} 
+{% block titlePage %} {{course.name }}  {% endblock %} 
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %} 
+           <div class="content ">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-12">
+			   <div class="card">
+                <div class="card-header card-header-primary card-header-icon">
+                  <div class="card-icon >
+                    <i class="material-icons ">assignment</i>
+                  </div>
+                  <h4 class="card-title">Course</h4>
+                </div>
+                <div class="card-body">
+				<form method="post">
+                <div class="row">
+                    <div class="col-md-4">
+                       
+                    </div>
+                    <div class="col-md-6">
+                        <div class="profile-head">
+                                    <h5>
+                                        {{course.name }} 
+                                    </h5>
+                                    <h6>
+                                      {{course.department}}
+                                  </h6>
+                                    <h6>
+                                      {{course.faculty}}
+                                  </h6>
+                                    <h6>
+                                        {{course.campus}}
+                                    </h6>
+                                    <p class="proile-rating">RANKINGS : <span>8/10</span></p>
+                              <ul class="nav nav-pills nav-pills-success" role="tablist">
+                    <li class="nav-item">
+                      <a class="nav-link active show" data-toggle="tab" href="#link1" role="tablist">
+                        course 
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href="#link2" role="tablist">
+                        Course 
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href="#link3" role="tablist">
+                        Students
+                      </a>
+                    </li>
+                  </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+					<a href="{% url 'edit_course' course.id  %} " class="profile-edit-btn"  >
+                       Edit Profile
+                      </a>
+                        <input type="button"  />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="profile-work">
+                            <p>WORK LINK</p>
+                            <a href="">Website Link</a><br/>
+                            <a href="">Bootsnipp Profile</a><br/>
+                            <a href="">Bootply Profile</a>
+                            <p>SKILLS</p>
+                            <a href="">Web Designer</a><br/>
+                            <a href="">Web Developer</a><br/>
+                            <a href="">WordPress</a><br/>
+                            <a href="">WooCommerce</a><br/>
+                            <a href="">PHP, .Net</a><br/>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+				<div class="card-body ">
+                
+                  <div class="tab-content tab-space">
+				  <div class="tab-pane active show" id="link1">
+										
+								
+					 
+					 
+										 
+										 
+                                        		
+										
+										
+                    </div>
+                    <div class="tab-pane" id="link2">
+					
+					
+					  {% for module in module %}
+										<div class="row">
+                                            <div class="col-md-2">
+                                                <label>Prefix</label>
+                                            </div>
+                                            <div class="col-md-10">
+                                                <p></p>
+                                            </div>
+                                        </div>
+										<div class="row">
+                                            <div class="col-md-2">
+                                                <label>Name</label>
+                                            </div>
+                                            <div class="col-md-10">
+                                                <p>{{module.name}}</p>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-2">
+                                                <label>course</label>
+                                            </div>
+                                            <div class="col-md-10">
+                                                <p> </p>
+                                            </div>
+                                        </div>
+					 {% endfor %}
+										
+                                     
+					</div>
+                    <div class="tab-pane" id="link3">
+					 {% for student in student %}
+										<div class="row">
+                                            <div class="col-md-2">
+                                                <label>Prefix</label>
+                                            </div>
+                                            <div class="col-md-10">
+                                                <p> {{ student.Name}}</p>
+                                            </div>
+                                        </div>
+										
+					 {% endfor %}
+					
+                                            
+									
+					 
+					 
+					 </div>
+                  </div>
+                </div>
+                        </div>
+                    </div>
+                </div>
+            </form>      
+				
+				</div>
+				</div>
+			     </div>
+              <!--  end card  -->
+           
+            <!-- end col-md-12 -->
+          </div>
+          <!-- end row -->
+        </div>
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <script>
+    $(document).ready(function() {
+      // Javascript method's body can be found in assets/js/demos.js
+      md.initDashboardPageCharts();
+
+    });
+  </script>
+
+{% endblock javascripts %}

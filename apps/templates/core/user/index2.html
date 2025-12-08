@@ -1,0 +1,1784 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Users Management {% endblock %} 
+{% block titlePage %} Users Management {% endblock %} 
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %} 
+{% load static %}
+<div class="content">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card">
+					<div class="card-header {% if request.user.data_color_general %}{% if request.user.data_color_general in 'danger' %}card-header-danger{% elif request.user.data_color_general in 'orange' %}card-header-warning{% elif request.user.data_color_general in 'green' %}card-header-success{% elif request.user.data_color_general in 'azure' %}card-header-info{% elif request.user.data_color_general in 'purple' %}card-header-primary{% endif %}   {% else %} card-header-success {% endif %} card-header-icon">
+						<div class="card-icon >
+							<i class="material-icons ">assignment</i>
+						</div>
+						<h4 class="card-title">Users Management</h4>
+						<ul class="nav nav-pills  {% if request.user.data_color_general %} {% if request.user.data_color_general in 'danger' %}nav-pills-danger{% elif request.user.data_color_general in 'orange' %}nav-pills-warning{% elif request.user.data_color_general in 'green' %}nav-pills-success{% elif request.user.data_color_general in 'azure' %}nav-pills-info{% elif request.user.data_color_general in 'purple' %}nav-pills-primary{% endif %} {% else %} nav-pills-success {% endif %} " role="tablist">
+                    <li class="nav-item">
+                      <a class="nav-link active show" data-toggle="tab" href="#link1" role="tablist">
+                       Admin ICT 
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href="#link2" role="tablist">
+                      Lecturers 
+                      </a>
+                    </li>
+                    <li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href="#link3" role="tablist">
+                       Students 
+                      </a>
+                    </li>
+					<li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href="#link4" role="tablist">
+                       Deans
+                      </a>
+                    </li>
+					
+					<li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href="#link5" role="tablist">
+                       HoDs
+                      </a>
+                    </li>
+					<li class="nav-item">
+                      <a class="nav-link" data-toggle="tab" href="#link6" role="tablist">
+                       Heads of Units
+                      </a>
+                    </li>
+					 <li class="nav-item">
+                      <a class="nav-link  show" data-toggle="tab" href="#link7" role="tablist">
+                       Admin Staff 
+                      </a>
+                    </li>
+                  </ul>
+					</div>
+					  <div class="tab-content tab-space">
+					  <div class="tab-pane active show" id="link1">
+						<div class="card-body">
+						<div class="row">
+							<div class="col-12 text-right">
+							 {% if ipam %}
+								<a href="{% url 'authentication:create_ict_user_ipam'  %} "
+							
+							 {% elif fbc %}
+								<a href="{% url 'authentication:create_adminUser_fbc'  %} "
+							
+							 {% elif comahs %}
+								<a href="{% url 'authentication:create_adminUser_comahs'  %} "
+							{% endif %}
+								   class="btn btn-sm btn-primary ">Add Admin ICT User</a>
+							</div>
+						</div>  
+						<div class="example_wrapper">
+							<div id="toolbar"
+							     class="select">
+								<select class="form-control">
+									<option value="">Export Basic</option>
+									<option value="all">Export All</option>
+									<option value="selected">Export Selected</option>
+								</select>
+							</div>
+							<table id="fresh-table"
+							       data-toggle="table"
+							       class="table"
+							       id="table"
+							       data-toolbar="#toolbar"
+							       data-search="true"
+							       data-show-toggle="true"
+							       data-show-fullscreen="true"
+							       data-show-columns="true"
+							       data-show-columns-toggle-all="true"
+							       data-detail-view="true"
+							       data-show-export="true"
+							       data-click-to-select="true"
+							       data-minimum-count-columns="2"
+							       data-pagination="true"
+							       data-id-field="id"
+							       data-toolbar="#toolbar"
+							       data-page-list="[10, 25, 50, 100, all]"
+							       data-show-footer="true"
+							       data-sort-priority='[{"sortName": "id","sortOrder":"desc"},{"sortName":"name","sortOrder":"desc"}]'
+							       data-show-multi-sort="true"
+							       data-show-jump-to="true"
+							       data-response-handler="responseHandler"
+							       data-resizable="true"
+							       data-advanced-search="true"
+							       data-id-table="advancedTable"
+							       data-show-print="true"
+							       data-filter-control="true"
+								   data-show-footer="true"
+							       data-show-search-clear-button="true">
+								<thead>
+									<th>view</th>
+									<th scope="col" data-field="Name"
+									    data-filter-control="input"
+									    data-sortable="true">Name</th>
+									<th scope="col" data-field="Email"
+									    data-filter-control="input"
+									    data-sortable="true">Email</th>
+									<th scope="col" data-field="phone"
+									    data-sortable="true">Phone</th>
+									<th scope="col" data-field="Photo">Photo</th>
+									<th scope="col" data-field="Gender"
+									    data-sortable="true">Gender</th>
+									<th scope="col" data-field="DateOfBirth">Date Of Birth</th>
+									<th scope="col" data-field="Department"
+									    data-filter-control="select"
+									    data-sortable="true">Department</th>
+									<th scope="col" data-field="Faculty"
+									    data-filter-control="select"
+									    data-sortable="true">Faculty</th>
+									<th scope="col" data-field="campus">Campus</th>
+									<th scope="col" data-field="Status">Status</th>	
+									<th scope="col" data-field="Ban">Ban User Status</th>									
+									<th scope="col" data-field="action"
+									    data-print-ignore="true">Action</th>
+								</thead>
+								<tbody> 
+								 {% for adminUser in adminUser %}
+									<tr class='clickable-row'>
+									   <td>
+									   	{% if ipam %}
+											 <a style="float:left; " class="col-md-4"
+                                                href="{% url 'authentication:show_adminUser_ipam' adminUser.pk  %}" title="View"
+                                                data-toggle="tooltip"><i class="fa fa-eye"
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"></i>
+                                            </a>
+										
+										 {% elif fbc %}
+											 <a style="float:left; " class="col-md-4"
+                                                href="{% url 'authentication:show_adminUser_fbc' adminUser.id  %}" title="View"
+                                                data-toggle="tooltip"><i class="fa fa-eye"
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"></i>
+                                            </a>
+										
+										 {% elif comahs %}
+											 <a style="float:left; " class="col-md-4"
+                                                href="{% url 'authentication:show_adminUser_comahs' adminUser.id  %}" title="View"
+                                                data-toggle="tooltip"><i class="fa fa-eye"
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"></i>
+                                            </a>
+										 {% endif %}
+									   
+									   </td>
+									   
+									   	{% if ipam %}
+										<td>{{ adminUser.adminStaffNumberIPAM }} </td>
+										{% elif fbc %}
+										<td>{{ adminUser.adminStaffNumberFBC }} </td>
+										{% elif comahs %}
+										<td>{{ adminUser.adminStaffNumberCOMAHS }} </td>
+										 {% endif %}
+										<td>{{ adminUser.email}}</td>
+										<td>{{ adminUser.telephone}}</td>
+										<td class="w-25">
+										
+											{% if adminUser.file.url != '/media/False' %}
+											<ul class="list-inline gallery">
+												<li>
+													<a onclick="document.getElementById('myImage').src='{{ adminUser.file.url}}'"
+													   href="#"
+													   class="media-box">
+														<img data-toggle="modal"
+														     data-target="#myModalImage"
+														     src="{{ adminUser.file.url}}"
+														     width="60px"
+														     height="60px"
+														     class=" img-thumbnail thumbnail zoom"/>
+													</a>
+												</li>
+											</ul>
+											{% endif %}
+										</td>
+										<td>{{ adminUser.gender}}</td>
+										<td>{{ adminUser.dob}}</td>
+										<td>{{ adminUser.department}}</td>
+										<td>{{ adminUser.faculty}}</td>
+										<td>{{ adminUser.campus}}</td>
+										<td>
+										{% if adminUser.is_active %}
+										Active
+										{% else %}
+										Inactive
+										{% endif %}
+										</td>
+										<td>
+										<div class="togglebutton">
+										  <label>
+											<input {% if adminUser.is_Ban %} checked="" {% endif %} id="{{adminUser.id}}"href="#myModal" data-toggle="modal" data-cmd="{{adminUser.is_Ban}}"data-name="{{adminUser.full_name}}" data-id="{{adminUser.id}}"  class= "ban" type="checkbox">
+											  <span class="toggle"></span>
+												{% if adminUser.is_Ban %} 
+												<p id="ban_{{adminUser.id}}">User is Ban<p> 
+												{% else %}
+												<p id="{{adminUser.id}}">User is not Ban<p> 
+												{% endif %}
+										  </label>
+										</div>
+										</td>
+										<td>
+										<div class="row">
+									{% if adminUser.last_login == Null %}										
+										{% if ipam %}
+											 <a style="float:left; "class="col-md-4"
+                                                href="{% url 'authentication:edit_adminUser_ipam' adminUser.id  %} " title="Edit"
+                                                data-toggle="tooltip"><i
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"
+                                                    class="fa fa-edit"></i>
+                                            </a>
+										
+										 {% elif fbc %}
+											 <a style="float:left; "class="col-md-4"
+                                                href="{% url 'authentication:edit_adminUser_fbc' adminUser.id  %} " title="Edit"
+                                                data-toggle="tooltip"><i
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"
+                                                    class="fa fa-edit"></i>
+                                            </a>
+										
+										 {% elif comahs %}
+											 <a style="float:left; "class="col-md-4"
+                                                href="{% url 'authentication:edit_adminUser_comahs' adminUser.id  %} " title="Edit"
+                                                data-toggle="tooltip"><i
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"
+                                                    class="fa fa-edit"></i>
+                                            </a>
+										 {% endif %}
+											
+											<a href="#myModal2" data-toggle="modal" data-cmd="{{adminUser.full_name}}" data-id="{{adminUser.id}}" style="float:left; margin-left:3px;margin-right:2px;" class="deleteIcon"  href="#"
+                                                title="Delete" data-toggle="tooltip"><i
+                                                    style="float:left; font-size: 19px;  color:red;  margin-left:5px;"
+                                                    class="fa fa-trash-o"></i>
+                                            </a>
+											 {% endif %}
+											
+													   </div>
+														
+													   	 
+										</td>
+										</tr>
+										 {% endfor %}
+									</tbody>
+								</table>
+							</div>
+						</div>
+						</div>
+						<div class=" tab-pane" id="link2">
+							<div class="card-body">
+						<div class="row">
+							<div class="col-12 text-right">
+							 {% if ipam %}
+								<a href="{% url 'authentication:create_lecturerUser_ipam'  %} "
+							
+							 {% elif fbc %}
+								<a href="{% url 'authentication:create_lecturerUser_fbc'  %} "
+							
+							 {% elif comahs %}
+								<a href="{% url 'authentication:create_lecturerUser_comahs'  %} "
+							{% endif %}
+								   class="btn btn-sm btn-primary ">Add Lecturer</a>
+							</div>
+						</div>  
+						<div class="example_wrapper">
+							<div id="toolbar2"
+							     class="select">
+								<select class="form-control">
+									<option value="">Export Basic</option>
+									<option value="all">Export All</option>
+									<option value="selected">Export Selected</option>
+								</select>
+							</div>
+							<table id="fresh-table"
+							       data-toggle="table"
+							       class="table"
+							       id="table"
+							       data-toolbar="#toolbar2"
+							       data-search="true"
+							       data-show-toggle="true"
+							       data-show-fullscreen="true"
+							       data-show-columns="true"
+							       data-show-columns-toggle-all="true"
+							       data-detail-view="true"
+							       data-show-export="true"
+							       data-click-to-select="true"
+							       data-minimum-count-columns="2"
+							       data-pagination="true"
+							       data-id-field="id"
+							       data-toolbar="#toolbar"
+							       data-page-list="[10, 25, 50, 100, all]"
+							       data-show-footer="true"
+							       data-sort-priority='[{"sortName": "id","sortOrder":"desc"},{"sortName":"name","sortOrder":"desc"}]'
+							       data-show-multi-sort="true"
+							       data-show-jump-to="true"
+							       data-response-handler="responseHandler"
+							       data-resizable="true"
+							       data-advanced-search="true"
+							       data-id-table="advancedTable"
+							       data-show-print="true"
+							       data-filter-control="true"
+								   data-show-footer="true"
+							       data-show-search-clear-button="true">
+								<thead>
+									
+									<th>view</th>
+									<th scope="col" data-field="Name"
+									    data-filter-control="input"
+									    data-sortable="true">Name</th>
+									<th scope="col" data-field="Email"
+									    data-filter-control="input"
+									    data-sortable="true">Email</th>
+									<th scope="col" data-field="phone"
+									    data-sortable="true">Phone</th>
+									<th scope="col" data-field="Photo">Photo</th>
+									<th scope="col" data-field="Gender"
+									    data-sortable="true">Gender</th>
+									<th scope="col" data-field="DateOfBirth">Date Of Birth</th>
+									<th scope="col" data-field="Department"
+									    data-filter-control="select"
+									    data-sortable="true">Department</th>
+									<th scope="col" data-field="Faculty"
+									    data-filter-control="select"
+									    data-sortable="true">Faculty</th>
+									<th scope="col" data-field="campus">Campus</th>
+									<th scope="col" data-field="Status">Status</th>	
+									<th scope="col" data-field="Ban">Ban User Status</th>								
+									<th scope="col" data-field="action"
+									    data-print-ignore="true">Action</th>
+								</thead>
+								<tbody>
+								 {% for lecturerUser in lecturerUser %}
+									<tr class='clickable-row'>
+									   	   <td>
+									   										{% if ipam %}
+											 <a style="float:left; " class="col-md-4"
+                                                href="{% url 'authentication:show_lecturerUser_ipam' lecturerUser.pk  %}" title="View"
+                                                data-toggle="tooltip"><i class="fa fa-eye"
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"></i>
+                                            </a>
+										
+										 {% elif fbc %}
+											 <a style="float:left; " class="col-md-4"
+                                                href="{% url 'authentication:show_lecturerUser_fbc' lecturerUser.id  %}" title="View"
+                                                data-toggle="tooltip"><i class="fa fa-eye"
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"></i>
+                                            </a>
+										
+										 {% elif comahs %}
+											 <a style="float:left; " class="col-md-4"
+                                                href="{% url 'authentication:show_lecturerUser_comahs' lecturerUser.id  %}" title="View"
+                                                data-toggle="tooltip"><i class="fa fa-eye"
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"></i>
+                                            </a>
+										 {% endif %}
+									   
+									   </td>
+										<td>{{ lecturerUser.full_name }} </td>
+										<td>{{ lecturerUser.email}}</td>
+										<td>{{ lecturerUser.telephone}}</td>
+										<td class="w-25">
+										
+											{% if lecturerUser.file.url != '/media/False' %}
+											<ul class="list-inline gallery">
+												<li>
+													<a onclick="document.getElementById('myImage').src='{{ lecturerUser.file.url}}'"
+													   href="#"
+													   class="media-box">
+														<img data-toggle="modal"
+														     data-target="#myModalImage"
+														     src="{{ lecturerUser.file.url}}"
+														     width="60px"
+														     height="60px"
+														     class=" img-thumbnail thumbnail zoom"/>
+													</a>
+												</li>
+											</ul>
+											{% endif %}
+										</td>
+										<td>{{ lecturerUser.gender}}</td>
+										<td>{{ lecturerUser.dob}}</td>
+										<td>{{ lecturerUser.department}}</td>
+										<td>{{ lecturerUser.faculty}}</td>
+										<td>{{ lecturerUser.campus}}</td>
+										<td>
+										{% if lecturerUser.is_active %}
+										Active
+										{% else %}
+										Inactive
+										{% endif %}
+										</td>
+										<td>
+										<div class="togglebutton">
+										  <label>
+											<input {% if lecturerUser.is_Ban %} checked="" {% endif %} id="{{lecturerUser.id}}"href="#myModal" data-toggle="modal" data-cmd="{{lecturerUser.is_Ban}}"data-name="{{lecturerUser.full_name}}" data-id="{{lecturerUser.id}}"  class= "ban" type="checkbox">
+											  <span class="toggle"></span>
+												{% if lecturerUser.is_Ban %} 
+												<p id="ban_{{lecturerUser.id}}">User is Ban<p> 
+												{% else %}
+												<p id="{{lecturerUser.id}}">User is not Ban<p> 
+												{% endif %}
+										  </label>
+										</div>
+										</td>
+										<td>
+										<div class="row"> 
+										{% if ipam %}
+											 <a style="float:left; "class="col-md-4"
+                                                href="{% url 'authentication:edit_lecturerUser_ipam' lecturerUser.id  %} " title="Edit"
+                                                data-toggle="tooltip"><i
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"
+                                                    class="fa fa-edit"></i>
+                                            </a>
+										
+										 {% elif fbc %}
+											 <a style="float:left; "class="col-md-4"
+                                                href="{% url 'authentication:edit_lecturerUser_fbc' lecturerUser.id  %} " title="Edit"
+                                                data-toggle="tooltip"><i
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"
+                                                    class="fa fa-edit"></i>
+                                            </a>
+										
+										 {% elif comahs %}
+											 <a style="float:left; "class="col-md-4"
+                                                href="{% url 'authentication:edit_lecturerUser_comahs' lecturerUser.id  %} " title="Edit"
+                                                data-toggle="tooltip"><i
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"
+                                                    class="fa fa-edit"></i>
+                                            </a>
+										 {% endif %}
+											
+											<a href="#myModal2" data-toggle="modal" data-cmd="{{lecturerUser.full_name}}" data-id="{{lecturerUser.id}}" style="float:left; margin-left:3px;margin-right:2px;" class="deleteIcon"  href="#"
+                                                title="Delete" data-toggle="tooltip"><i
+                                                    style="float:left; font-size: 19px;  color:red;  margin-left:5px;"
+                                                    class="fa fa-trash-o"></i>
+                                            </a>
+											
+											
+													   </div>
+														
+													   	 
+										</td>
+										</tr>
+										 {% endfor %}
+									</tbody>
+								</table>
+							</div>
+						</div>
+						
+						</div>
+						
+						
+						<!-- end content-->
+						
+						<div class=" tab-pane" id="link3">
+							<div class="card-body">
+						<div class="row">
+							<div class="col-12 text-right">
+							 {% if ipam %}
+								<a href="{% url 'authentication:create_studentUser_ipam'  %} "
+							
+							 {% elif fbc %}
+								<a href="{% url 'authentication:create_studentUser_fbc'  %} "
+							
+							 {% elif comahs %}
+								<a href="{% url 'authentication:create_studentUser_comahs'  %} "
+							{% endif %}
+								   class="btn btn-sm btn-primary ">Add Student</a>
+							</div>
+						</div>  
+						<div class="example_wrapper">
+							<div id="toolbar3"
+							     class="select">
+								<select class="form-control">
+									<option value="">Export Basic</option>
+									<option value="all">Export All</option>
+									<option value="selected">Export Selected</option>
+								</select>
+							</div>
+							<table id="fresh-table"
+							       data-toggle="table"
+							       class="table"
+							       id="table"
+							       data-toolbar="#toolbar3"
+							       data-search="true"
+							       data-show-toggle="true"
+							       data-show-fullscreen="true"
+							       data-show-columns="true"
+							       data-show-columns-toggle-all="true"
+							       data-detail-view="true"
+							       data-show-export="true"
+							       data-click-to-select="true"
+							       data-minimum-count-columns="2"
+							       data-pagination="true"
+							       data-id-field="id"
+							       data-toolbar="#toolbar"
+							       data-page-list="[10, 25, 50, 100, all]"
+							       data-show-footer="true"
+							       data-sort-priority='[{"sortName": "id","sortOrder":"desc"},{"sortName":"name","sortOrder":"desc"}]'
+							       data-show-multi-sort="true"
+							       data-show-jump-to="true"
+							       data-response-handler="responseHandler"
+							       data-resizable="true"
+							       data-advanced-search="true"
+							       data-id-table="advancedTable"
+							       data-show-print="true"
+							       data-filter-control="true"
+								   data-show-footer="true"
+							       data-show-search-clear-button="true">
+								<thead>
+									
+									<th>view</th>
+									<th scope="col" data-field="Name"
+									    data-filter-control="input"
+									    data-sortable="true">Name</th>
+									<th scope="col" data-field="Email"
+									    data-filter-control="input"
+									    data-sortable="true">Email</th>
+									<th scope="col" data-field="phone"
+									    data-sortable="true">Phone</th>
+									<th scope="col" data-field="Photo">Photo</th>
+									<th scope="col" data-field="Gender"
+									    data-sortable="true">Gender</th>
+									<th scope="col" data-field="DateOfBirth">Date Of Birth</th>
+									<th scope="col" data-field="Department"
+									    data-filter-control="select"
+									    data-sortable="true">Department</th>
+									<th scope="col" data-field="Faculty"
+									    data-filter-control="select"
+									    data-sortable="true">Faculty</th>
+									<th scope="col" data-field="campus">Campus</th>
+									<th scope="col" data-field="Status">Status</th>	
+									<th scope="col" data-field="Ban">Ban User Status</th>								
+									<th scope="col" data-field="action"
+									    data-print-ignore="true">Action</th>
+								</thead>
+								<tbody>
+								 {% for studentUser in studentUser %} 
+									<tr class='clickable-row'>
+	   <td>
+									   										{% if ipam %}
+											 <a style="float:left; " class="col-md-4"
+                                                href="{% url 'authentication:show_studentUser_ipam' studentUser.pk  %}" title="View"
+                                                data-toggle="tooltip"><i class="fa fa-eye"
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"></i>
+                                            </a>
+										
+										 {% elif fbc %}
+											 <a style="float:left; " class="col-md-4"
+                                                href="{% url 'authentication:show_studentUser_fbc' studentUser.id  %}" title="View"
+                                                data-toggle="tooltip"><i class="fa fa-eye"
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"></i>
+                                            </a>
+										
+										 {% elif comahs %}
+											 <a style="float:left; " class="col-md-4"
+                                                href="{% url 'authentication:show_studentUser_comahs' studentUser.id  %}" title="View"
+                                                data-toggle="tooltip"><i class="fa fa-eye"
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"></i>
+                                            </a>
+										 {% endif %}
+									   
+									   </td>
+										<td>{{ studentUser.full_name }} </td>
+										<td>{{ studentUser.email}}</td>
+										<td>{{ studentUser.telephone}}</td>
+										<td class="w-25">
+										
+											{% if studentUser.file.url != '/media/False' %}
+											<ul class="list-inline gallery">
+												<li>
+													<a onclick="document.getElementById('myImage').src='{{ studentUser.file.url}}'"
+													   href="#"
+													   class="media-box">
+														<img data-toggle="modal"
+														     data-target="#myModalImage"
+														     src="{{ studentUser.file.url}}"
+														     width="60px"
+														     height="60px"
+														     class=" img-thumbnail thumbnail zoom"/>
+													</a>
+												</li>
+											</ul>
+											{% endif %}
+										</td>
+										<td>{{ studentUser.gender}}</td>
+										<td>{{ studentUser.dob}}</td>
+										<td>{{ studentUser.department}}</td>
+										<td>{{ studentUser.faculty}}</td>
+										<td>{{ studentUser.campus}}</td>
+										<td>
+										{% if studentUser.is_active %}
+										Active
+										{% else %}
+										Inactive
+										{% endif %}
+										</td>
+										<td>
+										<div class="togglebutton">
+										  <label>
+											<input {% if studentUser.is_Ban %} checked="" {% endif %} id="{{studentUser.id}}"href="#myModal" data-toggle="modal" data-cmd="{{studentUser.is_Ban}}"data-name="{{studentUser.full_name}}" data-id="{{studentUser.id}}"  class= "ban" type="checkbox">
+											  <span class="toggle"></span>
+												{% if studentUser.is_Ban %} 
+												<p id="ban_{{studentUser.id}}">User is Ban<p> 
+												{% else %}
+												<p id="{{studentUser.id}}">User is not Ban<p> 
+												{% endif %}
+										  </label>
+										</div>
+										</td>
+										<td>
+										<div class="row"> 
+										{% if ipam %}
+											 <a style="float:left; "class="col-md-4"
+                                                href="{% url 'authentication:edit_studentUser_ipam' studentUser.id  %} " title="Edit"
+                                                data-toggle="tooltip"><i
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"
+                                                    class="fa fa-edit"></i>
+                                            </a>
+										
+										 {% elif fbc %}
+											 <a style="float:left; "class="col-md-4"
+                                                href="{% url 'authentication:edit_studentUser_fbc' studentUser.id  %} " title="Edit"
+                                                data-toggle="tooltip"><i
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"
+                                                    class="fa fa-edit"></i>
+                                            </a>
+										
+										 {% elif comahs %}
+											 <a style="float:left; "class="col-md-4"
+                                                href="{% url 'authentication:edit_studentUser_comahs' studentUser.id  %} " title="Edit"
+                                                data-toggle="tooltip"><i
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"
+                                                    class="fa fa-edit"></i>
+                                            </a>
+										 {% endif %}
+											
+											<a href="#myModal2" data-toggle="modal" data-cmd="{{studentUser.full_name}}" data-id="{{studentUser.id}}" style="float:left; margin-left:3px;margin-right:2px;" class="deleteIcon"  href="#"
+                                                title="Delete" data-toggle="tooltip"><i
+                                                    style="float:left; font-size: 19px;  color:red;  margin-left:5px;"
+                                                    class="fa fa-trash-o"></i>
+                                            </a>
+											
+											
+													   </div>
+														
+													   	 
+										</td>
+										</tr>
+										 {% endfor %}
+									</tbody>
+								</table>
+							</div>
+						</div>
+						
+						
+						</div>
+									<!-- end content-->
+						
+<div class=" tab-pane" id="link4">
+							
+							<div class="card-body">
+						<div class="row">
+							<div class="col-12 text-right">
+							 {% if ipam %}
+								<a href="{% url 'authentication:create_DeanUser_ipam'  %} "
+							
+							 {% elif fbc %}
+								<a href="{% url 'authentication:create_DeanUser_fbc'  %} "
+							
+							 {% elif comahs %}
+								<a href="{% url 'authentication:create_DeanUser_comahs'  %} "
+							{% endif %}
+								   class="btn btn-sm btn-primary ">Add Dean User</a>
+							</div>
+						</div>  
+						<div class="example_wrapper">
+							<div id="toolbar4"
+							     class="select">
+								<select class="form-control">
+									<option value="">Export Basic</option>
+									<option value="all">Export All</option>
+									<option value="selected">Export Selected</option>
+								</select>
+							</div>
+							<table id="fresh-table"
+							       data-toggle="table"
+							       class="table"
+							       id="table"
+							       data-toolbar="#toolbar4"
+							       data-search="true"
+							       data-show-toggle="true"
+							       data-show-fullscreen="true"
+							       data-show-columns="true"
+							       data-show-columns-toggle-all="true"
+							       data-detail-view="true"
+							       data-show-export="true"
+							       data-click-to-select="true"
+							       data-minimum-count-columns="2"
+							       data-pagination="true"
+							       data-id-field="id"
+							       data-toolbar="#toolbar"
+							       data-page-list="[10, 25, 50, 100, all]"
+							       data-show-footer="true"
+							       data-sort-priority='[{"sortName": "id","sortOrder":"desc"},{"sortName":"name","sortOrder":"desc"}]'
+							       data-show-multi-sort="true"
+							       data-show-jump-to="true"
+							       data-response-handler="responseHandler"
+							       data-resizable="true"
+							       data-advanced-search="true"
+							       data-id-table="advancedTable"
+							       data-show-print="true"
+							       data-filter-control="true"
+								   data-show-footer="true"
+							       data-show-search-clear-button="true">
+								<thead>
+									
+									<th>view</th>
+									<th scope="col" data-field="Name"
+									    data-filter-control="input"
+									    data-sortable="true">Name</th>
+									<th scope="col" data-field="Email"
+									    data-filter-control="input"
+									    data-sortable="true">Email</th>
+									<th scope="col" data-field="phone"
+									    data-sortable="true">Phone</th>
+									<th scope="col" data-field="Photo">Photo</th>
+									<th scope="col" data-field="Gender"
+									    data-sortable="true">Gender</th>
+									<th scope="col" data-field="DateOfBirth">Date Of Birth</th>
+									<th scope="col" data-field="Department"
+									    data-filter-control="select"
+									    data-sortable="true">Department</th>
+									<th scope="col" data-field="Faculty"
+									    data-filter-control="select"
+									    data-sortable="true">Faculty</th>
+									<th scope="col" data-field="campus">Campus</th>
+									<th scope="col" data-field="Status">Status</th>
+									<th scope="col" data-field="Ban">Ban User Status</th>									
+									<th scope="col" data-field="action"
+									    data-print-ignore="true">Action</th>
+								</thead>
+								<tbody>
+								 {% for DeanUser in DeanUser %}
+									<tr class='clickable-row'>
+									   
+											   <td>
+									   										{% if ipam %}
+											 <a style="float:left; " class="col-md-4"
+                                                href="{% url 'authentication:show_DeanUser_ipam' DeanUser.pk  %}" title="View"
+                                                data-toggle="tooltip"><i class="fa fa-eye"
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"></i>
+                                            </a>
+										
+										 {% elif fbc %}
+											 <a style="float:left; " class="col-md-4"
+                                                href="{% url 'authentication:show_DeanUser_fbc' DeanUser.id  %}" title="View"
+                                                data-toggle="tooltip"><i class="fa fa-eye"
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"></i>
+                                            </a>
+										
+										 {% elif comahs %}
+											 <a style="float:left; " class="col-md-4"
+                                                href="{% url 'authentication:show_DeanUser_comahs' DeanUser.id  %}" title="View"
+                                                data-toggle="tooltip"><i class="fa fa-eye"
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"></i>
+                                            </a>
+										 {% endif %}
+									   
+									   </td>
+										<td>{{ DeanUser.full_name }} </td>
+										<td>{{ DeanUser.email}}</td>
+										<td>{{ DeanUser.telephone}}</td>
+										<td class="w-25">
+										
+											{% if DeanUser.file.url != '/media/False' %}
+											<ul class="list-inline gallery">
+												<li>
+													<a onclick="document.getElementById('myImage').src='{{ DeanUser.file.url}}'"
+													   href="#"
+													   class="media-box">
+														<img data-toggle="modal"
+														     data-target="#myModalImage"
+														     src="{{ DeanUser.file.url}}"
+														     width="60px"
+														     height="60px"
+														     class=" img-thumbnail thumbnail zoom"/>
+													</a>
+												</li>
+											</ul>
+											{% endif %}
+										</td>
+										<td>{{ DeanUser.gender}}</td>
+										<td>{{ DeanUser.dob}}</td>
+										<td>{{ DeanUser.department}}</td>
+										<td>{{ DeanUser.faculty}}</td>
+										<td>{{ DeanUser.campus}}</td>
+										<td>
+										{% if DeanUser.is_active %}
+										Active
+										{% else %}
+										Inactive
+										{% endif %}
+										</td>
+										
+										<td>
+										<div class="togglebutton">
+										  <label>
+											<input {% if DeanUser.is_Ban %} checked="" {% endif %} id="{{DeanUser.id}}"href="#myModal" data-toggle="modal" data-cmd="{{DeanUser.is_Ban}}"data-name="{{DeanUser.full_name}}" data-id="{{DeanUser.id}}"  class= "ban" type="checkbox">
+											  <span class="toggle"></span>
+												{% if DeanUser.is_Ban %} 
+												<p id="ban_{{DeanUser.id}}">User is Ban<p> 
+												{% else %}
+												<p id="{{DeanUser.id}}">User is not Ban<p> 
+												{% endif %}
+										  </label>
+										</div>
+										</td>
+										<td>
+										<div class="row"> 
+										{% if ipam %}
+											 <a style="float:left; "class="col-md-4"
+                                                href="{% url 'authentication:edit_DeanUser_ipam' DeanUser.id  %} " title="Edit"
+                                                data-toggle="tooltip"><i
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"
+                                                    class="fa fa-edit"></i>
+                                            </a>
+										
+										 {% elif fbc %}
+											 <a style="float:left; "class="col-md-4"
+                                                href="{% url 'authentication:edit_DeanUser_fbc' DeanUser.id  %} " title="Edit"
+                                                data-toggle="tooltip"><i
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"
+                                                    class="fa fa-edit"></i>
+                                            </a>
+										
+										 {% elif comahs %}
+											 <a style="float:left; "class="col-md-4"
+                                                href="{% url 'authentication:edit_DeanUser_comahs' DeanUser.id  %} " title="Edit"
+                                                data-toggle="tooltip"><i
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"
+                                                    class="fa fa-edit"></i>
+                                            </a>
+										 {% endif %}
+											
+											<a href="#myModal2" data-toggle="modal" data-cmd="{{DeanUser.full_name}}" data-id="{{DeanUser.id}}" style="float:left; margin-left:3px;margin-right:2px;" class="deleteIcon"  href="#"
+                                                title="Delete" data-toggle="tooltip"><i
+                                                    style="float:left; font-size: 19px;  color:red;  margin-left:5px;"
+                                                    class="fa fa-trash-o"></i>
+                                            </a>
+											
+											
+													   </div>
+														
+													   	 
+										</td>
+										</tr>
+										 {% endfor %}
+									</tbody>
+								</table>
+							</div>
+						</div>			
+			</div>
+			
+			<!-- end content-->
+						
+<div class=" tab-pane" id="link5">
+							
+							<div class="card-body">
+						<div class="row">
+							<div class="col-12 text-right">
+							 {% if ipam %}
+								<a href="{% url 'authentication:create_HoDUser_ipam'  %} "
+							
+							 {% elif fbc %}
+								<a href="{% url 'authentication:create_HoDUser_fbc'  %} "
+							
+							 {% elif comahs %}
+								<a href="{% url 'authentication:create_HoDUser_comahs'  %} "
+							{% endif %}
+								   class="btn btn-sm btn-primary ">Add HoD User</a>
+							</div>
+						</div>  
+						<div class="example_wrapper">
+							<div id="toolbar5"
+							     class="select">
+								<select class="form-control">
+									<option value="">Export Basic</option>
+									<option value="all">Export All</option>
+									<option value="selected">Export Selected</option>
+								</select>
+							</div>
+							<table id="fresh-table"
+							       data-toggle="table"
+							       class="table"
+							       id="table"
+							       data-toolbar="#toolbar5"
+							       data-search="true"
+							       data-show-toggle="true"
+							       data-show-fullscreen="true"
+							       data-show-columns="true"
+							       data-show-columns-toggle-all="true"
+							       data-detail-view="true"
+							       data-show-export="true"
+							       data-click-to-select="true"
+							       data-minimum-count-columns="2"
+							       data-pagination="true"
+							       data-id-field="id"
+							       data-toolbar="#toolbar"
+							       data-page-list="[10, 25, 50, 100, all]"
+							       data-show-footer="true"
+							       data-sort-priority='[{"sortName": "id","sortOrder":"desc"},{"sortName":"name","sortOrder":"desc"}]'
+							       data-show-multi-sort="true"
+							       data-show-jump-to="true"
+							       data-response-handler="responseHandler"
+							       data-resizable="true"
+							       data-advanced-search="true"
+							       data-id-table="advancedTable"
+							       data-show-print="true"
+							       data-filter-control="true"
+								   data-show-footer="true"
+							       data-show-search-clear-button="true">
+								<thead>
+									
+									<th>view</th>
+									<th scope="col" data-field="Name"
+									    data-filter-control="input"
+									    data-sortable="true">Name</th>
+									<th scope="col" data-field="Email"
+									    data-filter-control="input"
+									    data-sortable="true">Email</th>
+									<th scope="col" data-field="phone"
+									    data-sortable="true">Phone</th>
+									<th scope="col" data-field="Photo">Photo</th>
+									<th scope="col" data-field="Gender"
+									    data-sortable="true">Gender</th>
+									<th scope="col" data-field="DateOfBirth">Date Of Birth</th>
+									<th scope="col" data-field="Department"
+									    data-filter-control="select"
+									    data-sortable="true">Department</th>
+									<th scope="col" data-field="Faculty"
+									    data-filter-control="select"
+									    data-sortable="true">Faculty</th>
+									<th scope="col" data-field="campus">Campus</th>
+									<th scope="col" data-field="Status">Status</th>
+									<th scope="col" data-field="Ban">Ban User Status</th>									
+									<th scope="col" data-field="action"
+									    data-print-ignore="true">Action</th>
+								</thead>
+								<tbody>
+								 {% for HoDUser in HoDUser %}
+									<tr class='clickable-row'>
+									   
+  <td>
+									   										{% if ipam %}
+											 <a style="float:left; " class="col-md-4"
+                                                href="{% url 'authentication:show_HoDUser_ipam' HoDUser.pk  %}" title="View"
+                                                data-toggle="tooltip"><i class="fa fa-eye"
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"></i>
+                                            </a>
+										
+										 {% elif fbc %}
+											 <a style="float:left; " class="col-md-4"
+                                                href="{% url 'authentication:show_HoDUser_fbc' HoDUser.id  %}" title="View"
+                                                data-toggle="tooltip"><i class="fa fa-eye"
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"></i>
+                                            </a>
+										
+										 {% elif comahs %}
+											 <a style="float:left; " class="col-md-4"
+                                                href="{% url 'authentication:show_HoDUser_comahs' HoDUser.id  %}" title="View"
+                                                data-toggle="tooltip"><i class="fa fa-eye"
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"></i>
+                                            </a>
+										 {% endif %}
+									   
+									   </td>
+										<td>{{ HoDUser.full_name }} </td>
+										<td>{{ HoDUser.email}}</td>
+										<td>{{ HoDUser.telephone}}</td>
+										<td class="w-25">
+										
+											{% if HoDUser.file.url != '/media/False' %}
+											<ul class="list-inline gallery">
+												<li>
+													<a onclick="document.getElementById('myImage').src='{{ HoDUser.file.url}}'"
+													   href="#"
+													   class="media-box">
+														<img data-toggle="modal"
+														     data-target="#myModalImage"
+														     src="{{ HoDUser.file.url}}"
+														     width="60px"
+														     height="60px"
+														     class=" img-thumbnail thumbnail zoom"/>
+													</a>
+												</li>
+											</ul>
+											{% endif %}
+										</td>
+										<td>{{ HoDUser.gender}}</td>
+										<td>{{ HoDUser.dob}}</td>
+										<td>{{ HoDUser.department}}</td>
+										<td>{{ HoDUser.faculty}}</td>
+										<td>{{ HoDUser.campus}}</td>
+										<td>
+										{% if HoDUser.is_active %}
+										Active
+										{% else %}
+										Inactive
+										{% endif %}
+										</td>
+										
+										<td>
+										<div class="togglebutton">
+										  <label>
+											<input {% if HoDUser.is_Ban %} checked="" {% endif %} id="{{HoDUser.id}}"href="#myModal" data-toggle="modal" data-cmd="{{HoDUser.is_Ban}}"data-name="{{HoDUser.full_name}}" data-id="{{HoDUser.id}}"  class= "ban" type="checkbox">
+											  <span class="toggle"></span>
+												{% if HoDUser.is_Ban %} 
+												<p id="ban_{{HoDUser.id}}">User is Ban<p> 
+												{% else %}
+												<p id="{{HoDUser.id}}">User is not Ban<p> 
+												{% endif %}
+										  </label>
+										</div>
+										</td>
+										<td>
+										<div class="row"> 
+										{% if ipam %}
+											 <a style="float:left; "class="col-md-4"
+                                                href="{% url 'authentication:edit_HoDUser_ipam' HoDUser.id  %} " title="Edit"
+                                                data-toggle="tooltip"><i
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"
+                                                    class="fa fa-edit"></i>
+                                            </a>
+										
+										 {% elif fbc %}
+											 <a style="float:left; "class="col-md-4"
+                                                href="{% url 'authentication:edit_HoDUser_fbc' HoDUser.id  %} " title="Edit"
+                                                data-toggle="tooltip"><i
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"
+                                                    class="fa fa-edit"></i>
+                                            </a>
+										
+										 {% elif comahs %}
+											 <a style="float:left; "class="col-md-4"
+                                                href="{% url 'authentication:edit_HoDUser_comahs' HoDUser.id  %} " title="Edit"
+                                                data-toggle="tooltip"><i
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"
+                                                    class="fa fa-edit"></i>
+                                            </a>
+										 {% endif %}
+											
+											<a href="#myModal2" data-toggle="modal" data-cmd="{{HoDUser.full_name}}" data-id="{{HoDUser.id}}" style="float:left; margin-left:3px;margin-right:2px;" class="deleteIcon"  href="#"
+                                                title="Delete" data-toggle="tooltip"><i
+                                                    style="float:left; font-size: 19px;  color:red;  margin-left:5px;"
+                                                    class="fa fa-trash-o"></i>
+                                            </a>
+											
+											
+													   </div>
+														
+													   	 
+										</td>
+										</tr>
+										 {% endfor %}
+									</tbody>
+								</table>
+							</div>
+						</div>
+						
+						</div>
+						
+									<!-- end content-->
+						
+<div class=" tab-pane" id="link6">
+							
+							<div class="card-body">
+						<div class="row">
+							<div class="col-12 text-right">
+							 {% if ipam %}
+								<a href="{% url 'authentication:create_HoUUser_ipam'  %} "
+							
+							 {% elif fbc %}
+								<a href="{% url 'authentication:create_HoUUser_fbc'  %} "
+							
+							 {% elif comahs %}
+								<a href="{% url 'authentication:create_HoUUser_comahs'  %} "
+							{% endif %}
+								   class="btn btn-sm btn-primary ">Add Head of Unit User</a>
+							</div>
+						</div>  
+						<div class="example_wrapper">
+							<div id="toolbar6"
+							     class="select">
+								<select class="form-control">
+									<option value="">Export Basic</option>
+									<option value="all">Export All</option>
+									<option value="selected">Export Selected</option>
+								</select>
+							</div>
+							<table id="fresh-table"
+							       data-toggle="table"
+							       class="table"
+							       id="table"
+							       data-toolbar="#toolbar6"
+							       data-search="true"
+							       data-show-toggle="true"
+							       data-show-fullscreen="true"
+							       data-show-columns="true"
+							       data-show-columns-toggle-all="true"
+							       data-detail-view="true"
+							       data-show-export="true"
+							       data-click-to-select="true"
+							       data-minimum-count-columns="2"
+							       data-pagination="true"
+							       data-id-field="id"
+							       data-toolbar="#toolbar"
+							       data-page-list="[10, 25, 50, 100, all]"
+							       data-show-footer="true"
+							       data-sort-priority='[{"sortName": "id","sortOrder":"desc"},{"sortName":"name","sortOrder":"desc"}]'
+							       data-show-multi-sort="true"
+							       data-show-jump-to="true"
+							       data-response-handler="responseHandler"
+							       data-resizable="true"
+							       data-advanced-search="true"
+							       data-id-table="advancedTable"
+							       data-show-print="true"
+							       data-filter-control="true"
+								   data-show-footer="true"
+							       data-show-search-clear-button="true">
+								<thead>
+									
+									<th>view</th>
+									<th scope="col" data-field="Name"
+									    data-filter-control="input"
+									    data-sortable="true">Name</th>
+									<th scope="col" data-field="Email"
+									    data-filter-control="input"
+									    data-sortable="true">Email</th>
+									<th scope="col" data-field="phone"
+									    data-sortable="true">Phone</th>
+									<th scope="col" data-field="Photo">Photo</th>
+									<th scope="col" data-field="Gender"
+									    data-sortable="true">Gender</th>
+									<th scope="col" data-field="DateOfBirth">Date Of Birth</th>
+									<th scope="col" data-field="Department"
+									    data-filter-control="select"
+									    data-sortable="true">Department</th>
+									<th scope="col" data-field="Faculty"
+									    data-filter-control="select"
+									    data-sortable="true">Faculty</th>
+									<th scope="col" data-field="campus">Campus</th>
+									<th scope="col" data-field="Status">Status</th>	
+									<th scope="col" data-field="Ban">Ban User Status</th>								
+									<th scope="col" data-field="action"
+									    data-print-ignore="true">Action</th>
+								</thead>
+								<tbody>
+								 {% for HoUUser in HoUUser %}
+									<tr class='clickable-row'>
+	   <td>
+									   										{% if ipam %}
+											 <a style="float:left; " class="col-md-4"
+                                                href="{% url 'authentication:show_HoUUser_ipam' HoUUser.pk  %}" title="View"
+                                                data-toggle="tooltip"><i class="fa fa-eye"
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"></i>
+                                            </a>
+										
+										 {% elif fbc %}
+											 <a style="float:left; " class="col-md-4"
+                                                href="{% url 'authentication:show_HoUUser_fbc' HoUUser.id  %}" title="View"
+                                                data-toggle="tooltip"><i class="fa fa-eye"
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"></i>
+                                            </a>
+										
+										 {% elif comahs %}
+											 <a style="float:left; " class="col-md-4"
+                                                href="{% url 'authentication:show_HoUUser_comahs' HoUUser.id  %}" title="View"
+                                                data-toggle="tooltip"><i class="fa fa-eye"
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"></i>
+                                            </a>
+										 {% endif %}
+									   
+									   </td>
+										<td>{{ HoUUser.full_name }} </td>
+										<td>{{ HoUUser.email}}</td>
+										<td>{{ HoUUser.telephone}}</td>
+										<td class="w-25">
+										
+											{% if HoUUser.file.url != '/media/False' %}
+											<ul class="list-inline gallery">
+												<li>
+													<a onclick="document.getElementById('myImage').src='{{ HoUUser.file.url}}'"
+													   href="#"
+													   class="media-box">
+														<img data-toggle="modal"
+														     data-target="#myModalImage"
+														     src="{{ HoUUser.file.url}}"
+														     width="60px"
+														     height="60px"
+														     class=" img-thumbnail thumbnail zoom"/>
+													</a>
+												</li>
+											</ul>
+											{% endif %}
+										</td>
+										<td>{{ HoUUser.gender}}</td>
+										<td>{{ HoUUser.dob}}</td>
+										<td>{{ HoUUser.department}}</td>
+										<td>{{ HoUUser.faculty}}</td>
+										<td>{{ HoUUser.campus}}</td>
+										<td>
+										{% if HoUUser.is_active %}
+										Active
+										{% else %}
+										Inactive
+										{% endif %}
+										</td>
+										<td>
+										<div class="togglebutton">
+										  <label>
+											<input {% if HoUUser.is_Ban %} checked="" {% endif %} id="{{HoUUser.id}}"href="#myModal" data-toggle="modal" data-cmd="{{HoUUser.is_Ban}}"data-name="{{HoUUser.full_name}}" data-id="{{HoUUser.id}}"  class= "ban" type="checkbox">
+											  <span class="toggle"></span>
+												{% if HoUUser.is_Ban %} 
+												<p id="ban_{{HoUUser.id}}">User is Ban<p> 
+												{% else %}
+												<p id="{{HoUUser.id}}">User is not Ban<p> 
+												{% endif %}
+										  </label>
+										</div>
+										</td>
+										<td>
+										<div class="row"> 
+										{% if ipam %}
+											 <a style="float:left; "class="col-md-4"
+                                                href="{% url 'authentication:edit_HoUUser_ipam' HoUUser.id  %} " title="Edit"
+                                                data-toggle="tooltip"><i
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"
+                                                    class="fa fa-edit"></i>
+                                            </a>
+										
+										 {% elif fbc %}
+											 <a style="float:left; "class="col-md-4"
+                                                href="{% url 'authentication:edit_HoUUser_fbc' HoUUser.id  %} " title="Edit"
+                                                data-toggle="tooltip"><i
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"
+                                                    class="fa fa-edit"></i>
+                                            </a>
+										
+										 {% elif comahs %}
+											 <a style="float:left; "class="col-md-4"
+                                                href="{% url 'authentication:edit_HoUUser_comahs' HoUUser.id  %} " title="Edit"
+                                                data-toggle="tooltip"><i
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"
+                                                    class="fa fa-edit"></i>
+                                            </a>
+										 {% endif %}
+											
+											<a href="#myModal2" data-toggle="modal" data-cmd="{{HoUUser.full_name}}" data-id="{{HoUUser.id}}" style="float:left; margin-left:3px;margin-right:2px;" class="deleteIcon"  href="#"
+                                                title="Delete" data-toggle="tooltip"><i
+                                                    style="float:left; font-size: 19px;  color:red;  margin-left:5px;"
+                                                    class="fa fa-trash-o"></i>
+                                            </a>
+											
+											
+													   </div>
+														
+													   	 
+										</td>
+										</tr>
+										 {% endfor %}
+									</tbody>
+								</table>
+							</div>
+						</div>
+						
+						</div>
+									<!-- end content-->
+						
+<div class=" tab-pane" id="link7">
+							
+							<div class="card-body">
+						<div class="row">
+							<div class="col-12 text-right">
+							 {% if ipam %}
+								<a href="{% url 'authentication:create_staffUser_ipam'  %} "
+							
+							 {% elif fbc %}
+								<a href="{% url 'authentication:create_staffUser_fbc'  %} "
+							
+							 {% elif comahs %}
+								<a href="{% url 'authentication:create_staffUser_comahs'  %} "
+							{% endif %}
+								   class="btn btn-sm btn-primary ">Add Staff User</a>
+							</div>
+						</div>  
+						<div class="example_wrapper">
+							<div id="toolbar7"
+							     class="select">
+								<select class="form-control">
+									<option value="">Export Basic</option>
+									<option value="all">Export All</option>
+									<option value="selected">Export Selected</option>
+								</select>
+							</div>
+							<table id="fresh-table"
+							       data-toggle="table"
+							       class="table"
+							       id="table"
+							       data-toolbar="#toolbar7"
+							       data-search="true"
+							       data-show-toggle="true"
+							       data-show-fullscreen="true"
+							       data-show-columns="true"
+							       data-show-columns-toggle-all="true"
+							       data-detail-view="true"
+							       data-show-export="true"
+							       data-click-to-select="true"
+							       data-minimum-count-columns="2"
+							       data-pagination="true"
+							       data-id-field="id"
+							       data-toolbar="#toolbar"
+							       data-page-list="[10, 25, 50, 100, all]"
+							       data-show-footer="true"
+							       data-sort-priority='[{"sortName": "id","sortOrder":"desc"},{"sortName":"name","sortOrder":"desc"}]'
+							       data-show-multi-sort="true"
+							       data-show-jump-to="true"
+							       data-response-handler="responseHandler"
+							       data-resizable="true"
+							       data-advanced-search="true"
+							       data-id-table="advancedTable"
+							       data-show-print="true"
+							       data-filter-control="true"
+								   data-show-footer="true"
+							       data-show-search-clear-button="true">
+								<thead>
+									
+									<th>view</th>
+									<th scope="col" data-field="Name"
+									    data-filter-control="input"
+									    data-sortable="true">Name</th>
+									<th scope="col" data-field="Email"
+									    data-filter-control="input"
+									    data-sortable="true">Email</th>
+									<th scope="col" data-field="phone"
+									    data-sortable="true">Phone</th>
+									<th scope="col" data-field="Photo">Photo</th>
+									<th scope="col" data-field="Gender"
+									    data-sortable="true">Gender</th>
+									<th scope="col" data-field="DateOfBirth">Date Of Birth</th>
+									<th scope="col" data-field="Department"
+									    data-filter-control="select"
+									    data-sortable="true">Department</th>
+									<th scope="col" data-field="Faculty"
+									    data-filter-control="select"
+									    data-sortable="true">Faculty</th>
+									<th scope="col" data-field="campus">Campus</th>
+									<th scope="col" data-field="Status">Status</th>	
+									<th scope="col" data-field="Ban">Ban User Status</th>								
+									<th scope="col" data-field="action"
+									    data-print-ignore="true">Action</th>
+								</thead>
+								<tbody>
+								 {% for staffUser in staffUser %}
+									<tr class='clickable-row'>
+									   
+	   <td>
+									   										{% if ipam %}
+											 <a style="float:left; " class="col-md-4"
+                                                href="{% url 'authentication:show_staffUser_ipam' staffUser.pk  %}" title="View"
+                                                data-toggle="tooltip"><i class="fa fa-eye"
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"></i>
+                                            </a>
+										
+										 {% elif fbc %}
+											 <a style="float:left; " class="col-md-4"
+                                                href="{% url 'authentication:show_staffUser_fbc' staffUser.id  %}" title="View"
+                                                data-toggle="tooltip"><i class="fa fa-eye"
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"></i>
+                                            </a>
+										
+										 {% elif comahs %}
+											 <a style="float:left; " class="col-md-4"
+                                                href="{% url 'authentication:show_staffUser_comahs' staffUser.id  %}" title="View"
+                                                data-toggle="tooltip"><i class="fa fa-eye"
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"></i>
+                                            </a>
+										 {% endif %}
+									   
+									   </td>
+										<td>{{ staffUser.full_name }} </td>
+										<td>{{ staffUser.email}}</td>
+										<td>{{ staffUser.telephone}}</td>
+										<td class="w-25">
+										
+											{% if staffUser.file.url != '/media/False' %}
+											<ul class="list-inline gallery">
+												<li>
+													<a onclick="document.getElementById('myImage').src='{{ staffUser.file.url}}'"
+													   href="#"
+													   class="media-box">
+														<img data-toggle="modal"
+														     data-target="#myModalImage"
+														     src="{{ staffUser.file.url}}"
+														     width="60px"
+														     height="60px"
+														     class=" img-thumbnail thumbnail zoom"/>
+													</a>
+												</li>
+											</ul>
+											{% endif %}
+										</td>
+										<td>{{ staffUser.gender}}</td>
+										<td>{{ staffUser.dob}}</td>
+										<td>{{ staffUser.department}}</td>
+										<td>{{ staffUser.faculty}}</td>
+										<td>{{ staffUser.campus}}</td>
+										<td>
+										{% if staffUser.is_active %}
+										Active
+										{% else %}
+										Inactive
+										{% endif %}
+										</td>
+										<td>
+										<div class="togglebutton">
+										  <label>
+											<input {% if staffUser.is_Ban %} checked="" {% endif %} id="{{staffUser.id}}"href="#myModal" data-toggle="modal" data-cmd="{{staffUser.is_Ban}}"data-name="{{staffUser.full_name}}" data-id="{{staffUser.id}}"  class= "ban" type="checkbox">
+											  <span class="toggle"></span>
+												{% if staffUser.is_Ban %} 
+												<p id="ban_{{staffUser.id}}">User is Ban<p> 
+												{% else %}
+												<p id="{{staffUser.id}}">User is not Ban<p> 
+												{% endif %}
+										  </label>
+										</div>
+										</td>
+										<td>
+										<div class="row"> 
+										{% if ipam %}
+											 <a style="float:left; "class="col-md-4"
+                                                href="{% url 'authentication:edit_staffUser_ipam' staffUser.id  %} " title="Edit"
+                                                data-toggle="tooltip"><i
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"
+                                                    class="fa fa-edit"></i>
+                                            </a>
+										
+										 {% elif fbc %}
+											 <a style="float:left; "class="col-md-4"
+                                                href="{% url 'authentication:edit_staffUser_fbc' staffUser.id  %} " title="Edit"
+                                                data-toggle="tooltip"><i
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"
+                                                    class="fa fa-edit"></i>
+                                            </a>
+										
+										 {% elif comahs %}
+											 <a style="float:left; "class="col-md-4"
+                                                href="{% url 'authentication:edit_staffUser_comahs' staffUser.id  %} " title="Edit"
+                                                data-toggle="tooltip"><i
+                                                    style="float:left; font-size: 19px;  color:green;  margin: 0 5px;"
+                                                    class="fa fa-edit"></i>
+                                            </a>
+										 {% endif %}
+											
+											<a href="#myModal2" data-toggle="modal" data-cmd="{{staffUser.full_name}}" data-id="{{staffUser.id}}" style="float:left; margin-left:3px;margin-right:2px;" class="deleteIcon"  href="#"
+                                                title="Delete" data-toggle="tooltip"><i
+                                                    style="float:left; font-size: 19px;  color:red;  margin-left:5px;"
+                                                    class="fa fa-trash-o"></i>
+                                            </a>
+											
+											
+													   </div>
+														
+													   	 
+										</td>
+										</tr>
+										 {% endfor %}
+									</tbody>
+								</table>
+							</div>
+						</div>
+						</div>
+						
+						
+					</div>
+					<!--  end card  -->
+					
+					
+					
+						</div>
+					
+					
+				</div>
+				<!-- end col-md-12 -->
+			</div>
+			<!-- end row -->
+		</div>
+	</div>
+	<!-- The Image Modal -->
+	<!-- The Image Modal -->
+	<div class="modal fade"
+	     id="myModalImage">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<!-- Modal body -->
+				<div class="modal-body">
+					<img id="myImage"
+					     src=""
+						 
+						 style="margin-left:auto; margin-right:auto;width:100%; height:100%; display:block;"
+					     class=" img-thumbnail thumbnail zoom"/>
+				</div>
+				<!-- Modal footer -->
+				<div class="modal-footer">
+					<button type="button"
+					        class="btn btn-danger"
+					        data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<div id="myModal2" class="modal fade">
+												<div class="modal-dialog modal-confirm">
+													<div class="modal-content">
+														<div class="modal-header flex-column">
+															<div class="icon-box">
+																<i class="material-icons">&#xE5CD;</i>
+															</div>						
+															<h4 class="modal-title w-100">Are you sure?</h4>	
+															<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+														</div>
+														<div class="modal-body">
+															<p>Do you really want to delete  User,(<b id="student_Name"></b>)? This process cannot be undone.</p>
+															<!-- <p>Do you really want to delete these records? This process cannot be undone.</p>-->
+														</div>
+														<div class="modal-footer justify-content-center">
+															<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+															<button type="button"  id="myBtn"class="deleteDutton btn btn-danger">Delete</button>
+														</div>
+													</div>
+												</div>
+	</div>
+	
+	
+	<!-- Modal HTML -->
+<<!--Ban User  Modal HTML -->
+<div id="myModal" class="modal fade">
+												<div class="modal-dialog modal-confirm">
+													<div class="modal-content">
+														<div class="modal-header flex-column">
+															<div class="icon-box">
+																<i class="material-icons">&#xE5CD;</i>
+															</div>						
+															<h4 class="modal-title w-100">Are you sure?</h4>	
+															<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+														</div>
+														<div class="modal-body">
+															<p>Do you really want to Ban <b id="User_Name"></b>? This User would not be able to Login.</p>
+															<!-- <p>Do you really want to delete these records? This process cannot be undone.</p>-->
+														</div>
+														<div class="modal-footer justify-content-center">
+															<button type="button" id= "Cancel" class="btn btn-secondary " data-dismiss="modal">Cancel</button>
+															<button type="button"  id="myBtn"class="BanButton btn btn-danger">Dan</button>
+														</div>
+													</div>
+												</div>
+	</div>
+	
+	
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+	<input style="display:none"type="text" id="deleteValue"name="deleteValue"/>	
+   	<input style="display:none"type="text" id="deleteName"name="deleteName"/>	
+   														
+			
+	<input style="display:none"type="text" id="userId"name="userId"/>	
+   	<input style="display:none"type="text" id="userName"name="userName"/>	
+   	<input style="display:none"type="text" id="status"name="status"/>
+	<input style="display:none"type="text" id="status2"name="status2"/>
+<script>   
+$(document).ready(function() {
+	//alert("jjj");
+	
+var switchStatus = false;	
+$(document).on('change', '.ban', function (e) {
+    e.preventDefault();
+   
+   var id = $(this).data('id');
+   var cmd = $(this).data('cmd'); 
+   var userName = $(this).data('name');
+   document.getElementById("userId").value = id;  
+   document.getElementById("status").value = cmd;
+   var name = document.getElementById("userName").value = userName;
+   document.getElementById("User_Name").innerHTML = name;
+	//alert(checkedValue);	
+if ($(this).is(':checked')) {
+    switchStatus = $(this).is(':checked');
+	document.getElementById("status2").value = switchStatus;
+    }
+    else {
+       switchStatus = $(this).is(':checked');
+	   document.getElementById("status2").value = switchStatus;
+      // alert(switchStatus);// To verify
+    }
+  // if (cmd = True) {
+
+    // }		
+
+   
+});
+	
+$(document).on('click', '#Cancel', function (e) {
+    e.preventDefault();
+	
+	
+	location.reload();
+	
+var userId = document.getElementById("userId").value;
+var status = document.getElementById("status").value;
+var status2 = document.getElementById("status2").value;
+//var bb = "#ban_" + userId ;
+  //If the checkbox is checked, display the output text
+ // if (status2 == 'false'){
+   // $(bb).prop('checked',true)
+   //alert(status2);
+     // turn toggle switch ON
+  //$("#ban_" + userId ).attr("checked", true);
+  // text.style.display = "block";
+  //document.getElementById(String("#ban_" + userId)).setAttribute = true;
+  //$("#ban_" + userId).prop("checked", "");
+	//$("#" + userId).text("User is Ban");
+	//var att = document.createAttribute("checked");       // Create a "class" attribute
+  // att.value = "";
+//var h1 = document.getElementById("#" + userId)[0];   // Get the first <h1> element in the document
+//var att = document.createAttribute("checked");       // Create a "class" attribute
+//att.value = "";                           // Set the value of the class attribute
+//h1.setAttributeNode(att); 
+	//document.getElementById("#ban_" + userId)[0].createAttribute("checked").value = "";
+   //alert(status2);
+ // } else {
+     // turn toggle switch off
+//	 alert(status2);
+	 //document.getElementById("#" + userId).innerHTML = "New text!";
+    //$("#ban_" + userId ).attr("checked", false);
+	//$("#" + userId).text("User is not Ban");
+	//$("#ban_" + userId).removeAttr("checked");
+    //text.style.display = "none";
+	//var id ="#ban_" + userId ;
+	//document.getElementById(userId).removeAttribute("checked");
+	//$(userId).prop("checked", false);
+    //document.getElementById(String("#ban_" + userId)).setAttribute = false;
+ //}
+
+	
+			
+
+   
+});
+
+
+$(document).on('click', '.BanButton', function (e) {
+    e.preventDefault();
+
+var userId = document.getElementById("userId").value;
+var status = document.getElementById("status").value;
+var status2 = document.getElementById("status2").value;	   
+	   var data = {
+	   "id": userId ,
+	   "status": status,
+	   "status2":status2,
+	   };
+		$.ajax({
+           type: "POST",
+			url: '/ban_user/' + userId ,
+			data: data,
+           success: function(ban) {
+		   if (ban) {
+		   swal('User Ban/Unban successfully', {
+           icon: "success",
+		   buttons: true,
+           })
+           .then((result) => {
+            $("#myModal").modal("hide");
+            })
+        } else {
+           swal("Error Banning User!", "Please try again", "error");
+        }
+		}
+          });
+
+   
+});
+
+
+
+});
+$(document).on('click', '.deleteIcon', function (e) {
+    e.preventDefault();
+   
+   var id = $(this).data('id');
+   var cmd = $(this).data('cmd'); 
+   document.getElementById("deleteValue").value = id;
+   var name = document.getElementById("deleteName").value = cmd;
+   document.getElementById("student_Name").innerHTML = name;
+		
+			
+
+   
+});
+
+
+$(document).on('click', '.deleteDutton', function (e) {
+    e.preventDefault();
+
+	   var deleteid = document.getElementById("deleteValue").value;
+	   var deleteName = document.getElementById("deleteName").value;
+        
+		
+	   var data = {
+	   "id": deleteid ,
+	   };
+		$.ajax({
+           type: "DELETE",
+		   {% if ipam %}
+			url: '/destroy_student_ipam/' + deleteid,
+		   {% elif fbc %}
+			url: '/destroy_student_fbc/' + deleteid,
+		   {% elif comahs %}
+			url: '/destroy_student_comahs/' + deleteid,	
+		   {% endif %}
+		   data: data,
+           success: function(deleted) {
+		   if (deleted) {
+		   swal('delete successfully', {
+           icon: "success",
+		   buttons: true,
+           })
+           .then((result) => {
+            location.reload()
+            })
+        } else {
+           swal("Error deleting!", "Please try again", "error");
+        }
+		}
+          });
+
+   
+});
+</script>	
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <script>
+    $(document).ready(function() {
+      // Javascript method's body can be found in assets/js/demos.js
+      md.initDashboardPageCharts();
+
+    });
+  </script>
+
+{% endblock javascripts %}

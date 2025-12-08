@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Credentials Wallet - CertChain</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+  <link rel="stylesheet" href="../../dashboard.css">
+  <link rel="stylesheet" href="../admin.css">
+</head>
+<body class="dashboard-body">
+  <div class="admin-page">
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="page-header-content">
+        <div class="page-title-group">
+          <h1 class="page-title">My Credentials Wallet</h1>
+          <p class="page-subtitle">View and share your blockchain-verified credentials</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-outline">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Download All
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Wallet Summary -->
+    <div class="wallet-summary">
+      <div class="wallet-summary-card">
+        <div class="wallet-summary-icon primary">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+            <path d="M2 17l10 5 10-5"/>
+            <path d="M2 12l10 5 10-5"/>
+          </svg>
+        </div>
+        <div class="wallet-summary-content">
+          <span class="wallet-summary-value">3</span>
+          <span class="wallet-summary-label">Total Credentials</span>
+        </div>
+      </div>
+      <div class="wallet-summary-card">
+        <div class="wallet-summary-icon success">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="m9 12 2 2 4-4"/>
+            <circle cx="12" cy="12" r="10"/>
+          </svg>
+        </div>
+        <div class="wallet-summary-content">
+          <span class="wallet-summary-value">3</span>
+          <span class="wallet-summary-label">Verified & Active</span>
+        </div>
+      </div>
+      <div class="wallet-summary-card">
+        <div class="wallet-summary-icon teal">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+        </div>
+        <div class="wallet-summary-content">
+          <span class="wallet-summary-value">47</span>
+          <span class="wallet-summary-label">Times Verified</span>
+        </div>
+      </div>
+      <div class="wallet-summary-card">
+        <div class="wallet-summary-icon coral">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+            <polyline points="16 6 12 2 8 6"/>
+            <line x1="12" y1="2" x2="12" y2="15"/>
+          </svg>
+        </div>
+        <div class="wallet-summary-content">
+          <span class="wallet-summary-value">12</span>
+          <span class="wallet-summary-label">Times Shared</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Credentials Grid -->
+    <div class="credentials-grid">
+      <!-- Credential Card 1 -->
+      <div class="credential-card">
+        <div class="credential-card-header">
+          <div class="credential-institution">
+            <img src="/placeholder.svg?height=48&width=48" alt="USL">
+            <div>
+              <h3>University of Sierra Leone</h3>
+              <span class="credential-type">Bachelor's Degree</span>
+            </div>
+          </div>
+          <div class="credential-status">
+            <span class="status-badge success">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                <path d="m9 12 2 2 4-4"/>
+              </svg>
+              Verified
+            </span>
+          </div>
+        </div>
+        <div class="credential-card-body">
+          <h2 class="credential-title">Bachelor of Science in Computer Science</h2>
+          <div class="credential-details">
+            <div class="credential-detail">
+              <span class="detail-label">Classification</span>
+              <span class="detail-value">First Class Honours</span>
+            </div>
+            <div class="credential-detail">
+              <span class="detail-label">Credential ID</span>
+              <code class="detail-value">CERT-2024-SL-001234</code>
+            </div>
+            <div class="credential-detail">
+              <span class="detail-label">Issue Date</span>
+              <span class="detail-value">December 15, 2024</span>
+            </div>
+            <div class="credential-detail">
+              <span class="detail-label">Blockchain Hash</span>
+              <code class="detail-value hash">0x7f8a...3e2b</code>
+            </div>
+          </div>
+        </div>
+        <div class="credential-card-footer">
+          <button class="btn btn-outline btn-sm">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+            View
+          </button>
+          <button class="btn btn-outline btn-sm">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7"/>
+              <rect x="14" y="3" width="7" height="7"/>
+              <rect x="3" y="14" width="7" height="7"/>
+              <rect x="14" y="14" width="7" height="7"/>
+            </svg>
+            QR Code
+          </button>
+          <button class="btn btn-primary btn-sm">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+              <polyline points="16 6 12 2 8 6"/>
+              <line x1="12" y1="2" x2="12" y2="15"/>
+            </svg>
+            Share
+          </button>
+        </div>
+      </div>
+
+      <!-- Credential Card 2 -->
+      <div class="credential-card">
+        <div class="credential-card-header">
+          <div class="credential-institution">
+            <img src="/placeholder.svg?height=48&width=48" alt="USL">
+            <div>
+              <h3>University of Sierra Leone</h3>
+              <span class="credential-type">Certificate</span>
+            </div>
+          </div>
+          <div class="credential-status">
+            <span class="status-badge success">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                <path d="m9 12 2 2 4-4"/>
+              </svg>
+              Verified
+            </span>
+          </div>
+        </div>
+        <div class="credential-card-body">
+          <h2 class="credential-title">Certificate in Data Science Fundamentals</h2>
+          <div class="credential-details">
+            <div class="credential-detail">
+              <span class="detail-label">Classification</span>
+              <span class="detail-value">Distinction</span>
+            </div>
+            <div class="credential-detail">
+              <span class="detail-label">Credential ID</span>
+              <code class="detail-value">CERT-2023-SL-008721</code>
+            </div>
+            <div class="credential-detail">
+              <span class="detail-label">Issue Date</span>
+              <span class="detail-value">June 20, 2023</span>
+            </div>
+            <div class="credential-detail">
+              <span class="detail-label">Blockchain Hash</span>
+              <code class="detail-value hash">0x4c2d...9a1f</code>
+            </div>
+          </div>
+        </div>
+        <div class="credential-card-footer">
+          <button class="btn btn-outline btn-sm">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+            View
+          </button>
+          <button class="btn btn-outline btn-sm">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7"/>
+              <rect x="14" y="3" width="7" height="7"/>
+              <rect x="3" y="14" width="7" height="7"/>
+              <rect x="14" y="14" width="7" height="7"/>
+            </svg>
+            QR Code
+          </button>
+          <button class="btn btn-primary btn-sm">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+              <polyline points="16 6 12 2 8 6"/>
+              <line x1="12" y1="2" x2="12" y2="15"/>
+            </svg>
+            Share
+          </button>
+        </div>
+      </div>
+
+      <!-- Credential Card 3 -->
+      <div class="credential-card">
+        <div class="credential-card-header">
+          <div class="credential-institution">
+            <img src="/placeholder.svg?height=48&width=48" alt="Cert">
+            <div>
+              <h3>Sierra Leone ICT Association</h3>
+              <span class="credential-type">Professional Certification</span>
+            </div>
+          </div>
+          <div class="credential-status">
+            <span class="status-badge success">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                <path d="m9 12 2 2 4-4"/>
+              </svg>
+              Verified
+            </span>
+          </div>
+        </div>
+        <div class="credential-card-body">
+          <h2 class="credential-title">Certified Software Developer</h2>
+          <div class="credential-details">
+            <div class="credential-detail">
+              <span class="detail-label">Level</span>
+              <span class="detail-value">Professional</span>
+            </div>
+            <div class="credential-detail">
+              <span class="detail-label">Credential ID</span>
+              <code class="detail-value">CERT-2024-SL-PRO-0042</code>
+            </div>
+            <div class="credential-detail">
+              <span class="detail-label">Issue Date</span>
+              <span class="detail-value">March 10, 2024</span>
+            </div>
+            <div class="credential-detail">
+              <span class="detail-label">Blockchain Hash</span>
+              <code class="detail-value hash">0x8e5b...2c7d</code>
+            </div>
+          </div>
+        </div>
+        <div class="credential-card-footer">
+          <button class="btn btn-outline btn-sm">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+            View
+          </button>
+          <button class="btn btn-outline btn-sm">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7"/>
+              <rect x="14" y="3" width="7" height="7"/>
+              <rect x="3" y="14" width="7" height="7"/>
+              <rect x="14" y="14" width="7" height="7"/>
+            </svg>
+            QR Code
+          </button>
+          <button class="btn btn-primary btn-sm">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+              <polyline points="16 6 12 2 8 6"/>
+              <line x1="12" y1="2" x2="12" y2="15"/>
+            </svg>
+            Share
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

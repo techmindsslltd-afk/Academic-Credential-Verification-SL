@@ -1,0 +1,2062 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} {{ object }} {% endblock %} 
+{% block titlePage %} {{ object }}{% endblock %} 
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %} 
+
+<style>
+
+ .sticky { 
+    position: sticky;
+    top: 0;
+    background-color: #f2f2f2;
+    padding: 10px;
+    font-weight: bold; 
+  }
+</style>
+
+{% load static %}		
+	
+<!--begin::Navbar-->
+<div class="card mb-5 mb-xxl-8">
+<div class="card-header">
+	
+		<h2 class="card-title fw-bold">Profile</h2>
+							
+		<div class="card-toolbar">
+			<a href='{% url "update_profile" object.id %}' class="btn btn-flex btn-primary" data-kt-calendar="add">
+			<!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
+			<span class="svg-icon svg-icon-2">
+				<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+					<rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="currentColor" />
+					<rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="currentColor" />
+				</svg>
+			</span>
+			<!--end::Svg Icon-->Edit Profile</a>
+		</div>
+	</div>
+    <div class="card-body pt-9 pb-0">
+        <!--begin::Details-->
+        <div class="d-flex flex-wrap flex-sm-nowrap">
+            <!--begin: Pic-->
+            <div class="me-7 mb-4">
+                <div class="symbol symbol-100px symbol-lg-160px symbol-fixed position-relative">
+				
+					
+					{% if object.file and request.user.file.url != "/media/False"%}
+						<img src="{{ object.file.url }}" class="img-thumbnail" alt="">
+					{% else %}
+						{% if object.gender == "Male" %}
+							<img src="{% static 'assets/img/avataMale.jpg' %}" alt="">
+						{% else %}
+							<img src="{% static 'assets/img/avataFemale.jpg' %}" alt="">
+						{% endif %}
+					{% endif %}
+					
+					<div class="position-absolute translate-middle bottom-0 start-100 mb-6 bg-success rounded-circle border border-4 border-body h-20px w-20px"></div>
+                </div>
+            </div>
+            <!--end::Pic-->
+
+            <!--begin::Info-->
+            <div class="flex-grow-1">
+                <!--begin::Title-->
+                <div class="d-flex justify-content-between align-items-start flex-wrap mb-2">
+                    <!--begin::User-->
+                    <div class="d-flex flex-column">
+                        <!--begin::Name-->
+                        <div class="d-flex align-items-center mb-2">
+                            <a href="#" class="text-gray-900 text-hover-primary fs-2 fw-bold me-1">{{ object.full_name }}</a> 
+							
+                            <a href="#"><i class="ki-duotone ki-verify fs-1 text-primary"><span class="path1"></span><span class="path2"></span></i></a>
+                        </div>
+                        <!--end::Name-->
+
+                        <!--begin::Info-->                        
+                        <div class="d-flex flex-wrap fw-semibold fs-6 mb-4 pe-2">
+
+                            <a href="#" class="d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2">
+                                <i class="ki-duotone ki-profile-circle fs-4 me-1"><span class="path1"></span><span class="path2"></span><span class="path3"></span></i>
+								<b class="badge badge-light-success fw-bold"> Gender:</b>  {{ object.gender }}
+                            </a>
+                            <a href="#" class="d-flex align-items-center text-gray-400 text-hover-primary me-5 mb-2">
+                                <i class="ki-duotone ki-geolocation fs-4 me-1"><span class="path1"></span><span class="path2"></span></i>
+								<b class="badge badge-light-success fw-bold">Date of Birth: </b>  {{ object.dob }} ||<b class="badge badge-light-danger fw-bold">Age: {{ object.calculate_age }}</b>   
+								
+                            </a>
+								
+                        </div>
+                        <!--end::Info-->
+                    </div>
+                    <!--end::User-->
+
+                    <!--begin::Actions-->
+                    <div class="d-flex my-4">
+					<div class="row">
+                       <div class="col">
+							
+                        </div>
+					  </div>
+                       
+                    </div>
+                    <!--end::Actions-->
+                </div>
+                <!--end::Title-->
+
+                <!--begin::Stats-->
+                <div class="d-flex flex-wrap flex-stack">
+                    <!--begin::Wrapper-->
+                    <div class="d-flex flex-column flex-grow-1 pe-8">
+                        <!--begin::Stats-->
+                        <div class="d-flex flex-wrap">
+                            <!--begin::Stat-->
+                            <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+                                <!--begin::Number-->
+                                <div class="d-flex align-items-center">
+                                    <i class="ki-duotone ki-arrow-up fs-3 text-success me-2"><span class="path1"></span><span class="path2"></span></i>                                    
+									<div class="fs-2 fw-bold" >{{object.email}}</div>
+                                </div>
+                                <!--end::Number-->
+
+                                <!--begin::Label-->
+                                <div class="fw-semibold fs-6 text-gray-400">Email</div> <br>
+								
+								
+                            </div>
+                            <!--end::Stat-->
+
+                            <!--begin::Stat-->
+                            <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+                                <!--begin::Number-->
+                                <div class="d-flex align-items-center">
+                                    <i class="ki-duotone ki-arrow-down fs-3 text-danger me-2"><span class="path1"></span><span class="path2"></span></i>                                    
+									<div class="fs-2 fw-bold" >{{object.telephone}}</div>
+									
+                                </div>
+                                <!--end::Number-->
+
+                                <!--begin::Label-->
+                                <div class="fw-semibold fs-6 text-gray-400">Telephone</div>
+                                <!--end::Label-->
+								
+							 </div>
+                            <!--end::Stat-->
+
+                            <!--begin::Stat-->
+                            <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+                                <!--begin::Number-->
+                                <div class="d-flex align-items-center">
+                                    <i class="ki-duotone ki-arrow-up fs-3 text-success me-2"><span class="path1"></span><span class="path2"></span></i>                                    
+									<div class="fs-2 fw-bold" >{{ object.groups.all.0 }} </div>
+                                </div>
+                                <!--end::Number-->                                
+
+                                <!--begin::Label-->
+                                <div class="fw-semibold fs-6 text-gray-400">User Role</div>
+								
+                            </div>
+                            <!--end::Stat-->
+							
+							
+                            <!--begin::Stat-->
+                            <div class="border border-gray-300 border-dashed rounded min-w-125px py-3 px-4 me-6 mb-3">
+                                <!--begin::Number-->
+                                <div class="d-flex align-items-center">
+                                    <i class="ki-duotone ki-arrow-up fs-3 text-success me-2"><span class="path1"></span><span class="path2"></span></i>                                    
+									<div class="fs-2 fw-bold" >{{ object.campus }} </div>
+                                </div>
+                                <!--end::Number-->                                
+
+                                <!--begin::Label-->
+                                <div class="fw-semibold fs-6 text-gray-400">Campus</div>
+								
+                            </div>
+                            <!--end::Stat-->
+							
+							
+                        </div>
+                        <!--end::Stats-->
+                    </div>
+                    <!--end::Wrapper-->
+
+                </div>
+                <!--end::Stats-->
+            </div>
+            <!--end::Info-->
+        </div>
+        <!--end::Details-->   
+
+        <!--begin::Navs-->
+        <ul class="nav btn btn-sm btn-light   nav-tabs nav-pills nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bold">
+                            <!--begin::Nav item-->
+			{% if view_Vital %}
+              <li class="nav-item mt-2">
+                    <a class="nav-link text-active-primary ms-0 me-10 py-5 
+					{% if view_Vital %}
+					  active 
+					{% endif %}" data-bs-toggle="tab" href="#kt_tab_pane_1">
+                        Vital Signs                    </a>
+                </li> 
+				{% endif %}
+                <!--end::Nav item-->
+                            <!--begin::Nav item-->
+				{% if view_Vital %}
+               <li class="nav-item mt-2">
+                    <a class="nav-link text-active-primary ms-0 me-10 py-5   
+					{% if not view_Vital and view_Encounters and not view_Lab and not view_Pharma and not view_Treatment and not view_nurse_note and not view_doctor_note and not view_invoice and not view_nurse_note %}
+						active
+					{% endif %}" data-bs-toggle="tab" href="#kt_tab_pane_2">
+                       Encounters                  </a>
+                </li> {% endif %}
+                <!--end::Nav item-->
+                            <!--begin::Nav item-->
+				{% if view_Encounters %}
+                <li class="nav-item mt-2">
+                    <a class="nav-link text-active-primary ms-0 me-10 py-5 
+					{% if not view_Vital and not view_Encounters and view_Lab and not view_Pharma and not view_Treatment and not view_nurse_note and not view_doctor_note and not view_invoice and not view_nurse_note %}
+						active
+					{% endif %}" data-bs-toggle="tab" href="#kt_tab_pane_3">
+                        Lab Order(s)               </a>
+                </li>{% endif %}
+                <!--end::Nav item-->
+                            <!--begin::Nav item-->
+				{% if view_Pharma %}
+                <li class="nav-item mt-2">
+                    <a class="nav-link text-active-primary ms-0 me-10 py-5 
+					{% if not view_Vital and not view_Encounters and not view_Lab and view_Pharma and not view_Treatment and not view_nurse_note and not view_doctor_note and not view_invoice and not view_nurse_note %}
+						active
+					{% endif %}" data-bs-toggle="tab" href="#kt_tab_pane_4">
+                        Pharma Order(s)                   </a>
+                </li>{% endif %}
+                <!--end::Nav item-->
+                            <!--begin::Nav item-->
+				{% if view_Treatment %}
+                <li class="nav-item mt-2">
+                    <a class="nav-link text-active-primary ms-0 me-10 py-5 
+					{% if not view_Vital and not view_Encounters and not view_Lab and not view_Pharma and view_Treatment and not view_nurse_note and not view_doctor_note and not view_invoice and not view_nurse_note %}
+						active
+					{% endif %}" data-bs-toggle="tab" href="#kt_tab_pane_5">
+                        Treatment                     </a>
+                </li>{% endif %}
+                <!--end::Nav item-->
+                            <!--begin::Nav item-->
+				{% if view_invoice %}
+               <li class="nav-item mt-2">
+                    <a class="nav-link text-active-primary ms-0 me-10 py-5 
+					{% if not view_Vital and not view_Encounters and not view_Lab and not view_Pharma and not view_Treatment and not view_nurse_note and not view_doctor_note and view_invoice and not view_nurse_note %}
+						active
+					{% endif %}" data-bs-toggle="tab" href="#kt_tab_pane_6">
+                        Billing Invoice                  </a>
+                </li>{% endif %}
+               {% if view_nurse_note %}<li class="nav-item mt-2">
+                    <a class="nav-link text-active-primary ms-0 me-10 py-5 
+					{% if not view_Vital and not view_Encounters and not view_Lab and not view_Pharma and not view_Treatment and not view_nurse_note and not view_doctor_note and not view_invoice and view_nurse_note %}
+						active
+					{% endif %}" data-bs-toggle="tab" href="#kt_tab_pane_7">
+                       Nurse's Notes                 </a>
+                </li>{% endif %}
+               {% if view_doctor_note %} <li class="nav-item mt-2">
+                    <a class="nav-link text-active-primary ms-0 me-10 py-5 
+					{% if not view_Vital and not view_Encounters and not view_Lab and not view_Pharma and not view_Treatment and not view_nurse_note and not view_nurse_note and not view_invoice and view_doctor_note %}
+						active
+					{% endif %}" data-bs-toggle="tab" href="#kt_tab_pane_8">
+                       Doctor's Notes                  </a>
+                </li>{% endif %}
+                <!--end::Nav item-->
+                    </ul>
+        <!--begin::Navs-->
+		
+		
+		<div class="tab-content" id="myTabContent">
+			<div class="tab-pane fade 
+			{% if view_Vital %}
+			show active 
+			{% endif %} " id="kt_tab_pane_1" role="tabpanel">
+		
+			<!--begin::Form-->
+			<form class="form">
+				<!--begin::Card-->
+				<div class="card">
+					<!--begin::Card header-->
+					<div class="card-header">
+						<!--begin::Card header-->
+						<div class="card-title fs-3 fw-bold"> Vital Signs</div>
+						<!--end::Card header-->
+					</div>
+					<!--end::Card header-->
+
+					<!--begin::Card body-->
+					<div class="card-body">
+						<!--begin::Row-->
+						<div class="row mb-8">
+							<!--begin::Col-->
+							<div class="col-xl-2">
+								<div class="fs-6 fw-semibold mt-2 mb-3"></div>
+							</div>
+							<!--end::Col-->
+
+							<!--begin::Col-->
+							<div class="col-xl-8">
+								<!--begin::Progress-->
+								<div class="d-flex flex-column">
+									<div class="d-flex justify-content-between w-100 fs-4 fw-bold mb-3">
+										<span>Latest Vital Signs</span>
+										<span>Date Created : <b id="current_Date_div">{{vital_sign_object.timestamp}}</b></span>
+									</div>
+
+									<div class="h-8px bg-light rounded mb-3">
+										<div class="bg-success rounded h-8px" role="progressbar" style="width: 68%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+									</div>
+
+									<div class=" fw-semibold text-gray-600">
+									{% if vital_sign_object %} <a class="btn btn-sm btn-secondary me-3" href="{% url 'vital_sgins_History' object.id %}">View all Vital Signs</a> {% endif %}
+									<a class="btn btn-sm btn-secondary me-3" href="#" data-bs-toggle="modal" data-bs-target="#vital_s_modal" >Add New</a>
+									</div>
+								
+									
+								
+								</div>
+								<!--end::Progress-->
+							</div>
+							
+							<div class="col-xl-2">
+								<div class="fs-6 fw-semibold mt-2 mb-3"></div>
+							</div>
+							<!--end::Col-->
+						</div>
+						<!--end::Row-->
+
+						<!--begin::Row-->
+						<div class="row mb-8">
+							<!--begin::Col-->
+							<div class="col-xl-2">
+								
+							</div>
+							<!--end::Col-->
+
+							<!--begin::Col-->
+							<div class="col-xl-6">
+							<div class="fs-6 fw-semibold mt-2 mb-3">Reason for visit</div>
+								<div  id="extra_comment_div" style="width:100%!important" name="notes" class="form-control form-control-solid" >
+									
+									{{ vital_sign_object.extra_comment|safe }}
+									</div>
+							</div>
+							<!--end::Col-->
+							
+							<!--begin::Col-->
+							<div class="col-xl-2">
+								
+							</div>
+							<!--end::Col-->
+						</div>
+						<!--end::Row-->
+						<!--begin::Row-->
+						<div class="row mb-8">
+							<!--begin::Col-->
+							<div class="col-xl-2">
+								<div class="fs-6 fw-semibold mt-2 mb-3"></div>
+							</div>
+							<!--end::Col-->
+
+							<!--begin::Col-->
+							<div class="col-xl-8">
+								<!--begin::Row-->
+								<div class="row g-9" data-kt-buttons="true" data-kt-buttons-target="[data-kt-button]">
+									<!--begin::Col-->
+									<div class="col-md-4 col-lg-12 col-xxl-4">
+										<label class="btn btn-outline btn-outline-dashed btn-active-light-primary active d-flex text-start p-6" data-kt-button="true">
+											<!--begin::Radio button-->
+											<span class="form-check form-check-custom form-check-solid form-check-sm align-items-start mt-1">
+												<input class="form-check-input" type="radio" name="usage" value="1" checked="checked" />
+											</span>
+											<!--end::Radio button-->
+
+											<span class="ms-5">
+												<span class="fs-4 fw-bold mb-1 d-block">Ft</span>
+												<span id="height_ft_div" class="fw-semibold fs-7 text-gray-600">
+													{{vital_sign_object.height_ft}}
+												</span>
+											</span>
+										</label>
+									</div>
+									<!--end::Col-->
+
+									<!--begin::Col-->
+									<div class="col-md-4 col-lg-12 col-xxl-4">
+										<label class="btn btn-outline btn-outline-dashed btn-active-light-primary d-flex text-start p-6" data-kt-button="true">
+											<!--begin::Radio button-->
+											<span class="form-check form-check-custom form-check-solid form-check-sm align-items-start mt-1">
+												<input class="form-check-input" type="radio" name="usage" value="2" />
+											</span>
+											<!--end::Radio button-->
+											<span class="ms-5">
+												<span class="fs-4 fw-bold mb-1 d-block">In</span>
+												<span id="height_in_div" class="fw-semibold fs-7 text-gray-600">
+													{{vital_sign_object.height_in}}
+												</span>
+											</span>
+										</label>
+									</div>
+									<!--end::Col-->
+
+									<!--begin::Col-->
+									<div class="col-md-4 col-lg-12 col-xxl-4">
+										<label class="btn btn-outline btn-outline-dashed btn-active-light-primary d-flex text-start p-6" data-kt-button="true">
+											<!--begin::Radio button-->
+											<span class="form-check form-check-custom form-check-solid form-check-sm align-items-start mt-1">
+												<input class="form-check-input" type="radio" name="usage" value="3" />
+											</span>
+											<!--end::Radio button-->
+											<span class="ms-5">
+												<span class="fs-4 fw-bold mb-1 d-block">Weight</span>
+												<span  id="weight_div" class="fw-semibold fs-7 text-gray-600">
+													{{vital_sign_object.weight}}
+												</span>
+											</span>
+										</label>
+									</div>
+									<!--end::Col-->
+									
+									<!--begin::Col-->
+									<div class="col-md-4 col-lg-12 col-xxl-4">
+										<label class="btn btn-outline btn-outline-dashed btn-active-light-primary d-flex text-start p-6" data-kt-button="true">
+											<!--begin::Radio button-->
+											<span class="form-check form-check-custom form-check-solid form-check-sm align-items-start mt-1">
+												<input class="form-check-input" type="radio" name="usage" value="3" />
+											</span>
+											<!--end::Radio button-->
+											<span class="ms-5">
+												<span class="fs-4 fw-bold mb-1 d-block">Pulse</span>
+												<span  id="pulse_div" class="fw-semibold fs-7 text-gray-600">
+													{{vital_sign_object.pulse}}
+												</span>
+											</span>
+										</label>
+									</div>
+									<!--end::Col-->
+									
+									<!--begin::Col-->
+									<div class="col-md-4 col-lg-12 col-xxl-4">
+										<label class="btn btn-outline btn-outline-dashed btn-active-light-primary d-flex text-start p-6" data-kt-button="true">
+											<!--begin::Radio button-->
+											<span class="form-check form-check-custom form-check-solid form-check-sm align-items-start mt-1">
+												<input class="form-check-input" type="radio" name="usage" value="3" />
+											</span>
+											<!--end::Radio button-->
+											<span class="ms-5">
+												<span class="fs-4 fw-bold mb-1 d-block">Blood Pressure</span>
+												<span  id="blood_pressure_div"  class="fw-semibold fs-7 text-gray-600">
+													{{vital_sign_object.blood_pressure}}
+												</span>
+											</span>
+										</label>
+									</div>
+									<!--end::Col-->
+									
+									<!--begin::Col-->
+									<div class="col-md-4 col-lg-12 col-xxl-4">
+										<label class="btn btn-outline btn-outline-dashed btn-active-light-primary d-flex text-start p-6" data-kt-button="true">
+											<!--begin::Radio button-->
+											<span class="form-check form-check-custom form-check-solid form-check-sm align-items-start mt-1">
+												<input class="form-check-input" type="radio" name="usage" value="3" />
+											</span>
+											<!--end::Radio button-->
+											<span class="ms-5">
+												<span class="fs-4 fw-bold mb-1 d-block">Q2 Saturation</span>
+												<span  id="saturation_div"  class="fw-semibold fs-7 text-gray-600">
+													{{vital_sign_object.saturation}}
+												</span>
+											</span>
+										</label>
+									</div>
+									<!--end::Col-->
+									
+									<!--begin::Col-->
+									<div class="col-md-4 col-lg-12 col-xxl-4">
+										<label class="btn btn-outline btn-outline-dashed btn-active-light-primary d-flex text-start p-6" data-kt-button="true">
+											<!--begin::Radio button-->
+											<span class="form-check form-check-custom form-check-solid form-check-sm align-items-start mt-1">
+												<input class="form-check-input" type="radio" name="usage" value="3" />
+											</span>
+											<!--end::Radio button-->
+											<span class="ms-5">
+												<span class="fs-4 fw-bold mb-1 d-block">Q2 Flow Rate</span>
+												<span  id="flow_rate_div"  class="fw-semibold fs-7 text-gray-600">
+													{{vital_sign_object.flow_rate}}
+												</span>
+											</span>
+										</label>
+									</div>
+									<!--end::Col-->
+									
+									<!--begin::Col-->
+									<div class="col-md-4 col-lg-12 col-xxl-4">
+										<label class="btn btn-outline btn-outline-dashed btn-active-light-primary d-flex text-start p-6" data-kt-button="true">
+											<!--begin::Radio button-->
+											<span class="form-check form-check-custom form-check-solid form-check-sm align-items-start mt-1">
+												<input class="form-check-input" type="radio" name="usage" value="3" />
+											</span>
+											<!--end::Radio button-->
+											<span class="ms-5">
+												<span class="fs-4 fw-bold mb-1 d-block">Temperatue</span>
+												<span  id="temperatue_div" class="fw-semibold fs-7 text-gray-600">
+													{{vital_sign_object.temperatue}}
+												</span>
+											</span>
+										</label>
+									</div>
+									<!--end::Col-->
+									
+									<!--begin::Col-->
+									<div class="col-md-4 col-lg-12 col-xxl-4">
+										<label class="btn btn-outline btn-outline-dashed btn-active-light-primary d-flex text-start p-6" data-kt-button="true">
+											<!--begin::Radio button-->
+											<span class="form-check form-check-custom form-check-solid form-check-sm align-items-start mt-1">
+												<input class="form-check-input" type="radio" name="usage" value="3" />
+											</span>
+											<!--end::Radio button-->
+											<span class="ms-5">
+												<span class="fs-4 fw-bold mb-1 d-block">Respiratory Rate</span>
+												<span id="respiratory_rate_div" class="fw-semibold fs-7 text-gray-600">
+													{{vital_sign_object.respiratory_rate}}
+												</span>
+											</span>
+										</label>
+									</div>
+									<!--end::Col-->
+									
+									<!--begin::Col-->
+									<div class="col-md-4 col-lg-12 col-xxl-4">
+										<label class="btn btn-outline btn-outline-dashed btn-active-light-primary d-flex text-start p-6" data-kt-button="true">
+											<!--begin::Radio button-->
+											<span class="form-check form-check-custom form-check-solid form-check-sm align-items-start mt-1">
+												<input class="form-check-input" type="radio" name="usage" value="3" />
+											</span>
+											<!--end::Radio button-->
+											<span class="ms-5">
+												<span class="fs-4 fw-bold mb-1 d-block">BMI</span>
+												<span id="bmi_div"   class="fw-semibold fs-7 text-gray-600">
+													{{vital_sign_object.bmi}}
+												</span>
+											</span>
+										</label>
+									</div>
+									<!--end::Col-->
+								</div>
+								<!--end::Row-->
+							</div>
+							
+							<!--begin::Col-->
+							<div class="col-xl-2">
+								<div class="fs-6 fw-semibold mt-2 mb-3"></div>
+							</div>
+							<!--end::Col-->
+						</div>
+						<!--end::Row-->
+
+					</div>
+					<!--end::Card body-->
+
+					<!--begin::Card footer
+					<div class="card-footer d-flex justify-content-end py-6">
+						<button type="reset" class="btn btn-light btn-active-light-primary me-2">Discard</button>
+
+						<button type="submit" class="btn btn-primary">Save Changes</button>
+					</div>
+					<!--end::Card footer-->
+				</div>
+				<!--end::Card-->
+			</form>
+			<!--end:Form-->    
+			</div>
+			<div class="tab-pane fade 
+			{% if not view_Vital and view_Encounters and not view_Lab and not view_Pharma and not view_Treatment and not view_nurse_note and not view_doctor_note and not view_invoice and not view_nurse_note %}
+			show active
+			{% endif %}" id="kt_tab_pane_2" role="tabpanel">
+		<!--begin::Form-->
+			
+				<!--begin::Card-->
+				<div class="card">
+					<!--begin::Card header-->
+					<div class="card-header">
+						<!--begin::Card header--> 
+						<div class="card-title fs-3 fw-bold">Encounters</div>
+						<!--end::Card header-->
+					</div>
+					<!--end::Card header-->
+
+					<!--begin::Card body-->
+					<div class="card-body">
+				<div class="table-responsive">
+							<div id="toolbar"
+							     class="select">
+								<select class="form-control">
+									<option value="">Export Basic</option>
+									<option value="all">Export All</option>
+									<option value="selected">Export Selected</option>
+								</select>
+							</div>
+							<table id="fresh-table"
+							       data-toggle="table"
+							       class="table"
+							       id="table"
+							       data-toolbar="#toolbar"
+							       data-search="true"
+							       data-show-toggle="true"
+							       data-show-fullscreen="true"
+							       data-show-columns="true"
+							       data-show-columns-toggle-all="true"
+							       data-show-export="true"
+							       data-click-to-select="true"
+							       data-minimum-count-columns="2"
+							       data-pagination="true"
+							       data-id-field="id"
+							       data-toolbar="#toolbar"
+							       data-page-list="[10, 25, 50, 100, all]"
+							       data-show-footer="true"
+							       data-sort-priority='[{"sortName": "id","sortOrder":"desc"},{"sortName":"name","sortOrder":"desc"}]'
+							       data-show-multi-sort="true"
+							       data-show-jump-to="true"
+							       data-response-handler="responseHandler"
+							       data-resizable="true"
+							       data-advanced-search="true"
+							       data-id-table="advancedTable"
+							       data-show-print="true"
+							       data-filter-control="true"
+								   data-show-footer="true"
+							       data-show-search-clear-button="true">
+								<thead>
+									<th scope="col" data-field="View">View</th>
+									<th scope="col" data-field="DateOfBirth">Date Of Encounter</th>
+									<th scope="col" data-field="Visit">Visit Type</th>
+									
+									<th scope="col" data-field="Created">Created By</th>
+						        								
+								
+								</thead>
+								<tbody>
+								 {% for object in encounters_obj %}
+									<tr id="tr_{{object.id}}" class='clickable-row'>
+									   <td>
+											<a style="float:left; " class="btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary" 
+                                                href="{% url 'show_encounters' object.pk object.patient.pk  %}" title="View"
+                                                data-toggle="tooltip">View 
+                                            </a>
+											
+										</td>
+											
+										<td>{{ object.timestamp}}
+										<br>
+										<b class="badge badge-light-danger fw-bold">Status:</b> {% if object.status %} Open{% else %} Closed {% endif %}</td>
+										<td>
+										{% if object.visit_type == "IVF" %}
+											Infertility
+										{% else %}
+											{{ object.visit_type }}
+										{% endif %}
+									</td>
+
+										
+										
+										<td> 
+										{{object.recordOwner.full_name }}</td>
+										
+										
+										</tr>
+										 {% endfor %}
+									</tbody>
+								</table>
+							</div>
+									
+			
+			
+			
+			         </div>
+					<!--end::Card body-->
+
+					<!--begin::Card footer-->
+					<div class="card-footer d-flex justify-content-end py-6">
+					
+							
+							<input style="display:none"type="text" value="{% if form_history.instance.recordOwner %} {{form_history.instance.recordOwner.id}} {% else %} {{request.user.id}} {% endif%}" id="recordOwner_history"name="recordOwner_history"/> 
+							
+							 {% if encounter_object.recordOwner.id == request.user.id %}
+							
+								<button {% if not encounter_object.status %} disabled {% endif %} type="bottom" id="save_History" class="btn btn-primary">Save History</button>
+							
+						
+							 {% endif %}
+					</div>
+					<!--end::Card footer-->
+				</div>
+				<!--end::Card-->
+			
+			<!--end:Form-->    
+			</div>
+			
+			<div class="tab-pane fade 
+			{% if not view_Vital and not view_Encounters and view_Lab and not view_Pharma and not view_Treatment and not view_nurse_note and not view_doctor_note and not view_invoice and not view_nurse_note %}
+			show active
+			{% endif %}
+			" id="kt_tab_pane_3" role="tabpanel">
+		
+			<!--begin::Card-->
+			<div class="card">
+					<!--begin::Card header-->
+					<div class="card-header">
+						<!--begin::Card header-->
+						<div class="card-title fs-3 fw-bold"> Lab Report </div>
+						<!--end::Card header-->
+					</div>
+					<!--end::Card header-->
+
+					<!--begin::Card body-->
+					<div class="card-body">
+					
+						   <table id="fresh-table"
+							       data-toggle="table"
+							       class="table"
+							       id="table"
+							       data-search="true"
+							       data-show-toggle="true"
+							       data-show-fullscreen="true"
+							       data-show-columns="true"
+							       data-show-columns-toggle-all="true"
+							       data-click-to-select="true"
+							       data-minimum-count-columns="2"
+							       data-pagination="true"
+							       data-id-field="id"
+							       data-toolbar="#toolbar"
+							       data-page-list="[10, 25, 50, 100, all]"
+							       data-show-footer="true"
+							       data-show-multi-sort="true"
+							       data-show-jump-to="true"
+							       data-response-handler="responseHandler"
+							       data-resizable="true"
+							       data-show-print="true"
+							       data-filter-control="true"
+								   data-show-footer="true"
+							       data-show-search-clear-button="true">
+								<thead>
+									<th scope="col" data-field="Name"
+									    data-sortable="true">Order # </th>
+									<th scope="col" data-field="By"
+									    data-print-ignore="true">Order By</th>
+									<th scope="col" data-field="Date"
+									    data-sortable="true">Ordered Date</th>
+						        								
+									<th scope="col" data-field="View"
+									    data-print-ignore="true">View</th>
+								
+								</thead>
+								<tbody>
+								 {% for object in lab_order_obj %}
+								 <tr>
+								<td>{{ object}}   </td>
+								<td>
+														
+								{{ object.recordOwner.full_name }}
+								</td>
+								<td>{{ object.date_ordered }}   </td>
+
+								<td>
+
+								<a  class="btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary" 
+																				   data-bs-toggle="modal" data-bs-target="#content_modal_2{{object.id}}" href="#"  title="View"
+																				   data-toggle="tooltip">View Labs
+																			</a>
+																			
+
+								<div class="modal fade" id="content_modal_2{{object.id}}"   data-bs-backdrop="static" aria-hidden="true">
+									<!--begin::Modal dialog-->
+									<div class="modal-dialog modal-dialog-centered  modal-lg">
+										<!--begin::Modal content-->
+										<div class="modal-content">
+											<!--begin::Modal header-->
+											<div class="modal-header border-0 ">
+												<!--begin::Edit-->
+												<h5 class="modal-title" id="exampleModalLabel">{% if object.patient %}{{ object.patient }} {%else%}  {{ object.name_patient }} {% endif %}</h5>
+																					<!--begin::Close-->
+												<div class="btn btn-icon btn-sm btn-color-gray-500 btn-active-icon-primary" data-bs-toggle="tooltip" title="Hide Photo" data-bs-dismiss="modal">
+													<!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+													<span class="svg-icon svg-icon-1">
+														<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+															<rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor" />
+															<rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
+														</svg>
+													</span>
+													<!--end::Svg Icon-->
+												</div> 
+												<!--end::Close-->
+											</div>
+											<!--end::Modal header-->
+											<!--begin::Modal body-->
+											<div class="modal-body pt-0 pb-20 px-lg-17">
+											<div class="table-responsive">
+											<table class="table table-rounded table-row-bordered border gy-7 gs-7">
+												<thead>
+												<tr class="fw-semibold fs-6 text-gray-800 border-bottom-2 border-gray-200">
+
+														<th scope="col" data-field="Name"
+															data-sortable="true"></th>
+																					
+														<th scope="col" data-field="Name"
+															data-filter-control="input">---</th>
+														<th scope="col" data-field="Result">Result</th>
+													</tr>
+														</thead>
+											</table>
+											   </div>
+											  </div>
+											  <div class="modal-footer">
+											  {% if can_sent_to_doctor %}
+															 
+											   <button   data-id="{{object.id}}" data-status="{% if object.result_availabe%}sent{%else%}notsend{% endif %}"  data-order="{{object}}" class="send_or_retrive_lab_report btn btn-primary"  ><b id="send_btn_2_{{object.id}}"> Send Report </b></button>		
+											  {% endif %}
+											 <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+													
+											  </div>
+											</div>
+										  </div>
+										</div>
+						
+									</td>
+									
+							     </tr>
+								 
+											{% endfor %}
+									</tbody>
+								</table>
+									
+						
+					
+					
+					
+			        
+			        </div>
+					<!--end::Card body-->
+
+					
+				</div>
+				<!--end::Card-->
+			
+			</div>
+			<div class="tab-pane fade 
+			{% if not view_Vital and not view_Encounters and not view_Lab and view_Pharma and not view_Treatment and not view_nurse_note and not view_doctor_note and not view_invoice and not view_nurse_note %}
+			show active
+			{% endif %}
+			" id="kt_tab_pane_4" role="tabpanel">
+		
+			
+				<!--begin::Card-->
+			<div class="card">
+					<!--begin::Card header-->
+					<div class="card-header">
+						<!--begin::Card header-->
+						<div class="card-title fs-3 fw-bold"> Pharma Order </div>
+						<!--end::Card header-->
+					</div>
+					<!--end::Card header-->
+
+					<!--begin::Card body-->
+					<div class="card-body">
+					
+					   <div class="table-responsive">
+							<div id="toolbar33"
+							     class="select">
+								<select class="form-control">
+									<option value="">Export Basic</option>
+									<option value="all">Export All</option>
+									<option value="selected">Export Selected</option>
+								</select>
+							</div>
+							<table id="fresh-table"
+							       data-toggle="table"
+							       class="table"
+							       id="table"
+							       data-toolbar="#toolbar33"
+							       data-search="true"
+							       data-show-toggle="true"
+							       data-show-fullscreen="true"
+							       data-show-columns="true"
+							       data-show-columns-toggle-all="true"
+							       data-show-export="true"
+							       data-click-to-select="true"
+							       data-minimum-count-columns="2"
+							       data-pagination="true"
+							       data-id-field="id"
+							       data-toolbar="#toolbar2"
+							       data-page-list="[10, 25, 50, 100, all]"
+							       data-show-footer="true"
+							       data-sort-priority='[{"sortName": "id","sortOrder":"desc"},{"sortName":"name","sortOrder":"desc"}]'
+							       data-show-multi-sort="true"
+							       data-show-jump-to="true"
+							       data-response-handler="responseHandler"
+							       data-resizable="true"
+							       data-advanced-search="true"
+							       data-id-table="advancedTable"
+							       data-show-print="true"
+							       data-filter-control="true"
+								   data-show-footer="true"
+							       data-show-search-clear-button="true">
+								<thead>
+								     <th  data-field="td">	</th>
+								     <th  data-field="td222">	</th>
+									<th scope="col" data-field="Order#"
+									    data-filter-control="input"
+									    data-sortable="true">Order #</th>
+									<th scope="col" data-field="Order" data-sortable="true">Date-Order</th>					
+								
+								</thead>
+								<tbody>
+   
+								 {% for object in pharma_Order_grouped %}
+									<tr>
+									<td>
+											
+										     {%  if object.drug_Sale   %}
+											 
+												<a target="_blank"style="float:left; " class="btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary" 
+													 href="{% url 'precription_pdf' object.drug_Sale.id 'normal' %}"  title="Print"
+													data-toggle="tooltip">Print 
+												</a> 
+												{%  else  %}
+											 
+											 
+												<a target="_blank"style="float:left; " class="btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary" 
+													 href="{% url 'precription_pdf' object.encounter.id 'encounter' %}"  title="View"
+													data-toggle="tooltip">Print 
+												</a>
+											{% endif %}
+									</td>		
+									<td>
+											
+										     {%  if object.drug_Sale   %}
+											 
+												
+											   
+												
+											<a style="margin-top: 5%" data-bs-toggle="modal" data-bs-target="#myModalImage" class="btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary" 
+												   onclick="updatePharmacyData_{{ object.drug_Sale.id }}()">View</a>
+
+												<!-- ... -->
+
+												<script>
+												function updatePharmacyData_{{ object.drug_Sale.id }}() {
+													var phamarcyDataElement = document.getElementById('phamarcy_data_d');
+													var innerHTMLContent = '';
+
+													{% for obj in filtered_prescriptions %}
+														{% if obj.drug_Sale.id == object.drug_Sale.id %}
+															innerHTMLContent += '<tr><td>{{ obj.medicine }}</td><td>{{ obj.quantity }}</td><td>{% if obj.paid %}Paid{% else %}unpaid{% endif %}</td></tr>';
+														{% endif %}
+													{% endfor %}
+
+													if (phamarcyDataElement) {
+														phamarcyDataElement.innerHTML = innerHTMLContent;
+													}
+												}
+												</script>
+
+										     {%  else  %}
+											 
+											 
+										  
+											
+											<a style="margin-top: 5%" data-bs-toggle="modal" data-bs-target="#myModalImage" class="btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary" 
+											   onclick="updatePharmacyData_{{object.encounter.id}}()">View</a>
+
+											<!-- ... -->
+											<script>
+												function updatePharmacyData_{{ object.encounter.id }}() {
+													var phamarcyDataElement = document.getElementById('phamarcy_data_d');
+													var innerHTMLContent = '';
+
+													{% for obj in filtered_prescriptions %}
+														{% if obj.encounter.id == object.encounter.id %}
+															innerHTMLContent += '<tr><td>{{ obj.medicine }}</td><td>{{ obj.quantity }}</td><td>{% if obj.paid %}Paid{% else %}unpaid{% endif %}</td></tr>';
+														{% endif %}
+													{% endfor %}
+
+													if (phamarcyDataElement) {
+														phamarcyDataElement.innerHTML = innerHTMLContent;
+													}
+												}
+												</script>
+											
+
+											{%  endif %}
+											
+											
+											 {%  if from_finance %}
+											
+										     {%  else  %}
+										     {%  if object.drug_Sale   %}
+											 {%  if object.paid   %}
+											
+											 {%  if object.drug_Sale   %}
+											   {%  endif %}
+											   {%  endif %}
+										     {%  else  %}
+											 
+											  {%  endif %}
+										     {%  endif %}
+										</td>
+										<td>
+										 {%  if object.encounter   %} {{ object.encounter }}  {%  else %} {{ object.drug_Sale }} {% endif %}
+										</td>
+											
+										<td>
+										{{ object.date }}
+										 </td>
+										 
+										 </tr>
+										 {% endfor %}
+									</tbody>
+								</table>
+							</div>
+						
+						
+			        
+			        </div>
+					<!--end::Card body-->
+
+				
+					<!--end::Card footer-->
+				</div>
+				<!--end::Card-->
+			
+			</div>
+			<div class="tab-pane fade
+			{% if not view_Vital and not view_Encounters and not view_Lab and not view_Pharma and view_Treatment and not view_nurse_note and not view_doctor_note and not view_invoice and not view_nurse_note %}
+			show active
+			{% endif %}" id="kt_tab_pane_5" role="tabpanel">
+		
+			
+				<!--begin::Card-->
+			<div class="card">
+					<!--begin::Card header-->
+					<div class="card-header">
+						<!--begin::Card header-->
+						<div class="card-title fs-3 fw-bold"> Treatment </div>
+						<!--end::Card header-->
+					</div>
+					<!--end::Card header-->
+
+					<!--begin::Card body-->
+					<div class="card-body">
+					
+					<div class="table-responsive">
+							<div id="toolbar2"
+							     class="select">
+								<select class="form-control">
+									<option value="">Export Basic</option>
+									<option value="all">Export All</option>
+									<option value="selected">Export Selected</option>
+								</select>
+							</div>
+							<table id="fresh-table"
+							       data-toggle="table"
+							       class="table"
+							       id="table"
+							       data-toolbar="#toolbar2"
+							       data-search="true"
+							       data-show-toggle="true"
+							       data-show-fullscreen="true"
+							       data-show-columns="true"
+							       data-show-columns-toggle-all="true"
+							       data-show-export="true"
+							       data-click-to-select="true"
+							       data-minimum-count-columns="2"
+							       data-pagination="true"
+							       data-id-field="id"
+							       data-toolbar="#toolbar2"
+							       data-page-list="[10, 25, 50, 100, all]"
+							       data-show-footer="true"
+							       data-sort-priority='[{"sortName": "id","sortOrder":"desc"},{"sortName":"name","sortOrder":"desc"}]'
+							       data-show-multi-sort="true"
+							       data-show-jump-to="true"
+							       data-response-handler="responseHandler"
+							       data-resizable="true"
+							       data-advanced-search="true"
+							       data-id-table="advancedTable"
+							       data-show-print="true"
+							       data-filter-control="true"
+								   data-show-footer="true"
+							       data-show-search-clear-button="true">
+								<thead>
+								     <th  data-field="td">	</th>
+									<th scope="col" data-field="MR" data-sortable="true"
+									data-filter-control="input">Ordered Number #</th>
+									<th scope="col" data-field="Medical"
+									    data-filter-control="input"
+									    data-sortable="true">Order By</th>
+									<th scope="col" data-field="date_ordered">Date Ordered</th>
+									<th scope="col" data-field="Status">Action</th>	
+						        								
+								
+								</thead>
+								<tbody>
+								 {% for object in treatment_order %}
+									<tr class='clickable-row' id="tr_{{object.id}}">
+									   <td>
+											
+											
+										   <a style="margin-top:5%;" data-bs-toggle="modal" data-bs-target="#exampleModal_treatment_{{object.id}}" class=" btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary" >View</a> 
+										
+										<div class="modal fade" id="exampleModal_treatment_{{object.id}}"   data-bs-backdrop="static" aria-hidden="true">
+											<!--begin::Modal dialog-->
+											<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+												<!--begin::Modal content-->
+												<div class="modal-content">
+													<!--begin::Modal header-->
+													<div class="modal-header border-0 ">
+														<!--begin::Edit-->
+														 
+														<!--begin::Close-->
+														<h5 class="modal-title" id="exampleModalLabel"> Treatment Order</h5>	
+														{% if object.treatment.count > 3 %} <span class="badge badge-danger"> scroll down to view more</span>{% endif %} 
+														<div class="btn btn-icon btn-sm btn-color-gray-500 btn-active-icon-primary" data-bs-toggle="tooltip" title="Hide Photo" data-bs-dismiss="modal">
+															<!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+															<span class="svg-icon svg-icon-1">
+																<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+																	<rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor" />
+																	<rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
+																</svg>
+															</span>
+															<!--end::Svg Icon-->
+														</div> 
+														<!--end::Close-->
+													</div>
+													<!--end::Modal header-->
+													<!--begin::Modal body-->
+													<div class="modal-body pt-0 pb-20 px-lg-17">
+													<div class="table-responsive">
+													<table class="table table-rounded table-row-bordered border gy-7 gs-7">
+													<thead>
+															<tr class="fw-semibold fs-6 text-gray-800 border-bottom-2 border-gray-200">
+																<th>Item</th>
+															</tr>
+													</thead>
+													<tbody>
+														  {% for obj in object.treatment.all %}
+															 
+															 
+															<tr>
+															<td>{{obj.name}}</td>
+															</tr>  
+															
+															{% endfor %}
+														
+														
+															  
+														<!-- and so on... -->
+													</tbody>
+												  </table>
+														
+														
+															</div>
+													  </div>
+													  <div class="modal-footer">
+													   <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+													  </div>
+													</div>
+												  </div>
+												</div>
+											
+											
+											
+										</td>
+										<td>
+										
+										{{ object.recordOwner.full_name }}
+										</td>
+										<td>{{ object.date_ordered }}   </td>
+										<td> 
+										
+										   <div class="dropdown">
+												<a class="btn btn-light btn-active-light-primary btn-flex btn-center btn-sm  dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" data-bs-auto-close="false" aria-expanded="false"> Action </a>
+												<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+												
+													{% if  object.recordOwner.id == request.user.id %}
+													{% if not object.paid  %}
+													<li><a class="dropdown-item" href="{% url 'treatment_order_Preview_normal_update' object.id  %}">Edit</a></li>
+													
+													<li class="deleteButton" onclick="deleteData('{{object.id}}','{{object}}')"  data-id="{{ object.id}}" data-name="{{ object}}"><a class="dropdown-item" >Delete</a></li>
+												
+													{% endif %}
+													{% endif %}
+													<li class="dropdown dropend">
+														<a class="dropdown-item dropdown-toggle" href="#" id="multilevelDropdownMenu1" data-bs-toggle="dropdown" data-bs-auto-close="false" aria-haspopup="true" aria-expanded="false">Record Audit</a>
+														<ul class="dropdown-menu" aria-labelledby="multilevelDropdownMenu1">
+															<li><a class="dropdown-item" >
+															
+																<b class="badge badge-light-success fw-bold">Created by</b><br>
+																{{ object.recordOwner.full_name}} <br>
+																{{ object.recordOwner.email}}
+																
+																{% if  object.update_by %}
+																<br>
+																<b class="badge badge-light-danger fw-bold">Updated by</b><br>
+																{{ object.update_by.full_name}} <br>
+																{{ object.update_by.email}}
+																{% endif %}
+															
+																{% if  object.billing_approved_time %}
+																<br>
+															   <b class="badge badge-light-success fw-bold">Billing Approved Time</b><br>
+																{{ object.billing_approved_time}} <br>
+																{% endif %}
+																
+																{% if  object.billing_approved_by %}
+																<br>
+																<b class="badge badge-light-danger fw-bold">Billing approved by</b><br>
+																{{ object.billing_approved_by.full_name}} <br>
+																{{ object.billing_approved_by.email}}
+																{% endif %}
+																
+																{% if  object.billing_reverse_by %}
+																<br>
+																<b class="badge badge-light-danger fw-bold">Billing approval reversed by</b><br>
+																{{ object.billing_reverse_by.full_name}} <br>
+																{{ object.billing_reverse_by.email}}
+																{% endif %}
+															
+															 
+															</a></li>
+														</ul>
+													</li>
+												</ul>
+											</div>
+   
+										</td>
+										
+											
+										</tr>
+										 {% endfor %}
+									</tbody>
+								</table>
+							</div>
+						
+			        
+			        </div>
+					<!--end::Card body-->
+
+					<!--begin::Card footer-->
+					<div  class="card-footer d-flex justify-content-end py-6">
+					
+
+							 
+						<input style="display:none"type="text" value="{% if embryologist_Form.instance.recordOwner %} {{embryologist_Form.instance.recordOwner.id}} {% else %} {{request.user.id}} {% endif%}" id="recordOwner_embryologist"name="recordOwner_embryologist"/> 
+															
+							 {% if encounter_object.recordOwner.id == request.user.id %}
+							 
+							
+						<button {% if not encounter_object.status %} disabled {% endif %} type="bottom" id="save_embryologist" class="btn btn-primary">Save Changes</button>
+							
+							 {% endif %}
+					</div>
+					<!--end::Card footer-->
+				</div>
+				<!--end::Card-->
+			</div>
+			<div class="tab-pane fade 
+			{% if not view_Vital and not view_Encounters and not view_Lab and not view_Pharma and not view_Treatment and not view_nurse_note and not view_doctor_note and view_invoice and not view_nurse_note %}
+			show active
+			{% endif %}" id="kt_tab_pane_6" role="tabpanel">
+		
+			<!--begin::Form-->
+			
+				<!--begin::Card-->
+				<div class="card">
+					<!--begin::Card header-->
+					<div class="card-header">
+						<!--begin::Card header-->
+						<div class="card-title fs-3 fw-bold"> Billing Invoice</div>
+						<!--end::Card header-->
+					</div>
+					<!--end::Card header-->
+
+					<!--begin::Card body-->
+					<div class="card-body">
+			
+											<table id="fresh-table"
+							       data-toggle="table"
+							       class="table"
+							       id="table"
+							       data-toolbar="#toolbar2"
+							       data-search="true"
+							       data-show-toggle="true"
+							       data-show-fullscreen="true"
+							       data-show-columns="true"
+							       data-show-columns-toggle-all="true"
+							       data-show-export="true"
+							       data-click-to-select="true"
+							       data-minimum-count-columns="2"
+							       data-pagination="true"
+							       data-id-field="id"
+							       data-toolbar="#toolbar2"
+							       data-page-list="[10, 25, 50, 100, all]"
+							       data-show-footer="true"
+							       data-sort-priority='[{"sortName": "id","sortOrder":"desc"},{"sortName":"name","sortOrder":"desc"}]'
+							       data-show-multi-sort="true"
+							       data-show-jump-to="true"
+							       data-response-handler="responseHandler"
+							       data-resizable="true"
+							       data-advanced-search="true"
+							       data-id-table="advancedTable"
+							       data-show-print="true"
+							       data-filter-control="true"
+								   data-show-footer="true"
+							       data-show-search-clear-button="true">
+								<thead>
+									<th  data-field="#">#</th>
+									<th  data-field="td"
+									data-filter-control="input"data-sortable="true">Inoice #	</th>
+									
+									<th scope="col" data-field="MR" data-sortable="true"
+									>Total Amount</th>
+									<th scope="col" data-field="Photo">Amount Paid</th>
+									<th scope="col" data-field="Encounter"
+									    >Balance</th>
+									<th scope="col" data-field="Date"
+									    >Date Created</th> 
+									<th scope="col" data-field="Due"
+									    >Date Due</th>	
+									<th scope="col" data-field="View"
+									    >View</th>							
+						        								
+								
+								</thead>
+								<tbody>
+								 {% for object in billing_inoices %}
+								
+									<tr class='clickable-row'>
+									  <td> {{ forloop.counter}} </td>
+									   <td>
+									   {{ object.Invoice_number }}
+										</td>
+									   	<td> 
+										
+										{{ object.get_tatal_price }} 
+										</td>
+										
+										<td >
+										{{ object.get_amount_paid }}
+											
+										</td>
+										<td>
+										{{ object.get_balance }}
+										</td>
+										<td>
+										{{ object.datestamp }}
+										</td>
+										<td>
+										<b id="due_{{ object.id}}"> {{ object.date_due }}</b>
+										
+										</td>
+										<td>
+									        {% if object.drug_Sale  %}
+										   <a target="_blank"style="margin-top:5% " class="btn btn-light-primary" 
+                                                 href="{% url 'invoice_pdf_2' object.drug_Sale.id 'second'%}"  title="View"
+                                                data-toggle="tooltip">View Invoice 
+											</a>
+											{% elif object.order and not object.encounter %}
+										   <a target="_blank"style="margin-top:5% " class="btn btn-light-primary" 
+                                                 href="{% url 'invoice_pdf_3' object.order.id 'second' %}"  title="View"
+                                                data-toggle="tooltip">View Invoice 
+											</a>
+											{% elif object.order  %}
+										   <a target="_blank"style="margin-top:5% " class="btn btn-light-primary" 
+                                                 href="{% url 'invoice_pdf_4' object.order.id %}"  title="View"
+                                                data-toggle="tooltip">View Invoice
+											</a>
+											{% elif object.encounter  %}
+											<a target="_blank"style="margin-top:5% " class="btn btn-light-primary" 
+                                                 href="{% url 'invoice_pdf' object.encounter.id object.patient.id 'second'%}"  title="View"
+                                                data-toggle="tooltip">View Invoice 
+											</a>
+											
+											</a> 
+											
+											   {% else  %}
+											 {% endif  %}
+										</td>
+											
+										
+										</tr>
+									
+										 {% endfor %}
+									</tbody>
+								</table>
+							
+			
+			
+			
+			         </div>
+					<!--end::Card body-->
+
+					<!--begin::Card footer-->
+					
+					<!--end::Card footer-->
+				</div>
+				
+			</div>
+			<div class="tab-pane fade 
+			{% if not view_Vital and not view_Encounters and not view_Lab and not view_Pharma and not view_Treatment and not view_nurse_note and not view_doctor_note and not view_invoice and view_nurse_note %}
+			show active
+			{% endif %}" id="kt_tab_pane_7" role="tabpanel">
+		 <!--begin::Form-->
+			
+				<!--begin::Card-->
+				<div class="card">
+					<!--begin::Card header-->
+					<div class="card-header">
+						<!--begin::Card header-->
+						<div class="card-title fs-3 fw-bold"> Nurse's Notes </div>
+						<!--end::Card header-->
+					</div>
+					<!--end::Card header-->
+
+					<!--begin::Card body-->
+					<div class="card-body">
+			<div class="table-responsive">
+							<div id="toolbaru"
+							     class="select">
+								<select class="form-control">
+									<option value="">Export Basic</option>
+									<option value="all">Export All</option>
+									<option value="selected">Export Selected</option>
+								</select>
+							</div>
+							<table id="fresh-table"
+							       data-toggle="table"
+							       class="table"
+							       id="table"
+							       data-toolbar="#toolbaru"
+							       data-search="true"
+							       data-show-toggle="true"
+							       data-show-fullscreen="true"
+							       data-show-columns="true"
+							       data-show-columns-toggle-all="true"
+							       data-show-export="true"
+							       data-click-to-select="true"
+							       data-minimum-count-columns="2"
+							       data-pagination="true"
+							       data-id-field="id"
+							       data-toolbar="#toolbar"
+							       data-page-list="[10, 25, 50, 100, all]"
+							       data-show-footer="true"
+							       data-sort-priority='[{"sortName": "id","sortOrder":"desc"},{"sortName":"name","sortOrder":"desc"}]'
+							       data-show-multi-sort="true"
+							       data-show-jump-to="true"
+							       data-response-handler="responseHandler"
+							       data-resizable="true"
+							       data-advanced-search="true"
+							       data-id-table="advancedTable"
+							       data-show-print="true"
+							       data-filter-control="true"
+								   data-show-footer="true"
+							       data-show-search-clear-button="true">
+								<thead> 				
+								  <th  data-field="td">---	</th>
+									 
+									 
+									<th scope="col" data-field="Ultrasound" data-sortable="true"
+									data-filter-control="input">Title</th>
+									<th scope="col" data-field="Name"
+									    data-filter-control="input"
+									    data-sortable="true">Patient</th>
+								
+									
+									<th scope="col" data-field="Medical"
+									    data-filter-control="input"
+									    data-sortable="true">Nurse</th>
+									<th scope="col" data-field="date_ordered">Note Date</th>
+									<th scope="col" data-field="Action">Action</th>
+								</thead>
+								<tbody>
+								 {% for object in nurse_note %}
+									<tr id="tr_{{object.id}}" class='clickable-row'>
+									   
+										<td>
+											<a  class="btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary" 
+                                                    target="_blank" href="{% url 'nurse_note_pdf' object.id  %}"  title="View Report"
+												   data-toggle="tooltip">
+												   View Note
+												   
+											</a>
+
+										</td>
+										<td>{{  object.title }} </td>
+										<td>{% if object.patient %}{{  object.patient }} {%else%}  {{  object.name_patient }} <br> {{  object.telephone_patient}}  <br> {{  object.address_patient}}{% endif %}</td>
+										
+										<td>
+										
+										{{ object.recordOwner.full_name}} <br>
+										{{ object.recordOwner.email}}
+										
+										</td>
+										<td>{% if object.note_date %} {{ object.note_date }} {% else %}{{ object.created_at }} {% endif %} </td>
+										<td>
+										
+										
+										   <div class="dropdown">
+												<a class="btn btn-light btn-active-light-primary btn-flex btn-center btn-sm  dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" data-bs-auto-close="false" aria-expanded="false"> Action </a>
+												<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+												
+													{% if  object.recordOwner.id == request.user.id %}
+													<li><a class="dropdown-item" href="{% url 'nurse_note_update' object.id  %}">Edit</a></li>
+													
+													<li class="deleteButton" onclick="deleteData('{{ object.id}}', '{{ object}}')"  data-id="{{ object.id}}" data-name="{{ object}}"><a class="dropdown-item" >Delete</a></li>
+							
+													{% endif %}
+													<li class="dropdown dropend">
+														<a class="dropdown-item dropdown-toggle" href="#" id="multilevelDropdownMenu1" data-bs-toggle="dropdown" data-bs-auto-close="false" aria-haspopup="true" aria-expanded="false">Record Audit</a>
+														<ul class="dropdown-menu" aria-labelledby="multilevelDropdownMenu1">
+															<li><a class="dropdown-item" >
+															
+																<b class="badge badge-light-success fw-bold">Created by</b><br>
+																{{ object.recordOwner.full_name}} <br>
+																{{ object.recordOwner.email}}
+																
+																{% if  object.update_by %}
+																<br>
+																<b class="badge badge-light-danger fw-bold">Updated by</b><br>
+																{{ object.update_by.full_name}} <br>
+																{{ object.update_by.email}}
+																{% endif %}
+																
+																{% if  object.created_at %}
+																<br>
+																<b class="badge badge-light-danger fw-bold">Created at </b><br>
+																{{ object.created_at}} 
+																{% endif %}
+															
+															</a></li>
+														</ul>
+													</li>
+												</ul>
+											</div>
+   
+   
+										</td>
+										
+										</tr>
+										 {% endfor %}
+									</tbody>
+								</table>
+							</div>
+						
+			</div>
+					<!--end::Card body-->
+
+					<!--begin::Card footer-->
+					<div class="card-footer d-flex justify-content-end py-6">
+					
+
+							
+					</div>
+					<!--end::Card footer-->
+				</div>
+				<!--end::Card-->
+			
+			<!--end:Form--> 
+		 
+		 
+			</div>
+			
+			<div class="tab-pane fade 
+			{% if not view_Vital and not view_Encounters and not view_Lab and not view_Pharma and not view_Treatment and not view_nurse_note and not view_nurse_note and not view_invoice and view_doctor_note %}
+			show active
+			{% endif %}" id="kt_tab_pane_8" role="tabpanel">
+		
+				<!--begin::Card-->
+			<div class="card">
+					<!--begin::Card header-->
+					<div class="card-header">
+						<!--begin::Card header-->
+						<div class="card-title fs-3 fw-bold">  Doctor's Notes </div>
+						<!--end::Card header-->
+					</div>
+					<!--end::Card header-->
+
+					<!--begin::Card body-->
+					<div class="card-body">
+					<div class="table-responsive">
+							<div id="toolbarb"
+							     class="select">
+								<select class="form-control">
+									<option value="">Export Basic</option>
+									<option value="all">Export All</option>
+									<option value="selected">Export Selected</option>
+								</select>
+							</div>
+							<table id="fresh-table"
+							       data-toggle="table"
+							       class="table"
+							       id="table"
+							       data-toolbar="#toolbarb"
+							       data-search="true"
+							       data-show-toggle="true"
+							       data-show-fullscreen="true"
+							       data-show-columns="true"
+							       data-show-columns-toggle-all="true"
+							       data-show-export="true"
+							       data-click-to-select="true"
+							       data-minimum-count-columns="2"
+							       data-pagination="true"
+							       data-id-field="id"
+							       data-toolbar="#toolbar"
+							       data-page-list="[10, 25, 50, 100, all]"
+							       data-show-footer="true"
+							       data-sort-priority='[{"sortName": "id","sortOrder":"desc"},{"sortName":"name","sortOrder":"desc"}]'
+							       data-show-multi-sort="true"
+							       data-show-jump-to="true"
+							       data-response-handler="responseHandler"
+							       data-resizable="true"
+							       data-advanced-search="true"
+							       data-id-table="advancedTable"
+							       data-show-print="true"
+							       data-filter-control="true"
+								   data-show-footer="true"
+							       data-show-search-clear-button="true">
+								<thead> 				
+								  <th  data-field="td">---	</th>
+									 
+									 
+									<th scope="col" data-field="Ultrasound" data-sortable="true"
+									data-filter-control="input">Title</th>
+									<th scope="col" data-field="Name"
+									    data-filter-control="input"
+									    data-sortable="true">Patient</th>
+								
+									
+									<th scope="col" data-field="Medical"
+									    data-filter-control="input"
+									    data-sortable="true">Doctor</th>
+									<th scope="col" data-field="date_ordered">Note Date</th>
+									<th scope="col" data-field="Action">Action</th>
+								</thead>
+								<tbody>
+								 {% for object in doctor_note %}
+									<tr id="tr_{{object.id}}" class='clickable-row'>
+									   
+										<td>
+											<a  class="btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary" 
+                                                    target="_blank" href="{% url 'doctor_note_pdf' object.id  %}"  title="View Report"
+												   data-toggle="tooltip">
+												   View Note
+												   
+											</a>
+
+										</td>
+										<td>{{  object.title }} </td>
+										<td>{% if object.patient %}{{  object.patient }} {%else%}  {{  object.name_patient }} <br> {{  object.telephone_patient}}  <br> {{  object.address_patient}}{% endif %}</td>
+										
+										<td>
+										
+										{{ object.recordOwner.full_name}} <br>
+										{{ object.recordOwner.email}}
+										
+										</td>
+										<td>{% if object.note_date %} {{ object.note_date }} {% else %}{{ object.created_at }} {% endif %}   </td>
+										<td>
+										
+										
+										   <div class="dropdown">
+												<a class="btn btn-light btn-active-light-primary btn-flex btn-center btn-sm  dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" data-bs-auto-close="false" aria-expanded="false"> Action </a>
+												<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+												
+													{% if  object.recordOwner.id == request.user.id %}
+													<li><a class="dropdown-item" href="{% url 'doctor_note_update' object.id  %}">Edit</a></li>
+													
+													<li class="deleteButton" onclick="deleteData('{{ object.id}}', '{{ object}}')"  data-id="{{ object.id}}" data-name="{{ object}}"><a class="dropdown-item" >Delete</a></li>
+							
+													{% endif %}
+													<li class="dropdown dropend">
+														<a class="dropdown-item dropdown-toggle" href="#" id="multilevelDropdownMenu1" data-bs-toggle="dropdown" data-bs-auto-close="false" aria-haspopup="true" aria-expanded="false">Record Audit</a>
+														<ul class="dropdown-menu" aria-labelledby="multilevelDropdownMenu1">
+															<li><a class="dropdown-item" >
+															
+																<b class="badge badge-light-success fw-bold">Created by</b><br>
+																{{ object.recordOwner.full_name}} <br>
+																{{ object.recordOwner.email}}
+																
+																{% if  object.update_by %}
+																<br>
+																<b class="badge badge-light-danger fw-bold">Updated by</b><br>
+																{{ object.update_by.full_name}} <br>
+																{{ object.update_by.email}}
+																{% endif %}
+																{% if  object.created_at %}
+																<br>
+																<b class="badge badge-light-danger fw-bold">Created at </b><br>
+																{{ object.created_at}} 
+																{% endif %}
+															
+															</a></li>
+														</ul>
+													</li>
+												</ul>
+											</div>
+   
+   
+										</td>
+										
+										</tr>
+										 {% endfor %}
+									</tbody>
+								</table>
+							</div>
+						
+			        </div>
+					<!--end::Card body-->
+
+					<!--begin::Card footer-->
+					<div  class="card-footer d-flex justify-content-end py-6">
+					
+
+						
+					</div>
+					<!--end::Card footer-->
+				</div>
+				<!--end::Card-->
+			</div>
+		</div>
+		
+    </div>
+</div>
+	  <!--begin::Modal - Assign Modal -->
+
+  <!--begin::Modal - New Product-->
+<div class="modal fade" id="myModalImage"    aria-hidden="true">
+	<!--begin::Modal dialog-->
+	<div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
+		<!--begin::Modal content-->
+		<div class="modal-content">
+			<!--begin::Modal header-->
+			<div class="modal-header border-0 ">
+				<!--begin::Edit-->
+				  <h5 class="modal-title" id="exampleModalLabel">Prescrition</h5>
+				<!--begin::Close-->
+				<div class="btn btn-icon btn-sm btn-color-gray-500 btn-active-icon-primary" data-bs-toggle="tooltip" title="Hide Photo" data-bs-dismiss="modal">
+					<!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+					<span class="svg-icon svg-icon-1">
+						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor" />
+							<rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
+						</svg>
+					</span>
+					<!--end::Svg Icon-->
+				</div>
+				<!--end::Close-->
+			</div>
+			<!--end::Modal header-->
+			<!--begin::Modal body-->
+			<div class="modal-body pt-0 pb-20 px-lg-17">
+				
+			
+			<div class="table-responsive">
+			<table class="table table-rounded table-row-bordered border gy-7 gs-7">
+				<thead>
+					<tr class="fw-semibold fs-6 text-gray-800 border-bottom-2 border-gray-200">
+					<th>Name</th>
+					<th>Qty</th>
+					<th>Status</th>
+				</tr>
+			</thead>
+			<tbody id="phamarcy_data_d">
+				
+					
+				<!-- and so on... -->
+			</tbody>
+		  </table>
+		  </div>
+				
+				
+				
+
+			</div>
+				<!--end::Row-->
+			</div>
+			<!--end::Modal body-->
+		</div>
+	</div>
+	<!--end::Modal Vital Sign-->
+
+
+				  <!--begin::Modal - Assign Modal -->
+<div class="modal fade"     id="vital_s_modal" aria-hidden="true" data-bs-backdrop="static">
+	<!--begin::Modal dialog-->
+	<div class="modal-dialog modal-dialog-centered ">
+		<!--begin::Modal content-->
+		<div class="modal-content">
+			<!--begin::Modal header-->
+			<div class="modal-header border-0 ">
+				<!--begin::Edit-->
+				  <h5  class="modal-title">Add New Vital Sign</h5>
+				<!--begin::Close-->
+				<div class="btn btn-icon btn-sm btn-color-gray-500 btn-active-icon-primary" data-bs-toggle="tooltip" title="Close Modal" data-bs-dismiss="modal">
+					<!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+					<span class="svg-icon svg-icon-1">
+						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor" />
+							<rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
+						</svg>
+					</span>
+					<!--end::Svg Icon-->
+				</div>
+				<!--end::Close-->
+			</div>
+			<!--end::Modal header-->
+			<!--begin::Modal body-->
+			<div class="modal-body pt-0 pb-20 px-lg-17">
+                <form>
+		
+		       {% csrf_token %} 
+		
+		
+		
+		<div class="form-group bmd-form-group">
+			<label class="fs-6 fw-semibold mb-2" >Patient
+				<span class="text-danger">*</span>
+			</label>
+			<input type="text"  value="{{object}}" id="p_name_vs" class="form-control form-control-solid"style="cursor:default" disabled>
+			
+		</div>				
+		<div class="form-group bmd-form-group">
+			<label class="fs-6 fw-semibold mb-2">Created By
+				<span class="text-danger">*</span>
+			</label>
+			<input type="text" value="{{request.user.full_name}}"  id="b_name_Vs" class="form-control form-control-solid"style="cursor:default" disabled>
+			
+
+		</div>
+		<div class="form-group bmd-form-group">
+			<label class="fs-6 fw-semibold mb-2">Date
+				<span class="text-danger">*</span>
+			</label>
+			<input type="date" id='datefield_vs' name="date"  class="form-control form-control-solid">
+			
+		</div>
+			<div class="form-group">
+			
+			<label class="fs-6 fw-semibold mb-2">  Ft  -</label>
+				<input type="text"    id="height_ft"   name="height_ft"   class="form-control form-control-solid">
+			</div>
+			<div class="form-group">
+				<label class="fs-6 fw-semibold mb-2">  In  -</label>
+				<input type="text"  id="height_in"  name="height_in"   class="form-control form-control-solid">
+			</div>
+			<div class="form-group">
+			<label class="fs-6 fw-semibold mb-2">  Weight  -</label>
+				<input type="text"    id="weight"  name="weight"   class="form-control form-control-solid">
+				
+			</div>
+			<div class="form-group">
+			<label class="fs-6 fw-semibold mb-2"> Pulse -</label>
+				<input type="text"    id="pulse"    name="pulse"   class="form-control form-control-solid">
+			
+			</div>
+			<div class="form-group">
+			<label class="fs-6 fw-semibold mb-2" > Blood Pressure -</label>
+				<input type="text"   id="blood_pressure" name="blood_pressure"   class="form-control form-control-solid">
+			 
+			</div>
+			<div class="form-group">
+			<label class="fs-6 fw-semibold mb-2" >Q2 Saturation -</label>
+				<input type="text"   id="saturation"   name="saturation"   class="form-control form-control-solid">
+			  
+			</div>
+			<div class="form-group">
+			<label class="fs-6 fw-semibold mb-2" > Q2 Flow Rate -</label>
+				<input type="text" id="flow_rate"   name="flow_rate"   class="form-control form-control-solid">
+				
+			</div>
+			<div class="form-group">
+			<label class="fs-6 fw-semibold mb-2" >Temperatue -</label>
+				<input type="text" id="temperatue" name="temperatue"   class="form-control form-control-solid">
+			
+			</div>
+			<div class="form-group">
+			<label class="fs-6 fw-semibold mb-2" >Respiratory Rate -</label>
+				<input type="text"  id="respiratory_rate" name="respiratory_rate" class="form-control form-control-solid">
+			  
+			</div>
+			<div class="form-group">
+			<label class="fs-6 fw-semibold mb-2" >BMI -</label>
+				<input type="text"  id="bmi"  name="bmi"   class="form-control form-control-solid">
+			 
+							
+			</div>
+			<div class="form-group">
+			<label class="fs-6 fw-semibold mb-2 required" >Reason for visit</label>
+			<textarea  name="extra_comment" cols="10" rows="10"  placeholder="Reason for visit" class="form-control form-control-solid text_Com_" id="id_extra_comment">
+				
+				</textarea>	
+			</div>
+			<input  type="hidden"  class="form-control form-control-solid" id="pk_vs" name="pk">
+			<!-- <input type="text" type="hidden" class="form-control form-control-solid" name="patient" id="patient"> -->
+		
+	  </div>
+	  
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+                <button data-id="{{object.id}}"id="save_vital_science"  type="button" class="btn btn-primary">Submit</button>
+            
+			
+			<input style="display:none"type="text" value="{{object.id}}" id="patient"name="patient"/>
+			</form>
+			</div>
+			
+            </div>
+			</div>
+			<!--end::Modal body-->
+		</div>
+
+
+<form>
+{% csrf_token %} 
+
+<input style="display:none"type="text" value="{{patient}}" id="patient"name="patient"/>
+
+<input style="display:none"type="text" value="{{encounter_id}}" id="encounter"name="encounter"/>
+</form>
+<!--end::Navbar-->
+
+  <script>
+
+ 
+ 
+ // Vital Signs
+let id_extra_comment;
+ClassicEditor
+    .create( document.querySelector( '#id_extra_comment' ) )
+    .then( newEditor => {
+        id_extra_comment = newEditor;
+        
+        // Now the addTextToEditor function is in the global scope
+    })
+    .catch( error => {
+        console.error( error );
+    }); 
+
+// Check if ClassicEditor instance is empty
+function isEditorEmpty(editor) {
+    const editorData = editor.getData().trim(); // Get and trim the content
+
+    return editorData === ''; // Return true if content is empty, false otherwise
+}
+
+
+document.getElementById("datefield_vs").value = new Date().toISOString().substr(0, 10);
+const save_vital_signs = document.querySelector('#save_vital_science');
+
+save_vital_signs.addEventListener("click", function() {
+
+	Swal.fire({
+        title: "Are you sure to save?",
+        text: "Saving would override any existing content",
+		icon: "warning",
+		showCancelButton: true,
+		buttonsStyling: false, 
+		confirmButtonText: "Yes, Save",
+		cancelButtonText: "No, cancel",
+		customClass: {
+			confirmButton: "btn fw-bold btn-danger",
+			cancelButton: "btn fw-bold btn-active-light-primary"
+		}
+	}).then((submit) => { 
+        if (submit) {
+		const isEmpty = isEditorEmpty(id_extra_comment);
+		 if (isEmpty) {
+		 Swal.fire({
+                title: 'Enter Reason for visit!',
+				icon: "error",
+				buttons: true,
+				dangerMode: true,
+            });
+		 } else {
+            var dataString = {
+               "height_ft": document.getElementById("height_ft").value,
+               "height_in": document.getElementById("height_in").value,
+               "weight": document.getElementById("weight").value,
+               "pulse": document.getElementById("pulse").value,
+               "blood_pressure": document.getElementById("blood_pressure").value,
+               "saturation": document.getElementById("saturation").value,
+               "flow_rate": document.getElementById("flow_rate").value,
+               "temperatue": document.getElementById("temperatue").value,
+               "respiratory_rate": document.getElementById("respiratory_rate").value,
+               "bmi": document.getElementById("bmi").value,
+              // "recordOwner": document.getElementById("recordOwner").value,
+               "csrfmiddlewaretoken": document.querySelector('[name="csrfmiddlewaretoken"]').value,
+			   "patient": document.querySelector('[name="patient"]').value,
+               "extra_comment": id_extra_comment.getData(),
+            };
+            
+            $.ajax({
+                type: "POST",
+                url: "/save_vital_sgins_without_encounter",
+                data: dataString,
+                success: function(data) {
+                    if (data.status === 'success') {
+                        Swal.fire({
+                            title: 'Saved successfully',
+                            icon: 'success'
+                        });
+						
+						document.getElementById('height_ft_div').innerHTML =document.getElementById("height_ft").value;
+						document.getElementById('height_in_div').innerHTML=document.getElementById("height_in").value;
+						document.getElementById('weight_div').innerHTML =document.getElementById("weight").value;
+						document.getElementById('pulse_div').innerHTML = document.getElementById("pulse").value;
+						document.getElementById('blood_pressure_div').innerHTML = document.getElementById("blood_pressure").value;
+						document.getElementById('saturation_div').innerHTML =document.getElementById("saturation").value;
+						document.getElementById('flow_rate_div').innerHTML = document.getElementById("flow_rate").value;
+						document.getElementById('temperatue_div').innerHTML = document.getElementById("temperatue").value;
+						document.getElementById('respiratory_rate_div').innerHTML = document.getElementById("respiratory_rate").value;
+						document.getElementById('bmi_div').innerHTML = document.getElementById("bmi").value;
+						document.getElementById('extra_comment_div').innerHTML = id_extra_comment.getData();
+						document.getElementById('current_Date_div').innerHTML = document.getElementById("datefield_vs").value;
+						$('#vital_s_modal').modal('hide');
+				   } else {
+                        Swal.fire({
+                            title: 'Error Saving!',
+                            text: 'Please try again',
+                            icon: 'error'
+                        });
+                    }
+                }   
+             }); 
+			
+			 
+			 } 
+          } else {
+            Swal.fire({
+                title: 'Your content is safe!'
+            });
+        }
+    });
+});
+  </script>
+
+
+{% endblock content %}
+{{ form.media.js }}
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <script>
+    $(document).ready(function() {
+      // Javascript method's body can be found in assets/js/demos.js
+      md.initDashboardPageCharts();
+
+    });
+  </script>
+
+{% endblock javascripts %}

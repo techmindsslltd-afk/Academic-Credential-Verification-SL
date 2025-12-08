@@ -1,0 +1,98 @@
+<!--begin:Menu item-->
+<div class="menu-item pt-5">
+    <!--begin:Menu content-->
+    <div class="menu-content">
+        <span class="menu-heading fw-bold text-uppercase fs-7">Institution Management</span>
+    </div>
+    <!--end:Menu content-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item me-5">
+    <!--begin:Menu link-->
+    <a href="{% url 'dashboard' %}" class="menu-link {% if 'dashboard' == segment %} active {% endif %}">
+        <span class="menu-icon">
+            <i style='opacity:0.3;' class='fas fa-tachometer-alt'></i>
+        </span>
+        <span class="menu-title">Dashboard</span>
+    </a>
+    <!--end:Menu link-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item me-5">
+    <!--begin:Menu link-->
+    <a href="{% url 'credential_create' %}" class="menu-link {% if 'issue-credentials' == segment %} active {% endif %}">
+        <span class="menu-icon">
+            <i style='opacity:0.3;' class='fas fa-certificate'></i>
+        </span>
+        <span class="menu-title">Issue Credentials</span>
+    </a>
+    <!--end:Menu link-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item me-5">
+    <!--begin:Menu link-->
+    <a href="{% url 'student_list' %}" class="menu-link {% if 'students' == segment %} active {% endif %}">
+        <span class="menu-icon">
+            <i style='opacity:0.3;' class='fas fa-user-graduate'></i>
+        </span>
+        <span class="menu-title">Students</span>
+    </a>
+    <!--end:Menu link-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item me-5">
+    <!--begin:Menu link-->
+    <a href="#" class="menu-link {% if 'verification-logs' == segment %} active {% endif %}">
+        <span class="menu-icon">
+            <i style='opacity:0.3;' class='fas fa-clipboard-list'></i>
+        </span>
+        <span class="menu-title">Verification Logs</span>
+    </a>
+    <!--end:Menu link-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item pt-5">
+    <!--begin:Menu content-->
+    <div class="menu-content">
+        <span class="menu-heading fw-bold text-uppercase fs-7">Account</span>
+    </div>
+    <!--end:Menu content-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item me-5">
+    <!--begin:Menu link-->
+    <a href="{% url 'profile' %}" class="menu-link {% if 'inst-profile' == segment %} active {% endif %}">
+        <span class="menu-icon">
+            <i style='opacity:0.3;' class='fas fa-user'></i>
+        </span>
+        <span class="menu-title">Profile</span>
+    </a>
+    <!--end:Menu link-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item me-5">
+    <!--begin:Menu link-->
+    <a href="#" class="menu-link {% if 'inst-settings' == segment %} active {% endif %}">
+        <span class="menu-icon">
+            <i style='opacity:0.3;' class='fas fa-cog'></i>
+        </span>
+        <span class="menu-title">Settings</span>
+    </a>
+    <!--end:Menu link-->
+</div>
+<!--end:Menu item-->
+

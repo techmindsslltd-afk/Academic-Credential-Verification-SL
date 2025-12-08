@@ -1,0 +1,278 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Contact Messages{% endblock %} 
+{% block titlePage %}Contact Messages Management {% endblock %} 
+
+{% block stylesheets %}
+<style>
+.status-badge {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-weight: 600;
+}
+.status-new {
+    background-color: #0d6efd;
+    color: white;
+}
+.status-read {
+    background-color: #6c757d;
+    color: white;
+}
+.status-replied {
+    background-color: #198754;
+    color: white;
+}
+.status-archived {
+    background-color: #dc3545;
+    color: white;
+}
+.tab-count {
+    background: rgba(255, 255, 255, 0.2);
+    padding: 0.25rem 0.6rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    margin-left: 0.5rem;
+}
+.nav-tabs .nav-link {
+    color: #6c757d;
+    border: none;
+    border-bottom: 3px solid transparent;
+    font-weight: 600;
+}
+.nav-tabs .nav-link.active {
+    color: #0d6efd;
+    border-bottom-color: #0d6efd;
+    background: none;
+}
+</style>
+{% endblock stylesheets %}
+
+{% block content %} 
+
+<div class="card">
+    <div class="card-header card-header-primary">
+        <div class="d-flex justify-content-between align-items-center flex-wrap">
+            <div>
+                <h4 class="card-title mb-2">
+                    <i class="fas fa-envelope"></i> Contact Messages
+                </h4>
+                <p class="card-category mb-0">Manage contact form submissions</p>
+            </div>
+            <div class="d-flex gap-2 align-items-center">
+                <span class="badge bg-primary badge-lg">
+                    <i class="fas fa-database me-1"></i> Total: {{ messages.count }}
+                </span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="card-body">
+        <!-- Status Tabs -->
+        <ul class="nav nav-tabs mb-4" id="statusTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <a class="nav-link active" href="?status=" onclick="filterByStatus('')">
+                    All Messages
+                </a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" href="?status=new" onclick="filterByStatus('new')">
+                    New <span class="tab-count">{{ new_count }}</span>
+                </a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" href="?status=read" onclick="filterByStatus('read')">
+                    Read <span class="tab-count">{{ read_count }}</span>
+                </a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" href="?status=replied" onclick="filterByStatus('replied')">
+                    Replied <span class="tab-count">{{ replied_count }}</span>
+                </a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a class="nav-link" href="?status=archived" onclick="filterByStatus('archived')">
+                    Archived <span class="tab-count">{{ archived_count }}</span>
+                </a>
+            </li>
+        </ul>
+
+        <!-- Messages Table -->
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Subject</th>
+                        <th>Interest</th>
+                        <th>Status</th>
+                        <th>Received</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for message in messages %}
+                    <tr>
+                        <td>{{ message.name }}</td>
+                        <td>
+                            <a href="mailto:{{ message.email }}">{{ message.email }}</a>
+                            {% if message.phone %}
+                            <br><small class="text-muted"><i class="fas fa-phone"></i> {{ message.phone }}</small>
+                            {% endif %}
+                        </td>
+                        <td>{{ message.subject }}</td>
+                        <td>
+                            {% if message.interest %}
+                                <span class="badge bg-info">{{ message.get_interest_display }}</span>
+                            {% else %}
+                                <span class="text-muted">-</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <span class="status-badge status-{{ message.status }}">
+                                {{ message.get_status_display }}
+                            </span>
+                        </td>
+                        <td>
+                            <small>{{ message.created_at|date:"M d, Y" }}</small>
+                            <br><small class="text-muted">{{ message.created_at|date:"h:i A" }}</small>
+                        </td>
+                        <td>
+                            <div class="dropdown">
+                                <a class="btn btn-light btn-active-light-primary btn-sm dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                                    Actions
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="{% url 'contact_message_detail' message.pk %}">
+                                        <i class="fas fa-eye"></i> View
+                                    </a></li>
+                                    
+                                    {% if message.status == 'new' %}
+                                    <li><a class="dropdown-item" href="#" onclick="updateStatus({{ message.pk }}, 'read'); return false;">
+                                        <i class="fas fa-check"></i> Mark as Read
+                                    </a></li>
+                                    {% endif %}
+                                    
+                                    {% if message.status != 'replied' %}
+                                    <li><a class="dropdown-item" href="#" onclick="updateStatus({{ message.pk }}, 'replied'); return false;">
+                                        <i class="fas fa-reply"></i> Mark as Replied
+                                    </a></li>
+                                    {% endif %}
+                                    
+                                    {% if message.status != 'archived' %}
+                                    <li><a class="dropdown-item" href="#" onclick="updateStatus({{ message.pk }}, 'archived'); return false;">
+                                        <i class="fas fa-archive"></i> Archive
+                                    </a></li>
+                                    {% endif %}
+                                    
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item text-danger" href="#" onclick="deleteMessage({{ message.pk }}, '{{ message.name }}'); return false;">
+                                        <i class="fas fa-trash"></i> Delete
+                                    </a></li>
+                                </ul>
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-5">
+                            <i class="fas fa-inbox fa-3x mb-3"></i>
+                            <p>No contact messages found</p>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+function filterByStatus(status) {
+    window.location.href = '?status=' + status;
+}
+
+function updateStatus(messageId, status) {
+    Swal.fire({
+        text: "Update message status?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, update!",
+        cancelButtonText: "No, cancel",
+        customClass: {
+            confirmButton: "btn fw-bold btn-danger",
+            cancelButton: "btn fw-bold btn-active-light-primary"
+        }
+    }).then(function (result) {
+        if (result.value) {
+            var formData = new FormData();
+            formData.append('status', status);
+            formData.append('csrfmiddlewaretoken', document.querySelector('[name="csrfmiddlewaretoken"]').value);
+            
+            fetch('/admin/contact-messages/' + messageId + '/update-status/', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    Swal.fire({
+                        text: data.message,
+                        icon: "success",
+                        buttonsStyling: false,
+                        confirmButtonText: "Ok!",
+                        customClass: {
+                            confirmButton: "btn fw-bold btn-primary"
+                        }
+                    }).then(() => location.reload());
+                } else {
+                    Swal.fire("Error!", data.message, "error");
+                }
+            });
+        }
+    });
+}
+
+function deleteMessage(messageId, name) {
+    Swal.fire({
+        text: "Are you sure you want to delete " + name + "?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete!",
+        cancelButtonText: "No, cancel",
+        customClass: {
+            confirmButton: "btn fw-bold btn-danger",
+            cancelButton: "btn fw-bold btn-active-light-primary"
+        }
+    }).then(function (result) {
+        if (result.value) {
+            var formData = new FormData();
+            formData.append('csrfmiddlewaretoken', document.querySelector('[name="csrfmiddlewaretoken"]').value);
+            
+            fetch('/admin/contact-messages/' + messageId + '/delete/', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    Swal.fire({
+                        text: data.message,
+                        icon: "success",
+                        buttonsStyling: false,
+                        confirmButtonText: "Ok!",
+                        customClass: {
+                            confirmButton: "btn fw-bold btn-primary"
+                        }
+                    }).then(() => location.reload());
+                } else {
+                    Swal.fire("Error!", data.message, "error");
+                }
+            });
+        }
+    });
+}
+</script>
+
+{% endblock content %}

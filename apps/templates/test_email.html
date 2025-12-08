@@ -1,0 +1,52 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}Test Email System{% endblock %}
+
+{% block content %}
+<div class="container-fluid px-4 py-4">
+    <div class="card">
+        <div class="card-header">
+            <h3>Test Email System</h3>
+        </div>
+        <div class="card-body">
+            <p>Click the button below to test the email system:</p>
+            <button id="testEmailBtn" class="btn btn-primary">Test Email System</button>
+            <div id="result" class="mt-3"></div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('testEmailBtn').addEventListener('click', function() {
+    const btn = this;
+    const result = document.getElementById('result');
+    
+    btn.disabled = true;
+    btn.textContent = 'Testing...';
+    result.innerHTML = '<div class="alert alert-info">Testing email system...</div>';
+    
+    fetch('/admin/test-email/', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name="csrfmiddlewaretoken"]').value,
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            result.innerHTML = '<div class="alert alert-success">' + data.message + '</div>';
+        } else {
+            result.innerHTML = '<div class="alert alert-danger">' + data.message + '</div>';
+        }
+    })
+    .catch(error => {
+        result.innerHTML = '<div class="alert alert-danger">Error: ' + error.message + '</div>';
+    })
+    .finally(() => {
+        btn.disabled = false;
+        btn.textContent = 'Test Email System';
+    });
+});
+</script>
+{% endblock %}

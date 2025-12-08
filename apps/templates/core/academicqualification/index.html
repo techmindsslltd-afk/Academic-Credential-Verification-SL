@@ -1,0 +1,219 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Academic Qualification {% endblock %} 
+{% block titlePage %} <p> Academic Qualification </p>{% endblock %} 
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %} 
+{% load static %}
+				<div class="card">
+					<div class="card-header card-header-primary card-header-icon">
+						
+						<h4 class="card-title">Academic Qualification</h4>
+						<div class="card-toolbar">
+							<a href='{% url "create_AQ" %}' class="btn btn-flex btn-primary" data-kt-calendar="add">
+							<!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
+							<span class="svg-icon svg-icon-2">
+								<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="currentColor" />
+									<rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="currentColor" />
+								</svg>
+							</span>
+							<!--end::Svg Icon-->Add New</a>
+						</div>
+					</div>
+					<div class="card-body">
+						
+						<div class="example_wrapper">
+							<div id="toolbar"
+							     class="select">
+								<select class="form-control">
+									<option value="">Export Basic</option>
+									<option value="all">Export All</option>
+									<option value="selected">Export Selected</option>
+								</select>
+							</div>
+							<table id="fresh-table"
+							       data-toggle="table"
+							       class="table"
+							       id="table"
+							       data-toolbar="#toolbar"
+							       data-search="true"
+							       data-show-toggle="true"
+							       data-show-fullscreen="true"
+							       data-show-columns="true"
+							       data-show-columns-toggle-all="true"
+							       data-show-export="true"
+							       data-click-to-select="true"
+							       data-minimum-count-columns="2"
+							       data-pagination="true"
+							       data-id-field="id"
+							       data-toolbar="#toolbar"
+							       data-page-list="[10, 25, 50, 100, all]"
+							       data-show-footer="true"
+							       data-sort-priority='[{"sortName": "id","sortOrder":"desc"},{"sortName":"name","sortOrder":"desc"}]'
+							       data-show-multi-sort="true"
+							       data-show-jump-to="true"
+							       data-response-handler="responseHandler"
+							       data-resizable="true"
+							       data-advanced-search="true"
+							       data-id-table="advancedTable"
+							       data-show-print="true"
+							       data-filter-control="true"
+								   data-show-footer="true"
+							       data-show-search-clear-button="true">
+								<thead>
+									<th scope="col" data-field="Name"
+									    data-filter-control="input"
+									    data-sortable="true">Name</th>
+									<th scope="col" data-field="Prefix">Abbreviations</th>	
+									<th scope="col" data-field="Level">Level</th>	
+									<th scope="col" data-field="Status">Status</th>	
+						        								
+									<th scope="col" data-field="action"
+									    data-print-ignore="true">Action</th>
+								
+								</thead>
+								<tbody>
+								 {% for object in objects %}
+									<tr class='clickable-row' id="tr_{{object.id}}">
+									   
+										<td>{{ object.name }} </td>
+										<td>{{ object.prifix }} </td>
+										<td>{{ object.level }} </td>
+										<td> 
+										{% if object.status %}
+										 <b class="badge badge-light-success fw-bold">Active</b>
+										{% else %}
+										
+										<b class="badge badge-light-danger fw-bold">Inactive</b>
+										{% endif %}
+										</td>
+										
+										<td>
+											   <div class="dropdown">
+												<a class="btn btn-light btn-active-light-primary btn-flex btn-center btn-sm  dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" data-bs-auto-close="false" aria-expanded="false"> Action </a>
+												<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+													<li><a class="dropdown-item" href="{% url 'edit_AQ' object.id  %}">Edit</a></li>
+													
+													<li class="deleteButton" onclick="deleteData('{{ object.id}}', '{{ object}}')"  data-id="{{ object.id}}" data-name="{{ object}}"><a class="dropdown-item" >Delete</a></li>
+													
+													<li class="dropdown dropend">
+														<a class="dropdown-item dropdown-toggle" href="#" id="multilevelDropdownMenu1" data-bs-toggle="dropdown" data-bs-auto-close="false" aria-haspopup="true" aria-expanded="false">Record Audit</a>
+														<ul class="dropdown-menu" aria-labelledby="multilevelDropdownMenu1">
+															<li><a class="dropdown-item" >
+															
+																<b class="badge badge-light-success fw-bold">Created by</b><br>
+																{{ object.recordOwner.full_name}} <br>
+																{{ object.recordOwner.email}}
+																
+																{% if  object.update_by %}
+																<br>
+																<b class="badge badge-light-danger fw-bold">Updated by</b><br>
+																{{ object.update_by.full_name}} <br>
+																{{ object.update_by.email}}
+																{% endif %}
+															
+															
+															 
+															</a></li>
+														</ul>
+													</li>
+												</ul>
+											</div>
+																						   
+										  </td>
+										</tr>
+										 {% endfor %}
+									</tbody>
+								</table>
+							</div>
+						</div>
+						<!-- end content-->
+					</div>
+					<!--  end card  -->
+
+				
+<form method="post" action="">
+    {% csrf_token %}
+   
+</form>
+<script>
+
+
+// Delete button on click
+
+// Delete button on click
+function deleteData(dataId, userName) {
+	
+	var row = document.getElementById('tr_'+dataId);
+
+	// SweetAlert2 pop up --- official docs reference: https://sweetalert2.github.io/
+	Swal.fire({
+		text: "Are you sure you want to delete " + userName + "?",
+		icon: "warning",
+		showCancelButton: true,
+		buttonsStyling: false, 
+		confirmButtonText: "Yes, delete!",
+		cancelButtonText: "No, cancel",
+		customClass: {
+			confirmButton: "btn fw-bold btn-danger",
+			cancelButton: "btn fw-bold btn-active-light-primary"
+		}
+	}).then(function (result) {
+		if (result.value) {
+			var data = {
+				"id": dataId,
+				"csrfmiddlewaretoken": document.querySelector('[name="csrfmiddlewaretoken"]').value,
+			};
+
+			$.ajax({
+				type: "DELETE",
+				url:  "{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/corecode/destroy_AQ/" + dataId,
+			
+				data: data,
+				success: function(deleted) {
+					if (deleted.status === "True") {
+						Swal.fire({
+							text: "You have deleted " + userName + "!.",
+							icon: "success",
+							buttonsStyling: false,
+							confirmButtonText: "Ok, got it!",
+							customClass: {
+								confirmButton: "btn fw-bold btn-primary",
+							}
+						}).then(function () {
+							$("#tr_" + dataId).remove();
+						});
+					} else {
+						Swal.fire("Error deleting!", "You are not permitted to delete", "error");
+					}
+				},
+				error: function() {
+					Swal.fire("Error deleting!", "An error occurred while deleting", "error");
+				}
+			});
+		} else if (result.dismiss === 'cancel') {
+			Swal.fire({
+				text: userName + " was not deleted.",
+				icon: "error",
+				buttonsStyling: false,
+				confirmButtonText: "Ok, got it!",
+				customClass: {
+					confirmButton: "btn fw-bold btn-primary",
+				}
+			});
+		}
+	});
+};
+
+</script>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+
+{% endblock javascripts %}

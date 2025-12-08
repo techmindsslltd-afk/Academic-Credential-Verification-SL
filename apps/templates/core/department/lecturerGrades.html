@@ -1,0 +1,370 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}  Submitted Grades {% endblock %} 
+{% block titlePage %} Submitted Grades {% endblock %} 
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %} 
+
+<div class="content">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card">
+					<div class="card-header card-header-primary card-header-icon">
+						
+						<h4 class="card-title">Submitted Grades {{request.user.faculty}}</h4>
+					</div>
+					<div class="card-body">
+						<div class="row">
+						<div class="col-12 text-right">
+							<ul class="nav nav-tabs nav-pills nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bold">
+									<!-- Nav item -->
+									<li class="nav-item mt-2">
+										<a class="nav-link {% if objects  %} active {% else %}{% if not objects_3 and not objects_2 %} active show {% endif %}{% endif %} btn btn-active-light btn-color-gray-600 btn-active-color-primary rounded-bottom-0" data-bs-toggle="tab" href="#kt_tab_pane_1">
+											Waiting on Dean's Approval
+										</a>
+									</li>
+									
+									<!-- Nav item -->
+									<li class="nav-item mt-2">
+										<a class="nav-link {% if not objects and objects_2 %} active {% endif %} btn btn-active-light btn-color-gray-600 btn-active-color-primary rounded-bottom-0" data-bs-toggle="tab" href="#kt_tab_pane_2">
+											Approved Grades - Active Session
+										</a>
+									</li>
+									
+									<!-- Nav item -->
+									<li class="nav-item mt-2">
+										<a class="nav-link {% if not objects and not objects_2 and objects_3 %} active {% endif %} btn btn-active-light btn-color-gray-600 btn-active-color-primary rounded-bottom-0" data-bs-toggle="tab" href="#kt_tab_pane_3">
+											Approved Grades - Previous Sessions
+										</a>
+									</li>
+							  </ul>
+
+					</div>
+					
+					<div class="tab-content" id="myTabContent">
+						<div class="tab-pane fade {% if objects %} active show {% else %}{% if not objects_3 and not objects_2 %} active show {% endif %} {% endif %}" id="kt_tab_pane_1" role="tabpanel">
+							<!-- Content for Waiting on Dean's Approval -->
+						<div class="table-responsive">
+							<div id="toolbar1"
+							     class="select">
+								<select class="form-control">
+									<option value="">Export Basic</option>
+									<option value="all">Export All</option>
+									<option value="selected">Export Selected</option>
+								</select>
+							</div>
+							<table id="fresh-table"
+							       data-toggle="table"
+							       class="table"
+							       id="table"
+							       data-toolbar="#toolbar1"
+							       data-search="true"
+							       data-show-toggle="true"
+							       data-show-fullscreen="true"
+							       data-show-columns="true"
+							       data-show-columns-toggle-all="true"
+							       data-show-export="true"
+							       data-click-to-select="true"
+							       data-minimum-count-columns="2"
+							       data-pagination="true"
+							       data-id-field="id"
+							       data-page-list="[10, 25, 50, 100, all]"
+							       data-show-footer="true"
+							       data-sort-priority='[{"sortName": "id","sortOrder":"desc"},{"sortName":"name","sortOrder":"desc"}]'
+							       data-show-multi-sort="true"
+							       data-show-jump-to="true"
+							       data-response-handler="responseHandler"
+							       data-resizable="true"
+							       data-advanced-search="true"
+							       data-id-table="advancedTable"
+							       data-show-print="true"
+							       data-filter-control="true"
+								   data-show-footer="true"
+							       data-show-search-clear-button="true">
+								<thead>
+									<th  data-field="Lecturer"
+									    data-filter-control="input"
+										data-sortable="true">Lecturer</th>
+									
+									<th  data-field="objects"
+									    data-filter-control="input"
+										data-sortable="true">Course</th>
+									<th  data-field="Code"
+										data-sortable="true">View </th>
+									<th  data-field="Lecturer1"
+									    data-filter-control="input"
+										data-sortable="true">Assistant Lecturer</th>
+									<th  data-field="Course"
+									    data-filter-control="input"
+										data-sortable="true">Program</th>
+									
+									<th  data-field="Semester"
+									    data-filter-control="input"
+									    data-sortable="true">Semester</th>
+									<th  data-field="year"
+									    data-filter-control="input"
+										data-sortable="true">Year</th>
+									<th  data-field="Session"
+									    data-filter-control="input"
+										data-sortable="true">Academic Session</th>
+								</thead>
+								<tbody>
+							
+									 
+									 {% for object in objects %}
+									  {% if object.lecturer.id %}
+									<tr class='clickable-row'>
+										<td>{{ object.lecturer}}</td>
+										<td>{{ object.module.module_name}}</td>
+										<td>
+										<a target="_blank" href="/show_SubmittedGrades_2/{{ object.course.id }}/{{ object.module.id }}/{{ object.accademicSession.id }}/{{ object.lecturer.id }} " class="btn  btn-primary "> Grades </a>
+										</td>
+										<td>{% if object.lecturer1 %} {{ object.lecturer1}} {% if object.lecturer2 %} & {{ object.lecturer2}}{% endif %} {% endif %}</td>
+										<td>{{ object.course}}</td>
+										<td>{{ object.semester}}</td>
+										<td>{{ object.year}}</td>
+										<td>{{ object.accademicSession}}</td>
+										
+										</tr>
+										 {% endif %}
+										 {% endfor %}
+									</tbody>
+								</table>
+							</div>
+						
+						
+                        </div>
+						   
+					<div class="tab-pane fade {% if not objects and objects_2 %} active show {% endif %}" id="kt_tab_pane_2" role="tabpanel">
+						<!-- Content for Approved Grades - Active Session -->
+						<div class="table-responsive">
+							<div id="toolbar1"
+							     class="select">
+								<select class="form-control">
+									<option value="">Export Basic</option>
+									<option value="all">Export All</option>
+									<option value="selected">Export Selected</option>
+								</select>
+							</div>
+							<table id="fresh-table"
+							       data-toggle="table"
+							       class="table"
+							       id="table"
+							       data-toolbar="#toolbar1"
+							       data-search="true"
+							       data-show-toggle="true"
+							       data-show-fullscreen="true"
+							       data-show-columns="true"
+							       data-show-columns-toggle-all="true"
+							       data-show-export="true"
+							       data-click-to-select="true"
+							       data-minimum-count-columns="2"
+							       data-pagination="true"
+							       data-id-field="id"
+							       data-page-list="[10, 25, 50, 100, all]"
+							       data-show-footer="true"
+							       data-sort-priority='[{"sortName": "id","sortOrder":"desc"},{"sortName":"name","sortOrder":"desc"}]'
+							       data-show-multi-sort="true"
+							       data-show-jump-to="true"
+							       data-response-handler="responseHandler"
+							       data-resizable="true"
+							       data-advanced-search="true"
+							       data-id-table="advancedTable"
+							       data-show-print="true"
+							       data-filter-control="true"
+								   data-show-footer="true"
+							       data-show-search-clear-button="true">
+								<thead>
+									<th  data-field="Lecturer"
+									    data-filter-control="input"
+										data-sortable="true">Lecturer</th>
+									
+									<th  data-field="objects"
+									    data-filter-control="input"
+										data-sortable="true">Course</th>
+									<th  data-field="Code"
+										data-sortable="true">View </th>
+									<th  data-field="Lecturer1"
+									    data-filter-control="input"
+										data-sortable="true">Assistant Lecturer</th>
+									<th  data-field="Course"
+									    data-filter-control="input"
+										data-sortable="true">Program</th>
+									
+									<th  data-field="Semester"
+									    data-filter-control="input"
+									    data-sortable="true">Semester</th>
+									<th  data-field="year"
+									    data-filter-control="input"
+										data-sortable="true">Year</th>
+									<th  data-field="Session"
+									    data-filter-control="input"
+										data-sortable="true">Academic Session</th>
+								</thead>
+								<tbody>
+							
+									 
+									 {% for object in objects_2 %}
+									<tr class='clickable-row'>
+									  {% if object.lecturer.id %}
+
+										<td>{{ object.lecturer}}</td>
+										<td>{{ object.module.module_name}}</td>
+										<td>
+										<a target="_blank" href="/show_SubmittedGrades_2/{{ object.course.id }}/{{ object.module.id }}/{{ object.accademicSession.id }}/{{ object.lecturer.id }} " class="btn  btn-primary "> Grades </a>
+										</td>
+										<td>{{ object.lecturer1}}</td>
+										<td>{{ object.course}}</td>
+										<td>{{ object.semester}}</td>
+										<td>{{ object.year}}</td>
+										<td>{{ object.accademicSession}}</td>
+										
+										</tr>
+										 {% endif %}
+										 {% endfor %}
+									</tbody>
+								</table>
+							</div>
+						
+						
+                        </div>
+						
+						  
+						<div class="tab-pane fade {% if not objects and not objects_2 and objects_3 %} active show {% endif %}" id="kt_tab_pane_3" role="tabpanel">
+							<!-- Content for Approved Grades - Previous Sessions -->
+						<div class="table-responsive">
+							<div id="toolbar1"
+							     class="select">
+								<select class="form-control">
+									<option value="">Export Basic</option>
+									<option value="all">Export All</option>
+									<option value="selected">Export Selected</option>
+								</select>
+							</div>
+							<table id="fresh-table"
+							       data-toggle="table"
+							       class="table"
+							       id="table"
+							       data-toolbar="#toolbar1"
+							       data-search="true"
+							       data-show-toggle="true"
+							       data-show-fullscreen="true"
+							       data-show-columns="true"
+							       data-show-columns-toggle-all="true"
+							       data-show-export="true"
+							       data-click-to-select="true"
+							       data-minimum-count-columns="2"
+							       data-pagination="true"
+							       data-id-field="id"
+							       data-page-list="[10, 25, 50, 100, all]"
+							       data-show-footer="true"
+							       data-sort-priority='[{"sortName": "id","sortOrder":"desc"},{"sortName":"name","sortOrder":"desc"}]'
+							       data-show-multi-sort="true"
+							       data-show-jump-to="true"
+							       data-response-handler="responseHandler"
+							       data-resizable="true"
+							       data-advanced-search="true"
+							       data-id-table="advancedTable"
+							       data-show-print="true"
+							       data-filter-control="true"
+								   data-show-footer="true"
+							       data-show-search-clear-button="true">
+								<thead>
+									<th  data-field="Lecturer"
+									    data-filter-control="input"
+										data-sortable="true">Lecturer</th>
+									
+									<th  data-field="objects"
+									    data-filter-control="input"
+										data-sortable="true">Course</th>
+									<th  data-field="Code"
+										data-sortable="true">View </th>
+									<th  data-field="Lecturer1"
+									    data-filter-control="input"
+										data-sortable="true">Assistant Lecturer</th>
+									<th  data-field="Course"
+									    data-filter-control="input"
+										data-sortable="true">Program</th>
+									
+									<th  data-field="Semester"
+									    data-filter-control="input"
+									    data-sortable="true">Semester</th>
+									<th  data-field="year"
+									    data-filter-control="input"
+										data-sortable="true">Year</th>
+									<th  data-field="Session"
+									    data-filter-control="input"
+										data-sortable="true">Academic Session</th>
+								</thead>
+								<tbody>
+							
+									 
+									 {% for object in  objects_3 %}
+									  {% if object.lecturer.id %}
+									  
+									<tr class='clickable-row'>
+										<td>{{ object.lecturer}}</td>
+										<td>{{ object.module.module_name}}</td>
+										<td>
+										<a target="_blank" href="/show_SubmittedGrades_2/{{ object.course.id }}/{{ object.module.id }}/{{ object.accademicSession.id }}/{{ object.lecturer.id }} " class="btn  btn-primary "> Grades </a>
+										</td>
+										<td>{{ object.lecturer1}}</td>
+										<td>{{ object.course}}</td>
+										<td>{{ object.semester}}</td>
+										<td>{{ object.year}}</td>
+										<td>{{ object.accademicSession}}</td>
+										
+										</tr>
+										  {% endif %}
+										 {% endfor %}
+									</tbody>
+								</table>
+							</div>
+						
+						
+                        </div>						
+					 </div>
+					
+						</div>
+						<!-- end content-->
+					</div>
+					<!--  end card  -->
+				</div>
+				<!-- end col-md-12 -->
+			</div>
+			<!-- end row -->
+		</div>
+	</div>
+<!-- Modal HTML -->
+<div id="myModal" class="modal fade">
+												<div class="modal-dialog modal-confirm">
+													<div class="modal-content">
+														<div class="modal-header flex-column">
+															<div class="icon-box">
+																<i class="material-icons">&#xE5CD;</i>
+															</div>						
+															<h4 class="modal-title w-100">Are you sure?</h4>	
+															<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+														</div>
+														<div class="modal-body">
+															<p>Do you really want to delete <b id="objectsName"></b> objects? This process cannot be undone.</p>
+															<!-- <p>Do you really want to delete these records? This process cannot be undone.</p>-->
+														</div>
+														<div class="modal-footer justify-content-center">
+															<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+															<button type="button"  id="myBtn"class="deleteDutton btn btn-danger">Delete</button>
+														</div>
+													</div>
+												</div>
+	</div>
+	<input style="display:none"type="text" id="deleteValue"name="deleteValue"/>	
+   	<input style="display:none"type="text" id="deleteName"name="deleteName"/>	
+   														
+
+
+{% endblock content %}
+
+

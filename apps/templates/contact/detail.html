@@ -1,0 +1,510 @@
+{% extends "layouts/base.html" %}
+
+{% block title %}{{ message.subject }} - Contact Message{% endblock %} 
+{% block titlePage %}Contact Message Details{% endblock %} 
+
+{% block stylesheets %}
+<style>
+.gradient-header {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+</style>
+{% endblock stylesheets %}
+
+{% block content %} 
+
+<div class="container-fluid px-4 py-4">
+    <!-- Header Card -->
+    <div class="card gradient-header text-white mb-4 shadow-lg border-0">
+        <div class="card-body p-4">
+            <div class="d-flex align-items-center justify-content-between">
+                <div>
+                    <h2 class="mb-3 fw-bold">{{ message.subject }}</h2>
+                    <div class="d-flex flex-wrap gap-2">
+                        <span class="badge bg-white bg-opacity-20 px-3 py-2 rounded-pill">
+                            <i class="fas fa-user me-2"></i>{{ message.name }}
+                        </span>
+                        <span class="badge bg-white bg-opacity-20 px-3 py-2 rounded-pill">
+                            <i class="fas fa-{% if message.status == 'new' %}circle{% elif message.status == 'read' %}check-circle{% elif message.status == 'replied' %}reply{% else %}archive{% endif %} me-2"></i>
+                            {{ message.get_status_display }}
+                        </span>
+                        <span class="badge bg-white bg-opacity-20 px-3 py-2 rounded-pill">
+                            <i class="fas fa-clock me-2"></i>{{ message.created_at|timesince }} ago
+                        </span>
+                    </div>
+                </div>
+                <a href="{% url 'contact_messages_list' %}" class="btn btn-light rounded-pill">
+                    <i class="fas fa-arrow-left me-2"></i> Back to List
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Main Content -->
+        <div class="col-lg-8">
+            <!-- Message Content -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-envelope-open me-2"></i>Message</h5>
+                </div>
+                <div class="card-body">
+                    <p class="lead">{{ message.message }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sidebar -->
+        <div class="col-lg-4">
+            <!-- Contact Information -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-address-card me-2"></i>Contact Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong><i class="fas fa-user me-2"></i>Name:</strong>
+                        <p class="mb-0">{{ message.name }}</p>
+                    </div>
+                    <div class="mb-3">
+                        <strong><i class="fas fa-envelope me-2"></i>Email:</strong>
+                        <p class="mb-0"><a href="mailto:{{ message.email }}">{{ message.email }}</a></p>
+                    </div>
+                    {% if message.phone %}
+                    <div class="mb-3">
+                        <strong><i class="fas fa-phone me-2"></i>Phone:</strong>
+                        <p class="mb-0"><a href="tel:{{ message.phone }}">{{ message.phone }}</a></p>
+                    </div>
+                    {% endif %}
+                    {% if message.interest %}
+                    <div class="mb-3">
+                        <strong><i class="fas fa-tag me-2"></i>Interest:</strong>
+                        <p class="mb-0"><span class="badge bg-info">{{ message.get_interest_display }}</span></p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Status Information -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0"><i class="fas fa-info-circle me-2"></i>Status Information</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <strong>Status:</strong>
+                        <p class="mb-0">
+                            <span class="badge status-badge status-{{ message.status }}">
+                                {{ message.get_status_display }}
+                            </span>
+                        </p>
+                    </div>
+                    <div class="mb-3">
+                        <strong>Received:</strong>
+                        <p class="mb-0">{{ message.created_at|date:"F d, Y h:i A" }}</p>
+                    </div>
+                    {% if message.replied_at %}
+                    <div class="mb-3">
+                        <strong>Replied At:</strong>
+                        <p class="mb-0">{{ message.replied_at|date:"F d, Y h:i A" }}</p>
+                    </div>
+                    {% endif %}
+                    {% if message.replied_by %}
+                    <div class="mb-3">
+                        <strong>Replied By:</strong>
+                        <p class="mb-0">{{ message.replied_by.get_full_name|default:message.replied_by.email }}</p>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="card shadow-sm">
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0"><i class="fas fa-cog me-2"></i>Actions</h5>
+                </div>
+                                 <div class="card-body">
+                     <div class="d-grid gap-2">
+                         <button onclick="replyEmail()" class="btn btn-primary">
+                             <i class="fas fa-reply me-2"></i>Reply via Email Client
+                         </button>
+                         <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#replyModal">
+                             <i class="fas fa-envelope me-2"></i>Quick Reply
+                         </button>
+                         {% if message.status != 'replied' %}
+                         <button onclick="markAsReplied()" class="btn btn-success">
+                             <i class="fas fa-check me-2"></i>Mark as Replied
+                         </button>
+                         {% endif %}
+                         {% if message.status != 'archived' %}
+                         <button onclick="archiveMessage()" class="btn btn-warning">
+                             <i class="fas fa-archive me-2"></i>Archive
+                         </button>
+                         {% endif %}
+                         <button onclick="deleteMessage()" class="btn btn-danger">
+                             <i class="fas fa-trash me-2"></i>Delete
+                         </button>
+                         <button onclick="testEmailSystem()" class="btn btn-info">
+                             <i class="fas fa-envelope me-2"></i>Test Email
+                         </button>
+                     </div>
+                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Reply Modal -->
+<div class="modal fade" id="replyModal" tabindex="-1" aria-labelledby="replyModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="replyModalLabel">
+                    <i class="fas fa-envelope me-2"></i>Quick Reply
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="replyForm">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label class="form-label"><strong>To:</strong></label>
+                        <div class="input-group">
+                            <span class="input-group-text"><i class="fas fa-user"></i></span>
+                            <input type="text" class="form-control" value="{{ message.name }} &lt;{{ message.email }}&gt;" readonly>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><strong>Subject:</strong></label>
+                        <div class="input-group">
+                            <span class="input-group-text">Re:</span>
+                            <input type="text" id="replySubject" class="form-control" value="{{ message.subject }}">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label"><strong>Message:</strong></label>
+                        <textarea id="replyBody" class="form-control" rows="12" placeholder="Type your reply here..."></textarea>
+                    </div>
+                    <div class="alert alert-info mb-0">
+                        <small>
+                            <i class="fas fa-info-circle me-1"></i>
+                            <strong>Note:</strong> This will open your default email client with the reply pre-filled. 
+                            Make sure you have a default email client configured on your system.
+                        </small>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="fas fa-times me-2"></i>Cancel
+                </button>
+                <button style="display:none" type="button" class="btn btn-primary" onclick="sendQuickReply()">
+                    <i class="fas fa-paper-plane me-2"></i>Open in Email Client
+                </button>
+                <button type="button" class="btn btn-success" onclick="sendDirectEmail()">
+                    <i class="fas fa-envelope me-2"></i>Send Email Now
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function replyEmail() {
+    const email = '{{ message.email }}';
+    const subject = encodeURIComponent('Re: {{ message.subject|escapejs }}');
+    const originalMessage = `\n\n\n--- Original Message ---\nFrom: {{ message.name }}\nDate: {{ message.created_at|date:"F d, Y \\a\\t h:i A" }}\nSubject: {{ message.subject|escapejs }}\n\n{{ message.message|striptags|escapejs }}`;
+    const body = encodeURIComponent(originalMessage);
+    
+    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+}
+
+function sendQuickReply() {
+    const email = '{{ message.email }}';
+    const subject = encodeURIComponent('Re: ' + document.getElementById('replySubject').value);
+    const replyBody = document.getElementById('replyBody').value;
+    const originalMessage = `\n\n\n--- Original Message ---\nFrom: {{ message.name }}\nDate: {{ message.created_at|date:"F d, Y \\a\\t h:i A" }}\nSubject: {{ message.subject|escapejs }}\n\n{{ message.message|striptags|escapejs }}`;
+    const body = encodeURIComponent(replyBody + originalMessage);
+    
+    window.location.href = `mailto:${email}?subject=${subject}&body=${body}`;
+    
+    // Close modal
+    var modal = bootstrap.Modal.getInstance(document.getElementById('replyModal'));
+    modal.hide();
+    
+    // Show success message
+    Swal.fire({
+        title: 'Opening Email Client...',
+        text: 'Your default email client should open with the reply pre-filled.',
+        icon: 'success',
+        timer: 2000,
+        showConfirmButton: false
+    });
+}
+
+function sendDirectEmail() {
+    const subject = document.getElementById('replySubject').value;
+    const replyBody = document.getElementById('replyBody').value;
+    
+    console.log('sendDirectEmail called:', { subject, replyBody: replyBody.substring(0, 50) + '...' });
+    
+    if (!subject || !replyBody) {
+        Swal.fire({
+            title: 'Missing Information',
+            text: 'Please fill in both subject and message fields.',
+            icon: 'warning'
+        });
+        return;
+    }
+    
+    Swal.fire({
+        title: 'Send Email?',
+        text: `Send reply to {{ message.email }}?`,
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, Send!',
+        cancelButtonText: 'Cancel',
+        customClass: {
+            confirmButton: "btn fw-bold btn-success",
+            cancelButton: "btn fw-bold btn-secondary"
+        }
+    }).then(function (result) {
+        if (result.value) {
+            // Show loading
+            Swal.fire({
+                title: 'Sending Email...',
+                text: 'Please wait while we send your reply.',
+                icon: 'info',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+            
+            // Send email via AJAX
+            var formData = new FormData();
+            formData.append('subject', subject);
+            formData.append('message', replyBody);
+            
+            const csrfToken = document.querySelector('[name="csrfmiddlewaretoken"]').value;
+            console.log('CSRF Token:', csrfToken);
+            formData.append('csrfmiddlewaretoken', csrfToken);
+            
+            // Create an AbortController for timeout
+            const controller = new AbortController();
+            const timeoutId = setTimeout(() => controller.abort(), 30000); // 30 second timeout
+            
+            console.log('Sending request to:', '/admin/contact-messages/{{ message.pk }}/send-reply/');
+            
+            fetch('/admin/contact-messages/{{ message.pk }}/send-reply/', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name="csrfmiddlewaretoken"]').value
+                },
+                signal: controller.signal
+            })
+            .then(response => {
+                console.log('Response status:', response.status);
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Response data:', data);
+                // Clear timeout
+                clearTimeout(timeoutId);
+                // Close the loading modal first
+                Swal.close();
+                
+                if (data.status === 'success') {
+                    Swal.fire({
+                        title: 'Email Sent!',
+                        text: data.message,
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                        timer: 3000,
+                        timerProgressBar: true
+                    }).then(() => {
+                        // Close modal and reload page
+                        var modal = bootstrap.Modal.getInstance(document.getElementById('replyModal'));
+                        if (modal) {
+                            modal.hide();
+                        }
+                        location.reload();
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: data.message || 'An error occurred while sending the email.',
+                        icon: 'error',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            })
+            .catch(error => {
+                // Clear timeout
+                clearTimeout(timeoutId);
+                // Close the loading modal first
+                Swal.close();
+                
+                console.error('Email sending error:', error);
+                
+                let errorMessage = 'Failed to send email. Please check your connection and try again.';
+                if (error.name === 'AbortError') {
+                    errorMessage = 'Request timed out. Please try again.';
+                }
+                
+                Swal.fire({
+                    title: 'Error!',
+                    text: errorMessage,
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            });
+        }
+    });
+}
+
+function markAsReplied() {
+    updateStatus('replied');
+}
+
+function archiveMessage() {
+    updateStatus('archived');
+}
+
+function updateStatus(status) {
+    Swal.fire({
+        text: "Update message status?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, update!",
+        cancelButtonText: "No, cancel",
+        customClass: {
+            confirmButton: "btn fw-bold btn-danger",
+            cancelButton: "btn fw-bold btn-active-light-primary"
+        }
+    }).then(function (result) {
+        if (result.value) {
+            var formData = new FormData();
+            formData.append('status', status);
+            formData.append('csrfmiddlewaretoken', document.querySelector('[name="csrfmiddlewaretoken"]').value);
+            
+            fetch('/admin/contact-messages/{{ message.pk }}/update-status/', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    Swal.fire({
+                        text: data.message,
+                        icon: "success",
+                        buttonsStyling: false,
+                        confirmButtonText: "Ok!",
+                        customClass: {
+                            confirmButton: "btn fw-bold btn-primary"
+                        }
+                    }).then(() => location.reload());
+                } else {
+                    Swal.fire("Error!", data.message, "error");
+                }
+            });
+        }
+    });
+}
+
+function deleteMessage() {
+    Swal.fire({
+        text: "Are you sure you want to delete this message?",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonText: "Yes, delete!",
+        cancelButtonText: "No, cancel",
+        customClass: {
+            confirmButton: "btn fw-bold btn-danger",
+            cancelButton: "btn fw-bold btn-active-light-primary"
+        }
+    }).then(function (result) {
+        if (result.value) {
+            var formData = new FormData();
+            formData.append('csrfmiddlewaretoken', document.querySelector('[name="csrfmiddlewaretoken"]').value);
+            
+            fetch('/admin/contact-messages/{{ message.pk }}/delete/', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    Swal.fire({
+                        text: data.message,
+                        icon: "success",
+                        buttonsStyling: false,
+                        confirmButtonText: "Ok!",
+                        customClass: {
+                            confirmButton: "btn fw-bold btn-primary"
+                        }
+                    }).then(() => window.location.href = '{% url "contact_messages_list" %}');
+                } else {
+                    Swal.fire("Error!", data.message, "error");
+                }
+            });
+        }
+    });
+}
+
+function testEmailSystem() {
+    Swal.fire({
+        title: 'Testing Email System...',
+        text: 'Please wait while we test the email system.',
+        icon: 'info',
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+    
+    fetch('/admin/test-email/', {
+        method: 'POST',
+        headers: {
+            'X-CSRFToken': document.querySelector('[name="csrfmiddlewaretoken"]').value,
+            'Content-Type': 'application/x-www-form-urlencoded',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        Swal.close();
+        if (data.status === 'success') {
+            Swal.fire({
+                title: 'Email System Test Successful!',
+                text: data.message,
+                icon: 'success',
+                confirmButtonText: 'OK'
+            });
+        } else {
+            Swal.fire({
+                title: 'Email System Test Failed!',
+                text: data.message,
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        }
+    })
+    .catch(error => {
+        Swal.close();
+        Swal.fire({
+            title: 'Email System Test Error!',
+            text: 'Error: ' + error.message,
+            icon: 'error',
+            confirmButtonText: 'OK'
+        });
+    });
+}
+</script>
+
+{% endblock content %}

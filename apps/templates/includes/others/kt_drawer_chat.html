@@ -1,0 +1,1204 @@
+		
+		
+	{% load static %}	
+		<!--begin::Chat drawer-->
+		<div id="kt_drawer_chat" class="bg-body" data-kt-drawer="true" data-kt-drawer-name="chat" data-kt-drawer-activate="true" data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'300px', 'md': '500px'}" data-kt-drawer-direction="end" data-kt-drawer-toggle="#kt_drawer_chat_toggle" data-kt-drawer-close="#kt_drawer_chat_close">
+			<!--begin::Messenger-->
+			<div class="card w-100 rounded-0 border-0" id="kt_drawer_chat_messenger">
+				<!--begin::Card header-->
+				<div class="card-header pe-5" id="kt_drawer_chat_messenger_header">
+					<!--begin::Title-->
+					<div class="card-title">
+						<!--begin::User-->
+						<div  class="d-flex justify-content-center flex-column me-3">
+							<div class=" d-flex flex-stack py-4">
+								<!--begin::Details-->
+								<div class="d-flex align-items-center">
+									<!--begin::Avatar-->
+									<div id="PicArea" class="symbol  symbol-45px symbol-circle ">
+										{% if request.user.file.url != "/media/False" %}
+										 <img id="Pic" src="{{ request.user.file.url}}" />
+											{% else %}
+												{% if request.user.gender == "Male" %}
+											<img id="Pic"  src="{% static 'assets/img/avataMale.jpg' %}" alt="">
+												{% else %}
+											<img id="Pic" src="{% static 'assets/img/avataFemale.jpg' %}" alt="">
+												{% endif %}
+											{% endif %}
+										 
+									</div>
+									<!--end::Avatar-->
+									<!--begin::Details-->
+									<div class="ms-5">
+										<a href="#" id="userMainName" class="userName fs-5 fw-bold text-gray-900 text-hover-primary mb-2"> {{request.user.full_name}} </a>
+									<!--begin::Info--> 
+										<div id="userMainActive" class="mb-0 lh-1">
+											<span class="badge badge-success badge-circle w-10px h-10px me-1"></span>
+											<span id="userMainActivespan" class="fs-7 fw-semibold text-muted">Active</span>
+										</div>
+										<!--end::Info-->
+									</div>
+									<!--end::Details--> 
+								</div>
+								<!--end::Details-->
+
+							</div>
+							
+						</div>
+						<!--end::User-->
+					</div>
+					<!--end::Title-->
+					<!--begin::Card toolbar-->
+					<div class="card-toolbar">
+					
+						<div class="me-2" style="display:none" id="volumeArea">
+							<i id="volumeON"style='font-size:20px; cursor: pointer;{% if not request.user.chat_volume %}display: none;{%endif%} ' class='fas text-primary'>&#xf028;</i>
+							<i id="volumeOFF"  style='font-size:20px;cursor: pointer;{% if request.user.chat_volume %}display: none;{%endif%}' class='fas text-danger'>&#xf6a9;</i>
+						</div>
+						<!--begin::Menu-->
+						<div class="me-2">
+							<button class="btn btn-sm btn-icon btn-active-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">
+								<i class="bi bi-three-dots fs-3"></i>
+							</button>
+							<!--begin::Menu 3-->
+							<div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-800 menu-state-bg-light-primary fw-semibold w-200px py-3" data-kt-menu="true">
+								<!--begin::Heading-->
+								<div class="menu-item px-3">
+									<div class="menu-content text-muted pb-2 px-3 fs-7 text-uppercase">Contacts</div>
+								</div>
+								<!--end::Heading-->
+								<!--begin::Menu item-->
+								<div class="menu-item px-3">
+									<a onclick="showUsers()" style="display:none" id="findUser" class="menu-link px-3" >Find User</a>
+								</div>
+								<!--end::Menu item-->
+								<!--begin::Menu item-->
+								<div class="menu-item px-3">
+									<a href="#" class="menu-link flex-stack px-3" data-bs-toggle="modal" data-bs-target="#kt_modal_invite_friends">Invite Contacts 
+									<i class="fas fa-exclamation-circle ms-2 fs-7" data-bs-toggle="tooltip" title="Specify a contact email to send an invitation"></i></a>
+								</div>
+								<!--end::Menu item-->
+								<!--begin::Menu item-->
+								<div class="menu-item px-3" data-kt-menu-trigger="hover" data-kt-menu-placement="right-start">
+									<a href="#" class="menu-link px-3">
+										<span class="menu-title">Groups</span>
+										<span class="menu-arrow"></span>
+									</a>
+									<!--begin::Menu sub-->
+									<div class="menu-sub menu-sub-dropdown w-175px py-4">
+										<!--begin::Menu item-->
+										<div class="menu-item px-3">
+											<a href="#" class="menu-link px-3" data-bs-toggle="tooltip" title="Coming soon">Create Group</a>
+										</div>
+										<!--end::Menu item-->
+										<!--begin::Menu item-->
+										<div class="menu-item px-3">
+											<a  class="hide-chat-box menu-link px-3" >Find User</a>
+										</div>
+										<!--end::Menu item-->
+										<!--begin::Menu item-->
+										<div class="menu-item px-3">
+											<a href="#" class="menu-link px-3" data-bs-toggle="tooltip" title="Coming soon">Settings</a>
+										</div>
+										<!--end::Menu item-->
+									</div>
+									<!--end::Menu sub-->
+								</div>
+								<!--end::Menu item-->
+								<!--begin::Menu item-->
+								<div class="menu-item px-3 my-1">
+									<a href="#" class="menu-link px-3" data-bs-toggle="tooltip" title="Coming soon">Settings</a>
+								</div>
+								<!--end::Menu item-->
+							</div>
+							<!--end::Menu 3-->
+						</div>
+						<!--end::Menu-->
+						<!--begin::Close-->
+						<div class="btn btn-sm btn-icon btn-active-light-primary" id="kt_drawer_chat_close">
+							<!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+							<span class="svg-icon svg-icon-2">
+								<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor" />
+									<rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
+								</svg>
+							</span>
+							<!--end::Svg Icon-->
+						</div>
+						<div style="display:none" class="btn btn-sm btn-icon btn-active-light-primary" id="kt_drawer_return_to_users">
+							<!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+							<span class="svg-icon svg-icon-2">
+								<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor" />
+									<rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
+								</svg>
+							</span>
+							<!--end::Svg Icon-->
+						</div>
+						<!--end::Close-->
+					
+					</div>
+					<!--end::Card toolbar-->
+				</div>
+				<!--end::Card header-->
+				<!--begin::Card body-->
+				<div class="card-body" id="kt_drawer_chat_messenger_body">
+					<!--begin::Messages-->
+				<div id="chatArea" style="display:none"> 
+					<div class="scroll-y me-n5 pe-5" data-kt-element="messages" data-kt-scroll="true" data-kt-scroll-activate="true" data-kt-scroll-height="auto" data-kt-scroll-dependencies="#kt_drawer_chat_messenger_header, #kt_drawer_chat_messenger_footer" data-kt-scroll-wrappers="#kt_drawer_chat_messenger_body" data-kt-scroll-offset="0px">
+					 <div id="chatList"> 
+				
+                                
+                       </div>
+						<!--begin::Message(template for out)-->
+						<div class="d-flex justify-content-end mb-10 d-none" data-kt-element="template-out">
+							<!--begin::Wrapper-->
+							<div class="d-flex flex-column align-items-end">
+								<!--begin::User-->
+								<div class="d-flex align-items-center mb-2">
+									<!--begin::Details-->
+									<div class="me-3">
+										<span data-kt-element="message-time"  class="text-muted fs-7 mb-1">Just now</span>
+										<a href="#" class="fs-5 fw-bold text-gray-900 text-hover-primary ms-1">You</a>
+									</div>
+									<!--end::Details-->
+									<!--begin::Avatar-->
+									<div class="symbol symbol-35px symbol-circle">
+										{% if request.user.file.url != "/media/False" %}
+										  <img data-kt-element="message-img" src="{{ request.user.file.url}}" />
+										{% else %}
+											{% if request.user.gender == "Male" %}
+												<img data-kt-element="message-img" src="{% static 'assets/img/avataMale.jpg' %}" alt="">
+											{% else %}
+												<img data-kt-element="message-img" src="{% static 'assets/img/avataFemale.jpg' %}" alt="">
+											{% endif %}
+										{% endif %}
+									</div>
+									<!--end::Avatar-->
+								</div>
+								<!--end::User-->
+								<!--begin::Text-->
+								<div class="p-5 rounded bg-light-primary text-dark fw-semibold mw-lg-400px text-end" data-kt-element="message-text"></div>
+								<!--end::Text-->
+							</div>
+							<!--end::Wrapper-->
+						</div>
+						<!--end::Message(template for out)-->
+						<!--begin::Message(template for in)-->
+						<div class="d-flex justify-content-start mb-10 d-none" data-kt-element="template-in">
+							<!--begin::Wrapper-->
+							<div class="d-flex flex-column align-items-start">
+								<!--begin::User-->
+								<div class="d-flex align-items-center mb-2">
+									<!--begin::Avatar-->
+									<div class="symbol symbol-35px symbol-circle">
+										<img data-kt-element="message-img" alt="Pic" src='{% static "assets/img/avataMale.jpg" %}' />
+									</div>
+									<!--end::Avatar-->
+									<!--begin::Details-->
+									<div class="ms-3">
+										<a href="#" data-kt-element="message-name"  class="fs-5 fw-bold text-gray-900 text-hover-primary me-1">Brian Cox</a>
+										<span data-kt-element="message-time"  class="text-muted fs-7 mb-1">Just now</span>
+									</div>
+									<!--end::Details-->
+								</div>
+								<!--end::User-->
+								<!--begin::Text-->
+								<div class="p-5 rounded bg-light-info text-dark fw-semibold mw-lg-400px text-start" data-kt-element="message-text">Right before vacation season we have the next Big Deal for you.</div>
+								<!--end::Text-->
+							</div>
+							<!--end::Wrapper-->
+						</div>
+						<!--end::Message(template for in)-->
+					</div>
+					<!--end::Messages-->
+					</div>
+				<div id="UsersArea"> 
+					 <!--begin::List-->
+					  <input type="text" class="form-control" id="userSearch" placeholder="Search users...">   
+				<div class="scroll-y me-n5 pe-5 h-200px h-lg-auto" data-kt-scroll="true" data-kt-scroll-activate="{default: false, lg: true}" data-kt-scroll-max-height="auto" data-kt-scroll-dependencies="#kt_header, #kt_app_header, #kt_toolbar, #kt_app_toolbar, #kt_footer, #kt_app_footer, #kt_chat_contacts_header" data-kt-scroll-wrappers="#kt_content, #kt_app_content, #kt_chat_contacts_body" data-kt-scroll-offset="5px" style="">
+
+												   <!--begin::User-->
+						 <div id="userList">
+						
+										
+						 </div>
+				 </div>
+		<!--end::List-->
+				 </div>
+				</div>
+				<!--end::Card body-->
+				<!--begin::Card footer-->
+				<div  class="card-footer pt-4" id="kt_drawer_chat_messenger_footer">
+					<!--begin::Input-->
+					<textarea class="form-control form-control-flush mb-3" rows="1" data-kt-element="input" placeholder="Type a message"></textarea>
+					<!--end::Input-->
+					<!--begin:Toolbar-->
+					<div class="d-flex flex-stack">
+						<!--begin::Actions-->
+						<div class="d-flex align-items-center me-2">
+							<button class="btn btn-sm btn-icon btn-active-light-primary me-1" type="button" data-bs-toggle="tooltip" title="Coming soon">
+								<i class="bi bi-paperclip fs-3"></i>
+							</button>
+							<button class="btn btn-sm btn-icon btn-active-light-primary me-1" type="button" data-bs-toggle="tooltip" title="Coming soon">
+								<i class="bi bi-upload fs-3"></i>
+							</button>
+						</div>
+						<!--end::Actions-->
+						<!--begin::Send-->
+						<button class="btn btn-primary" type="button" data-kt-element="send">Send</button>
+						<!--end::Send-->
+					</div>
+					<!--end::Toolbar-->
+				</div>
+				<!--end::Card footer-->
+			</div>
+			<!--end::Messenger-->
+		</div>
+		<!--end::Chat drawer-->
+		<!--begin::Chat drawer-->
+		<div id="kt_shopping_cart" class="bg-body" data-kt-drawer="true" data-kt-drawer-name="cart" data-kt-drawer-activate="true" data-kt-drawer-overlay="true" data-kt-drawer-width="{default:'300px', 'md': '500px'}" data-kt-drawer-direction="end" data-kt-drawer-toggle="#kt_drawer_shopping_cart_toggle" data-kt-drawer-close="#kt_drawer_shopping_cart_close">
+			<!--begin::Messenger-->
+			<div class="card card-flush w-100 rounded-0">
+				<!--begin::Card header-->
+				<div class="card-header">
+					<!--begin::Title-->
+					<h3 class="card-title text-gray-900 fw-bold">Shopping Cart</h3>
+					<!--end::Title-->
+					<!--begin::Card toolbar-->
+					<div class="card-toolbar">
+						<!--begin::Close-->
+						<div class="btn btn-sm btn-icon btn-active-light-primary" id="kt_drawer_shopping_cart_close">
+							<!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+							<span class="svg-icon svg-icon-2">
+								<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor" />
+									<rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
+								</svg>
+							</span>
+							<!--end::Svg Icon-->
+						</div>
+						<!--end::Close-->
+					</div>
+					<!--end::Card toolbar-->
+				</div>
+				<!--end::Card header-->
+				<!--begin::Card body-->
+				<div class="card-body hover-scroll-overlay-y h-400px pt-5">
+					<!--begin::Item-->
+					<div class="d-flex flex-stack">
+						<!--begin::Wrapper-->
+						<div class="d-flex flex-column me-3">
+							<!--begin::Section-->
+							<div class="mb-3">
+								<a href="ecommerce/sales/details.html" class="text-gray-800 text-hover-primary fs-4 fw-bold">Iblender</a>
+								<span class="text-gray-400 fw-semibold d-block">The best kitchen gadget in 2022</span>
+							</div>
+							<!--end::Section-->
+							<!--begin::Section-->
+							<div class="d-flex align-items-center">
+								<span class="fw-bold text-gray-800 fs-5">$ 350</span>
+								<span class="text-muted mx-2">for</span>
+								<span class="fw-bold text-gray-800 fs-5 me-3">5</span>
+								<a href="#" class="btn btn-sm btn-light-success btn-icon-success btn-icon w-25px h-25px me-2">
+									<!--begin::Svg Icon | path: icons/duotune/arrows/arr090.svg-->
+									<span class="svg-icon svg-icon-4">
+										<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="currentColor" />
+										</svg>
+									</span>
+									<!--end::Svg Icon-->
+								</a>
+								<a href="#" class="btn btn-sm btn-light-success btn-icon w-25px h-25px">
+									<!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
+									<span class="svg-icon svg-icon-4">
+										<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="currentColor" />
+											<rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="currentColor" />
+										</svg>
+									</span>
+									<!--end::Svg Icon-->
+								</a>
+							</div>
+							<!--end::Wrapper-->
+						</div>
+						<!--end::Wrapper-->
+						<!--begin::Pic-->
+						<div class="symbol symbol-70px symbol-2by3 flex-shrink-0">
+							<img src='{% static "assets/media/stock/600x400/img-1.jpg"%}' alt="" />
+						</div>
+						<!--end::Pic-->
+					</div>
+					<!--end::Item-->
+					<!--begin::Separator-->
+					<div class="separator separator-dashed my-6"></div>
+					<!--end::Separator-->
+					<!--begin::Item-->
+					<div class="d-flex flex-stack">
+						<!--begin::Wrapper-->
+						<div class="d-flex flex-column me-3">
+							<!--begin::Section-->
+							<div class="mb-3">
+								<a href="ecommerce/sales/details.html" class="text-gray-800 text-hover-primary fs-4 fw-bold">SmartCleaner</a>
+								<span class="text-gray-400 fw-semibold d-block">Smart tool for cooking</span>
+							</div>
+							<!--end::Section-->
+							<!--begin::Section-->
+							<div class="d-flex align-items-center">
+								<span class="fw-bold text-gray-800 fs-5">$ 650</span>
+								<span class="text-muted mx-2">for</span>
+								<span class="fw-bold text-gray-800 fs-5 me-3">4</span>
+								<a href="#" class="btn btn-sm btn-light-success btn-icon-success btn-icon w-25px h-25px me-2">
+									<!--begin::Svg Icon | path: icons/duotune/arrows/arr090.svg-->
+									<span class="svg-icon svg-icon-4">
+										<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="currentColor" />
+										</svg>
+									</span>
+									<!--end::Svg Icon-->
+								</a>
+								<a href="#" class="btn btn-sm btn-light-success btn-icon w-25px h-25px">
+									<!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
+									<span class="svg-icon svg-icon-4">
+										<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="currentColor" />
+											<rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="currentColor" />
+										</svg>
+									</span>
+									<!--end::Svg Icon-->
+								</a>
+							</div>
+							<!--end::Wrapper-->
+						</div>
+						<!--end::Wrapper-->
+						<!--begin::Pic-->
+						<div class="symbol symbol-70px symbol-2by3 flex-shrink-0">
+							<img src='{% static "assets/media/stock/600x400/img-3.jpg"%}' alt="" />
+						</div>
+						<!--end::Pic-->
+					</div>
+					<!--end::Item-->
+					<!--begin::Separator-->
+					<div class="separator separator-dashed my-6"></div>
+					<!--end::Separator-->
+					<!--begin::Item-->
+					<div class="d-flex flex-stack">
+						<!--begin::Wrapper-->
+						<div class="d-flex flex-column me-3">
+							<!--begin::Section-->
+							<div class="mb-3">
+								<a href="ecommerce/sales/details.html" class="text-gray-800 text-hover-primary fs-4 fw-bold">CameraMaxr</a>
+								<span class="text-gray-400 fw-semibold d-block">Professional camera for edge</span>
+							</div>
+							<!--end::Section-->
+							<!--begin::Section-->
+							<div class="d-flex align-items-center">
+								<span class="fw-bold text-gray-800 fs-5">$ 150</span>
+								<span class="text-muted mx-2">for</span>
+								<span class="fw-bold text-gray-800 fs-5 me-3">3</span>
+								<a href="#" class="btn btn-sm btn-light-success btn-icon-success btn-icon w-25px h-25px me-2">
+									<!--begin::Svg Icon | path: icons/duotune/arrows/arr090.svg-->
+									<span class="svg-icon svg-icon-4">
+										<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="currentColor" />
+										</svg>
+									</span>
+									<!--end::Svg Icon-->
+								</a>
+								<a href="#" class="btn btn-sm btn-light-success btn-icon w-25px h-25px">
+									<!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
+									<span class="svg-icon svg-icon-4">
+										<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="currentColor" />
+											<rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="currentColor" />
+										</svg>
+									</span>
+									<!--end::Svg Icon-->
+								</a>
+							</div>
+							<!--end::Wrapper-->
+						</div>
+						<!--end::Wrapper-->
+						<!--begin::Pic-->
+						<div class="symbol symbol-70px symbol-2by3 flex-shrink-0">
+							<img src='{% static "assets/media/stock/600x400/img-8.jpg"%}'alt="" />
+						</div>
+						<!--end::Pic-->
+					</div>
+					<!--end::Item-->
+					<!--begin::Separator-->
+					<div class="separator separator-dashed my-6"></div>
+					<!--end::Separator-->
+					<!--begin::Item-->
+					<div class="d-flex flex-stack">
+						<!--begin::Wrapper-->
+						<div class="d-flex flex-column me-3">
+							<!--begin::Section-->
+							<div class="mb-3">
+								<a href="ecommerce/sales/details.html" class="text-gray-800 text-hover-primary fs-4 fw-bold">$D Printer</a>
+								<span class="text-gray-400 fw-semibold d-block">Manfactoring unique objekts</span>
+							</div>
+							<!--end::Section-->
+							<!--begin::Section-->
+							<div class="d-flex align-items-center">
+								<span class="fw-bold text-gray-800 fs-5">$ 1450</span>
+								<span class="text-muted mx-2">for</span>
+								<span class="fw-bold text-gray-800 fs-5 me-3">7</span>
+								<a href="#" class="btn btn-sm btn-light-success btn-icon-success btn-icon w-25px h-25px me-2">
+									<!--begin::Svg Icon | path: icons/duotune/arrows/arr090.svg-->
+									<span class="svg-icon svg-icon-4">
+										<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="currentColor" />
+										</svg>
+									</span>
+									<!--end::Svg Icon-->
+								</a>
+								<a href="#" class="btn btn-sm btn-light-success btn-icon w-25px h-25px">
+									<!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
+									<span class="svg-icon svg-icon-4">
+										<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="currentColor" />
+											<rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="currentColor" />
+										</svg>
+									</span>
+									<!--end::Svg Icon-->
+								</a>
+							</div>
+							<!--end::Wrapper-->
+						</div>
+						<!--end::Wrapper-->
+						<!--begin::Pic-->
+						<div class="symbol symbol-70px symbol-2by3 flex-shrink-0">
+							<img src='{% static "assets/media/stock/600x400/img-26.jpg"%}' alt="" />
+						</div>
+						<!--end::Pic-->
+					</div>
+					<!--end::Item-->
+					<!--begin::Separator-->
+					<div class="separator separator-dashed my-6"></div>
+					<!--end::Separator-->
+					<!--begin::Item-->
+					<div class="d-flex flex-stack">
+						<!--begin::Wrapper-->
+						<div class="d-flex flex-column me-3">
+							<!--begin::Section-->
+							<div class="mb-3">
+								<a href="ecommerce/sales/details.html" class="text-gray-800 text-hover-primary fs-4 fw-bold">MotionWire</a>
+								<span class="text-gray-400 fw-semibold d-block">Perfect animation tool</span>
+							</div>
+							<!--end::Section-->
+							<!--begin::Section-->
+							<div class="d-flex align-items-center">
+								<span class="fw-bold text-gray-800 fs-5">$ 650</span>
+								<span class="text-muted mx-2">for</span>
+								<span class="fw-bold text-gray-800 fs-5 me-3">7</span>
+								<a href="#" class="btn btn-sm btn-light-success btn-icon-success btn-icon w-25px h-25px me-2">
+									<!--begin::Svg Icon | path: icons/duotune/arrows/arr090.svg-->
+									<span class="svg-icon svg-icon-4">
+										<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="currentColor" />
+										</svg>
+									</span>
+									<!--end::Svg Icon-->
+								</a>
+								<a href="#" class="btn btn-sm btn-light-success btn-icon w-25px h-25px">
+									<!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
+									<span class="svg-icon svg-icon-4">
+										<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="currentColor" />
+											<rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="currentColor" />
+										</svg>
+									</span>
+									<!--end::Svg Icon-->
+								</a>
+							</div>
+							<!--end::Wrapper-->
+						</div>
+						<!--end::Wrapper-->
+						<!--begin::Pic-->
+						<div class="symbol symbol-70px symbol-2by3 flex-shrink-0">
+							<img src='{% static "assets/media/stock/600x400/img-21.jpg"%}' alt="" />
+						</div>
+						<!--end::Pic-->
+					</div>
+					<!--end::Item-->
+					<!--begin::Separator-->
+					<div class="separator separator-dashed my-6"></div>
+					<!--end::Separator-->
+					<!--begin::Item-->
+					<div class="d-flex flex-stack">
+						<!--begin::Wrapper-->
+						<div class="d-flex flex-column me-3">
+							<!--begin::Section-->
+							<div class="mb-3">
+								<a href="ecommerce/sales/details.html" class="text-gray-800 text-hover-primary fs-4 fw-bold">Samsung</a>
+								<span class="text-gray-400 fw-semibold d-block">Profile info,Timeline etc</span>
+							</div>
+							<!--end::Section-->
+							<!--begin::Section-->
+							<div class="d-flex align-items-center">
+								<span class="fw-bold text-gray-800 fs-5">$ 720</span>
+								<span class="text-muted mx-2">for</span>
+								<span class="fw-bold text-gray-800 fs-5 me-3">6</span>
+								<a href="#" class="btn btn-sm btn-light-success btn-icon-success btn-icon w-25px h-25px me-2">
+									<!--begin::Svg Icon | path: icons/duotune/arrows/arr090.svg-->
+									<span class="svg-icon svg-icon-4">
+										<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="currentColor" />
+										</svg>
+									</span>
+									<!--end::Svg Icon-->
+								</a>
+								<a href="#" class="btn btn-sm btn-light-success btn-icon w-25px h-25px">
+									<!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
+									<span class="svg-icon svg-icon-4">
+										<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="currentColor" />
+											<rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="currentColor" />
+										</svg>
+									</span>
+									<!--end::Svg Icon-->
+								</a>
+							</div>
+							<!--end::Wrapper-->
+						</div>
+						<!--end::Wrapper-->
+						<!--begin::Pic-->
+						<div class="symbol symbol-70px symbol-2by3 flex-shrink-0">
+							<img src='{% static "assets/media/stock/600x400/img-34.jpg"%}' alt="" />
+						</div>
+						<!--end::Pic-->
+					</div>
+					<!--end::Item-->
+					<!--begin::Separator-->
+					<div class="separator separator-dashed my-6"></div>
+					<!--end::Separator-->
+					<!--begin::Item-->
+					<div class="d-flex flex-stack">
+						<!--begin::Wrapper-->
+						<div class="d-flex flex-column me-3">
+							<!--begin::Section-->
+							<div class="mb-3">
+								<a href="ecommerce/sales/details.html" class="text-gray-800 text-hover-primary fs-4 fw-bold">$D Printer</a>
+								<span class="text-gray-400 fw-semibold d-block">Manfactoring unique objekts</span>
+							</div>
+							<!--end::Section-->
+							<!--begin::Section-->
+							<div class="d-flex align-items-center">
+								<span class="fw-bold text-gray-800 fs-5">$ 430</span>
+								<span class="text-muted mx-2">for</span>
+								<span class="fw-bold text-gray-800 fs-5 me-3">8</span>
+								<a href="#" class="btn btn-sm btn-light-success btn-icon-success btn-icon w-25px h-25px me-2">
+									<!--begin::Svg Icon | path: icons/duotune/arrows/arr090.svg-->
+									<span class="svg-icon svg-icon-4">
+										<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="currentColor" />
+										</svg>
+									</span>
+									<!--end::Svg Icon-->
+								</a>
+								<a href="#" class="btn btn-sm btn-light-success btn-icon w-25px h-25px">
+									<!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
+									<span class="svg-icon svg-icon-4">
+										<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+											<rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="currentColor" />
+											<rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="currentColor" />
+										</svg>
+									</span>
+									<!--end::Svg Icon-->
+								</a>
+							</div>
+							<!--end::Wrapper-->
+						</div>
+						<!--end::Wrapper-->
+						<!--begin::Pic-->
+						<div class="symbol symbol-70px symbol-2by3 flex-shrink-0">
+							<img src='{% static "assets/media/stock/600x400/img-27.jpg"%}' alt="" />
+						</div>
+						<!--end::Pic-->
+					</div>
+					<!--end::Item-->
+				</div>
+				<!--end::Card body-->
+				<!--begin::Card footer-->
+				<div class="card-footer">
+					<!--begin::Item-->
+					<div class="d-flex flex-stack">
+						<span class="fw-bold text-gray-600">Total</span>
+						<span class="text-gray-800 fw-bolder fs-5">$ 1840.00</span>
+					</div>
+					<!--end::Item-->
+					<!--begin::Item-->
+					<div class="d-flex flex-stack">
+						<span class="fw-bold text-gray-600">Sub total</span>
+						<span class="text-primary fw-bolder fs-5">$ 246.35</span>
+					</div>
+					<!--end::Item-->
+					<!--end::Action-->
+					<div class="d-flex justify-content-end mt-9">
+						<a href="#" class="btn btn-primary d-flex justify-content-end">Pleace Order</a>
+					</div>
+					<!--end::Action-->
+				</div>
+				<!--end::Card footer-->
+			</div>
+			<!--end::Messenger-->
+		</div>
+		<!--end::Chat drawer -->
+
+<input id="SendToId"  type="hidden" />
+<input id="Sendfrom"  type="hidden" />
+<input id="volume_onof"  type="hidden" value="{% if request.user.chat_volume %}ON{%endif%}" />
+		
+	
+		<script>
+
+/// Chat System
+
+// Class definition
+var KTAppChat = function () {
+
+	// Private functions
+	var handeSend = function (element) {
+		if (!element) {
+			return;
+		}
+
+		// Handle send
+		element.querySelector('[data-kt-element="input"]').addEventListener('keydown', function(e) {
+			if (e.keyCode == 13) {
+				handeMessaging(element);
+				e.preventDefault();
+
+				return false;
+			}
+		});
+
+		element.querySelector('[data-kt-element="send"]').addEventListener('click', function(e) {
+			handeMessaging(element);
+		});
+	};
+
+	var handeMessaging = function(element) {
+		var messages = element.querySelector('[data-kt-element="messages"]');
+		var input = element.querySelector('[data-kt-element="input"]');
+        var chatList = document.querySelector('#chatList');
+
+		if (input.value.length === 0) {
+			return;
+		}
+
+		var messageOutTemplate = messages.querySelector('[data-kt-element="template-out"]');
+		var messageInTemplate = messages.querySelector('[data-kt-element="template-in"]');
+		var message;
+
+		// Show example outgoing message
+		message = messageOutTemplate.cloneNode(true);
+		message.classList.remove('d-none');
+		message.querySelector('[data-kt-element="message-text"]').innerText = input.value;
+        message.querySelector('[data-kt-element="message-time"]').innerText = "Just now";
+		chatList.appendChild(message);
+		messages.scrollTop = messages.scrollHeight;
+	    var SendToId = document.getElementById("SendToId").value; 
+		var data = { 
+			"SendToId": SendToId,
+			"message": input.value,
+		   };
+		$.ajax({ // 
+			type:'POST',
+			url: '{% url "send_Message" %}',
+			data: data,
+			success: function(data) {
+				if (data) {
+				input.value = '';
+				}
+				}
+			});
+		//setTimeout(function() {
+			// Show example incoming message
+		//	message = messageInTemplate.cloneNode(true);
+			//message.classList.remove('d-none');
+			//message.querySelector('[data-kt-element="message-text"]').innerText = 'Thank you for your awesome support!';
+			//messages.appendChild(message);
+		//	messages.scrollTop = messages.scrollHeight;
+		//}, 2000);
+	};
+
+	// Public methods
+	return {
+		init: function(element) {
+			handeSend(element);
+		}
+	};
+}();
+
+// On document ready
+document.addEventListener('DOMContentLoaded', function () {
+	// Init inline chat messenger
+	KTAppChat.init(document.querySelector('#kt_chat_messenger'));
+
+	// Init drawer chat messenger
+	KTAppChat.init(document.querySelector('#kt_drawer_chat_messenger'));
+	//load_all_users();
+	//userSearch ();
+	
+	setInterval(function(){
+		//load_all_users();
+	}, 5000);
+
+	setInterval(function(){
+	    //check_for_unread_messages();
+		//load_new_chat();
+		}, 500 );
+	volume();
+	closeChat();
+});
+//////////////////////////////////////////////////////////////////////
+// Custom Codes
+//////////////////////////////////////////////////////////////////////
+
+function userSearch (){
+	const userSearchInput = document.getElementById('userSearch');
+	const userList = document.getElementById('userList');
+
+	userSearchInput.addEventListener('keyup', () => {
+		const searchText = userSearchInput.value.toLowerCase();
+		const users = userList.getElementsByClassName('user');
+
+		for (const user of users) {
+			const userName = user.querySelector('.userName').textContent.toLowerCase();
+			if (userName.includes(searchText)) {
+				user.style.display = 'block';
+			} else {
+				user.style.display = 'none';
+			}
+		}
+	});
+};
+
+function showUsers (){
+	//
+var x = document.getElementById("UsersArea");
+
+var y = document.getElementById("chatArea");
+var kt_drawer_chat_messenger_footer = document.getElementById("kt_drawer_chat_messenger_footer");
+	  
+  if (x.style.display === "none") {
+    x.style.display = "block";
+	 document.getElementById('findUser').innerHTML ="Return to Chat";
+  } else {
+    x.style.display = "none";
+	 document.getElementById('findUser').innerHTML ="Find User";
+  } 
+  if (y.style.display === "none") {
+    y.style.display = "block";
+    kt_drawer_chat_messenger_footer.style.display = "block";
+	 document.getElementById('findUser').innerHTML ="Find User";
+  } else {
+    y.style.display = "none";
+    kt_drawer_chat_messenger_footer.style.display = "none";
+	 document.getElementById('findUser').innerHTML ="Return to Chat";
+  }  
+};
+// your_js_file.js
+function load_new_chat() {
+    var sender = document.getElementById("SendToId").value;
+    var volume_onof = document.getElementById("volume_onof").value;
+
+    if (sender !== "") {
+        var data = {
+            "sender": sender,
+        };
+        $.ajax({
+            type: 'POST',
+            url: '{% url "load_new_chat" %}',
+            data: data,
+            success: function(response) {
+                if (response !== "") {
+                    var messages = document.querySelector('[data-kt-element="messages"]');
+                    var chatList = document.querySelector('#chatList');
+                    var messageInTemplate = messages.querySelector('[data-kt-element="template-in"]');
+                    var imgSrcmale = "{% static 'assets/img/avataMale.jpg' %}";
+                    var imgSrcfemale = "{% static 'assets/img/avataFemale.jpg' %}";
+                    var photo;
+                    var message;
+
+                    var Chats = JSON.parse(response.data);
+                    for (var i = 0; i < Chats.length; i++) {
+                        var chat = Chats[i];
+                        if (chat.photo) {
+                            photo = chat.photo;
+                        } else {
+                            if (chat.male === "yes") {
+                                photo = imgSrcmale;
+                            } else {
+                                photo = imgSrcfemale;
+                            }
+                        }
+                        message = messageInTemplate.cloneNode(true);
+                        message.classList.remove('d-none');
+                        message.querySelector('[data-kt-element="message-text"]').innerText = chat.message;
+                        message.querySelector('[data-kt-element="message-img"]').src = photo;
+                        message.querySelector('[data-kt-element="message-time"]').innerText = chat.time_since;
+                        message.querySelector('[data-kt-element="message-name"]').innerText = chat.name;
+                        chatList.appendChild(message);
+                        messages.scrollTop = messages.scrollHeight; // Scroll to the bottom
+                        if (volume_onof === "ON") {
+                            playAudio();
+                        }
+                    }
+                } else {
+                    // Handle the case when there's no message
+                }
+            }
+        });
+    }
+}
+
+$(document).on('click', '.user', function (e) {
+    e.preventDefault();
+    var id = $(this).data('id');
+    var name = $(this).data('name');
+    var online = $(this).data('online');
+    var img = $(this).data('img');
+    var abr = $(this).data('abr');
+    var profilepic = $(this).data('profilepic');
+     
+	 
+	
+	document.getElementById("SendToId").value= id;
+	
+    var x = document.getElementById("UsersArea");
+    var y = document.getElementById("chatArea");
+    var Pic = document.getElementById("Pic");
+    var PicArea = document.getElementById("PicArea");
+	
+    var volume_onof = document.getElementById("volume_onof").value;
+	//handle close icons
+	var closeMain = document.getElementById("kt_drawer_chat_close");
+	var close = document.getElementById("kt_drawer_return_to_users");
+	var volumeArea = document.getElementById("volumeArea");
+	closeMain.style.display = "none"; // 
+	close.style.display = "block"; //
+	volumeArea.style.display = "block"; //
+	
+	var img_var = '<img id="Pic" src="'+profilepic+'" />';
+	var Picspan ='<span id="Picspan" class="symbol-label  bg-light-danger text-danger  fs-6 fw-bolder ">'+abr+'</span>'
+   
+    //var Picspan = document.getElementById("Picspan");
+	
+
+    document.getElementById("userMainName").innerHTML = name;
+	 if (profilepic) {
+		PicArea.innerHTML = img_var;
+	}else{
+		PicArea.innerHTML = Picspan;
+	}
+	
+	var kt_drawer_chat_messenger_footer = document.getElementById("kt_drawer_chat_messenger_footer");
+	
+    if (online === 1) {
+        document.getElementById("userMainActive").style.display = "block";
+        document.getElementById("userMainActivespan").innerHTML = "Online";
+    } else {
+        document.getElementById("userMainActive").style.display = "none";
+    }
+    
+     
+    y.style.display = "block";
+    kt_drawer_chat_messenger_footer.style.display = "block";
+    x.style.display = "none";
+    document.getElementById('findUser').innerHTML = "Find User";
+    document.getElementById('findUser').style.display = "block";
+	const users = userList.getElementsByClassName('user');
+
+	for (const user of users) {
+		user.style.backgroundColor="#ffff";
+	}
+	var click_id = document.getElementById('user_'+id+'');  
+	 click_id.style.backgroundColor="#F8F8FF";
+	 
+	var data = { 
+	"SendToId": id,
+   };
+$.ajax({
+    type: 'POST',
+    url: '{% url "all_user_chat" %}',
+    data: data,
+    success: function(response) {
+        // Handle success
+        if (response && response.today_chats) {
+            var messages = document.querySelector('[data-kt-element="messages"]'); 
+			var chatList = document.querySelector('#chatList');
+            var messageOutTemplate = messages.querySelector('[data-kt-element="template-out"]');
+            var messageInTemplate = messages.querySelector('[data-kt-element="template-in"]');
+			var imgSrcmale ="{% static 'assets/img/avataMale.jpg' %}";
+			var imgSrcfemale ="{% static 'assets/img/avataFemale.jpg' %}";
+			var photo;
+			var photo_user;
+			var imgSrc;
+            var message;
+			chatList.innerHTML ='';
+            var todayChats = JSON.parse(response.today_chats);
+
+            var yesterday_chats = JSON.parse(response.yesterday_chats);
+			var other_chats = JSON.parse(response.other_chats);
+			
+			
+			for (var i = 0; i < other_chats.length; i++) {
+                var chat = other_chats[i];
+                // Access chat properties like chat.id, chat.name, etc., and do something with them
+                // Show example outgoing message
+				
+				
+				
+                if (chat.sender === 'self') {
+					{% if request.user.file.url != "/media/False" %}
+						photo_user = '{{ request.user.file.url }}';
+					{% else %}
+						{% if request.user.gender == "Male" %}
+							photo_user = imgSrcmale;
+						{% else %}
+							photo_user = imgSrcfemale;
+						{% endif %}
+					{% endif %}
+
+                    message = messageOutTemplate.cloneNode(true);
+                    message.classList.remove('d-none');
+                    message.querySelector('[data-kt-element="message-text"]').innerText = chat.message;
+                    message.querySelector('[data-kt-element="message-img"]').src = photo_user;
+                    message.querySelector('[data-kt-element="message-time"]').innerText = chat.time_since;
+                    chatList.appendChild(message);
+                    messages.scrollTop = messages.scrollHeight;
+                } else {
+						if (chat.photo){
+							photo =chat.photo;
+						}
+						else{
+							if(chat.male ==="yes"){
+								photo =imgSrcmale;
+							}else{
+								photo =imgSrcfemale;
+							}
+						}
+                    message = messageInTemplate.cloneNode(true);
+                    message.classList.remove('d-none');
+                    message.querySelector('[data-kt-element="message-text"]').innerText = chat.message;
+                    message.querySelector('[data-kt-element="message-img"]').src = photo;
+                    message.querySelector('[data-kt-element="message-time"]').innerText = chat.time_since;
+                    message.querySelector('[data-kt-element="message-name"]').innerText = chat.name;
+                    chatList.appendChild(message);
+                    messages.scrollTop = messages.scrollHeight;
+                }
+            }
+        
+            for (var i = 0; i < yesterday_chats.length; i++) {
+                var chat = yesterday_chats[i];
+                // Access chat properties like chat.id, chat.name, etc., and do something with them
+                // Show example outgoing message
+                if (chat.sender === 'self') {
+				{% if request.user.file.url != "/media/False" %}
+						photo_user = '{{ request.user.file.url }}';
+					{% else %}
+						{% if request.user.gender == "Male" %}
+							photo_user = imgSrcmale;
+						{% else %}
+							photo_user = imgSrcfemale;
+						{% endif %}
+					{% endif %}
+                    message = messageOutTemplate.cloneNode(true);
+                    message.classList.remove('d-none');
+                    message.querySelector('[data-kt-element="message-text"]').innerText = chat.message;
+                    message.querySelector('[data-kt-element="message-img"]').src = photo_user;
+                    message.querySelector('[data-kt-element="message-time"]').innerText = chat.time_since;
+                    //message.querySelector('[data-kt-element="message-name"]').innerText = chat.name;
+                    chatList.appendChild(message);
+                    messages.scrollTop = messages.scrollHeight;
+                } else {
+						if (chat.photo){
+							photo =chat.photo;
+						}
+						else{
+							if(chat.male ==="yes"){
+								photo =imgSrcmale;
+							}else{
+								photo =imgSrcfemale;
+							}
+						}
+                    message = messageInTemplate.cloneNode(true);
+                    message.classList.remove('d-none');
+                    message.querySelector('[data-kt-element="message-text"]').innerText = chat.message;
+                    message.querySelector('[data-kt-element="message-img"]').src = photo;
+                    message.querySelector('[data-kt-element="message-time"]').innerText = chat.time_since;
+                    message.querySelector('[data-kt-element="message-name"]').innerText = chat.name;
+                    chatList.appendChild(message);
+                    messages.scrollTop = messages.scrollHeight;
+                }
+            }
+			
+            for (var i = 0; i < todayChats.length; i++) {
+                var chat = todayChats[i];
+                // Access chat properties like chat.id, chat.name, etc., and do something with them
+                // Show example outgoing message
+				
+                if (chat.sender === 'self') {
+				   {% if request.user.file.url != "/media/False" %}
+						photo_user = '{{ request.user.file.url }}';
+					{% else %}
+						{% if request.user.gender == "Male" %}
+							photo_user = imgSrcmale;
+						{% else %}
+							photo_user = imgSrcfemale;
+						{% endif %}
+					{% endif %}
+                    message = messageOutTemplate.cloneNode(true);
+                    message.classList.remove('d-none');
+                    message.querySelector('[data-kt-element="message-text"]').innerText = chat.message;
+                    message.querySelector('[data-kt-element="message-img"]').src = photo_user;
+                    message.querySelector('[data-kt-element="message-time"]').innerText = chat.time_since;
+                    //message.querySelector('[data-kt-element="message-name"]').innerText = chat.name;
+                    chatList.appendChild(message);
+                    messages.scrollTop = messages.scrollHeight;
+                } else {
+						if (chat.photo){
+							photo =chat.photo;
+						}
+						else{
+							if(chat.male ==="yes"){
+								photo =imgSrcmale;
+							}else{
+								photo =imgSrcfemale;
+							}
+						}
+                    message = messageInTemplate.cloneNode(true);
+                    message.classList.remove('d-none');
+                    message.querySelector('[data-kt-element="message-text"]').innerText = chat.message;
+                    message.querySelector('[data-kt-element="message-img"]').src = photo;
+                    message.querySelector('[data-kt-element="message-time"]').innerText = chat.time_since;
+                    message.querySelector('[data-kt-element="message-name"]').innerText = chat.name;
+                    chatList.appendChild(message);
+                    messages.scrollTop = messages.scrollHeight;
+                }
+            }
+			
+      
+        } else {
+			document.getElementById("chatList").innerHTML ="";
+            document.getElementById("chatList").innerHTML += "<div id='nomessage' class='time'>no message</div>";
+        }
+    },
+    error: function(jqXHR, textStatus, errorThrown) {
+        console.error('AJAX Error:', textStatus, errorThrown);
+        // Handle the error here, e.g., display an error message to the user
+    }
+});
+
+
+
+   
+});
+
+function load_all_users() {  
+ const userSearchInput = document.getElementById('userSearch');
+  if (userSearchInput.value === "") {
+   $.ajax({ // 
+		type:'POST',
+		url: '{% url "gets_users" %}',
+		success: function(data) {
+		if (data != "") {
+			document.getElementById('userList').innerHTML = data;
+		}
+		else{
+		document.getElementById("userList").innerHTML = "No Users";
+		
+		}
+		}
+	});	
+		}			
+};
+function playAudio() {
+  var audio = new Audio("{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/apps/static/assets/chat/play.wav");
+  audio.play();
+}
+
+
+function volume() {
+// Get references to the volume icons
+var volumeON = document.getElementById("volumeON");
+var volumeOFF = document.getElementById("volumeOFF");
+
+// Add a click event listener to toggle the icons
+volumeON.addEventListener("click", function() {
+    volumeON.style.display = "none"; // Hide volumeON icon
+    volumeOFF.style.display = "block"; // Show volumeOFF icon
+		var data = { 
+			"onof": "ON",
+		   };
+		$.ajax({ // 
+			type:'POST',   
+			url: '{% url "chat_volume_onof" %}',
+			data: data,
+			success: function(data) {
+			
+			document.getElementById("volume_onof").value= "";
+				}
+			});
+    // Add your logic for turning the volume OFF here
+    // For example, you can trigger the volume mute functionality
+});
+
+volumeOFF.addEventListener("click", function() {
+    volumeOFF.style.display = "none"; // Hide volumeOFF icon
+    volumeON.style.display = "block"; // Show volumeON icon
+	var data = { 
+			"onof": "OFF",
+		   };
+		$.ajax({ // 
+			type:'POST',   
+			url: '{% url "chat_volume_onof" %}',
+			data: data,
+			success: function(data) {
+			 document.getElementById("volume_onof").value= "ON";
+				}
+			});
+			
+	
+    // Add your logic for turning the volume ON here
+    // For example, you can trigger the volume unmute functionality
+});
+
+}
+
+function closeChat() {
+// Get references to the volume icons
+var closeMain = document.getElementById("kt_drawer_chat_close");
+var close = document.getElementById("kt_drawer_return_to_users");
+var volumeArea = document.getElementById("volumeArea");
+
+close.addEventListener("click", function() {
+    close.style.display = "none"; // 
+    closeMain.style.display = "block"; // 
+	showUsers ();
+	document.getElementById("SendToId").value= "";
+	volumeArea.style.display = "none"; 
+});
+
+}
+
+function check_for_unread_messages() {
+
+         $.ajax({ // 
+			type:'POST',   
+			url: '{% url "check_for_unread_messages" %}',
+			success: function(data) {
+					if (data.status === "True"){
+						 document.getElementById("unreadAvailable").style.display= "block";
+							
+					}else{
+						
+						 document.getElementById("unreadAvailable").style.display= "none";
+					}
+				}
+			});
+}
+</script>

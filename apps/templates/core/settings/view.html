@@ -1,0 +1,58 @@
+
+{% extends "layouts/guest.html" %}
+
+{% block title %} {{settings.site_name}} {% endblock %} 
+
+<!-- Specific Page CSS goes HERE  -->
+
+
+{% block content %}
+
+	{% load static %}
+<style>
+.services:hover {
+    color: white!important;
+}	
+</style>
+<section class="hero-wrap hero-wrap-2" style="background-image: url('{% static 'assets/guest/images/bg_1.webp' %}'); max-height:200px!important;margin-bottom::20px!important">
+<div class="overlay"></div>
+<div class="container">
+<div class="row no-gutters slider-text align-items-center justify-content-center">
+<div class="col-md-9 pt-5 mt-5 text-center">
+<!-- <p class="breadcrumbs"><span class="me-2"><a href="{% url 'home' %}">Home <i class="fa fa-chevron-right"></i></a></span> <span>Contact <i class="fa fa-chevron-right"></i></span></p>
+<h1 class="mb-0 bread">Apply Now</h1>-->
+</div>
+</div>
+</div>
+</section>
+
+<section class="ftco-section ftco-no-pt ftco-no-pb">
+<div class="container-xl">
+<div class="row g-xl-12">
+
+<div class="col-md-12" data-aos="fade-up" data-aos-delay="200" data-aos-duration="1000">
+<div class="mt-0 my-lg-12 py-5">
+<span class="subheading">{{settings.site_name}}</span>
+<h2 class="mb-2">{{settings.site_name_abb}}</h2>
+<div class="row mt-12 g-lg-2">
+<div class="col-lg-12">
+<div class="services">
+<div class="icon"><span class="flaticon-online-learning"></span></div>
+<div class="text">
+<h2>{{my_record.tag}}</h2>
+<p class="mb-0">
+{{ my_record.content|safe }}
+</p>
+</div>
+</div>
+
+
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+
+{% endblock content %}

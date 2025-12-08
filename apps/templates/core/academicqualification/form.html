@@ -1,0 +1,132 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Add Academic Qualification {% endblock %} 
+{% block titlePage %}  {% if form.instance.name %} Edit Academic Qualification -  {{ form.name }} {% else %}  Add Student {% endif %} {% endblock %} 
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %} 
+<style>
+span a{
+display: none;
+}
+.glyphicon-ok:before {
+        content: "\f00c";
+    }
+    .glyphicon-remove:before {
+        content: "\f00d";
+    }
+    .glyphicon {
+        display: inline-block;
+        font: normal normal normal 14px/1 FontAwesome;
+        font-size: inherit;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+	
+	
+	
+	.feedsMain{
+margin-left:10%;
+margin-right:10%;
+}
+
+@media screen and (max-width: 960px) {
+.feedsMain{
+margin-left:5%;
+margin-right:5%;
+}
+}
+@media screen and (max-width: 768px) {
+.feedsMain{
+margin-left:2%;
+margin-right:2%;
+}
+}
+
+@media screen and (max-width: 480px) {
+.feedsMain{
+margin-left:0%;
+margin-right:0%;
+}
+}
+</style>
+
+<div class="feedsMain">
+				<div class="card">
+					<div class="card-header card-header-icon card-header-rose">
+						
+						<h4 class="card-title">Add Academic Qualification -
+							<!-- <small class="category">Complete Patient details</small> --></h4>
+					</div>
+					<div class="card-body">
+						<form id="defaultForm"
+						      action=""
+						      role="form"
+						      data-toggle="validator"
+						      method="POST"
+							  enctype="multipart/form-data">
+							  {% if form.errors %}
+							  <div class="row">
+							 <p class="btn btn-danger">
+							 {{ form.errors }}
+							 {{ form.non_field_errors }}
+							 </p> 
+							 </div>
+							 {% endif  %}
+
+
+							  {% csrf_token %} 
+								
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group bmd-form-group">
+										<label class="bmd-label-floating">Abbreviations</label>
+										 {{ form.prifix }}
+									</div>
+									<span class="text-danger">{{ form.prifix.errors }}</span>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group bmd-form-group">
+										<label class="bmd-label-floating">Name</label>
+										 {{ form.name }}
+									</div>
+									<span class="text-danger">{{ form.name.errors }}</span>
+								</div>
+								
+								<div class="col-md-12">
+									<div class="form-group bmd-form-group">
+										<label class="bmd-label-floating">Level</label>
+										 {{ form.level }}
+									</div>
+									<span class="text-danger">{{ form.level.errors }}</span>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group bmd-form-group">
+									<label class="bmd-label-floating">Status
+										</label>
+										{{ form.status }}
+									</div>
+										<span class="text-danger">{{ form.status.errors }}</span>
+								</div>
+								   	                            
+						        <input type="hidden" class="form-control" name="recordOwner" value="{% if form.instance.recordOwner %} {{ form.instance.recordOwner.id }} {% else %}{{ request.user.id }} {% endif %}">
+
+								 
+								</div>
+								<div  class="card-footer d-flex justify-content-end py-6">
+								<button type="submit"
+								        class="btn  btn-primary pull-right">Submit</button>
+								
+								</div>
+								<div class="clearfix"/>
+							</form>
+						</div>
+					</div>
+					<!--  end card  -->
+				</div>
+				<!-- end col-md-12 -->
+			
+{% endblock content %}
+

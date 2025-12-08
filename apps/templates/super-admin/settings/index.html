@@ -1,0 +1,519 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Settings {% endblock %} 
+
+{% block content %}
+{% load static %}
+  <!-- Settings Section -->
+  <section class="content-section active" id="section-settings">
+    <div class="section-header">
+      <div>
+        <h1 class="section-title">Settings</h1>
+        <p class="section-subtitle">Configure system settings and preferences</p>
+      </div>
+    </div>
+
+    <!-- Settings Tabs -->
+    <div style="margin-bottom: 2rem;">
+      <div style="display: flex; gap: 0.5rem; border-bottom: 2px solid var(--border-color); flex-wrap: wrap;">
+        <button class="settings-tab active" data-tab="general" onclick="switchTab('general')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 0.5rem;">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+          </svg>
+          General
+        </button>
+        <button class="settings-tab" data-tab="security" onclick="switchTab('security')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 0.5rem;">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+          Security
+        </button>
+        <button class="settings-tab" data-tab="appearance" onclick="switchTab('appearance')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 0.5rem;">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+          Appearance
+        </button>
+        <button class="settings-tab" data-tab="contact" onclick="switchTab('contact')">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="margin-right: 0.5rem;">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+          Contact & Social
+        </button>
+      </div>
+    </div>
+
+    <!-- General Settings Tab -->
+    <div id="tab-general" class="settings-tab-content active">
+      <form id="general-settings-form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="data-table-card" style="padding: 1.5rem;">
+          <h3 style="margin: 0 0 1.5rem 0; font-size: 1.25rem; font-weight: 600;">General Settings</h3>
+          
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+            <div class="form-group">
+              <label class="form-label">Site Name</label>
+              {{ form.site_name }}
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Site Name Abbreviation</label>
+              {{ form.site_name_abb }}
+            </div>
+            
+            <div class="form-group" style="grid-column: 1 / -1;">
+              <label class="form-label">Slogan</label>
+              {{ form.slogan }}
+            </div>
+            
+            <div class="form-group" style="grid-column: 1 / -1;">
+              <label class="form-label">Site Description</label>
+              {{ form.site_desc }}
+            </div>
+            
+            <div class="form-group" style="grid-column: 1 / -1;">
+              <label class="form-label">Site Keywords</label>
+              {{ form.site_keyword }}
+            </div>
+            
+            <div class="form-group" style="grid-column: 1 / -1;">
+              <label class="form-label">Google Analytics Code</label>
+              {{ form.google_code }}
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Status</label>
+              {{ form.status }}
+            </div>
+          </div>
+          
+          <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end;">
+            <button type="submit" class="btn btn-primary" id="general-save-btn">
+              <span class="btn-text">Save Changes</span>
+              <span class="btn-spinner" style="display: none;">
+                <span class="spinner" style="width: 16px; height: 16px; border-width: 2px;"></span>
+              </span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Security Settings Tab -->
+    <div id="tab-security" class="settings-tab-content" style="display: none;">
+      <div class="data-table-card" style="padding: 1.5rem;">
+        <h3 style="margin: 0 0 1.5rem 0; font-size: 1.25rem; font-weight: 600;">Security Settings</h3>
+        
+        <div style="display: flex; flex-direction: column; gap: 1rem;">
+          <div style="padding: 1rem; background: var(--bg-hover, #f5f5f5); border-radius: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <h4 style="margin: 0 0 0.25rem 0; font-size: 1rem; font-weight: 600;">Session Security</h4>
+                <p style="margin: 0; font-size: 0.875rem; color: var(--text-muted);">Sessions expire when browser closes</p>
+              </div>
+              <span class="status-badge success">Enabled</span>
+            </div>
+          </div>
+          
+          <div style="padding: 1rem; background: var(--bg-hover, #f5f5f5); border-radius: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <h4 style="margin: 0 0 0.25rem 0; font-size: 1rem; font-weight: 600;">Brute Force Protection</h4>
+                <p style="margin: 0; font-size: 0.875rem; color: var(--text-muted);">Protection against brute force attacks</p>
+              </div>
+              <span class="status-badge success">Enabled</span>
+            </div>
+          </div>
+          
+          <div style="padding: 1rem; background: var(--bg-hover, #f5f5f5); border-radius: 8px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+              <div>
+                <h4 style="margin: 0 0 0.25rem 0; font-size: 1rem; font-weight: 600;">JWT Authentication</h4>
+                <p style="margin: 0; font-size: 0.875rem; color: var(--text-muted);">Access token lifetime: 8 hours</p>
+              </div>
+              <span class="status-badge success">Enabled</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Appearance Settings Tab -->
+    <div id="tab-appearance" class="settings-tab-content" style="display: none;">
+      <form id="appearance-settings-form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="data-table-card" style="padding: 1.5rem;">
+          <h3 style="margin: 0 0 1.5rem 0; font-size: 1.25rem; font-weight: 600;">Appearance Settings</h3>
+          
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+            <div class="form-group">
+              <label class="form-label">Primary Color</label>
+              <div style="display: flex; gap: 0.5rem; align-items: center;">
+                {{ form.primary_color }}
+                <input type="color" id="primary-color-picker" value="{{ settings.primary_color|default:'#4f46e5' }}" onchange="document.getElementById('id_primary_color').value = this.value" style="width: 50px; height: 40px; border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer;">
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Secondary Color</label>
+              <div style="display: flex; gap: 0.5rem; align-items: center;">
+                {{ form.secondary_color }}
+                <input type="color" id="secondary-color-picker" value="{{ settings.secondary_color|default:'#6366f1' }}" onchange="document.getElementById('id_secondary_color').value = this.value" style="width: 50px; height: 40px; border: 1px solid var(--border-color); border-radius: 4px; cursor: pointer;">
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Logo</label>
+              {% if settings.file %}
+              <div style="margin-bottom: 0.5rem;">
+                <img src="{{ settings.file.url }}" alt="Logo" style="max-height: 60px; max-width: 200px; border: 1px solid var(--border-color); border-radius: 4px; padding: 0.5rem;">
+              </div>
+              {% endif %}
+              {{ form.file }}
+              <small style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.25rem; display: block;">Upload platform logo</small>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Secondary Logo</label>
+              {% if settings.file_2 %}
+              <div style="margin-bottom: 0.5rem;">
+                <img src="{{ settings.file_2.url }}" alt="Secondary Logo" style="max-height: 60px; max-width: 200px; border: 1px solid var(--border-color); border-radius: 4px; padding: 0.5rem;">
+              </div>
+              {% endif %}
+              {{ form.file_2 }}
+              <small style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.25rem; display: block;">Upload secondary logo</small>
+            </div>
+          </div>
+          
+          <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end;">
+            <button type="submit" class="btn btn-primary" id="appearance-save-btn">
+              <span class="btn-text">Save Changes</span>
+              <span class="btn-spinner" style="display: none;">
+                <span class="spinner" style="width: 16px; height: 16px; border-width: 2px;"></span>
+              </span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Contact & Social Settings Tab -->
+    <div id="tab-contact" class="settings-tab-content" style="display: none;">
+      <form id="contact-settings-form" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="data-table-card" style="padding: 1.5rem;">
+          <h3 style="margin: 0 0 1.5rem 0; font-size: 1.25rem; font-weight: 600;">Contact Information</h3>
+          
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+            <div class="form-group">
+              <label class="form-label">Primary Email</label>
+              {{ form.email }}
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Secondary Email</label>
+              {{ form.email2 }}
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Primary Phone</label>
+              {{ form.phone }}
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Secondary Phone</label>
+              {{ form.phone2 }}
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Street Address</label>
+              {{ form.street }}
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">City</label>
+              {{ form.city }}
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Country</label>
+              {{ form.country }}
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Street Address 2</label>
+              {{ form.street2 }}
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">City 2</label>
+              {{ form.city2 }}
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Country 2</label>
+              {{ form.country2 }}
+            </div>
+          </div>
+          
+          <h3 style="margin: 0 0 1.5rem 0; font-size: 1.25rem; font-weight: 600;">Social Media Links</h3>
+          
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem;">
+            <div class="form-group">
+              <label class="form-label">Facebook</label>
+              {{ form.facebook }}
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Twitter</label>
+              {{ form.twitter }}
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">LinkedIn</label>
+              {{ form.linkedin }}
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Google+</label>
+              {{ form.google }}
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Reddit</label>
+              {{ form.reddit }}
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Tumblr</label>
+              {{ form.tumblr }}
+            </div>
+          </div>
+          
+          <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end;">
+            <button type="submit" class="btn btn-primary" id="contact-save-btn">
+              <span class="btn-text">Save Changes</span>
+              <span class="btn-spinner" style="display: none;">
+                <span class="spinner" style="width: 16px; height: 16px; border-width: 2px;"></span>
+              </span>
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <script>
+    // Tab switching
+    function switchTab(tabName) {
+      // Hide all tab contents
+      document.querySelectorAll('.settings-tab-content').forEach(content => {
+        content.style.display = 'none';
+      });
+      
+      // Remove active class from all tabs
+      document.querySelectorAll('.settings-tab').forEach(tab => {
+        tab.classList.remove('active');
+      });
+      
+      // Show selected tab content
+      document.getElementById(`tab-${tabName}`).style.display = 'block';
+      
+      // Add active class to selected tab
+      document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+    }
+    
+    // Form submission handlers
+    document.getElementById('general-settings-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      await submitForm(this, 'general-save-btn');
+    });
+    
+    document.getElementById('appearance-settings-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      await submitForm(this, 'appearance-save-btn');
+    });
+    
+    document.getElementById('contact-settings-form').addEventListener('submit', async function(e) {
+      e.preventDefault();
+      await submitForm(this, 'contact-save-btn');
+    });
+    
+    async function submitForm(form, buttonId) {
+      const formData = new FormData(form);
+      const submitBtn = document.getElementById(buttonId);
+      const btnText = submitBtn.querySelector('.btn-text');
+      const btnSpinner = submitBtn.querySelector('.btn-spinner');
+      
+      btnText.style.display = 'none';
+      btnSpinner.style.display = 'inline-block';
+      submitBtn.disabled = true;
+      
+      try {
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value;
+        
+        const response = await fetch(form.action || window.location.pathname, {
+          method: 'POST',
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest',
+            'X-CSRFToken': csrfToken,
+          },
+          credentials: 'include',
+          body: formData
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok && result.success) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: result.message || 'Settings saved successfully',
+            timer: 2000,
+            showConfirmButton: false,
+            toast: true,
+            position: 'top-end'
+          });
+        } else {
+          // Handle validation errors
+          let errorMessage = result.message || 'Failed to save settings';
+          
+          if (result.errors) {
+            // Format form validation errors
+            const errorList = [];
+            for (const [field, messages] of Object.entries(result.errors)) {
+              if (Array.isArray(messages)) {
+                errorList.push(`<strong>${field}:</strong> ${messages.join(', ')}`);
+              } else {
+                errorList.push(`<strong>${field}:</strong> ${messages}`);
+              }
+            }
+            if (errorList.length > 0) {
+              errorMessage = 'Please fix the following errors:<br><br>' + errorList.join('<br>');
+            }
+          }
+          
+          Swal.fire({
+            icon: 'error',
+            title: 'Validation Error!',
+            html: errorMessage,
+            confirmButtonText: 'OK',
+            width: '600px'
+          });
+        }
+      } catch (error) {
+        console.error('Error saving settings:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: 'An error occurred while saving settings',
+          confirmButtonText: 'OK'
+        });
+      } finally {
+        btnText.style.display = 'inline-block';
+        btnSpinner.style.display = 'none';
+        submitBtn.disabled = false;
+      }
+    }
+    
+    // Sync color pickers with text inputs
+    document.getElementById('id_primary_color')?.addEventListener('input', function(e) {
+      document.getElementById('primary-color-picker').value = e.target.value;
+    });
+    
+    document.getElementById('id_secondary_color')?.addEventListener('input', function(e) {
+      document.getElementById('secondary-color-picker').value = e.target.value;
+    });
+  </script>
+
+  <style>
+    .settings-tab {
+      padding: 0.75rem 1.5rem;
+      background: none;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: var(--text-muted);
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      transition: all 0.2s;
+      font-size: 0.875rem;
+    }
+    
+    .settings-tab:hover {
+      color: var(--text-primary);
+      background: var(--bg-hover, #f5f5f5);
+    }
+    
+    .settings-tab.active {
+      color: var(--accent-primary);
+      border-bottom-color: var(--accent-primary);
+    }
+    
+    .settings-tab-content {
+      animation: fadeIn 0.3s ease-in;
+    }
+    
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+    
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      font-size: 0.875rem;
+      color: var(--text-primary);
+    }
+    
+    .form-group input[type="text"],
+    .form-group input[type="email"],
+    .form-group input[type="url"],
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 0.75rem;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      font-size: 0.875rem;
+      transition: all 0.2s;
+    }
+    
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+    
+    .spinner {
+      border: 3px solid var(--border-color);
+      border-top-color: var(--accent-primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      display: inline-block;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+
+{% endblock content %}

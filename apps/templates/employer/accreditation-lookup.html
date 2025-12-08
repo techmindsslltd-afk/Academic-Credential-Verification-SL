@@ -1,0 +1,80 @@
+
+        <section class="content-section active" id="section-employer-accreditation">
+          <div class="section-header">
+            <div>
+              <h1 class="section-title">Accreditation Lookup</h1>
+              <p class="section-subtitle">Verify institution accreditation status</p>
+            </div>
+          </div>
+          
+          <!-- Search Form -->
+          <div class="accreditation-search-card">
+            <h3>Check Institution Accreditation</h3>
+            <p>Search for any institution to verify its accreditation status through our database and UNESCO WHED records.</p>
+            
+            <form id="accreditation-search-form" class="search-form">
+              <div class="form-group" style="grid-column: 1 / -1;">
+                <label class="form-label">Institution Name</label>
+                <input type="text" class="form-input" id="institution-search-input" placeholder="Enter institution name..." required>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Country (Optional)</label>
+                <select class="form-select" id="country-filter">
+                  <option value="">All Countries</option>
+                  {% for country in countries %}
+                  <option value="{{ country }}">{{ country }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              
+              <div class="form-group">
+                <label class="form-label">Institution Type (Optional)</label>
+                <select class="form-select" id="institution-type-filter">
+                  <option value="">All Types</option>
+                  {% for value, label in institution_types %}
+                  <option value="{{ value }}">{{ label }}</option>
+                  {% endfor %}
+                </select>
+              </div>
+              
+              <div class="form-group" style="grid-column: 1 / -1; margin-top: 1rem;">
+                <button type="submit" class="btn btn-primary" id="search-btn">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/>
+                    <path d="m21 21-4.3-4.3"/>
+                  </svg>
+                  Search Accreditation Database
+                </button>
+              </div>
+            </form>
+          </div>
+          
+          <!-- Search Results -->
+          <div id="accreditation-results" style="display: none; margin-top: 2rem;">
+            <div class="section-header">
+              <div>
+                <h2 class="section-title">Search Results</h2>
+                <p class="section-subtitle" id="results-count"></p>
+              </div>
+            </div>
+            
+            <!-- CertChain Institutions -->
+            <div id="certchain-results" style="margin-bottom: 2rem;"></div>
+            
+            <!-- WHED Records -->
+            <div id="whed-results"></div>
+          </div>
+          
+          <!-- No Results -->
+          <div id="no-results" style="display: none; margin-top: 2rem;">
+            <div class="data-table-card" style="text-align: center; padding: 3rem;">
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="color: #9ca3af; margin-bottom: 1rem;">
+                <circle cx="11" cy="11" r="8"/>
+                <path d="m21 21-4.3-4.3"/>
+              </svg>
+              <h3 style="color: #6b7280; margin-bottom: 0.5rem;">No Results Found</h3>
+              <p style="color: #9ca3af;">Try adjusting your search criteria or search for a different institution.</p>
+            </div>
+          </div>
+        </section>

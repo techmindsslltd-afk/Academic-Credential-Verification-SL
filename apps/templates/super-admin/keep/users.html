@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Users Management - CertChain Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../../styles.css">
+  <link rel="stylesheet" href="../../dashboard.css">
+  <link rel="stylesheet" href="../admin.css">
+</head>
+<body class="dashboard-body">
+  <div class="admin-page">
+    <!-- Page Header -->
+    <div class="page-header">
+      <div class="page-header-content">
+        <div class="page-title-group">
+          <h1 class="page-title">Users Management</h1>
+          <p class="page-subtitle">Manage all platform users including admins, students, and employers</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-outline" id="export-users-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Export
+          </button>
+          <button class="btn btn-primary" id="add-user-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <line x1="19" y1="8" x2="19" y2="14"/>
+              <line x1="16" y1="11" x2="22" y2="11"/>
+            </svg>
+            Add User
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- User Stats -->
+    <div class="stats-row">
+      <div class="stat-card-mini">
+        <div class="stat-card-mini-icon primary">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+        </div>
+        <div class="stat-card-mini-content">
+          <span class="stat-card-mini-value">12,458</span>
+          <span class="stat-card-mini-label">Total Users</span>
+        </div>
+      </div>
+      <div class="stat-card-mini">
+        <div class="stat-card-mini-icon teal">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+            <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+          </svg>
+        </div>
+        <div class="stat-card-mini-content">
+          <span class="stat-card-mini-value">9,842</span>
+          <span class="stat-card-mini-label">Students</span>
+        </div>
+      </div>
+      <div class="stat-card-mini">
+        <div class="stat-card-mini-icon coral">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"/>
+            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>
+          </svg>
+        </div>
+        <div class="stat-card-mini-content">
+          <span class="stat-card-mini-value">2,156</span>
+          <span class="stat-card-mini-label">Employers</span>
+        </div>
+      </div>
+      <div class="stat-card-mini">
+        <div class="stat-card-mini-icon success">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+          </svg>
+        </div>
+        <div class="stat-card-mini-content">
+          <span class="stat-card-mini-value">460</span>
+          <span class="stat-card-mini-label">Inst. Admins</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Filters & Search -->
+    <div class="filters-bar">
+      <div class="search-filter">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="8"/>
+          <path d="m21 21-4.3-4.3"/>
+        </svg>
+        <input type="text" placeholder="Search by name, email, or ID..." class="search-filter-input" id="user-search">
+      </div>
+      <div class="filter-group">
+        <select class="filter-select" id="filter-role">
+          <option value="">All Roles</option>
+          <option value="student">Student</option>
+          <option value="employer">Employer</option>
+          <option value="inst-admin">Institution Admin</option>
+          <option value="super-admin">Super Admin</option>
+        </select>
+        <select class="filter-select" id="filter-user-status">
+          <option value="">All Status</option>
+          <option value="active">Active</option>
+          <option value="inactive">Inactive</option>
+          <option value="suspended">Suspended</option>
+        </select>
+        <select class="filter-select" id="filter-verification">
+          <option value="">Verification Status</option>
+          <option value="verified">Email Verified</option>
+          <option value="unverified">Unverified</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Users Table -->
+    <div class="data-table-container">
+      <table class="data-table" id="users-table">
+        <thead>
+          <tr>
+            <th><input type="checkbox" class="table-checkbox" id="select-all-users"></th>
+            <th>User</th>
+            <th>Role</th>
+            <th>Institution/Company</th>
+            <th>Credentials</th>
+            <th>Status</th>
+            <th>Last Active</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input type="checkbox" class="table-checkbox row-checkbox"></td>
+            <td>
+              <div class="user-cell">
+                <div class="user-avatar-cell">
+                  <img src="/placeholder.svg?height=40&width=40" alt="User">
+                  <span class="user-verified-badge" title="Verified">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 2L3.5 6.5v5.5c0 4.4 3.6 8.4 8.5 10 4.9-1.6 8.5-5.6 8.5-10V6.5L12 2zm-1 14l-4-4 1.4-1.4 2.6 2.6 5.6-5.6L18 9l-7 7z"/>
+                    </svg>
+                  </span>
+                </div>
+                <div class="user-info-cell">
+                  <span class="user-name-cell">Aminata Kamara</span>
+                  <span class="user-email-cell">aminata.kamara@student.usl.edu.sl</span>
+                </div>
+              </div>
+            </td>
+            <td><span class="role-badge student">Student</span></td>
+            <td>University of Sierra Leone</td>
+            <td><strong>3</strong></td>
+            <td><span class="status-badge success">Active</span></td>
+            <td>2 hours ago</td>
+            <td>
+              <div class="action-buttons">
+                <button class="action-btn" title="View Profile">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                </button>
+                <button class="action-btn" title="Edit">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+                  </svg>
+                </button>
+                <button class="action-btn action-btn-danger" title="Suspend">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+                  </svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" class="table-checkbox row-checkbox"></td>
+            <td>
+              <div class="user-cell">
+                <div class="user-avatar-cell">
+                  <img src="/placeholder.svg?height=40&width=40" alt="User">
+                  <span class="user-verified-badge" title="Verified">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 2L3.5 6.5v5.5c0 4.4 3.6 8.4 8.5 10 4.9-1.6 8.5-5.6 8.5-10V6.5L12 2zm-1 14l-4-4 1.4-1.4 2.6 2.6 5.6-5.6L18 9l-7 7z"/>
+                    </svg>
+                  </span>
+                </div>
+                <div class="user-info-cell">
+                  <span class="user-name-cell">Mohamed Sesay</span>
+                  <span class="user-email-cell">mohamed.sesay@techcorp.sl</span>
+                </div>
+              </div>
+            </td>
+            <td><span class="role-badge employer">Employer</span></td>
+            <td>TechCorp Sierra Leone</td>
+            <td><strong>-</strong></td>
+            <td><span class="status-badge success">Active</span></td>
+            <td>5 mins ago</td>
+            <td>
+              <div class="action-buttons">
+                <button class="action-btn" title="View Profile">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                </button>
+                <button class="action-btn" title="Edit">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+                  </svg>
+                </button>
+                <button class="action-btn action-btn-danger" title="Suspend">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+                  </svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" class="table-checkbox row-checkbox"></td>
+            <td>
+              <div class="user-cell">
+                <div class="user-avatar-cell">
+                  <img src="/placeholder.svg?height=40&width=40" alt="User">
+                  <span class="user-verified-badge" title="Verified">
+                    <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                      <path d="M12 2L3.5 6.5v5.5c0 4.4 3.6 8.4 8.5 10 4.9-1.6 8.5-5.6 8.5-10V6.5L12 2zm-1 14l-4-4 1.4-1.4 2.6 2.6 5.6-5.6L18 9l-7 7z"/>
+                    </svg>
+                  </span>
+                </div>
+                <div class="user-info-cell">
+                  <span class="user-name-cell">Dr. Sarah Bangura</span>
+                  <span class="user-email-cell">sarah.bangura@usl.edu.sl</span>
+                </div>
+              </div>
+            </td>
+            <td><span class="role-badge inst-admin">Inst. Admin</span></td>
+            <td>University of Sierra Leone</td>
+            <td><strong>-</strong></td>
+            <td><span class="status-badge success">Active</span></td>
+            <td>1 hour ago</td>
+            <td>
+              <div class="action-buttons">
+                <button class="action-btn" title="View Profile">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                </button>
+                <button class="action-btn" title="Edit">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+                  </svg>
+                </button>
+                <button class="action-btn action-btn-danger" title="Suspend">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/>
+                  </svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><input type="checkbox" class="table-checkbox row-checkbox"></td>
+            <td>
+              <div class="user-cell">
+                <div class="user-avatar-cell">
+                  <img src="/placeholder.svg?height=40&width=40" alt="User">
+                </div>
+                <div class="user-info-cell">
+                  <span class="user-name-cell">Ibrahim Conteh</span>
+                  <span class="user-email-cell">ibrahim.conteh@student.njala.edu.sl</span>
+                </div>
+              </div>
+            </td>
+            <td><span class="role-badge student">Student</span></td>
+            <td>Njala University</td>
+            <td><strong>1</strong></td>
+            <td><span class="status-badge warning">Inactive</span></td>
+            <td>3 weeks ago</td>
+            <td>
+              <div class="action-buttons">
+                <button class="action-btn" title="View Profile">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                </button>
+                <button class="action-btn" title="Edit">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+                  </svg>
+                </button>
+                <button class="action-btn action-btn-success" title="Reactivate">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m9 12 2 2 4-4"/>
+                    <circle cx="12" cy="12" r="10"/>
+                  </svg>
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <div class="table-footer">
+        <div class="table-info">
+          Showing <strong>1-4</strong> of <strong>12,458</strong> users
+        </div>
+        <div class="pagination">
+          <button class="pagination-btn" disabled>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="m15 18-6-6 6-6"/>
+            </svg>
+          </button>
+          <button class="pagination-btn active">1</button>
+          <button class="pagination-btn">2</button>
+          <button class="pagination-btn">3</button>
+          <span class="pagination-ellipsis">...</span>
+          <button class="pagination-btn">3115</button>
+          <button class="pagination-btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="m9 18 6-6-6-6"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<!--begin:Menu item-->
+<div class="menu-item pt-5">
+    <!--begin:Menu content-->
+    <div class="menu-content">
+        <span class="menu-heading fw-bold text-uppercase fs-7">Verification</span>
+    </div>
+    <!--end:Menu content-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item me-5">
+    <!--begin:Menu link-->
+    <a href="{% url 'credential_verify' %}" class="menu-link {% if 'verify-credential' == segment %} active {% endif %}">
+        <span class="menu-icon">
+            <i style='opacity:0.3;' class='fas fa-shield-check'></i>
+        </span>
+        <span class="menu-title">Verify Credential</span>
+    </a>
+    <!--end:Menu link-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item me-5">
+    <!--begin:Menu link-->
+    <a href="#" class="menu-link {% if 'scan-qr' == segment %} active {% endif %}">
+        <span class="menu-icon">
+            <i style='opacity:0.3;' class='fas fa-qrcode'></i>
+        </span>
+        <span class="menu-title">Scan QR Code</span>
+    </a>
+    <!--end:Menu link-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item me-5">
+    <!--begin:Menu link-->
+    <a href="#" class="menu-link {% if 'employer-accreditation' == segment %} active {% endif %}">
+        <span class="menu-icon">
+            <i style='opacity:0.3;' class='fas fa-search'></i>
+        </span>
+        <span class="menu-title">Accreditation Lookup</span>
+    </a>
+    <!--end:Menu link-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item me-5">
+    <!--begin:Menu link-->
+    <a href="#" class="menu-link {% if 'employer-history' == segment %} active {% endif %}">
+        <span class="menu-icon">
+            <i style='opacity:0.3;' class='fas fa-history'></i>
+        </span>
+        <span class="menu-title">Verification History</span>
+    </a>
+    <!--end:Menu link-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item pt-5">
+    <!--begin:Menu content-->
+    <div class="menu-content">
+        <span class="menu-heading fw-bold text-uppercase fs-7">Account</span>
+    </div>
+    <!--end:Menu content-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item me-5">
+    <!--begin:Menu link-->
+    <a href="{% url 'profile' %}" class="menu-link {% if 'employer-profile' == segment %} active {% endif %}">
+        <span class="menu-icon">
+            <i style='opacity:0.3;' class='fas fa-user'></i>
+        </span>
+        <span class="menu-title">Profile</span>
+    </a>
+    <!--end:Menu link-->
+</div>
+<!--end:Menu item-->
+

@@ -1,0 +1,291 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} {{ lecturer.full_name }} {% endblock %} 
+{% block titlePage %} {{ lecturer.full_name }}{% endblock %} 
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %} 
+<style>
+select[disabled]{
+background-color:fff;
+}
+input[type="text"]:disabled{
+background-color:fff;
+cursor:pointer;
+}
+
+.feedsMain{
+margin-left:10%;
+margin-right:10%;
+}
+
+@media screen and (max-width: 960px) {
+.feedsMain{
+margin-left:5%;
+margin-right:5%;
+}
+}
+@media screen and (max-width: 768px) {
+.feedsMain{
+margin-left:2%;
+margin-right:2%;
+}
+}
+
+@media screen and (max-width: 480px) {
+.feedsMain{
+margin-left:0%;
+margin-right:0%;
+}
+}
+</style>
+<div class="feedsMain">
+<div class="content ">
+	<div class="container-fluid">
+		<div class="row ">
+			<div class="col-md-10 ">
+				<div class="card">
+					<div class="card-header card-header-icon card-header-rose">
+						<div class="card-icon btn-primary ">
+							<i class="material-icons">perm_identity</i>
+						</div>
+						<h4 class="card-title"> Lecturer Profile
+							<small class="category">{{ lecturer.full_name }}</small> </h4>
+					</div>
+					<div class="card-body">
+						<form id="defaultForm"
+						      action=""
+						      role="form"
+						      data-toggle="validator"
+						      method="POST"
+							  enctype="multipart/form-data">
+							 
+							<div class="row">
+								<div class="col-md-6">
+									<div class="preview">
+									{% if lecturer.file.url  %}
+									<img src="{{ lecturer.file.url }}" class="thumbnail" alt="" style="width:100%;">
+									{% endif  %}
+									 
+									</div>
+									
+								</div>
+							
+								<div class="col-md-6">
+									<div class="form-group bmd-form-group">
+										<label class="bmd-label-floating">Staff Number
+											<span class="text-danger">*</span>
+										</label>
+										<input type="text" value="{{ lecturer.staffNumber }}" class="form-control" style="cursor:default" disabled>
+										 
+									</div>
+									
+									<div class="form-group bmd-form-group">
+										<label class="bmd-label-floating">Surname
+											<span class="text-danger">*</span>
+										</label>
+										<input type="text" value="{{ lecturer.surname }}" class="form-control" style="cursor:default" disabled>
+										 
+									</div>
+								
+									<div class="form-group bmd-form-group"> 
+										<label class="bmd-label-floating">First Name
+											<span class="text-danger">*</span>
+										</label>
+										<input type="text" value="{{ lecturer.name }}" class="form-control" style="cursor:default" disabled>
+										 
+									</div>
+									
+								</div>
+							</div>
+							
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group bmd-form-group">
+										<label class="bmd-label-floating">Other Name(s)</label>
+										<input type="text" value="{{ lecturer.other_name }}" class="form-control" style="cursor:default" disabled>
+										
+									</div>
+									
+								</div>
+								<div class="col-md-12">
+									<div class="form-group bmd-form-group">
+										<label class="">Date of Birth
+											<span class="text-danger">*</span>
+										</label>
+										
+										<input type="text" value="{{ lecturer.dob }}" class="form-control" style="cursor:default" disabled>
+										
+									</div>
+									
+								</div>
+								<div class="col-md-12">
+									<div class="form-group bmd-form-group">
+										<label class="control-label">Gender
+											<span class="text-danger">*</span>
+										</label>
+										<input type="text" value="{{ lecturer.gender }}" class="form-control" style="cursor:default" disabled>
+										
+									</div>
+								
+								</div>
+
+								<div class="col-md-12">
+									<div class="form-group bmd-form-group">
+										<label class="bmd-label-floating">Phone Number
+											
+										</label>
+										<input type="text" value="{{ lecturer.phone }}" class="form-control" style="cursor:default" disabled>
+									
+									</div>
+										
+								</div>
+								<div class="col-md-12">
+									<div class="form-group bmd-form-group">
+										<label class="bmd-label-floating">Email
+											
+										</label>
+										<input type="text" value="{{ lecturer.email }}" class="form-control" style="cursor:default" disabled>
+									
+									</div>
+										
+								</div>
+								<div class="col-md-12">
+									<div class="form-group bmd-form-group">
+										<label class="bmd-label-floating">Address
+											
+										</label>
+										<input type="text" value="{{ lecturer.address }}" class="form-control" style="cursor:default" disabled>
+										
+									</div>
+									
+								</div>
+								<div class="col-md-12">
+									<div class="form-group bmd-form-group">
+										<label class="bmd-label-floating">Nationality
+											<span class="text-danger">*</span>
+										</label>
+										<input type="text" value="{{ lecturer.nationality }}" class="form-control"style="cursor:default" disabled>
+										
+									</div>
+										
+								</div>
+								<div class="col-md-12">
+									<div class="form-group bmd-form-group">
+										<label class="bmd-label-floating">Region of Origin
+											<span class="text-danger">*</span>
+										</label>
+										<input type="text" value="{{ lecturer.region }}" class="form-control" style="cursor:default" disabled>
+										
+									</div>
+										
+								</div>
+									<div class="col-md-12">
+										<div class="form-group bmd-form-group">
+										   <label class="bmd-label-floating">Campus
+											<span class="text-danger">*</span>
+										</label>
+										<input type="text" value="{{ lecturer.campus }}" class="form-control" style="cursor:default" disabled>
+										
+										</div>
+											
+									</div>
+									<div class="col-md-12">
+										<div class="form-group bmd-form-group">
+											
+											 <label class="bmd-label-floating">Faculty
+											<span class="text-danger">*</span>
+										</label>
+										<input type="text" value="{{ lecturer.faculty }}" class="form-control" style="cursor:default" disabled>
+										
+										</div>
+										
+									</div>
+									<div class="col-md-12">
+										<div class="form-group bmd-form-group">
+											<label class="bmd-label-floating">Department
+											<span class="text-danger">*</span>
+										</label>
+										<input type="text" value="{{ lecturer.department }}" class="form-control" style="cursor:default" disabled>
+										
+										</div>
+										
+									</div>
+									<div class="col-md-12">
+										<div class="form-group bmd-form-group">
+											<label class="bmd-label-floating">Designation
+											<span class="text-danger">*</span>
+										</label>
+										<input type="text" value="{{ lecturer.designation }}" class="form-control" style="cursor:default" disabled>
+										
+										</div>
+										
+									</div>
+									<div class="col-md-12">
+										<div class="form-group bmd-form-group">
+											<label class="bmd-label-floating">Qualifications
+											<span class="text-danger">*</span>
+										</label>
+										<textarea type="text" class="form-control" style="cursor:default" disabled>{{ lecturer.qualifications }} </textarea>
+										
+										</div>
+										
+									</div>
+									<div class="col-md-12">
+										<div class="form-group bmd-form-group">
+											<div class="form-group bmd-form-group">
+											<label class="bmd-label-floating">Status
+											<span class="text-danger">*</span>
+										</label>
+										{% if lecturer.is_active %}
+								
+										<input type="text" value="Active" class="form-control" style="cursor:default" disabled>
+										{% else %}
+										<input type="text" value="Inactive" class="form-control" style="cursor:default" disabled>
+										{% endif %}
+										</div>
+											
+									</div>
+								</div>
+								
+								{% if ipam %}
+								<a href="{% url 'edit_lecturer_ipam' lecturer.id  %}" class="btn  btn-primary  pull-right">Edit</a>
+								<div class="clearfix"/>
+								{% elif fbc %}
+								<a href="{% url 'edit_lecturer_fbc' lecturer.id  %} " class="btn  btn-primary  pull-right">Edit</a>
+								<div class="clearfix"/>
+								{% elif comahs %}
+										 <a href="{% url 'edit_lecturer_comahs' lecturer.id  %}" class="btn  btn-primary  pull-right">Edit</a>
+								<div class="clearfix"/>
+								{% endif %}
+							
+							</form>
+						</div>
+					</div>
+					<!--  end card  -->
+				</div>
+				<!-- end col-md-12 -->
+			</div>
+			<!-- end row -->
+		</div>
+	</div>
+</div>
+</div>
+
+
+
+{% endblock content %}
+{{ form.media.js }}
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <script>
+    $(document).ready(function() {
+      // Javascript method's body can be found in assets/js/demos.js
+      md.initDashboardPageCharts();
+
+    });
+  </script>
+
+{% endblock javascripts %}

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Institution Profile - CertChain</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../admin.css">
+</head>
+<body>
+  <div class="admin-layout">
+    <aside class="admin-sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="../../index.html" class="sidebar-logo">
+          <div class="logo-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <span class="logo-text">CertChain</span>
+        </a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <span class="nav-section-title">Dashboard</span>
+          <ul class="nav-list">
+            <li><a href="dashboard.html" class="nav-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Dashboard</span></a></li>
+            <li><a href="issue-credentials.html" class="nav-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg><span>Issue Credentials</span></a></li>
+            <li><a href="students.html" class="nav-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg><span>Students</span></a></li>
+            <li><a href="verification-logs.html" class="nav-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg><span>Verification Logs</span></a></li>
+          </ul>
+        </div>
+        <div class="nav-section">
+          <span class="nav-section-title">Account</span>
+          <ul class="nav-list">
+            <li><a href="profile.html" class="nav-link active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profile</span></a></li>
+            <li><a href="settings.html" class="nav-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg><span>Settings</span></a></li>
+          </ul>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-header">
+        <div class="header-left">
+          <button class="menu-toggle" id="menu-toggle">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <div class="breadcrumb">
+            <a href="dashboard.html">Dashboard</a>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+            <span>Profile</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="admin-content">
+        <div class="profile-header">
+          <div class="profile-cover"></div>
+          <div class="profile-info">
+            <div class="profile-avatar-large">
+              <img src="/placeholder.svg?height=120&width=120" alt="Institution">
+              <button class="avatar-edit-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              </button>
+            </div>
+            <div class="profile-details">
+              <h1>University of Sierra Leone</h1>
+              <p>Freetown, Sierra Leone</p>
+              <div class="profile-badges">
+                <span class="badge badge-success">Verified Institution</span>
+                <span class="badge badge-info">UNESCO WHED Listed</span>
+                <span class="badge badge-primary">TEC Accredited</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="profile-content">
+          <div class="profile-section">
+            <h3>Institution Information</h3>
+            <div class="info-grid">
+              <div class="info-item">
+                <label>Institution Name</label>
+                <p>University of Sierra Leone</p>
+              </div>
+              <div class="info-item">
+                <label>Institution Type</label>
+                <p>Public University</p>
+              </div>
+              <div class="info-item">
+                <label>Founded</label>
+                <p>1967</p>
+              </div>
+              <div class="info-item">
+                <label>UNESCO WHED ID</label>
+                <p>IAU-021456</p>
+              </div>
+              <div class="info-item">
+                <label>Country</label>
+                <p>Sierra Leone</p>
+              </div>
+              <div class="info-item">
+                <label>City</label>
+                <p>Freetown</p>
+              </div>
+              <div class="info-item">
+                <label>Website</label>
+                <p><a href="#">www.usl.edu.sl</a></p>
+              </div>
+              <div class="info-item">
+                <label>Contact Email</label>
+                <p>registrar@usl.edu.sl</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="profile-section">
+            <h3>Administrator Account</h3>
+            <div class="admin-profile-card">
+              <img src="/placeholder.svg?height=80&width=80" alt="Admin" class="admin-avatar">
+              <div class="admin-info">
+                <h4>Dr. Sarah Bangura</h4>
+                <p>Institution Administrator</p>
+                <span class="admin-email">sarah.bangura@usl.edu.sl</span>
+              </div>
+              <button class="btn btn-secondary">Edit Profile</button>
+            </div>
+          </div>
+
+          <div class="profile-section">
+            <h3>Blockchain Identity</h3>
+            <div class="blockchain-info">
+              <div class="blockchain-item">
+                <label>Institution Wallet Address</label>
+                <code>0x7a23...8f4d</code>
+              </div>
+              <div class="blockchain-item">
+                <label>Total Credentials on Chain</label>
+                <span>12,847</span>
+              </div>
+              <div class="blockchain-item">
+                <label>First Credential Issued</label>
+                <span>March 15, 2023</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.getElementById('menu-toggle').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('show');
+    });
+  </script>
+</body>
+</html>

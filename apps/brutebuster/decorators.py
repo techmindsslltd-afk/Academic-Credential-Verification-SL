@@ -1,0 +1,72 @@
+# BruteBuster by Cyber Security Consulting (www.csc.bg)
+
+"""Decorators used by BruteBuster"""
+
+
+from django.shortcuts import redirect
+
+def protect_and_serve(auth_func):
+    """
+    This is the main code of the application. It is meant to replace the
+    authentication() function, with one that records failed login attempts and
+    blocks logins, if a threshold is reached
+    """
+
+    if hasattr(auth_func, '__BB_PROTECTED__'):
+        # avoiding multiple decorations
+        return auth_func
+
+    def decor(*args, **kwargs):
+        # Import here to avoid AppRegistryNotReady("Apps aren't loaded yet.") Exception
+        from .models import FailedAttempt
+        from .middleware import get_request
+        """
+        This is the wrapper that gets installed around the default
+        authentication function.
+        """
+        user = kwargs.get('email', '')
+        if not user:
+            return redirect('login')
+        request = get_request()
+        if request:
+            # try to get the remote address from thread locals
+            IP_ADDR = request.META.get('REMOTE_ADDR', None)
+        else:
+            IP_ADDR = None
+
+        try:
+            fa = FailedAttempt.objects.filter(email=user, IP=IP_ADDR)[0]
+            if fa.recent_failure():
+                if fa.too_many_failures():
+                    # we block the authentication attempt because
+                    # of too many recent failures
+                    fa.failures += 1
+                    fa.save()
+                    return None
+            else:
+                # the block interval is over, so let's start
+                # with a clean sheet
+                fa.failures = 0
+                fa.save()
+        except IndexError:
+            # No previous failed attempts
+            fa = None
+
+        result = auth_func(*args, **kwargs)
+        if result:
+            # if login is success we clear failures field if exists
+            if fa:
+                fa.failures = 0
+                fa.save()
+            # the authentication was successful - we do nothing
+            # special
+            return result
+        # the authentication was kaput, we should record this
+        fa = fa or FailedAttempt(email=user, IP=IP_ADDR, failures=0)
+        fa.failures += 1
+        fa.save()
+        # return with unsuccessful auth
+        return None
+
+    decor.__BB_PROTECTED__ = True
+    return decor

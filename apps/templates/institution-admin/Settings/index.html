@@ -1,0 +1,38 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Settings {% endblock %} 
+
+{% block content %}
+{% load static %}
+        <section class="content-section active" id="section-inst-settings">
+          <div class="section-header">
+            <div>
+              <h1 class="section-title">Settings</h1>
+              <p class="section-subtitle">Configure institution settings</p>
+            </div>
+          </div>
+          <div class="settings-grid">
+            <div class="settings-card">
+              <div class="settings-card-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+              </div>
+              <h4>General</h4>
+              <p>Basic settings and preferences</p>
+            </div>
+            <div class="settings-card">
+              <div class="settings-card-icon">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="11" width="18" height="11" rx="2"/>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+              </div>
+              <h4>Security</h4>
+              <p>Password and authentication</p>
+            </div>
+          </div>
+        </section>
+
+
+{% endblock content %}

@@ -1,0 +1,1219 @@
+{% extends "layouts/guest.html" %}
+
+{% block title %} Contact Us - Apple of God Foundation | Get in Touch{% endblock %} 
+
+{% block content %}
+{% load static %}
+
+    <link rel="stylesheet" href="{% static 'assets/guest/css/pages.css' %}">
+    <style>
+        /* ===== CSS Custom Properties ===== */
+        :root {
+            /* Colors */
+            --primary-green: #4ade80;
+            --primary-green-dark: #22c55e;
+            --primary-red: #ef4444;
+            --primary-red-dark: #dc2626;
+            --accent-pink: #f472b6;
+            
+            --neutral-white: #ffffff;
+            --neutral-gray-50: #f9fafb;
+            --neutral-gray-100: #f3f4f6;
+            --neutral-gray-200: #e5e7eb;
+            --neutral-gray-300: #d1d5db;
+            --neutral-gray-400: #9ca3af;
+            --neutral-gray-500: #6b7280;
+            --neutral-gray-600: #4b5563;
+            --neutral-gray-700: #374151;
+            --neutral-gray-800: #1f2937;
+            --neutral-gray-900: #111827;
+            
+            /* Typography */
+            --font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            --font-display: 'Playfair Display', Georgia, serif;
+            
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            
+            /* Border Radius */
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 1rem;
+            --radius-xl: 1.5rem;
+            --radius-full: 9999px;
+            
+            /* Transitions */
+            --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-normal: 300ms cubic-bezier(0.4, 0, 0.2, 1);
+            --transition-slow: 500ms cubic-bezier(0.4, 0, 0.2, 1);
+            
+            /* Spacing */
+            --header-height: 80px;
+        }
+
+
+      
+        .hamburger {
+            width: 24px;
+            height: 20px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .hamburger span {
+            display: block;
+            height: 2px;
+            background: currentColor;
+            border-radius: 2px;
+            transition: all var(--transition-normal);
+        }
+
+        .mobile-menu-toggle.active .hamburger span:nth-child(1) {
+            transform: translateY(9px) rotate(45deg);
+        }
+
+        .mobile-menu-toggle.active .hamburger span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .mobile-menu-toggle.active .hamburger span:nth-child(3) {
+            transform: translateY(-9px) rotate(-45deg);
+        }
+
+        /* ===== Buttons ===== */
+        .btn1 {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            padding: 0.875rem 2rem;
+            border: none;
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            font-family: var(--font-primary);
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+            white-space: nowrap;
+        }
+
+        .btn1:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn1:focus-visible {
+            outline: 2px solid var(--primary-green);
+            outline-offset: 4px;
+        }
+
+        .btn1-primary {
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-red));
+            color: var(--neutral-white);
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn1-primary:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn1-primary:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        /* ===== Main Content ===== */
+        main {
+            padding-top: var(--header-height);
+        }
+
+        /* ===== Hero Section ===== */
+        .hero {
+            background: linear-gradient(135deg, 
+                rgba(74, 222, 128, 0.1) 0%, 
+                rgba(239, 68, 68, 0.1) 100%);
+            padding: 6rem 2rem 4rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(circle, rgba(74, 222, 128, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+            z-index: 1;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-title {
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--neutral-gray-600);
+            line-height: 1.6;
+        }
+
+        /* ===== Contact Section ===== */
+        .contact-section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-subtitle {
+            font-size: 1.125rem;
+            color: var(--neutral-gray-600);
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .contact-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 4rem;
+            margin-top: 3rem;
+        }
+
+        /* ===== Contact Form ===== */
+        .contact-form {
+            background: var(--neutral-white);
+            padding: 3rem;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-form::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-green), var(--primary-red));
+        }
+
+        .form-title {
+            margin-bottom: 1.5rem;
+            color: var(--neutral-gray-900);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--neutral-gray-800);
+        }
+
+        .form-label .required {
+            color: var(--primary-red);
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid var(--neutral-gray-200);
+            border-radius: var(--radius-md);
+            font-family: var(--font-primary);
+            font-size: 1rem;
+            transition: all var(--transition-fast);
+            background: var(--neutral-white);
+            color: var(--neutral-gray-900);
+        }
+
+        .form-input:hover,
+        .form-textarea:hover {
+            border-color: var(--neutral-gray-300);
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: var(--primary-green);
+            box-shadow: 0 0 0 3px rgba(74, 222, 128, 0.1);
+        }
+
+        .form-input.error,
+        .form-textarea.error {
+            border-color: var(--primary-red);
+        }
+
+        .form-input.error:focus,
+        .form-textarea.error:focus {
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .form-error {
+            display: none;
+            color: var(--primary-red);
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+        }
+
+        .form-error.visible {
+            display: block;
+        }
+
+        .form-success {
+            display: none;
+            background: rgba(74, 222, 128, 0.1);
+            border: 2px solid var(--primary-green);
+            color: var(--primary-green-dark);
+            padding: 1rem;
+            border-radius: var(--radius-md);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .form-success.visible {
+            display: block;
+        }
+
+        /* Honeypot field for spam prevention */
+        .form-honeypot {
+            position: absolute;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+        }
+
+        .form-submit {
+            width: 100%;
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-red));
+            color: var(--neutral-white);
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: var(--radius-lg);
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all var(--transition-normal);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .form-submit:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .form-submit:active:not(:disabled) {
+            transform: translateY(0);
+        }
+
+        .form-submit:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .form-submit:focus-visible {
+            outline: 2px solid var(--primary-green);
+            outline-offset: 4px;
+        }
+
+        /* ===== Contact Info ===== */
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .contact-card {
+            background: var(--neutral-white);
+            padding: 2rem;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            transition: all var(--transition-normal);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .contact-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-green), var(--primary-red));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform var(--transition-normal);
+        }
+
+        .contact-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .contact-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .contact-card-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--primary-green), var(--accent-pink));
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+            color: var(--neutral-white);
+        }
+
+        .contact-card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--neutral-gray-900);
+        }
+
+        .contact-card-content {
+            color: var(--neutral-gray-600);
+            line-height: 1.6;
+        }
+
+        .contact-card-content a {
+            color: var(--primary-green);
+            transition: color var(--transition-fast);
+        }
+
+        .contact-card-content a:hover {
+            color: var(--primary-red);
+        }
+
+        .contact-card-content a:focus-visible {
+            outline: 2px solid var(--primary-green);
+            outline-offset: 2px;
+            border-radius: var(--radius-sm);
+        }
+
+        /* ===== Social Media Section ===== */
+        .social-section {
+            background: var(--neutral-gray-50);
+            padding: 4rem 2rem;
+            text-align: center;
+        }
+
+        .social-content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .social-link {
+            width: 60px;
+            height: 60px;
+            background: var(--neutral-white);
+            border-radius: var(--radius-full);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--neutral-gray-600);
+            transition: all var(--transition-normal);
+            box-shadow: var(--shadow-md);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .social-link::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, var(--primary-green), var(--primary-red));
+            transform: scale(0);
+            transition: transform var(--transition-normal);
+            border-radius: var(--radius-full);
+        }
+
+        .social-link:hover::before {
+            transform: scale(1);
+        }
+
+        .social-link:hover {
+            color: var(--neutral-white);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .social-link:focus-visible {
+            outline: 2px solid var(--primary-green);
+            outline-offset: 4px;
+        }
+
+        .social-link svg {
+            position: relative;
+            z-index: 1;
+            width: 24px;
+            height: 24px;
+        }
+
+        /* ===== Map Section ===== */
+        .map-section {
+            padding: 5rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .map-container {
+            background: var(--neutral-gray-100);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-lg);
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 2rem;
+            position: relative;
+        }
+
+        .map-placeholder {
+            text-align: center;
+            color: var(--neutral-gray-600);
+            padding: 2rem;
+        }
+
+        .map-placeholder svg {
+            width: 64px;
+            height: 64px;
+            color: var(--primary-green);
+            margin-bottom: 1rem;
+        }
+
+     
+
+        /* ===== Animations ===== */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .animate-on-scroll {
+            opacity: 0;
+        }
+
+        .animate-on-scroll.visible {
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        .spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: var(--neutral-white);
+            border-radius: var(--radius-full);
+            animation: spin 0.6s linear infinite;
+        }
+
+        /* ===== Responsive Design ===== */
+        @media (max-width: 768px) {
+            
+
+            .contact-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .contact-form {
+                padding: 2rem;
+            }
+
+            .hero {
+                padding: 4rem 1rem 3rem;
+            }
+
+            .contact-section,
+            .social-section,
+            .map-section {
+                padding: 3rem 1rem;
+            }
+
+            .social-links {
+                gap: 1rem;
+            }
+
+            .social-link {
+                width: 50px;
+                height: 50px;
+            }
+
+            .social-link svg {
+                width: 20px;
+                height: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .nav {
+                padding: 0 1rem;
+            }
+
+            .contact-form {
+                padding: 1.5rem;
+            }
+
+            .contact-card {
+                padding: 1.5rem;
+            }
+        }
+
+        /* ===== Print Styles ===== */
+        @media print {
+            .header,
+            .social-section,
+            .footer {
+                display: none;
+            }
+
+            .contact-section {
+                padding: 2rem 0;
+            }
+        }
+
+        /* ===== Screen Reader Only ===== */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border-width: 0;
+        }
+    </style>
+
+
+
+    <!-- Main Content -->
+    <main id="main-content">
+        <!-- Hero Section -->
+        <section class="hero animate-on-scroll" aria-labelledby="hero-title">
+            <div class="hero-content">
+                <h1 id="hero-title" class="hero-title">Get in Touch</h1>
+                <p class="hero-subtitle">
+                    We'd love to hear from you. Whether you're interested in volunteering, 
+                    partnering with us, or learning more about our programs, we're here to help.
+                </p>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section class="contact-section animate-on-scroll" aria-labelledby="contact-title">
+            <div class="section-header">
+                <h2 id="contact-title" class="section-title">Contact Us</h2>
+                <p class="section-subtitle">
+                    Ready to make a difference? Reach out to us and let's work together 
+                    to strengthen our community.
+                </p>
+            </div>
+
+            <div class="contact-grid">
+                <!-- Contact Form -->
+                <div class="contact-form">
+                    <h3 class="form-title">Send us a Message</h3>
+                    
+                    <div id="formSuccess" class="form-success" role="alert" aria-live="polite">
+                        <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" style="display: inline-block; vertical-align: middle; margin-right: 0.5rem;">
+                            <path d="M10 0C4.48 0 0 4.48 0 10C0 15.52 4.48 20 10 20C15.52 20 20 15.52 20 10C20 4.48 15.52 0 10 0ZM8 15L3 10L4.41 8.59L8 12.17L15.59 4.58L17 6L8 15Z" fill="currentColor"/>
+                        </svg>
+                        Thank you for your message! We'll get back to you within 24 hours.
+                    </div>
+
+                    <form method="POST" action="{% url 'contact' %}" id="contactForm" novalidate>
+                        {% csrf_token %}
+                        <!-- Honeypot field for spam prevention -->
+                        <input type="text" name="website" class="form-honeypot" tabindex="-1" autocomplete="off" aria-hidden="true">
+
+                        <div class="form-group">
+                            <label for="name" class="form-label">
+                                Full Name <span class="required" aria-label="required">*</span>
+                            </label>
+                            <input 
+                                type="text" 
+                                id="name" 
+                                name="name" 
+                                class="form-input" 
+                                required 
+                                aria-required="true"
+                                aria-describedby="name-error"
+                                autocomplete="name"
+                                minlength="2"
+                                maxlength="100"
+                            >
+                            <div id="name-error" class="form-error" role="alert"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="email" class="form-label">
+                                Email Address <span class="required" aria-label="required">*</span>
+                            </label>
+                            <input 
+                                type="email" 
+                                id="email" 
+                                name="email" 
+                                class="form-input" 
+                                required 
+                                aria-required="true"
+                                aria-describedby="email-error"
+                                autocomplete="email"
+                                inputmode="email"
+                            >
+                            <div id="email-error" class="form-error" role="alert"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="phone" class="form-label">
+                                Phone Number
+                            </label>
+                            <input 
+                                type="tel" 
+                                id="phone" 
+                                name="phone" 
+                                class="form-input" 
+                                aria-describedby="phone-error"
+                                autocomplete="tel"
+                            >
+                            <div id="phone-error" class="form-error" role="alert"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="subject" class="form-label">
+                                Subject <span class="required" aria-label="required">*</span>
+                            </label>
+                            <input 
+                                type="text" 
+                                id="subject" 
+                                name="subject" 
+                                class="form-input" 
+                                required 
+                                aria-required="true"
+                                aria-describedby="subject-error"
+                                minlength="3"
+                                maxlength="200"
+                            >
+                            <div id="subject-error" class="form-error" role="alert"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="interest" class="form-label">
+                                Area of Interest
+                            </label>
+                            <select 
+                                id="interest" 
+                                name="interest" 
+                                class="form-input"
+                                aria-describedby="interest-error"
+                            >
+                                <option value="">Select an option</option>
+                                <option value="volunteer">Volunteering</option>
+                                <option value="donate">Making a Donation</option>
+                                <option value="partner">Partnership Opportunities</option>
+                                <option value="programs">Program Information</option>
+                                <option value="other">Other</option>
+                            </select>
+                            <div id="interest-error" class="form-error" role="alert"></div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message" class="form-label">
+                                Message <span class="required" aria-label="required">*</span>
+                            </label>
+                            <textarea 
+                                id="message" 
+                                name="message" 
+                                class="form-textarea" 
+                                rows="5" 
+                                required 
+                                aria-required="true"
+                                aria-describedby="message-error"
+                                minlength="10"
+                                maxlength="1000"
+                            ></textarea>
+                            <div id="message-error" class="form-error" role="alert"></div>
+                        </div>
+                        
+                        <button type="submit" class="form-submit" id="submitbtn1">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M2 10L18 2L10 18L8 11L2 10Z" fill="currentColor"/>
+                            </svg>
+                            <span>Send Message</span>
+                        </button>
+                    </form>
+                </div>
+
+                <!-- Contact Information -->
+                <div class="contact-info">
+                    <address class="contact-card">
+                        <div class="contact-card-icon" aria-hidden="true">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <h3 class="contact-card-title">Visit Us</h3>
+                        <div class="contact-card-content">
+                            <p>
+                                {% if settings.street %}{{ settings.street }}{% if settings.city or settings.country %}<br>{% endif %}{% endif %}
+                                {% if settings.city %}{{ settings.city }}{% if settings.country %}, {% endif %}{% endif %}
+                                {% if settings.country %}{{ settings.country }}{% endif %}
+                                {% if not settings.street and not settings.city and not settings.country %}
+                                    {% if settings.street2 %}{{ settings.street2 }}{% if settings.city2 or settings.country2 %}<br>{% endif %}{% endif %}
+                                    {% if settings.city2 %}{{ settings.city2 }}{% if settings.country2 %}, {% endif %}{% endif %}
+                                    {% if settings.country2 %}{{ settings.country2 }}{% endif %}
+                                {% endif %}
+                                {% if not settings.street and not settings.city and not settings.country and not settings.street2 and not settings.city2 and not settings.country2 %}
+                                    Address information coming soon
+                                {% endif %}
+                            </p>
+                        </div>
+                    </address>
+
+                    <div class="contact-card">
+                        <div class="contact-card-icon" aria-hidden="true">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M6.62 10.79C8.06 13.62 10.38 15.94 13.21 17.38L15.41 15.18C15.69 14.9 16.08 14.82 16.43 14.93C17.55 15.3 18.75 15.5 20 15.5C20.55 15.5 21 15.95 21 16.5V20C21 20.55 20.55 21 20 21C10.61 21 3 13.39 3 4C3 3.45 3.45 3 4 3H7.5C8.05 3 8.5 3.45 8.5 4C8.5 5.25 8.7 6.45 9.07 7.57C9.18 7.92 9.1 8.31 8.82 8.59L6.62 10.79Z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <h3 class="contact-card-title">Call Us</h3>
+                        <div class="contact-card-content">
+                            <p>
+                                {% if settings.phone %}
+                                    Main Office: <a href="tel:{{ settings.phone }}">{{ settings.phone }}</a>{% if settings.phone2 %}<br>{% else %}{% if not settings.phone2 %}<br>{% endif %}{% endif %}
+                                {% endif %}
+                                {% if settings.phone2 %}
+                                    Secondary: <a href="tel:{{ settings.phone2 }}">{{ settings.phone2 }}</a>
+                                {% endif %}
+                                {% if not settings.phone and not settings.phone2 %}
+                                    Phone information coming soon
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="contact-card">
+                        <div class="contact-card-icon" aria-hidden="true">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 4H4C2.9 4 2.01 4.9 2.01 6L2 18C2 19.1 2.9 20 4 20H20C21.1 20 22 19.1 22 18V6C22 4.9 21.1 4 20 4ZM20 8L12 13L4 8V6L12 11L20 6V8Z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <h3 class="contact-card-title">Email Us</h3>
+                        <div class="contact-card-content">
+                            <p>
+                                {% if settings.email %}
+                                    General: <a href="mailto:{{ settings.email }}">{{ settings.email }}</a>{% if settings.email2 %}<br>{% else %}{% if not settings.email2 %}{% endif %}{% endif %}
+                                {% endif %}
+                                {% if settings.email2 %}
+                                    Secondary: <a href="mailto:{{ settings.email2 }}">{{ settings.email2 }}</a>
+                                {% endif %}
+                                {% if not settings.email and not settings.email2 %}
+                                    Email information coming soon
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="contact-card">
+                        <div class="contact-card-icon" aria-hidden="true">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M11.99 2C6.47 2 2 6.48 2 12C2 17.52 6.47 22 11.99 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 11.99 2ZM12 20C7.58 20 4 16.42 4 12C4 7.58 7.58 4 12 4C16.42 4 20 7.58 20 12C20 16.42 16.42 20 12 20ZM12.5 7H11V13L16.25 16.15L17 14.92L12.5 12.25V7Z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <h3 class="contact-card-title">Office Hours</h3>
+                        <div class="contact-card-content">
+                            <p>
+                                Monday - Friday: 9:00 AM - 6:00 PM<br>
+                                Saturday: 10:00 AM - 4:00 PM<br>
+                                Sunday: Closed
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Social Media Section -->
+        <section class="social-section animate-on-scroll" aria-labelledby="social-title">
+            <div class="social-content">
+                <h2 id="social-title" class="section-title">Follow Our Journey</h2>
+                <p class="section-subtitle">
+                    Stay connected with us on social media to see the latest updates, 
+                    success stories, and ways to get involved in our community.
+                </p>
+                
+                <div class="social-links" role="list">
+                    <a href="https://www.facebook.com/share/1CpzDz8uJX/"  target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Follow us on Facebook" role="listitem">
+                        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                        </svg>
+                    </a>
+                   <!-- <a href="#" target="_blank" class="social-link" aria-label="Follow us on Twitter" role="listitem">
+                        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/>
+                        </svg>
+                    </a>
+                    <a href="#" target="_blank" class="social-link" aria-label="Follow us on Instagram" role="listitem">
+                        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 0C8.74 0 8.333.015 7.053.072 5.775.132 4.905.333 4.14.63c-.789.306-1.459.717-2.126 1.384S.935 3.35.63 4.14C.333 4.905.131 5.775.072 7.053.012 8.333 0 8.74 0 12s.015 3.667.072 4.947c.06 1.277.261 2.148.558 2.913.306.788.717 1.459 1.384 2.126.667.666 1.336 1.079 2.126 1.384.766.296 1.636.499 2.913.558C8.333 23.988 8.74 24 12 24s3.667-.015 4.947-.072c1.277-.06 2.148-.262 2.913-.558.788-.306 1.459-.718 2.126-1.384.666-.667 1.079-1.335 1.384-2.126.296-.765.499-1.636.558-2.913.06-1.28.072-1.687.072-4.947s-.015-3.667-.072-4.947c-.06-1.277-.262-2.149-.558-2.913-.306-.789-.718-1.459-1.384-2.126C21.319 1.347 20.651.935 19.86.63c-.765-.297-1.636-.499-2.913-.558C15.667.012 15.26 0 12 0zm0 2.16c3.203 0 3.585.016 4.85.071 1.17.055 1.805.249 2.227.415.562.217.96.477 1.382.896.419.42.679.819.896 1.381.164.422.36 1.057.413 2.227.057 1.266.07 1.646.07 4.85s-.015 3.585-.074 4.85c-.061 1.17-.256 1.805-.421 2.227-.224.562-.479.96-.899 1.382-.419.419-.824.679-1.38.896-.42.164-1.065.36-2.235.413-1.274.057-1.649.07-4.859.07-3.211 0-3.586-.015-4.859-.074-1.171-.061-1.816-.256-2.236-.421-.569-.224-.96-.479-1.379-.899-.421-.419-.69-.824-.9-1.38-.165-.42-.359-1.065-.42-2.235-.045-1.26-.061-1.649-.061-4.844 0-3.196.016-3.586.061-4.861.061-1.17.255-1.814.42-2.234.21-.57.479-.96.9-1.381.419-.419.81-.689 1.379-.898.42-.166 1.051-.361 2.221-.421 1.275-.045 1.65-.06 4.859-.06l.045.03zm0 3.678c-3.405 0-6.162 2.76-6.162 6.162 0 3.405 2.76 6.162 6.162 6.162 3.405 0 6.162-2.76 6.162-6.162 0-3.405-2.76-6.162-6.162-6.162zM12 16c-2.21 0-4-1.79-4-4s1.79-4 4-4 4 1.79 4 4-1.79 4-4 4zm7.846-10.405c0 .795-.646 1.44-1.44 1.44-.795 0-1.44-.646-1.44-1.44 0-.794.646-1.439 1.44-1.439.793-.001 1.44.645 1.44 1.439z"/>
+                        </svg>
+                    </a>
+                    <a href="#" target="_blank" class="social-link" aria-label="Follow us on LinkedIn" role="listitem">
+                        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+                        </svg>
+                    </a> -->
+                    <a href="https://www.youtube.com/@aogfoundation"  target="_blank" class="social-link" aria-label="Subscribe to our YouTube channel" role="listitem">
+                        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                        </svg>
+                    </a>
+                    <a href="https://www.tiktok.com/@apple.of.god.foun?_t=ZM-8xIJS7VTBPZ&_r=1"  target="_blank" class="social-link" aria-label="Follow us on TikTok" role="listitem">
+                        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"/>
+                        </svg>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Map Section -->
+        <section class="map-section animate-on-scroll" aria-labelledby="map-title">
+            <div class="section-header">
+                <h2 id="map-title" class="section-title">Find Us</h2>
+                <p class="section-subtitle">
+                    Located in the heart of the community we serve, our doors are always 
+                    open to those who need support or want to make a difference.
+                </p>
+            </div>
+            
+            <div class="map-container">
+			<iframe 
+			src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15787.533651458203!2d-13.141299752091994!3d8.41310994291639!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xf04e7b5abce2d71%3A0x20e2724d29b38faf!2sJui!5e0!3m2!1sen!2ssl!4v1762021727885!5m2!1sen!2ssl" 
+			width="100%" 
+            height="100%" 
+			style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+              
+            </div>
+        </section>
+    </main>
+
+
+
+    <!-- JavaScript -->
+    <script>
+        'use strict';
+
+        // ===== Mobile Menu Toggle =====
+        (function() {
+            const menuToggle = document.querySelector('.mobile-menu-toggle');
+            const navMenu = document.querySelector('.nav-menu');
+            
+            if (menuToggle && navMenu) {
+                menuToggle.addEventListener('click', function() {
+                    const isExpanded = this.getAttribute('aria-expanded') === 'true';
+                    this.setAttribute('aria-expanded', !isExpanded);
+                    this.classList.toggle('active');
+                    navMenu.classList.toggle('active');
+                });
+
+                // Close menu when clicking outside
+                document.addEventListener('click', function(e) {
+                    if (!menuToggle.contains(e.target) && !navMenu.contains(e.target)) {
+                        menuToggle.setAttribute('aria-expanded', 'false');
+                        menuToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                    }
+                });
+
+                // Close menu on escape key
+                document.addEventListener('keydown', function(e) {
+                    if (e.key === 'Escape' && navMenu.classList.contains('active')) {
+                        menuToggle.setAttribute('aria-expanded', 'false');
+                        menuToggle.classList.remove('active');
+                        navMenu.classList.remove('active');
+                        menuToggle.focus();
+                    }
+                });
+            }
+        })();
+
+        // ===== Header Scroll Effect =====
+        (function() {
+            const header = document.querySelector('.header');
+            let lastScroll = 0;
+
+            function handleScroll() {
+                const currentScroll = window.pageYOffset;
+                
+                if (currentScroll > 100) {
+                    header.classList.add('scrolled');
+                } else {
+                    header.classList.remove('scrolled');
+                }
+                
+                lastScroll = currentScroll;
+            }
+
+            // Throttle scroll events
+            let ticking = false;
+            window.addEventListener('scroll', function() {
+                if (!ticking) {
+                    window.requestAnimationFrame(function() {
+                        handleScroll();
+                        ticking = false;
+                    });
+                    ticking = true;
+                }
+            });
+        })();
+
+        // ===== Intersection Observer for Animations =====
+        (function() {
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(function(entry) {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        observer.unobserve(entry.target);
+                    }
+                });
+            }, observerOptions);
+
+            const animatedElements = document.querySelectorAll('.animate-on-scroll');
+            animatedElements.forEach(function(el) {
+                observer.observe(el);
+            });
+        })();
+
+        // ===== Form Validation and Submission =====
+        (function() {
+            const form = document.getElementById('contactForm');
+            const submitbtn1 = document.getElementById('submitbtn1');
+            const formSuccess = document.getElementById('formSuccess');
+            
+            // Validation patterns
+            const patterns = {
+                name: /^[a-zA-Z\s'-]{2,100}$/,
+                email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+                subject: /^.{3,200}$/,
+                message: /^.{10,1000}$/
+            };
+
+            // Error messages
+            const errorMessages = {
+                name: 'Please enter a valid name (2-100 characters)',
+                email: 'Please enter a valid email address',
+                subject: 'Subject must be between 3-200 characters',
+                message: 'Message must be between 10-1000 characters'
+            };
+
+            // Validate single field
+            function validateField(field) {
+                const value = field.value.trim();
+                const fieldName = field.name;
+                const errorElement = document.getElementById(fieldName + '-error');
+                const isRequired = field.hasAttribute('required');
+                const isOptional = fieldName === 'phone' || fieldName === 'interest';
+                
+                if (!value) {
+                    if (isRequired) {
+                        showError(field, errorElement, 'This field is required');
+                        return false;
+                    } else if (isOptional) {
+                        // Optional fields are valid if empty
+                        clearError(field, errorElement);
+                        return true;
+                    }
+                }
+                
+                if (patterns[fieldName] && !patterns[fieldName].test(value)) {
+                    showError(field, errorElement, errorMessages[fieldName]);
+                    return false;
+                }
+                
+                clearError(field, errorElement);
+                return true;
+            }
+
+            // Show error
+            function showError(field, errorElement, message) {
+                field.classList.add('error');
+                field.setAttribute('aria-invalid', 'true');
+                errorElement.textContent = message;
+                errorElement.classList.add('visible');
+            }
+
+            // Clear error
+            function clearError(field, errorElement) {
+                field.classList.remove('error');
+                field.setAttribute('aria-invalid', 'false');
+                errorElement.textContent = '';
+                errorElement.classList.remove('visible');
+            }
+
+            // Real-time validation
+            const fields = form.querySelectorAll('.form-input, .form-textarea');
+            fields.forEach(function(field) {
+                // Validate on blur
+                field.addEventListener('blur', function() {
+                    if (this.value.trim()) {
+                        validateField(this);
+                    }
+                });
+
+                // Clear error on input
+                field.addEventListener('input', function() {
+                    if (this.classList.contains('error')) {
+                        const errorElement = document.getElementById(this.name + '-error');
+                        clearError(this, errorElement);
+                    }
+                });
+            });
+
+            // Form submission
+            form.addEventListener('submit', function(e) {
+                // Check honeypot
+                const honeypot = form.querySelector('[name="website"]');
+                if (honeypot && honeypot.value) {
+                    e.preventDefault();
+                    console.log('[v0] Spam detected');
+                    return;
+                }
+                
+                // Validate all fields
+                let isValid = true;
+                fields.forEach(function(field) {
+                    if (!validateField(field)) {
+                        isValid = false;
+                    }
+                });
+                
+                if (!isValid) {
+                    e.preventDefault();
+                    // Focus first error field
+                    const firstError = form.querySelector('.error');
+                    if (firstError) {
+                        firstError.focus();
+                    }
+                    return;
+                }
+                
+                // Allow form to submit normally to Django backend
+                submitbtn1.disabled = true;
+                submitbtn1.innerHTML = '<span class="spinner"></span><span>Sending...</span>';
+            });
+        })();
+
+        // ===== Smooth Scrolling for Anchor Links =====
+        (function() {
+            document.querySelectorAll('a[href^="#"]').forEach(function(anchor) {
+                anchor.addEventListener('click', function(e) {
+                    const href = this.getAttribute('href');
+                    if (href === '#') return;
+                    
+                    const target = document.querySelector(href);
+                    if (target) {
+                        e.preventDefault();
+                        const headerOffset = 80;
+                        const elementPosition = target.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                        window.scrollTo({
+                            top: offsetPosition,
+                            behavior: 'smooth'
+                        });
+
+                        // Focus target for accessibility
+                        target.setAttribute('tabindex', '-1');
+                        target.focus();
+                    }
+                });
+            });
+        })();
+
+        // ===== Performance: Preload critical resources =====
+        (function() {
+            // Preload fonts if needed
+            if ('fonts' in document) {
+                Promise.all([
+                    document.fonts.load('600 1em "Playfair Display"'),
+                    document.fonts.load('400 1em "Inter"')
+                ]).then(function() {
+                    document.body.classList.add('fonts-loaded');
+                });
+            }
+        })();
+    </script>
+
+
+{% endblock content %}

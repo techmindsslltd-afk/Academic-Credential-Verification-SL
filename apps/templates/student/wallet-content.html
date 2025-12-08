@@ -1,0 +1,88 @@
+{% load static %}
+    <section class="content-section active" id="section-wallet">
+          <div class="section-header">
+            <div>
+              <h1 class="section-title">My Credentials Wallet</h1>
+              <p class="section-subtitle">View and manage your verified credentials{% if credentials_count %} ({{ credentials_count }} total){% endif %}</p>
+            </div>
+          </div>
+          {% if credentials %}
+          <div class="credentials-grid">
+            {% for credential in credentials %}
+            <div class="credential-card" data-credential-id="{{ credential.id }}">
+              <div class="credential-card-header">
+                <div class="credential-badge {% if credential.status == 'issued' %}verified{% elif credential.status == 'revoked' %}revoked{% elif credential.status == 'expired' %}expired{% else %}pending{% endif %}">
+                  {% if credential.status == 'issued' %}
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="m9 12 2 2 4-4"/>
+                    <circle cx="12" cy="12" r="10"/>
+                  </svg>
+                  Verified
+                  {% elif credential.status == 'revoked' %}
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="15" y1="9" x2="9" y2="15"/>
+                    <line x1="9" y1="9" x2="15" y2="15"/>
+                  </svg>
+                  Revoked
+                  {% elif credential.status == 'expired' %}
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12 6 12 12 16 14"/>
+                  </svg>
+                  Expired
+                  {% else %}
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <polyline points="12 6 12 12 16 14"/>
+                  </svg>
+                  {{ credential.get_status_display }}
+                  {% endif %}
+                </div>
+              </div>
+              <div class="credential-card-body">
+                <h3>{{ credential.get_credential_type_display }}</h3>
+                <p class="credential-program">{{ credential.program_name }}</p>
+                <p class="credential-institution">{{ credential.institution.name }}</p>
+                {% if credential.grade %}
+                <p class="credential-grade">{{ credential.grade }}{% if credential.honors %} - {{ credential.honors }}{% endif %}</p>
+                {% endif %}
+                {% if credential.issue_date %}
+                <p class="credential-date">Issued: {{ credential.issue_date|date:"F d, Y" }}</p>
+                {% elif credential.completion_date %}
+                <p class="credential-date">Completed: {{ credential.completion_date|date:"F d, Y" }}</p>
+                {% endif %}
+              </div>
+              <div class="credential-card-footer">
+                <span class="credential-id">{{ credential.credential_id }}</span>
+                <div class="credential-actions">
+                  <button class="btn btn-sm btn-outline share-credential-btn" data-credential-id="{{ credential.id }}" data-credential-name="{{ credential.credential_id }}">Share</button>
+                  <button class="btn btn-sm btn-primary view-qr-btn" 
+                          data-credential-id="{{ credential.id }}" 
+                          {% if credential.qr_code %}data-qr-url="{{ credential.qr_code.url }}"{% endif %}
+                          {% if credential.verification_url %}data-verification-url="{{ credential.verification_url }}"{% endif %}
+                          data-credential-id-text="{{ credential.credential_id }}">
+                    View QR
+                  </button>
+                </div>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+          {% else %}
+          <div class="empty-state">
+            <div class="empty-state-icon">
+              <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="4" width="20" height="16" rx="2"/>
+                <path d="M22 10H2"/>
+                <path d="M6 14h.01"/>
+                <path d="M10 14h.01"/>
+                <path d="M14 14h.01"/>
+              </svg>
+            </div>
+            <h3>No Credentials Yet</h3>
+            <p>Your verified credentials will appear here once they are issued by your institution.</p>
+          </div>
+          {% endif %}
+        </section>
+

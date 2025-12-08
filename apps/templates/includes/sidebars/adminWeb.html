@@ -1,0 +1,628 @@
+<!--begin:Menu item-->
+<div class="menu-item pt-5">
+    <!--begin:Menu content-->
+    <div class="menu-content">
+        <span class="menu-heading fw-bold text-uppercase fs-7">Dashboard</span>
+    </div>
+    <!--end:Menu content-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item me-5">
+    <!--begin:Menu link-->
+    <a href="{% url 'dashboard' %}" class="menu-link {% if 'dashboard' == segment %} active {% endif %}">
+        <span class="menu-icon">
+            <i style='opacity:0.3;' class='fas fa-tachometer-alt'></i>
+        </span>
+        <span class="menu-title">Dashboard</span>
+    </a>
+    <!--end:Menu link-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item pt-5">
+    <!--begin:Menu content-->
+    <div class="menu-content">
+        <span class="menu-heading fw-bold text-uppercase fs-7">About Management</span>
+    </div>
+    <!--end:Menu content-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div data-kt-menu-trigger="click" class="menu-item menu-accordion {% if 'about_admin' == segment or 'team' == segment  %}show{% endif %}">
+    <!--begin:Menu link-->
+    <span class="menu-link">
+        <span class="menu-icon">
+            <i style='opacity:0.3;' class='fas fa-info-circle'></i>
+        </span>
+        <span class="menu-title">About Page</span>
+        <span class="menu-arrow"></span>
+    </span>
+    <!--end:Menu link-->
+    <!--begin:Menu sub-->
+    <div class="menu-sub menu-sub-accordion menu-active-bg">
+        <div class="menu-item">
+            <a class="menu-link" href="{% url 'about_admin_dashboard' %}">
+                <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+                <span class="menu-title">Overview</span>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a class="menu-link {% if  'team' == segment  %}active{% endif %}" href="{% url 'team_list' %}">
+                <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+                <span class="menu-title">Team Members</span>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a class="menu-link" href="{% url 'about_manage_board' %}">
+                <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+                <span class="menu-title">Board Members</span>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a class="menu-link" href="{% url 'about_manage_partners' %}">
+                <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+                <span class="menu-title">Partners</span>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a class="menu-link" href="{% url 'about_manage_timeline' %}">
+                <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+                <span class="menu-title">Timeline</span>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a class="menu-link" href="{% url 'about_manage_stats' %}">
+                <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+                <span class="menu-title">Impact Stats</span>
+            </a>
+        </div>
+    </div>
+    <!--end:Menu sub-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div data-kt-menu-trigger="click" class="menu-item menu-accordion {% if 'news' == segment or 'events' == segment or 'activities' == segment or 'activityCalendar' == segment %}show{% endif %}">
+    <!--begin:Menu link-->
+    <span class="menu-link">
+        <span class="menu-icon">
+            <i style='opacity:0.3;' class='fas fa-newspaper'></i>
+        </span>
+        <span class="menu-title">News & Events</span>
+        <span class="menu-arrow"></span>
+    </span>
+    <!--end:Menu link-->
+    <!--begin:Menu sub-->
+    <div class="menu-sub menu-sub-accordion menu-active-bg">
+        <!--begin:Menu item-->
+        <div class="menu-item">
+            <a class="menu-link {% if 'news' == segment %} active {% endif %}" href="{% url 'news' %}">
+                <span class="menu-bullet">
+                    <span class="bullet bullet-dot"></span>
+                </span>
+                <span class="menu-title">News/Blog</span>
+            </a>
+        </div>
+        <!--end:Menu item-->
+        <!--begin:Menu item-->
+        <div class="menu-item">
+            <a class="menu-link {% if 'events' == segment %} active {% endif %}" href="{% url 'events' %}">
+                <span class="menu-bullet">
+                    <span class="bullet bullet-dot"></span>
+                </span>
+                <span class="menu-title">Events</span>
+            </a>
+        </div>
+        <!--end:Menu item-->
+        <!--begin:Menu item-->
+        <div class="menu-item">
+            <a class="menu-link {% if 'activities' == segment %} active {% endif %}" href="{% url 'activities' %}">
+                <span class="menu-bullet">
+                    <span class="bullet bullet-dot"></span>
+                </span>
+                <span class="menu-title">Activities</span>
+            </a>
+        </div>
+        <!--end:Menu item-->
+        <!--begin:Menu item-->
+        <div class="menu-item">
+            <a class="menu-link {% if 'activityCalendar' == segment %} active {% endif %}" href="{% url 'activityCalendar_list' %}">
+                <span class="menu-bullet">
+                    <span class="bullet bullet-dot"></span>
+                </span>
+                <span class="menu-title">Activity Calendar</span>
+            </a>
+        </div>
+        <!--end:Menu item-->
+    </div>
+    <!--end:Menu sub-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item pt-5">
+    <!--begin:Menu content-->
+    <div class="menu-content">
+        <span class="menu-heading fw-bold text-uppercase fs-7">Programs</span>
+    </div>
+    <!--end:Menu content-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div data-kt-menu-trigger="click" class="menu-item menu-accordion {% if 'programs' == segment %}show{% endif %}">
+    <!--begin:Menu link-->
+    <span class="menu-link">
+        <span class="menu-icon">
+            <i style='opacity:0.3;' class='fas fa-clipboard-list'></i>
+        </span>
+        <span class="menu-title">Programs</span>
+        <span class="menu-arrow"></span>
+    </span>
+    <!--end:Menu link-->
+    <!--begin:Menu sub-->
+    <div class="menu-sub menu-sub-accordion menu-active-bg">
+        <!--begin:Menu item-->
+        <div class="menu-item">
+            <a class="menu-link {% if 'programs' == segment %} active {% endif %}" href="{% url 'program_list' %}">
+                <span class="menu-bullet">
+                    <span class="bullet bullet-dot"></span>
+                </span>
+                <span class="menu-title">All Programs</span>
+            </a>
+        </div>
+        <!--end:Menu item-->
+        <!--begin:Menu item-->
+        <div class="menu-item">
+            <a class="menu-link" href="{% url 'program_create' %}">
+                <span class="menu-bullet">
+                    <span class="bullet bullet-dot"></span>
+                </span>
+                <span class="menu-title">Add Program</span>
+            </a>
+        </div>
+        <!--end:Menu item-->
+        <!--begin:Menu item-->
+        <div class="menu-item">
+            <a class="menu-link" href="{% url 'program_category_list' %}">
+                <span class="menu-bullet">
+                    <span class="bullet bullet-dot"></span>
+                </span>
+                <span class="menu-title">Categories</span>
+            </a>
+        </div>
+        <!--end:Menu item-->
+    </div>
+    <!--end:Menu sub-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item pt-5">
+    <!--begin:Menu content-->
+    <div class="menu-content">
+        <span class="menu-heading fw-bold text-uppercase fs-7">Financial Management</span>
+    </div>
+    <!--end:Menu content-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item me-5">
+    <!--begin:Menu link-->
+    <a href="{% url 'financial_dashboard' %}" class="menu-link {% if 'financials' == segment %} active {% endif %}">
+        <span class="menu-icon">
+            <i style='opacity:0.3;' class='fas fa-chart-line'></i>
+        </span>
+        <span class="menu-title">Financial Dashboard</span>
+    </a>
+    <!--end:Menu link-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item me-5">
+    <!--begin:Menu link-->
+    <a href="{% url 'donations_list' %}" class="menu-link {% if 'donations' == segment %} active {% endif %}">
+        <span class="menu-icon">
+            <i style='opacity:0.3;' class='fas fa-hand-holding-heart'></i>
+        </span>
+        <span class="menu-title">Donations</span>
+    </a>
+    <!--end:Menu link-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item me-5">
+    <!--begin:Menu link-->
+    <a href="{% url 'visitor_analytics' %}" class="menu-link {% if 'analytics' == segment %} active {% endif %}">
+        <span class="menu-icon">
+            <i style='opacity:0.3;' class='fas fa-chart-line'></i>
+        </span>
+        <span class="menu-title">Visitor Analytics</span>
+    </a>
+    <!--end:Menu link-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div data-kt-menu-trigger="click" class="menu-item menu-accordion {% if 'financials' == segment %}show{% endif %}">
+    <!--begin:Menu link-->
+    <span class="menu-link">
+        <span class="menu-icon">
+            <i style='opacity:0.3;' class='fas fa-dollar-sign'></i>
+        </span>
+        <span class="menu-title">Revenue & Expenses</span>
+        <span class="menu-arrow"></span>
+    </span>
+    <!--end:Menu link-->
+    <!--begin:Menu sub-->
+    <div class="menu-sub menu-sub-accordion menu-active-bg">
+        <!--begin:Menu item-->
+        <div class="menu-item">
+            <a class="menu-link" href="{% url 'revenue_list' %}">
+                <span class="menu-bullet">
+                    <span class="bullet bullet-dot"></span>
+                </span>
+                <span class="menu-title">Revenues</span>
+            </a>
+        </div>
+        <!--end:Menu item-->
+        <!--begin:Menu item-->
+        <div class="menu-item">
+            <a class="menu-link" href="{% url 'expense_list' %}">
+                <span class="menu-bullet">
+                    <span class="bullet bullet-dot"></span>
+                </span>
+                <span class="menu-title">Expenses</span>
+            </a>
+        </div>
+        <!--end:Menu item-->
+        <!--begin:Menu item-->
+        <div class="menu-item">
+            <a class="menu-link" href="{% url 'financial_year_list' %}">
+                <span class="menu-bullet">
+                    <span class="bullet bullet-dot"></span>
+                </span>
+                <span class="menu-title">Fiscal Years</span>
+            </a>
+        </div>
+        <!--end:Menu item-->
+    </div>
+    <!--end:Menu sub-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div data-kt-menu-trigger="click" class="menu-item menu-accordion {% if 'financials' == segment %}show{% endif %}">
+    <!--begin:Menu link-->
+    <span class="menu-link">
+        <span class="menu-icon">
+            <i style='opacity:0.3;' class='fas fa-file-invoice-dollar'></i>
+        </span>
+        <span class="menu-title">Reports & Categories</span>
+        <span class="menu-arrow"></span>
+    </span>
+    <!--end:Menu link-->
+    <!--begin:Menu sub-->
+    <div class="menu-sub menu-sub-accordion menu-active-bg">
+        <!--begin:Menu item-->
+        <div class="menu-item">
+            <a class="menu-link" href="{% url 'report_list' %}">
+                <span class="menu-bullet">
+                    <span class="bullet bullet-dot"></span>
+                </span>
+                <span class="menu-title">Annual Reports</span>
+            </a>
+        </div>
+        <!--end:Menu item-->
+        <!--begin:Menu item-->
+        <div class="menu-item">
+            <a class="menu-link" href="{% url 'revenue_category_list' %}">
+                <span class="menu-bullet">
+                    <span class="bullet bullet-dot"></span>
+                </span>
+                <span class="menu-title">Revenue Categories</span>
+            </a>
+        </div>
+        <!--end:Menu item-->
+        <!--begin:Menu item-->
+        <div class="menu-item">
+            <a class="menu-link" href="{% url 'expense_category_list' %}">
+                <span class="menu-bullet">
+                    <span class="bullet bullet-dot"></span>
+                </span>
+                <span class="menu-title">Expense Categories</span>
+            </a>
+        </div>
+        <!--end:Menu item-->
+    </div>
+    <!--end:Menu sub-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item pt-5">
+    <!--begin:Menu content-->
+    <div class="menu-content">
+        <span class="menu-heading fw-bold text-uppercase fs-7">Partnerships & Sponsorships</span>
+    </div>
+    <!--end:Menu content-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div data-kt-menu-trigger="click" class="menu-item menu-accordion {% if 'partner_schools_admin' == segment or 'individual_sponsors_admin' == segment %}show{% endif %}">
+    <!--begin:Menu link-->
+    <span class="menu-link">
+        <span class="menu-icon">
+            <i style='opacity:0.3;' class='fas fa-handshake'></i>
+        </span>
+        <span class="menu-title">Partnerships & Sponsorships</span>
+        <span class="menu-arrow"></span>
+    </span>
+    <!--end:Menu link-->
+    <!--begin:Menu sub-->
+    <div class="menu-sub menu-sub-accordion menu-active-bg">
+        <div class="menu-item">
+            <a class="menu-link" href="{% url 'manage_partner_schools' %}">
+                <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+                <span class="menu-title">Partner Schools</span>
+            </a>
+        </div>
+        <div class="menu-item">
+            <a class="menu-link" href="{% url 'manage_individual_sponsors' %}">
+                <span class="menu-bullet"><span class="bullet bullet-dot"></span></span>
+                <span class="menu-title">Sponsored Pupils</span>
+            </a>
+        </div>
+    </div>
+    <!--end:Menu sub-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item pt-5">
+    <!--begin:Menu content-->
+    <div class="menu-content">
+        <span class="menu-heading fw-bold text-uppercase fs-7">Campaigns & Applications</span>
+    </div>
+    <!--end:Menu content-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item me-5">
+    <!--begin:Menu link-->
+    <a href="{% url 'campaigns_list' %}" class="menu-link {% if 'campaigns' == segment %} active {% endif %}">
+        <span class="menu-icon">
+            <i style='opacity:0.3;' class='fas fa-bullhorn'></i>
+        </span>
+        <span class="menu-title">Campaigns</span>
+    </a>
+    <!--end:Menu link-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item me-5">
+    <!--begin:Menu link-->
+    <a href="{% url 'pupil_checks_list' %}" class="menu-link {% if 'pupil_checks' == segment %} active {% endif %}">
+        <span class="menu-icon">
+            <i style='opacity:0.3;' class='fas fa-user-check'></i>
+        </span>
+        <span class="menu-title">Assistance Applications</span>
+    </a>
+    <!--end:Menu link-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item pt-5">
+    <!--begin:Menu content-->
+    <div class="menu-content">
+        <span class="menu-heading fw-bold text-uppercase fs-7">Media</span>
+    </div>
+    <!--end:Menu content-->
+</div>
+<!--end:Menu item-->
+
+
+
+<!--begin:Menu item-->
+<div class="menu-item me-5">
+    <!--begin:Menu link-->
+    <a href="{% url 'gallery_list' %}" class="menu-link {% if 'gallery' == segment %} active {% endif %}">
+        <span class="menu-icon">
+            <i style="opacity:0.3;" class="fa">&#xf03e;</i>
+        </span>
+        <span class="menu-title">Gallery</span>
+    </a>
+    <!--end:Menu link-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item me-5">
+    <!--begin:Menu link-->
+    <a href="{% url 'slider_list' %}" class="menu-link {% if 'slider' == segment %} active {% endif %}">
+        <span class="menu-icon">
+            <i style="opacity:0.3;" class="fas fa-images"></i>
+        </span>
+        <span class="menu-title">Slider Images</span>
+    </a>
+    <!--end:Menu link-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item pt-5">
+    <!--begin:Menu content-->
+    <div class="menu-content">
+        <span class="menu-heading fw-bold text-uppercase fs-7">Communication</span>
+    </div>
+    <!--end:Menu content-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item me-5">
+    <!--begin:Menu link-->
+    <a href="{% url 'contact_messages_list' %}" class="menu-link {% if 'contact_messages' == segment %} active {% endif %}">
+        <span class="menu-icon">
+            <i style="opacity:0.3;" class="fas fa-envelope"></i>
+        </span>
+        <span class="menu-title">Contact Messages</span>
+    </a>
+    <!--end:Menu link-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item me-5">
+    <!--begin:Menu link-->
+    <a href="{% url 'test_email_page' %}" class="menu-link">
+        <span class="menu-icon">
+            <i style="opacity:0.3;" class="fas fa-paper-plane"></i>
+        </span>
+        <span class="menu-title">Test Email System</span>
+    </a>
+    <!--end:Menu link-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item pt-5">
+    <!--begin:Menu content-->
+    <div class="menu-content">
+        <span class="menu-heading fw-bold text-uppercase fs-7">Content Management</span>
+    </div>
+    <!--end:Menu content-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item me-5">
+    <!--begin:Menu link-->
+    <a href="{% url 'content' %}" class="menu-link {% if 'pages' == segment %} active {% endif %}">
+        <span class="menu-icon">
+            <i style="opacity:0.3;" class="fas fa-edit"></i>
+        </span>
+        <span class="menu-title">Page Content</span>
+    </a>
+    <!--end:Menu link-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item pt-5">
+    <!--begin:Menu content-->
+    <div class="menu-content">
+        <span class="menu-heading fw-bold text-uppercase fs-7">Settings</span>
+    </div>
+    <!--end:Menu content-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div data-kt-menu-trigger="click" class="menu-item menu-accordion
+    {% if 'awaiting_Users' == segment %} 
+        show
+    {% elif 'users' == segment %}
+        show
+    {% elif user_group == segment %}
+        show
+    {% elif 'delegate_tasks' == segment %}
+        show
+    {% elif 'update_GeneralSettings' == segment %}
+        show
+    {% endif %}
+">
+    <!--begin:Menu link-->
+    <span class="menu-link">
+        <span class="menu-icon">
+            <!--begin::Svg Icon | path: icons/duotune/graphs/gra010.svg-->
+            <span class="svg-icon svg-icon-2">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+                <!--! Font Awesome Pro 6.3.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+                <path fill="currentColor" opacity="0.3" d="M224 0a128 128 0 1 1 0 256A128 128 0 1 1 224 0zM178.3 304h91.4c11.8 0 23.4 1.2 34.5 3.3c-2.1 18.5 7.4 35.6 21.8 44.8c-16.6 10.6-26.7 31.6-20 53.3c4 12.9 9.4 25.5 16.4 37.6s15.2 23.1 24.4 33c15.7 16.9 39.6 18.4 57.2 8.7v.9c0 9.2 2.7 18.5 7.9 26.3H29.7C13.3 512 0 498.7 0 482.3C0 383.8 79.8 304 178.3 304zM436 218.2c0-7 4.5-13.3 11.3-14.8c10.5-2.4 21.5-3.7 32.7-3.7s22.2 1.3 32.7 3.7c6.8 1.5 11.3 7.8 11.3 14.8v30.6c7.9 3.4 15.4 7.7 22.3 12.8l24.9-14.3c6.1-3.5 13.7-2.7 18.5 2.4c7.6 8.1 14.3 17.2 20.1 27.2s10.3 20.4 13.5 31c2.1 6.7-1.1 13.7-7.2 17.2l-25 14.4c.4 4 .7 8.1 .7 12.3s-.2 8.2-.7 12.3l25 14.4c6.1 3.5 9.2 10.5 7.2 17.2c-3.3 10.6-7.8 21-13.5 31s-12.5 19.1-20.1 27.2c-4.8 5.1-12.5 5.9-18.5 2.4l-24.9-14.3c-6.9 5.1-14.3 9.4-22.3 12.8l0 30.6c0 7-4.5 13.3-11.3 14.8c-10.5 2.4-21.5 3.7-32.7 3.7s-22.2-1.3-32.7-3.7c-6.8-1.5-11.3-7.8-11.3-14.8V454.8c-8-3.4-15.6-7.7-22.5-12.9l-24.7 14.3c-6.1 3.5-13.7 2.7-18.5-2.4c-7.6-8.1-14.3-17.2-20.1-27.2s-10.3-20.4-13.5-31c-2.1-6.7 1.1-13.7 7.2-17.2l24.8-14.3c-.4-4.1-.7-8.2-.7-12.4s.2-8.3 .7-12.4L343.8 325c-6.1-3.5-9.2-10.5-7.2-17.2c3.3-10.6 7.7-21 13.5-31s12.5-19.1 20.1-27.2c4.8-5.1 12.4-5.9 18.5-2.4l24.8 14.3c6.9-5.1 14.5-9.4 22.5-12.9V218.2zm92.1 133.5a48.1 48.1 0 1 0 -96.1 0 48.1 48.1 0 1 0 96.1 0z"/>
+                </svg>
+            </span>
+            <!--end::Svg Icon-->
+        </span>
+        <span class="menu-title">User Management</span>
+        <span class="menu-arrow"></span>
+    </span>
+    <!--end:Menu link-->
+    <!--begin:Menu sub-->
+    <div class="menu-sub menu-sub-accordion menu-active-bg">
+        <!--begin:Menu item-->
+        <div class="menu-item">
+            <!--begin:Menu link-->
+            <a class="menu-link {% if 'awaiting_Users' == segment %} active {% endif %}" href="{% url 'awaiting_Users' %}">
+                <span class="menu-bullet">
+                    <span class="bullet bullet-dot"></span>
+                </span>
+                <span class="menu-title">Awaiting Users</span>
+            </a>
+            <!--end:Menu link-->
+        </div>
+        <!--end:Menu item-->
+        <!--begin:Menu item-->
+        <div class="menu-item">
+            <!--begin:Menu link-->
+            <a class="menu-link {% if 'users' == segment %} active {% endif %}" href="{% url 'users' %}">
+                <span class="menu-bullet">
+                    <span class="bullet bullet-dot"></span>
+                </span>
+                <span class="menu-title">All Users</span>
+            </a>
+            <!--end:Menu link-->
+        </div>
+        <!--end:Menu item-->
+        <!--begin:Menu item-->
+        <div class="menu-item">
+            <!--begin:Menu link-->
+            <a class="menu-link {% if 'update_GeneralSettings' == segment %} active {% endif %}" href="{% url 'update_GeneralSettings' %}">
+                <span class="menu-bullet">
+                    <span class="bullet bullet-dot"></span>
+                </span>
+                <span class="menu-title">Site Settings</span>
+            </a>
+            <!--end:Menu link-->
+        </div>
+        <!--end:Menu item-->
+    </div>
+    <!--end:Menu sub-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item me-5">
+    <!--begin:Menu link-->
+    <a href="{% url 'logout' %}" class="menu-link">
+        <span class="menu-icon">
+            <!--begin::Svg Icon | path: icons/duotune/general/gen014.svg-->
+            <i style="opacity:0.3;" class="fa">&#xf08b;</i>
+            <!--end::Svg Icon-->
+        </span>
+        <span class="menu-title">Sign Out</span>
+    </a>
+    <!--end:Menu link-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item pt-5">
+    <!--begin:Menu content-->
+    <div class="menu-content">
+        <span class="menu-heading fw-bold text-uppercase fs-7">Powered by TechMinds (SL) Ltd</span>
+    </div>
+    <!--end:Menu content-->
+</div>
+<!--end:Menu item-->

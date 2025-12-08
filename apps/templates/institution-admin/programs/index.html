@@ -1,0 +1,669 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Programs {% endblock %} 
+
+{% block content %}
+{% load static %}
+  <!-- Programs Section -->
+  <section class="content-section active" id="section-programs">
+    <div class="section-header">
+      <div>
+        <h1 class="section-title">Programs</h1>
+        <p class="section-subtitle">Manage academic programs and courses</p>
+      </div>
+      <div class="section-actions">
+        <button class="btn btn-outline" id="filter-btn" onclick="openFilterModal()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+          </svg>
+          Filter
+        </button>
+        <button class="btn btn-primary" id="add-program-btn" onclick="openAddProgramModal()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Add Program
+        </button>
+      </div>
+    </div>
+    
+    <!-- Search Bar -->
+    <div style="margin-bottom: 1.5rem;">
+      <form method="get" action="{% url 'institution_admin_programs' %}" style="display: flex; gap: 0.75rem; align-items: center;">
+        <div style="position: relative; flex: 1; max-width: 400px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none;">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.3-4.3"/>
+          </svg>
+          <input 
+            type="text" 
+            name="search" 
+            value="{{ search_query }}"
+            placeholder="Search by name, code, department, or faculty..." 
+            class="input"
+            style="padding-left: 2.5rem; width: 100%;"
+            autocomplete="off"
+          >
+          {% if search_query %}
+          <a href="{% url 'institution_admin_programs' %}" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); text-decoration: none; padding: 4px;" title="Clear search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </a>
+          {% endif %}
+        </div>
+        <button type="submit" class="btn btn-primary" style="white-space: nowrap;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+          </svg>
+          Search
+        </button>
+      </form>
+    </div>
+
+    <div class="data-table-card">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Program Name</th>
+            <th>Code</th>
+            <th>Degree Level</th>
+            <th>Department</th>
+            <th>Faculty</th>
+            <th>Duration</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if programs %}
+            {% for program in programs %}
+            <tr>
+              <td>
+                <div class="table-cell-main">
+                  <div>
+                    <div class="table-cell-title">{{ program.name }}</div>
+                    <div class="table-cell-subtitle">
+                      Created: {{ program.created_at|date:"M d, Y" }}
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                {% if program.code %}
+                  <span style="font-family: monospace; font-size: 0.875rem;">{{ program.code }}</span>
+                {% else %}
+                  <span style="color: var(--text-muted);">—</span>
+                {% endif %}
+              </td>
+              <td>
+                <span class="status-badge info">{{ program.get_degree_level_display }}</span>
+              </td>
+              <td>
+                {% if program.department %}
+                  <div class="table-cell-title">{{ program.department }}</div>
+                {% else %}
+                  <span style="color: var(--text-muted);">—</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if program.faculty %}
+                  <div class="table-cell-title">{{ program.faculty }}</div>
+                {% else %}
+                  <span style="color: var(--text-muted);">—</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if program.duration_years %}
+                  {{ program.duration_years }} year{{ program.duration_years|pluralize }}
+                {% else %}
+                  <span style="color: var(--text-muted);">—</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if program.is_active %}
+                  <span class="status-badge success">Active</span>
+                {% else %}
+                  <span class="status-badge error">Inactive</span>
+                {% endif %}
+              </td>
+              <td>
+                <div class="table-actions">
+                  <button class="table-action-btn" aria-label="View" title="View Details" onclick="viewProgram('{{ program.id }}')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                      <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                  </button>
+                  <button class="table-action-btn" aria-label="Edit" title="Edit Program" onclick="editProgram('{{ program.id }}')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                    </svg>
+                  </button>
+                  <button class="table-action-btn" aria-label="Delete" title="Delete Program" onclick="deleteProgram('{{ program.id }}', '{{ program.name|escapejs }}')" style="color: var(--error);">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="3 6 5 6 21 6"/>
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                      <line x1="10" y1="11" x2="10" y2="17"/>
+                      <line x1="14" y1="11" x2="14" y2="17"/>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="8" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 1rem;">
+                  <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                  <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                </svg>
+                <p style="margin: 0; font-size: 1.125rem; font-weight: 600;">No programs found</p>
+                <p style="margin: 0.5rem 0 0 0; font-size: 0.875rem;">Use the "Add Program" button above to create a new program</p>
+              </td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    {% if programs.has_other_pages %}
+    <div class="pagination-container">
+      <span class="pagination-info">
+        Showing {{ programs.start_index }} to {{ programs.end_index }} of {{ programs.paginator.count }} programs
+      </span>
+      <div class="pagination-controls">
+        {% if programs.has_previous %}
+          <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}{% if filter_degree_level %}&degree_level={{ filter_degree_level }}{% endif %}{% if filter_status %}&status={{ filter_status }}{% endif %}{% if filter_department %}&department={{ filter_department }}{% endif %}" class="pagination-btn" title="First Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="11 17 6 12 11 7"></polyline><polyline points="18 17 13 12 18 7"></polyline></svg>
+          </a>
+          <a href="?page={{ programs.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if filter_degree_level %}&degree_level={{ filter_degree_level }}{% endif %}{% if filter_status %}&status={{ filter_status }}{% endif %}{% if filter_department %}&department={{ filter_department }}{% endif %}" class="pagination-btn" title="Previous Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </a>
+        {% else %}
+          <span class="pagination-btn disabled" title="First Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="11 17 6 12 11 7"></polyline><polyline points="18 17 13 12 18 7"></polyline></svg>
+          </span>
+          <span class="pagination-btn disabled" title="Previous Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </span>
+        {% endif %}
+
+        {% for i in programs.paginator.page_range %}
+          {% if programs.number == i %}
+            <span class="pagination-btn active">{{ i }}</span>
+          {% elif i > programs.number|add:'-3' and i < programs.number|add:'3' %}
+            <a href="?page={{ i }}{% if search_query %}&search={{ search_query }}{% endif %}{% if filter_degree_level %}&degree_level={{ filter_degree_level }}{% endif %}{% if filter_status %}&status={{ filter_status }}{% endif %}{% if filter_department %}&department={{ filter_department }}{% endif %}" class="pagination-btn">{{ i }}</a>
+          {% endif %}
+        {% endfor %}
+
+        {% if programs.has_next %}
+          <a href="?page={{ programs.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if filter_degree_level %}&degree_level={{ filter_degree_level }}{% endif %}{% if filter_status %}&status={{ filter_status }}{% endif %}{% if filter_department %}&department={{ filter_department }}{% endif %}" class="pagination-btn" title="Next Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </a>
+          <a href="?page={{ programs.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}{% if filter_degree_level %}&degree_level={{ filter_degree_level }}{% endif %}{% if filter_status %}&status={{ filter_status }}{% endif %}{% if filter_department %}&department={{ filter_department }}{% endif %}" class="pagination-btn" title="Last Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="13 17 18 12 13 7"></polyline><polyline points="6 17 11 12 6 7"></polyline></svg>
+          </a>
+        {% else %}
+          <span class="pagination-btn disabled" title="Next Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </span>
+          <span class="pagination-btn disabled" title="Last Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="13 17 18 12 13 7"></polyline><polyline points="6 17 11 12 6 7"></polyline></svg>
+          </span>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+  </section>
+
+  <!-- Filter Modal -->
+  <div id="filter-modal" class="modal" style="display: none;">
+    <div class="modal-overlay" onclick="closeFilterModal()"></div>
+    <div class="modal-content" style="max-width: 500px;">
+      <div class="modal-header">
+        <h2 class="modal-title">Filter Programs</h2>
+        <button class="modal-close" onclick="closeFilterModal()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <form method="get" action="{% url 'institution_admin_programs' %}" id="filter-form">
+        <div class="modal-body" style="padding: 1.5rem;">
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Degree Level</label>
+            <select name="degree_level" class="input select">
+              <option value="">All Degree Levels</option>
+              {% for value, label in degree_levels %}
+              <option value="{{ value }}" {% if filter_degree_level == value %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Department</label>
+            <select name="department" class="input select">
+              <option value="">All Departments</option>
+              {% for dept in departments %}
+              <option value="{{ dept }}" {% if filter_department == dept %}selected{% endif %}>{{ dept }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Status</label>
+            <select name="status" class="input select">
+              <option value="">All Statuses</option>
+              <option value="true" {% if filter_status == 'true' %}selected{% endif %}>Active</option>
+              <option value="false" {% if filter_status == 'false' %}selected{% endif %}>Inactive</option>
+            </select>
+          </div>
+          
+          {% if search_query %}
+          <input type="hidden" name="search" value="{{ search_query }}">
+          {% endif %}
+        </div>
+        <div class="modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 0.75rem;">
+          <button type="button" class="btn btn-outline" onclick="clearFilters()">Clear</button>
+          <button type="submit" class="btn btn-primary">Apply Filters</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add/Edit Program Modal -->
+  <div id="program-modal" class="modal" style="display: none;">
+    <div class="modal-overlay" onclick="closeProgramModal()"></div>
+    <div class="modal-content" style="max-width: 700px; max-height: 90vh; overflow-y: auto;">
+      <div class="modal-header">
+        <h2 class="modal-title" id="program-modal-title">Add Program</h2>
+        <button class="modal-close" onclick="closeProgramModal()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <form id="program-form" onsubmit="saveProgram(event)">
+        <div class="modal-body" style="padding: 1.5rem;">
+          <input type="hidden" id="program-id" name="id">
+          
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Program Name <span style="color: var(--error);">*</span></label>
+            <input type="text" id="program-name" name="name" class="input" required placeholder="e.g., Bachelor of Science in Computer Science">
+          </div>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+            <div class="form-group">
+              <label class="form-label">Program Code</label>
+              <input type="text" id="program-code" name="code" class="input" placeholder="e.g., BSCS">
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Degree Level</label>
+              <select id="program-degree-level" name="degree_level" class="input select">
+                {% for value, label in degree_levels %}
+                <option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+            <div class="form-group">
+              <label class="form-label">Department</label>
+              <input type="text" id="program-department" name="department" class="input" placeholder="e.g., Computer Science">
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Faculty</label>
+              <input type="text" id="program-faculty" name="faculty" class="input" placeholder="e.g., Engineering">
+            </div>
+          </div>
+          
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Duration (Years)</label>
+            <input type="number" id="program-duration" name="duration_years" class="input" step="0.5" min="0.5" max="10" placeholder="e.g., 4">
+            <small style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.25rem; display: block;">Enter duration in years (e.g., 4 for 4 years, 3.5 for 3.5 years)</small>
+          </div>
+          
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="checkbox-label" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+              <input type="checkbox" id="program-is-active" name="is_active" value="true" checked>
+              <span>Is Active</span>
+            </label>
+          </div>
+        </div>
+        <div class="modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 0.75rem;">
+          <button type="button" class="btn btn-outline" onclick="closeProgramModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="program-submit-btn">
+            <span class="btn-text">Save Program</span>
+            <span class="btn-spinner" style="display: none;">
+              <span class="spinner" style="width: 16px; height: 16px; border-width: 2px;"></span>
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Modal Functions
+    function openFilterModal() {
+      document.getElementById('filter-modal').style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeFilterModal() {
+      document.getElementById('filter-modal').style.display = 'none';
+      document.body.style.overflow = '';
+    }
+    
+    function clearFilters() {
+      window.location.href = "{% url 'institution_admin_programs' %}";
+    }
+    
+    function openAddProgramModal() {
+      document.getElementById('program-modal-title').textContent = 'Add Program';
+      document.getElementById('program-form').reset();
+      document.getElementById('program-id').value = '';
+      document.getElementById('program-is-active').checked = true;
+      document.getElementById('program-modal').style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeProgramModal() {
+      document.getElementById('program-modal').style.display = 'none';
+      document.body.style.overflow = '';
+      document.getElementById('program-form').reset();
+    }
+    
+    // CRUD Functions
+    async function saveProgram(event) {
+      event.preventDefault();
+      
+      const form = event.target;
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      
+      // Handle checkbox
+      data.is_active = document.getElementById('program-is-active').checked;
+      
+      const programId = document.getElementById('program-id').value;
+      const isEdit = !!programId;
+      const url = isEdit 
+        ? `/institution-admin/programs/${programId}/update/`
+        : '/institution-admin/programs/create/';
+      const method = isEdit ? 'PUT' : 'POST';
+      
+      const submitBtn = document.getElementById('program-submit-btn');
+      const btnText = submitBtn.querySelector('.btn-text');
+      const btnSpinner = submitBtn.querySelector('.btn-spinner');
+      
+      btnText.style.display = 'none';
+      btnSpinner.style.display = 'inline-block';
+      submitBtn.disabled = true;
+      
+      try {
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || 
+                         document.cookie.split(';').find(c => c.trim().startsWith('csrftoken='))?.split('=')[1];
+        
+        const response = await fetch(url, {
+          method: method,
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken,
+          },
+          credentials: 'include',
+          body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok && result.success) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: result.message || 'Program saved successfully',
+            timer: 2000,
+            showConfirmButton: false,
+            toast: true,
+            position: 'top-end'
+          });
+          closeProgramModal();
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: result.error || 'Failed to save program',
+            confirmButtonText: 'OK'
+          });
+        }
+      } catch (error) {
+        console.error('Error saving program:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: 'An error occurred while saving program',
+          confirmButtonText: 'OK'
+        });
+      } finally {
+        btnText.style.display = 'inline-block';
+        btnSpinner.style.display = 'none';
+        submitBtn.disabled = false;
+      }
+    }
+    
+    async function editProgram(programId) {
+      try {
+        const response = await fetch(`/institution-admin/programs/${programId}/`);
+        const data = await response.json();
+        
+        if (response.ok) {
+          document.getElementById('program-modal-title').textContent = 'Edit Program';
+          document.getElementById('program-id').value = data.id;
+          document.getElementById('program-name').value = data.name || '';
+          document.getElementById('program-code').value = data.code || '';
+          document.getElementById('program-degree-level').value = data.degree_level || 'bachelor';
+          document.getElementById('program-department').value = data.department || '';
+          document.getElementById('program-faculty').value = data.faculty || '';
+          document.getElementById('program-duration').value = data.duration_years || '';
+          document.getElementById('program-is-active').checked = data.is_active !== false;
+          
+          document.getElementById('program-modal').style.display = 'flex';
+          document.body.style.overflow = 'hidden';
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: data.error || 'Failed to load program',
+            confirmButtonText: 'OK'
+          });
+        }
+      } catch (error) {
+        console.error('Error loading program:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: 'An error occurred while loading program',
+          confirmButtonText: 'OK'
+        });
+      }
+    }
+    
+    async function deleteProgram(programId, programName) {
+      const result = await Swal.fire({
+        title: 'Are you sure?',
+        text: `Do you want to delete program "${programName}"? This action cannot be undone!`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel'
+      });
+      
+      if (!result.isConfirmed) {
+        return;
+      }
+      
+      try {
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || 
+                         document.cookie.split(';').find(c => c.trim().startsWith('csrftoken='))?.split('=')[1];
+        
+        const response = await fetch(`/institution-admin/programs/${programId}/delete/`, {
+          method: 'DELETE',
+          headers: {
+            'X-CSRFToken': csrfToken,
+          },
+          credentials: 'include'
+        });
+        
+        const deleteResult = await response.json();
+        
+        if (response.ok && deleteResult.success) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Deleted!',
+            text: deleteResult.message || 'Program deleted successfully',
+            timer: 2000,
+            showConfirmButton: false,
+            toast: true,
+            position: 'top-end'
+          });
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: deleteResult.error || 'Failed to delete program',
+            confirmButtonText: 'OK'
+          });
+        }
+      } catch (error) {
+        console.error('Error deleting program:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: 'An error occurred while deleting program',
+          confirmButtonText: 'OK'
+        });
+      }
+    }
+    
+    function viewProgram(programId) {
+      editProgram(programId);
+    }
+    
+    // Close modals on ESC key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeFilterModal();
+        closeProgramModal();
+      }
+    });
+  </script>
+
+  <style>
+    /* Modal Styles */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    
+    .modal-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+    }
+    
+    .modal-content {
+      position: relative;
+      background: var(--bg-card, #fff);
+      border-radius: var(--radius-lg, 12px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      width: 100%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .modal-title {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    
+    .modal-close {
+      background: none;
+      border: none;
+      padding: 0.5rem;
+      cursor: pointer;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s;
+    }
+    
+    .modal-close:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+    
+    .modal-body {
+      flex: 1;
+      overflow-y: auto;
+    }
+    
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      font-size: 0.875rem;
+      color: var(--text-primary);
+    }
+  </style>
+
+{% endblock content %}
+

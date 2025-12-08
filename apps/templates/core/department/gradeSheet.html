@@ -1,0 +1,1516 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Grade Sheet {% endblock %} 
+{% block titlePage %} Grade Sheet {% endblock %} 
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %} 
+<style>
+button  .glyphicon-ok:before {
+        content: "\f00c";
+    }
+button  .glyphicon-remove:before {
+        content: "\f00d";
+    }
+button  .glyphicon {
+        display: inline-block;
+        font: normal normal normal 14px/1 FontAwesome;
+        font-size: inherit;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+
+.chat-main{
+position: fixed;
+width: 300px;
+bottom: 0;
+right: 200px;
+}
+.chat-header{
+padding-top: 1px;
+padding-bottom: 1px;
+}
+.username i{
+font-size: 9px;
+}
+.username h6{
+display: inline-block;
+font-size: 12px;
+font-weight: 600;
+}
+.options i{
+font-size: 14px;
+font-weight: normal;
+
+}
+.options .live-video{
+font-size: 6px;
+}
+.chats{
+height: 260px;
+overflow-x: scroll;
+overflow-x: hidden;
+}
+.chats ul li{
+list-style: none;
+clear: both;
+font-size: 13px;
+}
+.chats .send-msg{
+float: right;
+}
+.receive-msg img{
+border-radius: 100%;
+height: 30px;
+width: 12%;
+}
+.receive-msg-img{
+display: inline;
+}
+.receive-msg .receive-msg-desc{
+display: inline-block;
+}
+
+.send-msg .send-msg-desc{
+display: inline-block;
+background:#DCF8C6;
+}
+.send-msg img{
+border-radius: 100%;
+height: 30px;
+width: 12%;
+float: right;
+}
+.send-msg-img{
+display: inline;
+}
+
+
+.receive-msg .receive-msg-desc p{
+background: #c1c1c1;
+}
+.message-box input{
+border: none;
+font-size: 13px;
+opacity: 0.7;
+height:30px;
+}
+.message-box textarea{
+border: none;
+font-size: 13px;
+opacity: 0.7;
+}
+.message-box input:focus{
+outline: none;
+}
+.message-box textarea:focus{
+outline: none;
+}
+.tools i{
+color: #a1a1a1;
+cursor: pointer;
+font-size: 20px;
+margin-right: 6px;
+}
+.chat-body{
+background:#fff;
+margin-top:0%;
+
+}
+.message-box{
+background:#fff;
+}
+
+
+
+ .loader {
+    border: 5px solid #f3f3f3; /* Light grey */
+    border-top: 5px solid #000000; /* Blue */
+    border-radius: 50%;
+    width:40px;
+    height:40px;
+    animation: spin 2s linear infinite;
+ }
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.hide-loader{
+display:none;
+}
+</style>
+<!-- 
+background-image: url('{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/static/assets/img/chatbox/bg.png');
+background-repeat:no-repeat;
+-->
+
+	{% load has_group %}
+	
+
+	
+<div class="content">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				<div class="card">
+					<div class="card-header card-header-primary card-header-icon">
+						
+						<h4 class="card-title">Grade Sheet </h4>
+				
+					
+					</div>
+					<div class="card-body">
+  
+							
+						{% if  canApprove %}
+						<div class="row">
+						<div class="col-md-12 ">
+						<h6>{{moduleSheet.0.course}} -- {{moduleSheet.0.year}} -- {{moduleSheet.0.module}}--{{moduleSheet.0.lecturer}} --Grades</h6>
+						<div class="row" style="padding:1%">
+						<div class="col-md-5">
+							  <div class="" Style="cursor:default;"> 
+																	  
+																	  
+									{% if DeanCA %}
+										<input style="display:none"type="text" value="unapproved" id="reversed_ca_dean"/>
+										<b id="status_ca_dean" >Dean Approval Status: Approved</b>
+									
+										{% else %}
+										<b id="status_ca_dean"  > Dean Approval Status: unapproved</b>
+										<input style="display:none"type="text" value="approved" id="reversed_ca_dean"/> 
+									{% endif %}
+									<br>
+									<a  style="cursor:pointer;"class="btn btn-sm {% if  DeanCA %} btn-success  {% else %} btn-primary {% endif %} me-3" onclick="confirm_approval('ca','dean')" id="confirm_approved_ca_dean"  >
+										<i class="ki-duotone ki-check fs-3 d-none"></i>                            
+										<!--begin::Indicator label-->
+										<span class="indicator-label">
+											{% if  DeanCA %}Click to withdraw  {% else %}Click to Approve  {% endif %} </span>
+										<!--end::Indicator label-->
+
+										<!--begin::Indicator progress-->
+										<span class="indicator-progress">
+											Please wait...    <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+										</span>
+										<!--end::Indicator progress-->                        
+									</a>
+								</div>
+														
+									
+						</div>						
+							
+						<div class="col-md-5">
+								<div class="" Style="cursor:default;"> 
+								{% if DeanEXAM %}
+									<input style="display:none"type="text" value="unapproved" id="reversed_exam_dean"/>
+									<b id="status_exam_dean" >Dean's Status: Approved</b>
+								
+									{% else %}
+									<b id="status_exam_dean"  > Dean's Status: unapproved</b>
+									<input style="display:none"type="text" value="approved" id="reversed_exam_dean"/> 
+								{% endif %}
+								<br>
+								<a  style="cursor:pointer;"class="btn btn-sm {% if  DeanEXAM %} btn-success  {% else %} btn-primary {% endif %} me-3" onclick="confirm_approval('exam','dean')" id="confirm_approved_exam_dean"  >
+									<i class="ki-duotone ki-check fs-3 d-none"></i>                            
+									<!--begin::indicator label-->
+									<span class="indicator-label">
+										{% if  DeanEXAM %}Click to withdraw  {% else %}Click to Approve  {% endif %} </span>
+									<!--end::indicator label-->
+
+									<!--begin::indicator progress-->
+									<span class="indicator-progress">
+										Please wait...    <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+									</span>
+									<!--end::indicator progress-->                        
+								</a>
+							</div>
+
+
+							
+						</div>	
+							 
+						
+							 
+						<div class="col-md-2">
+						
+							<!--begin::Option-->
+							
+							<!--end::Option-->
+							<button id="RoundUp" onclick="RoundUp()" class="btn btn-outline btn-outline-dashed  {% if DeanRoundUp %} btn-outline-success btn-active-light-success {% else %}btn-outline-primary btn-active-light-primary {% endif %}">{% if DeanRoundUp %} Disable Round-Up {% else %}Enable Round-Up {% endif %}</button>
+							<input type="hidden" id="RoundUpInput" value="{% if DeanRoundUp %} Disable{% else %}Enable{% endif %}">
+
+												
+							 </div>	
+							 
+						</div> 
+						
+						
+						{% if  request.user|has_group:"HoD" %} 
+			           
+							{% if moduleSheet.0.allowedRoundup or moduleSheet.0.RoundupDone%}
+								<div class="row">
+						 <br>
+                         <div id="form_roundup" >
+						 <hr>
+						 {% if moduleSheet.0.allowedRoundup %}
+						  <u><h6> You got the Dean's approval to round-up Grades </h6></u>
+							 <div class="form-inline editableform" >
+								 <div class="control-group form-group bmd-form-group">
+									 <div>
+										 <div class="editable-input" style="position: relative;">
+											<input id="input_roundup" type="text" value= "0" class="form-control input-sm" style="padding-right: 24px;"><span class="editable-clear-x"/>
+										 </div>
+										 <div class="editable-buttons">
+											 <button href="#myModal_roundUpGrade" data-toggle="modal" data-level="{{moduleSheet.0.level.id}}" data-faculty="{{moduleSheet.0.faculty.id}}" data-department="{{moduleSheet.0.department.id}}" data-course="{{moduleSheet.0.course.id}}" data-module="{{moduleSheet.0.module.id}}" data-lecturer="{{moduleSheet.0.lecturer.id}}" data-year="{{moduleSheet.0.year.id}}" data-session="{{moduleSheet.0.accademicSession.id}}"  data-name=" Module: {{moduleSheet.0.module}} Course: {{moduleSheet.0.course}} -- {{moduleSheet.0.year}}"   type="submit" class="btn  {% if request.user.data_color_general %} {% if request.user.data_color_general in 'danger'%}btn-danger{% elif request.user.data_color_general in 'orange' %}btn-warning{% elif request.user.data_color_general in 'green' %}btn-success{% elif request.user.data_color_general in 'azure' %}btn-info{% elif request.user.data_color_general in 'purple' %}btn-primary{% endif %} {% else %} btn-success {% endif %} btn-sm roundUpSubmitButton"><i class="glyphicon glyphicon-ok"/></button>
+											 <button   type="button" class="btn btn-default btn-sm editable-cancel">	<i class="glyphicon glyphicon-remove"/></button>
+										 </div>
+									 </div>
+								 <div class="editable-error-block help-block" style="display: none;">
+								 </div> 
+								  </div>
+							 </div>
+						
+						 <p><b>Note:</b>After submittion, all below listed students grades with be round-up and  you will not be able to undo submittion after this academic session 
+						  </p>
+						  {% endif %}
+						  {% if moduleSheet.0.RoundupDone  %} 
+						   <div class="col-md-12"style="margin-left:10%;margin-right:10%">
+						<div class="togglebutton">
+							<label>
+								<input {% if not moduleSheet.0.RoundupDone  %} checked="" data-onof="ON" {% else %} data-onof="OFF" {% endif %} href="#myModalUndoRoundUp" data-toggle="modal" data-name=" Module: {{moduleSheet.0.module}} Course: {{moduleSheet.0.course}} -- {{moduleSheet.0.year}}"   data-type="Undo_RoundUp" data-level="{{moduleSheet.0.level.id}}" data-faculty="{{moduleSheet.0.faculty.id}}" data-department="{{moduleSheet.0.department.id}}" data-course="{{moduleSheet.0.course.id}}"  data-module="{{moduleSheet.0.module.id}}" data-lecturer="{{moduleSheet.0.lecturer.id}}" data-year="{{moduleSheet.0.year.id}}"  data-typegrades="UndoRoundUp" data-session="{{moduleSheet.0.accademicSession.id}}"   id = "hod" class= "UndoRoundUpCheck" type="checkbox" {% if is_not_HoD %}  disabled {% endif %}>
+									<span class="toggle"></span>
+									  {% if not moduleSheet.0.RoundupDone  %} 
+										 <p > Round-Up Grades has been Undo<p> 
+										 {% else %}
+										  <p >Undo Round-Up Grades <p> 
+										{% endif %}
+										  </label>
+							 </div>			
+							 </div>	
+							 {% endif %}
+							 	 <hr>
+						 </div>
+						 
+					
+						 	</div>
+   						{% endif %}
+						
+							{% endif %}
+						</div>
+							</div>
+						
+						
+	
+						{% endif %}
+						  
+
+					<div class="tab-content tab-space">
+						
+						<div class="example_wrapper">
+							<div id="toolbar1"
+							     class="select">
+								<select class="form-control">
+									<option value="">Export Basic</option>
+									<option value="all">Export All</option>
+									<option value="selected">Export Selected</option>
+								</select>
+							</div>
+							<table id="fresh-table"
+							       data-toggle="table"
+							       class="table"
+							       id="table"
+							       data-toolbar="#toolbar1"
+							       data-search="true"
+							       data-show-toggle="true"
+							       data-show-fullscreen="true"
+							       data-show-columns="true"
+							       data-show-columns-toggle-all="true"
+							       data-show-export="true"
+							       data-click-to-select="true"
+							       data-minimum-count-columns="2"
+							       data-pagination="true"
+							       data-id-field="id"
+							       data-page-list="[10, 25, 50, 100, all]"
+							       data-show-footer="true"
+							       data-sort-priority='[{"sortName": "id","sortOrder":"desc"},{"sortName":"name","sortOrder":"desc"}]'
+							       data-show-multi-sort="true"
+							       data-show-jump-to="true"
+							       data-response-handler="responseHandler"
+							       data-resizable="true"
+							       data-advanced-search="true"
+							       data-id-table="advancedTable"
+							       data-show-print="true"
+							       data-filter-control="true"
+								   data-show-footer="true"
+							       data-show-search-clear-button="true">
+								<thead>
+								{% if  request.user|has_group:"Dean" %} 
+									<th  data-field="Remark"
+									    
+										data-sortable="true">Approve Re-Mark </th>
+								{% endif %}
+									<th  data-field="Name"
+									    data-filter-control="input"
+										data-sortable="true">Name</th>
+									<th  data-field="Module"
+									    
+										data-sortable="true">Modules</th>
+									<th  data-field="CA"
+									    
+										data-sortable="true">CA</th>
+									<th  data-field="Exam"
+									    data-editable="true"
+										data-sortable="true">Exam</th>
+									<th  data-field="total"
+									    
+										data-sortable="true">Total</th>
+									<th  data-field="gradePoint"
+									    
+										data-sortable="true">Grade Point</th>
+									<th  data-field="gradeComment"
+									    
+										data-sortable="true">Comment</th>
+									<th  data-field="Status"
+									    
+										data-sortable="true">Module Status</th>
+									<th  data-field="Course"
+									    
+										data-sortable="true">Course</th>
+									<th  data-field="Semester"
+									    
+									    data-sortable="true">Semester</th>
+									<th  data-field="year"
+									    
+										data-sortable="true">Year</th>
+									<th  data-field="Academic"
+									    
+										data-sortable="true">Academic Session</th>
+								</thead>
+								<tbody>
+							
+									 
+									 {% for module in moduleSheet %}
+									<tr id="{{ module.id}}" class='clickable-row'>
+										{% if  request.user|has_group:"Dean" %} 
+									    <td>
+										<button id="ReMark_{{module.pk}}" onclick="ReMark('{{ module.pk}}')" class="me-2 mb-2 btn btn-outline btn-outline-dashed  {% if module.allowedRemark %} btn-outline-success btn-active-light-success {% else %}btn-outline-primary btn-active-light-primary {% endif %}" >{% if module.allowedRemark %} Disable_Remark {% else %}Enable_Remark {% endif %}</button>
+							            <input type="hidden" id="ReMarkInput_{{module.pk}}" value="{% if module.allowedRemark %} Disable{% else %}Enable{% endif %}">
+
+										</td> 
+										{% endif %}
+										<td>{{ module.regNo}}  </td>
+										<td>{{ module.module.module_name}}</td>
+										<td> {{ module.ca}}</td>
+										<td  id="exam_{{ module.id}}">{% if is_not_HoD %} {{ module.exam}} {% if module.remarkDone %} <p style="background:grey;color:white">Remarked </p>{% endif%} {% else %} {% if module.allowedRemark %}<div class="tag_a"><a style="border-bottom: dashed 1px;"href="#" id =" {{ module.id}}" data-name="Exam" data-pk="{{ module.id}}" data-value="{{ module.exam}}" class="editable editable-click2"> {{ module.exam}}</a></div>  {% else %} {{ module.exam}} {% if module.remarkDone %} <p style="background:grey;color:white">Remarked </p>{% endif%}{% endif%}{% endif%}</td>
+										<td id="total_{{ module.id}}" >{{ module.total}}</td>
+										<td id="gradePoint_{{ module.id}}" >{{ module.gradePoint}}</td>
+										<td  id="gradeComment_{{ module.id}}">{{ module.gradeComment}}</td>
+										<td >
+										{% if module.highGrade %}
+										High Grade
+										 {% else %}
+										{{ module.moduleStatus}}
+										{% endif %}
+										</td>
+										
+										<td>{{ module.course}}</td>
+										<td>{{ module.semester}}</td>
+										<td>{{ module.year}}</td>
+										<td>{{ module.accademicSession}}</td>
+										
+										</tr>
+										 {% endfor %}
+									</tbody>
+								</table>
+							</div>
+						
+						</div>
+						<!-- end content-->
+					</div>
+					<!--  end card  -->
+				</div>
+				<!-- end col-md-12 -->
+			</div>
+			<!-- end row -->
+		</div>
+	</div>
+	
+<div class="container chat-box" style="display:none" >
+<div class="row pt-3">
+<div class="chat-main">
+<div style="font-size:40px; cursor:default;" class="col-md-12 chat-header rounded-top btn {% if request.user.data_color_general %} {% if request.user.data_color_general in 'danger'%}btn-danger{% elif request.user.data_color_general in 'orange' %}btn-warning{% elif request.user.data_color_general in 'green' %}btn-success{% elif request.user.data_color_general in 'azure' %}btn-info{% elif request.user.data_color_general in 'purple' %}btn-primary{% endif %} {% else %} btn-success {% endif %} text-white">
+<div class="row">
+<div class="col-md-6 username pl-2">
+<!-- <i class="fa fa-circle text-success" aria-hidden="true"></i> -->
+<h6 class="m-0" >Chat with <b id="nameType"> </b></h6>
+</div>
+
+	
+<div class="col-md-6 options text-right pr-2">
+<!--<i class="fa fa-plus mr-2" aria-hidden="true"></i>
+<i class="fa fa-video-camera" aria-hidden="true"></i>
+<i class="fa fa-circle text-success live-video mr-1" aria-hidden="true"></i>
+<i class="fa fa-phone mr-2" aria-hidden="true"></i>
+<i class="fa fa-cog mr-2" aria-hidden="true"></i>-->
+<i style="cursor:pointer{% if request.user.chat_volume %} {% else %};display:none{% endif %}" data-onof="ON"   id="volume_up" class="material-icons  volume" aria-hidden="true">volume_up</i>
+<i style="cursor:pointer{% if  request.user.chat_volume %};display:none {% else %}{% endif %}" data-onof="OFF" id="volume_down" class="material-icons  volume" aria-hidden="true">volume_down</i>
+<i style="cursor:pointer"class="fa fa-times hide-chat-box" aria-hidden="true"></i> 
+</div>
+</div>
+</div>
+<div class="chat-content">
+<div class="chat-body">
+<div class="col-md-12 chats border">
+<br>
+<ul class="p-0" id ="messageBody">
+
+<li class="loader" id="loader">
+</li>
+
+</ul>
+</div>
+</div>
+<div class="col-md-12 message-box border pl-2 pr-2 border-top-0">
+<div class="row">
+<div class="col-8">
+<textarea type="text" class="pl-0 pr-0 w-100" id="messageValue" placeholder="Type a message..." ></textarea>
+</div>
+<div class="col-2">
+<button id="sendMessageBtn" data-level="{{moduleSheet.0.level.id}}" data-faculty="{{moduleSheet.0.faculty.id}}" data-department="{{moduleSheet.0.department.id}}" data-course="{{moduleSheet.0.course.id}}" data-module="{{moduleSheet.0.module.id}}" data-lecturer="{{moduleSheet.0.lecturer.id}}" data-year="{{moduleSheet.0.year.id}}" data-session="{{moduleSheet.0.accademicSession.id}}"  data-name=" Module: {{moduleSheet.0.module}} Course: {{moduleSheet.0.course}} -- {{moduleSheet.0.year}}"   type="submit" class="btn  {% if request.user.data_color_general %} {% if request.user.data_color_general in 'danger'%}btn-danger{% elif request.user.data_color_general in 'orange' %}btn-warning{% elif request.user.data_color_general in 'green' %}btn-success{% elif request.user.data_color_general in 'azure' %}btn-info{% elif request.user.data_color_general in 'purple' %}btn-primary{% endif %} {% else %} btn-success {% endif %} btn-sm s sendMessageBtn" > <i class="material-icons ">send</i></button>
+</div>
+</div>
+<div class="tools">
+<!--<i class="fa fa-picture-o" aria-hidden="true"></i>
+<i class="fa fa-telegram" aria-hidden="true"></i>
+<i class="fa fa-bell" aria-hidden="true"></i>
+<i class="fa fa-meh-o" aria-hidden="true"></i>
+<i class="fa fa-paperclip" aria-hidden="true"></i>
+<i class="fa fa-gamepad" aria-hidden="true"></i>
+<i class="fa fa-camera" aria-hidden="true"></i>
+<i class="fa fa-folder" aria-hidden="true"></i> 
+<i class="fa fa-thumbs-o-up m-0" aria-hidden="true"></i>-->
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+	
+	
+<!-- Modal HTML -->
+<div id="myModal" class="modal fade">
+		<div class="modal-dialog modal-confirm">
+			<div class="modal-content">
+				<div class="modal-header flex-column">
+					<div class="icon-box">
+						<i class="material-icons">&#xE5CD;</i>
+					</div>						
+					<h4 class="modal-title w-100">Are you sure?</h4>	
+					<button type="button" class="close" data-bs-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body">
+					<p>Do you really want to <b id="actionType"></b>  <b id="yearTimetable"></b>? <b style="display:none" id="forapproval"> After approval, Students would be able to view Grades.</b> <b style="display:none" id="forunapproval"> If disapproved, Students would not be able to view Grades.</b><b style="display:none" id="forRoundUpDis"> If disapproved, HoD would not be able to round-up Grades.</b><b style="display:none" id="forRoundUpApp"> If approved, HoD would be able to round-up Grades.</b></p>
+					<!-- <p>Do you really want to delete these records? This process cannot be undone.</p>-->
+				</div>
+				<div class="modal-footer justify-content-center">
+					<button type="button" id= "Cancel" class="btn btn-secondary " data-bs-dismiss="modal">Cancel</button>
+					<button type="button"  id="myBtn"class="ApproveButton btn btn-danger"> <b id="btnaction"></b></button>
+				</div>
+			</div> 
+		</div>
+	</div>
+
+
+<div id="myModal_roundUpGrade" class="modal fade">
+		<div class="modal-dialog modal-confirm">
+			<div class="modal-content">
+				<div class="modal-header flex-column">
+					<div class="icon-box">
+						<i class="material-icons">&#xE5CD;</i>
+					</div>						
+					<h4 class="modal-title w-100">Are you sure?</h4>	
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body">
+					<p>You want round-up all below listed students grades  to <b id ="gradeId"></b> for  <b id="actionType_roundUpGrade"></b>? </p>
+					<!-- <p>Do you really want to delete these records? This process cannot be undone.</p>-->
+				</div>
+				<div class="modal-footer justify-content-center">
+					<button type="button" id= "Cancel" class="btn btn-secondary " data-dismiss="modal">Cancel</button>
+					<button type="button"  id="myBtn"class="roundUpGrade_Button btn btn-danger"> Submit</button>
+				</div>
+			</div> 
+		</div>
+	</div>
+
+<div id="myModalUndoRoundUp" class="modal fade">
+		<div class="modal-dialog modal-confirm">
+			<div class="modal-content">
+				<div class="modal-header flex-column">
+					<div class="icon-box">
+						<i class="material-icons">&#xE5CD;</i>
+					</div>						
+					<h4 class="modal-title w-100">Are you sure?</h4>	
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body">
+					<p>Do you really want to undo round-up grades for  <b id="undoClass"></b><br> After Undo, Students grades would be substrate by  {{ moduleSheet.0.RoundGrade }} % </p>
+					<!-- <p>Do you really want to delete these records? This process cannot be undone.</p>-->
+				</div>
+				<div class="modal-footer justify-content-center">
+					<button type="button" id= "Cancel" class="btn btn-secondary " data-dismiss="modal">Cancel</button>
+					<button type="button"  id="myBtn"class="UndoButton btn btn-danger"> <b id="btnactionUndo"></b></button>
+				</div>
+			</div> 
+		</div>
+	</div>	
+	
+	<div id="myModalRemark" class="modal fade">
+		<div class="modal-dialog modal-confirm">
+			<div class="modal-content">
+				<div class="modal-header flex-column">
+					<div class="icon-box">
+						<i class="material-icons">&#xE5CD;</i>
+					</div>						
+					<h4 class="modal-title w-100">Are you sure?</h4>	
+					<button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+				</div>
+				<div class="modal-body">
+					<p>Do you really want to <b id="RemarkAction"></b> for <b id="RemarkName"></b>,<b id="approvalRemark" style="display:none"> After approval, HoD would be able to remark grade </b><b id="unapprovalRemark" style="display:none"> After unapproval, HoD would not be able to remark grade </b></p>
+					<!-- <p>Do you really want to delete these records? This process cannot be undone.</p>-->
+				</div>
+				<div class="modal-footer justify-content-center">
+					<button type="button" id= "Cancel" class="btn btn-secondary " data-dismiss="modal">Cancel</button>
+					<button type="button"  id="myBtn"class="RemarkButton btn btn-danger"> <b id="btnactionRemark"></b></button>
+				</div>
+			</div> 
+		</div>
+	</div>	
+		<!-- The Image Modal -->
+	<div class="modal fade"
+	     id="myModalImage">
+		<div class="modal-dialog modal-sm">
+			<div class="modal-content">
+				<!-- Modal body -->
+				<div class="modal-body">
+					<img id="myImage"
+					     src=""
+						 
+						 style="margin-left:auto; margin-right:auto;width:100%; height:100%; display:block;"
+					     class=" img-thumbnail thumbnail zoom"/>
+				</div>
+				<!-- Modal footer -->
+				<div class="modal-footer">
+					<button type="button"
+					        class="btn btn-danger"
+					        data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+ <b style="display:none" id="for_roundUpGrade"> If disapproved, Students would not be able to view Grades.</b>
+	
+	<input style="display:none"type="text" id="yearId"name="yearId"/>	
+   	<input style="display:none"type="text" id="className"name="className"/>	
+   	<input style="display:none"type="text" id="typegrades"name="typegrades"/>	
+  	<input style="display:none"type="text" id="session"name="session"/>	
+	
+   	<input style="display:none"type="text" id="course"name="course"/>	
+   	<input style="display:none"type="text" id="faculty"name="faculty"/>	
+  	<input style="display:none"type="text" id="department"name="department"/>
+  	<input style="display:none"type="text" id="level"name="level"/>	
+  	<input style="display:none"type="text" id="module"name="module"/>
+  	<input style="display:none"type="text" id="lecturer"name="lecturer"/>
+  	<input style="display:none"type="text" id="onof"name="onof"/>	
+  	<input style="display:none"type="text" id="type"name="type"/>	
+	
+	
+  	<input style="display:none"type="text" id="pk"name="pk"/>	
+  	<input style="display:none"type="text" id="gradetype"name="gradetype"/>
+	
+	
+	
+  	<input style="display:none"type="text" id="currentForm"name="currentForm"/>
+	<input style="display:none"type="text" id="currentInput"name="currentInput"/>
+	<input style="display:none"type="text" id="oldValue"name="oldValue"/>
+	
+	
+	<input style="display:none"type="text" id="roundupGrade"name="roundupGrade"/>
+	<input style="display:none"type="text" id="GradeID"name="GradeID"/>
+	
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+<script>
+// chat-box Js   load_grade_chat
+/////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+
+
+function confirm_approval(dataId, approvaltype) {
+    // Show indicator
+    const confirm_approved_by_creator = document.querySelector('#confirm_approved_'  + dataId +"_" + approvaltype);
+    confirm_approved_by_creator.setAttribute('data-kt-indicator', 'on');
+
+    // Disable button to avoid multiple clicks
+    confirm_approved_by_creator.disabled = true;
+	var confirm_val = document.querySelector("#reversed_" + dataId +"_" + approvaltype).value;
+	if(approvaltype === 'creator'){
+		var type_name =  "Lecturer Approval ";
+	}
+	else if(approvaltype === 'hod'){
+		var type_name =  "Hod Approval";
+	}
+	else if(approvaltype === 'dean'){
+		var type_name =  "Dean Approval";
+	}else{
+		var type_name =  "";
+	}
+    // Build data object
+	   var data = {
+	   "typegrades": dataId, 
+	   "approvaltype": approvaltype,
+	    "dataID": "{{moduleSheet.0.pk}}",
+	    "year": "{{moduleSheet.0.year.id}}",
+	    "lecturer": "{{moduleSheet.0.lecturer.id}}",
+	    "module": "{{moduleSheet.0.module.id}}",
+	    "course":"{{moduleSheet.0.course.id}}" ,
+	    "session": "{{moduleSheet.0.accademicSession.id}}",
+	    "faculty": "{{moduleSheet.0.faculty.id}}" ,
+	    "department": "{{moduleSheet.0.department.id}}" ,
+	   };
+    $.ajax({
+        type: 'POST',
+        url: '/publiched_Grades_dean',
+        data: data,
+        success: function (response) {
+            if (response) {
+                setTimeout(function () {
+                    confirm_approved_by_creator.removeAttribute('data-kt-indicator');
+                    if (response.status === "unapproved") {
+                        confirm_approved_by_creator.classList.add("btn-danger");
+                        confirm_approved_by_creator.classList.remove("btn-success");  // Remove btn-success class
+                        confirm_approved_by_creator.querySelector("i").classList.remove("d-none");
+                        confirm_approved_by_creator.querySelector(".indicator-label").innerHTML = 'Click to Approve';
+                        document.querySelector("#status_"  + dataId +"_" + approvaltype).innerHTML = ""+type_name+" Status: Unapproved";
+                        document.querySelector("#reversed_"  + dataId +"_" + approvaltype).value = 'approved';
+                    } else {
+                        confirm_approved_by_creator.classList.add("btn-success");
+                        confirm_approved_by_creator.classList.remove("btn-danger");  // Remove btn-danger class
+                        confirm_approved_by_creator.querySelector("i").classList.add("d-none");
+                        confirm_approved_by_creator.querySelector(".indicator-label").innerHTML = 'Click to Withdraw';
+                        document.querySelector("#status_"  + dataId +"_" + approvaltype).innerHTML = ""+type_name+" Status: Approved";
+                        document.querySelector("#reversed_"  + dataId +"_" + approvaltype).value = 'unapproved';
+                    }
+                    confirm_approved_by_creator.disabled = false;
+                    Swal.fire({
+                        title: response.status === "withdraw" ? 'Grades Withdraw!' : 'Approved!',
+                    });
+                }, 1000);
+            }
+        }
+    });
+}
+
+
+function RoundUp() {
+
+    var RoundUpInput = document.getElementById('RoundUpInput').value;
+    Swal.fire({
+        text: "Are you sure you want to " + RoundUpInput + " Round-Up ?",
+        icon: "warning",
+        showCancelButton: true,
+        buttonsStyling: false,
+        confirmButtonText: "Yes, "+ RoundUpInput + "!",
+        cancelButtonText: "No, cancel",
+        customClass: {
+            confirmButton: "btn fw-bold btn-danger",
+            cancelButton: "btn fw-bold btn-active-light-primary"
+        }
+    }).then(function (result) {
+        if (result.value) {
+		   var data = {
+			   "action": RoundUpInput, 
+				"year": "{{moduleSheet.0.year.id}}",
+				"lecturer": "{{moduleSheet.0.lecturer.id}}",
+				"module": "{{moduleSheet.0.module.id}}",
+				"course":"{{moduleSheet.0.course.id}}" ,
+				"session": "{{moduleSheet.0.accademicSession.id}}",
+				"faculty": "{{moduleSheet.0.faculty.id}}" ,
+				"department": "{{moduleSheet.0.department.id}}" ,
+			   };
+
+            $.ajax({
+                type: "POST",
+                url: "{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/approve_RoundUp_Dean",
+                data: data,
+                success: function (data) {
+                    if (data.status === "success") {
+                        var button =  document.getElementById('RoundUp');
+						if (data.action ==="Enable"){
+							button.innerHTML = "Enable Round-Up"; // Update displayed text
+						}else{
+							button.innerHTML = "Disable Round-Up"; // Update displayed text
+						}
+						if (button.classList.contains('btn-outline-success')) {
+							// Change to primary
+							button.classList.remove('btn-outline-success', 'btn-active-light-success');
+							button.classList.add('btn-outline-primary', 'btn-active-light-primary');
+							button.textContent = 'Enable Round-Up';
+						} else {
+							// Change to success
+							button.classList.remove('btn-outline-primary', 'btn-active-light-primary');
+							button.classList.add('btn-outline-success', 'btn-active-light-success');
+							button.textContent = 'Disable Round-Up';
+						}
+						
+						document.getElementById('RoundUpInput').value = data.action;
+                        Swal.fire({
+                            text: "You have successfull " + RoundUpInput + "' Round-Up.",
+                            icon: "success",
+                            buttonsStyling: false,
+                            confirmButtonText: "Ok, got it!",
+                            customClass: {
+                                confirmButton: "btn fw-bold btn-primary",
+                            }
+                        });
+                    } else {
+                        Swal.fire("Error " + RoundUpInput + "!", "You are not permitted to update", "error");
+                    }
+                },
+                error: function () {
+                    Swal.fire("Error " + RoundUpInput + "!", "An error occurred while " + RoundUpInput + "", "error");
+                }
+            });
+
+        } else if (result.dismiss === 'cancel') {
+            Swal.fire({
+                text: "" + RoundUpInput + " canceled.",
+                icon: "error",
+                buttonsStyling: false,
+                confirmButtonText: "Ok, got it!",
+                customClass: {
+                    confirmButton: "btn fw-bold btn-primary",
+                }
+            });
+        }
+    });
+}
+ 
+
+function ReMark(grade) {
+
+    var ReMarkInput = document.getElementById('ReMarkInput_'+grade).value;
+    Swal.fire({
+        text: "Are you sure you want to " + ReMarkInput + " Re-Mark ?",
+        icon: "warning",
+        showCancelButton: true,
+        buttonsStyling: false,
+        confirmButtonText: "Yes, "+ ReMarkInput + "!",
+        cancelButtonText: "No, cancel",
+        customClass: {
+            confirmButton: "btn fw-bold btn-danger",
+            cancelButton: "btn fw-bold btn-active-light-primary"
+        }
+    }).then(function (result) {
+        if (result.value) {
+		   var data = {
+			   "action": ReMarkInput, 
+				"grade": grade,
+			   };
+
+            $.ajax({
+                type: "POST",
+                url: "{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/approve_remark",
+                data: data,
+                success: function (data) {
+                    if (data.status === "success") {
+                        var button =  document.getElementById('ReMark_'+grade);
+						
+						if (button.classList.contains('btn-outline-success')) {
+							// Change to primary
+							button.classList.remove('btn-outline-success', 'btn-active-light-success');
+							button.classList.add('btn-outline-primary', 'btn-active-light-primary');
+							button.textContent = 'Enable_Remark';
+						} else {
+							// Change to success
+							button.classList.remove('btn-outline-primary', 'btn-active-light-primary');
+							button.classList.add('btn-outline-success', 'btn-active-light-success');
+							button.textContent = 'Disable_Remark';
+						}
+						
+						document.getElementById('ReMarkInput_'+grade).value = data.action;
+                        Swal.fire({
+                            text: "You have successfull " + ReMarkInput + "' Re-Mark.",
+                            icon: "success",
+                            buttonsStyling: false,
+                            confirmButtonText: "Ok, got it!",
+                            customClass: {
+                                confirmButton: "btn fw-bold btn-primary",
+                            }
+                        });
+                    } else {
+                        Swal.fire("Error " + ReMarkInput + "!", "You are not permitted to update", "error");
+                    }
+                },
+                error: function () {
+                    Swal.fire("Error " + ReMarkInput + "!", "An error occurred while " + ReMarkInput + "", "error");
+                }
+            });
+
+        } else if (result.dismiss === 'cancel') {
+            Swal.fire({
+                text: "" + ReMarkInput + " canceled.",
+                icon: "error",
+                buttonsStyling: false,
+                confirmButtonText: "Ok, got it!",
+                customClass: {
+                    confirmButton: "btn fw-bold btn-primary",
+                }
+            });
+        }
+    });
+}
+ 
+ 
+$(document).ready(function(){
+
+// this will run after every 5 seconds
+setInterval(function(){
+load_new_chat() 
+}, 500 );
+
+
+});
+
+ $(document).on('click', '.remarkBtn', function (e) {
+    e.preventDefault(); 
+ 
+	  var id = $(this).data('id'); 
+	  var name = $(this).data('name');	 
+	  var onof = $(this).data('onof'); 
+	  
+	 if (onof ==="ON"){
+	   document.getElementById("btnactionRemark").innerHTML = "Unapprove Remark";
+	   document.getElementById("RemarkAction").innerHTML ="unapprove remark";
+	    $('#unapprovalRemark').show();
+		 $('#approvalRemark').hide();
+	 }else{
+	   document.getElementById("btnactionRemark").innerHTML = "Approve Remark";
+	   document.getElementById("RemarkAction").innerHTML ="approve remark";
+	     $('#unapprovalRemark').hide();
+		 $('#approvalRemark').show();
+	 }
+	 
+     document.getElementById("GradeID").value = id;
+     document.getElementById("onof").value = onof;
+     document.getElementById("RemarkName").innerHTML =  name;	 
+      	
+});
+
+
+$(document).on('click', '.RemarkButton', function (e) {
+    e.preventDefault(); 
+ 	   var onof = document.getElementById("onof").value;
+	   var id = document.getElementById("GradeID").value; 
+	//alert(type);
+	   var data = { 
+	    "id": id,
+	    "onof": onof,
+	   };
+	   
+	   if (onof ==="ON"){
+		   var action_v = "Remark Unapproved Successfully";
+		 }else{
+		   var action_v = "Remark approved Successfully";
+		   }
+		   
+	 	   $.ajax({ // 
+				type:'POST',
+				url: '/approve_remark',
+				data: data,
+				success: function(data) {
+				if (data) {
+					swal(action_v, {
+					icon: "success",
+					buttons: true,
+						 })
+						  .then((result) => {
+						   location.reload()
+                                });
+				}
+				}
+			});
+	 
+      	
+});
+ $(document).on('click', '.Chat_icon', function (e) {
+    e.preventDefault(); 
+
+	   var session = $(this).data('session');    
+	   var course = $(this).data('course');
+	   var faculty = $(this).data('faculty');
+	   var department = $(this).data('department');
+	   var level = $(this).data('level');  
+	   var module = $(this).data('module');
+	   var lecturer = $(this).data('lecturer');
+       var year = $(this).data('year');
+       var type = $(this).data('type'); 
+	   
+	   document.getElementById("yearId").value = year;
+       document.getElementById("session").value = session;
+       document.getElementById("course").value = course;
+       document.getElementById("faculty").value = faculty;
+       document.getElementById("department").value = department;
+       document.getElementById("level").value = level;
+       document.getElementById("module").value = module;
+       document.getElementById("lecturer").value = lecturer;
+	   document.getElementById("type").value = type;
+	  
+	   document.getElementById("nameType").innerHTML = type;
+	   
+	   
+	   
+	   	  var data = { 
+	    "year": year,
+	    "lecturer": lecturer,
+	    "type": type,
+	    "module": module,
+	    "course": course,
+	    "faculty": faculty,
+	    "department": department,
+	    "session": session,
+	    "level": level,
+	   };
+	 	   $.ajax({ // 
+				type:'POST',
+				url: '/load_all_grade_chat',
+				data: data,
+				success: function(data) {
+				if (data != "") {
+					$('#loader').addClass("hide-loader");
+					document.getElementById("messageBody").innerHTML = data;
+				}
+				}
+			});
+	  
+	 $('.chat-box').show();   
+
+      	
+});
+
+
+$(document).on('click', '#sendMessageBtn', function (e) {
+    e.preventDefault();
+
+	   var length = 60;
+	   var message = document.getElementById("messageValue").value;
+	   var year = document.getElementById("yearId").value;
+	   var session = document.getElementById("session").value; 
+	   var course = document.getElementById("course").value;
+	   var faculty = document.getElementById("faculty").value;
+	   var department = document.getElementById("department").value;
+	   var level = document.getElementById("level").value;
+	   var module = document.getElementById("module").value;
+	   var type = document.getElementById("type").value;
+	   var lecturer = document.getElementById("lecturer").value; 
+	//alert(type);
+	   var data = { 
+	    "year": year,
+	    "lecturer": lecturer,
+	    "type": type,
+	    "module": module,
+	    "course": course,
+	    "faculty": faculty,
+	    "department": department,
+	    "session": session,
+	    "level": level,
+	    "message": message,
+	   };
+	 	   $.ajax({ // 
+				type:'POST',
+				url: '/send_Message_grade_chat',
+				data: data,
+				success: function(data) {
+				if (data) {
+					document.getElementById("messageBody").innerHTML += data;
+					eraseText();
+				}
+				}
+			});	
+
+	
+
+
+	
+
+});
+
+
+
+function load_new_chat() {
+
+	   var year = document.getElementById("yearId").value;
+	   var session = document.getElementById("session").value; 
+	   var course = document.getElementById("course").value;
+	   var faculty = document.getElementById("faculty").value;
+	   var department = document.getElementById("department").value;
+	   var level = document.getElementById("level").value;
+	   var module = document.getElementById("module").value;
+	   var type = document.getElementById("type").value;
+	   var lecturer = document.getElementById("lecturer").value; 
+	   var volume_onof = document.getElementById("volume_onof").value; 
+	   
+	   if(type != ""){
+	   var data = { 
+	    "year": year,
+	    "lecturer": lecturer,
+	    "module": module,
+	    "course": course,
+	    "faculty": faculty,
+	    "department": department,
+	    "session": session,
+	    "level": level,
+	    "type": type,
+	   };
+	 	   $.ajax({ // 
+				type:'POST',
+				url: '/load_grade_chat',
+				data: data,
+				success: function(data) {
+				if (data != "") {
+					document.getElementById("messageBody").innerHTML += data;
+					if(volume_onof==="ON"){
+					  play();
+					}
+				}
+				}
+			});	
+			
+			}
+};
+
+
+
+ $(document).on('click', '.hide-chat-box', function (e) {
+    e.preventDefault(); 
+	
+	  $('.chat-box').hide();   
+
+      	
+});
+
+function eraseText() {
+    document.getElementById("messageValue").value = "";
+}
+function play() {
+  var audio = new Audio("{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/static/assets/chat/COMCell_Message 1 (ID 1111)_BSB.wav");
+  audio.play();
+}
+// Round-Up Grades Js
+/////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+ $(document).on('click', '.roundUpSubmitButton', function (e) {
+    e.preventDefault(); 
+	   
+	   var session = $(this).data('session');    
+	   var course = $(this).data('course');
+	   var faculty = $(this).data('faculty');
+	   var department = $(this).data('department');
+	   var level = $(this).data('level');  
+	   var module = $(this).data('module');
+	   var lecturer = $(this).data('lecturer');
+       var year = $(this).data('year'); 
+   
+      
+	      
+	   
+	   document.getElementById("yearId").value = year;
+       document.getElementById("session").value = session;
+       document.getElementById("course").value = course;
+       document.getElementById("faculty").value = faculty;
+       document.getElementById("department").value = department;
+       document.getElementById("level").value = level;
+       document.getElementById("module").value = module;
+       document.getElementById("lecturer").value = lecturer;
+	
+		var name = $(this).data('name');
+		var gradeValue = document.getElementById("roundupGrade").value;  
+		
+	document.getElementById("gradeId").innerHTML = gradeValue + "%";
+	document.getElementById("actionType_roundUpGrade").innerHTML = name;
+      	
+});
+
+
+ $(document).on('click', '.UndoRoundUpCheck', function (e) {
+    e.preventDefault(); 
+	    var session = $(this).data('session');    
+	   var course = $(this).data('course');
+	   var faculty = $(this).data('faculty');
+	   var department = $(this).data('department');
+	   var level = $(this).data('level');  
+	   var module = $(this).data('module');
+	   var lecturer = $(this).data('lecturer');
+       var year = $(this).data('year');
+	   var name = $(this).data('name');
+	   var onof = $(this).data('onof');
+	   //alert(name);
+	   document.getElementById("yearId").value = year;
+       document.getElementById("session").value = session;
+       document.getElementById("course").value = course;
+       document.getElementById("faculty").value = faculty;
+       document.getElementById("department").value = department;
+       document.getElementById("level").value = level;
+       document.getElementById("module").value = module;
+       document.getElementById("lecturer").value = lecturer;
+	
+		 if (onof ==="ON"){
+		   document.getElementById("btnactionUndo").innerHTML = "Redo";
+		 }else{
+		   document.getElementById("btnactionUndo").innerHTML = "Undo";
+		 }
+		
+		
+	document.getElementById("undoClass").innerHTML = name;  
+	
+      	
+});
+
+
+$('#input_roundup').keyup(function(){
+  if ($(this).val() > 100){
+    $(this).val('0');
+  }
+  
+   var gradetype = document.getElementById("roundupGrade").value; 
+   document.getElementById("roundupGrade").value = $(this).val();
+   
+    
+	
+});
+
+
+
+$(document).on('click', '.UndoButton', function (e) {
+    e.preventDefault();
+
+      
+	   var year = document.getElementById("yearId").value;
+	   var session = document.getElementById("session").value; 
+	   
+
+	   var course = document.getElementById("course").value;
+	   var faculty = document.getElementById("faculty").value;
+	   var department = document.getElementById("department").value;
+	   var level = document.getElementById("level").value;
+	   var module = document.getElementById("module").value;
+	   var lecturer = document.getElementById("lecturer").value;
+   	 
+	 
+	  
+	  
+	   var action_v = "Grades rounded-up successfully undo";
+			
+	
+	   var data = { 
+	    "year": year,
+	    "lecturer": lecturer,
+	    "module": module,
+	    "course": course,
+	    "faculty": faculty,
+	    "department": department,
+	    "session": session,
+	    "level": level,
+	   };
+	   $.ajax({ // 
+				type:'POST',
+				url: '/Undo_round_up_Grades',
+				data: data,
+				success: function(submitted) {
+				if (submitted) {
+					swal(action_v, {
+					icon: "success",
+					buttons: true,
+						 })
+						  .then((result) => {
+						   location.reload()
+                                });
+				}
+				}
+			});
+
+   
+});
+/////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////
+
+$(document).on('click', '.approve', function (e) {
+    e.preventDefault();
+   
+   var name = $(this).data('name');
+   var year = $(this).data('year');
+   var typegrades = $(this).data('typegrades');
+   var session = $(this).data('session');    
+   var course = $(this).data('course');
+   var faculty = $(this).data('faculty');
+   var department = $(this).data('department');
+   var level = $(this).data('level');  
+   var module = $(this).data('module');
+   var lecturer = $(this).data('lecturer'); 
+   var onof = $(this).data('onof');  
+   var type = $(this).data('type'); 
+
+   
+   var onof = $(this).data('onof'); 
+   	if (onof ==="ON"){
+	  if (typegrades === "RoundUp"){
+
+	  document.getElementById("btnaction").innerHTML = "Unapprove";
+	  document.getElementById("actionType").innerHTML = "unapprove rounding up";
+	  
+	  $('#forRoundUpDis').show();
+	  $('#forRoundUpApp').hide();
+	  $('#forunapproval').hide();
+	  $('#forapproval').hide();
+	  }else{
+	  document.getElementById("btnaction").innerHTML = "Unapprove";
+	  document.getElementById("actionType").innerHTML = "unapprove";
+	  $('#forunapproval').show();
+	  $('#forapproval').hide();
+	  $('#forRoundUpDis').hide();
+	  $('#forRoundUpApp').hide();
+	  }
+	}else{
+	 if (typegrades === "RoundUp"){
+	  document.getElementById("btnaction").innerHTML = "Approve";
+	  document.getElementById("actionType").innerHTML = "approve rounding up";
+	  
+	  $('#forRoundUpDis').hide();
+	  $('#forRoundUpApp').show();
+	  $('#forunapproval').hide();
+	  $('#forapproval').hide();
+	  }else{
+	  document.getElementById("btnaction").innerHTML = "Approve";
+	  document.getElementById("actionType").innerHTML = "approve";
+	  $('#forunapproval').hide();
+	  $('#forapproval').show();
+	  $('#forRoundUpDis').hide();
+	  $('#forRoundUpApp').hide();
+	  }
+	}
+
+   document.getElementById("yearId").value = year;
+   document.getElementById("typegrades").value = typegrades;
+   document.getElementById("session").value = session;
+   
+   document.getElementById("course").value = course;
+   document.getElementById("faculty").value = faculty;
+   document.getElementById("department").value = department;
+   document.getElementById("level").value = level;
+   document.getElementById("module").value = module;
+   document.getElementById("lecturer").value = lecturer;
+   document.getElementById("onof").value = onof;
+   document.getElementById("type").value = type;
+   var name = document.getElementById("className").value = name;
+   document.getElementById("yearTimetable").innerHTML = name;
+});
+$(document).on('click', '.ApproveButton', function (e) {
+    e.preventDefault();
+
+       var name = document.getElementById("className").value;
+	   var year = document.getElementById("yearId").value;
+	   var typegrades = document.getElementById("typegrades").value;
+	   var session = document.getElementById("session").value; 
+	   
+
+	   var course = document.getElementById("course").value;
+	   var faculty = document.getElementById("faculty").value;
+	   var department = document.getElementById("department").value;
+	   var level = document.getElementById("level").value;
+	   var module = document.getElementById("module").value;
+	   var lecturer = document.getElementById("lecturer").value;
+	   var onof = document.getElementById("onof").value;
+	   var type = document.getElementById("type").value;
+   	
+		if (onof ==="ON"){
+		 if (typegrades === "RoundUp"){
+		   var action_v = "Rounding Up Grades Unapproved Successfully";
+		 }else{
+		   var action_v = "Grades Unapproved Successfully";
+		   }
+		  
+		}else{
+		if (typegrades === "RoundUp"){
+		   var action_v = "Rounding Up Grades approved Successfully";
+		 }else{
+		   var action_v = "Grades approved Successfully";
+		   }
+		}	
+	
+	   var data = {
+	   "typegrades": typegrades, 
+	   "type": type, 
+	    "year": year,
+	    "lecturer": lecturer,
+	    "module": module,
+	    "course": course,
+	    "faculty": faculty,
+	    "department": department,
+	    "session": session,
+	    "level": level,
+	    "onof": onof,
+	   };
+	   $.ajax({ // 
+				type:'POST',
+				url: '/publiched_Grades',
+				data: data,
+				success: function(submitted) {
+				if (submitted) {
+					swal(action_v, {
+					icon: "success",
+					buttons: true,
+						 })
+						  .then((result) => {
+						   //td.html(grade);
+						   
+						   location.reload()
+                                });
+				}
+				}
+			});
+
+   
+});
+/////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// submitting Remark Grades Js
+/////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////
+$(document).on('click', '.editable-click2', function (e) {
+    e.preventDefault();
+   var currentForm = document.getElementById("currentForm").value;
+    
+   if(currentForm != ""){
+    var pk = document.getElementById("pk").value;
+    var gradetype = document.getElementById("gradetype").value;  
+    var oldValue = document.getElementById("oldValue").value;
+    var cell = document.getElementById("td_"+pk);
+	var OldLink = '<div class="tag_a"><a style="border-bottom: dashed 1px;" href="#" id ="'+pk+'" data-name="'+gradetype+'" data-pk="'+pk+'" data-value="'+oldValue+'" class=" editable-click2"> '+oldValue+'</a> </div>';
+    //var tds = td.find("td[id='td_'"+pk+"']");
+	 if(gradetype == "ca"){
+	 document.getElementById('ca_'+pk).innerHTML = OldLink;
+	 }else{
+	 document.getElementById('exam_'+pk).innerHTML = OldLink;
+	 }
+	//tds.html(OldLink);
+   }
+   var name = $(this).data('name');
+   var pk = $(this).data('pk'); 
+   
+   var value = $(this).data('value');
+   document.getElementById("gradetype").value = name;
+   document.getElementById("pk").value = pk;
+   document.getElementById("currentInput").value = 'input_' +pk;
+   document.getElementById("currentForm").value = 'form_' +pk;
+   document.getElementById("oldValue").value = value;
+   
+   var form = '<div id="form_'+pk+'"><form class="form-inline editableform" style=""><div class="control-group form-group bmd-form-group"><div><div class="editable-input" style="position: relative;"><input id="input_'+pk+'" type="text" value= "'+value+'" class="form-control input-sm" style="padding-right: 24px;"><span onclick="clearText()" class="editable-clear-x"/></div><div class="editable-buttons"><button type="submit" class="btn  {% if request.user.data_color_general %} {% if request.user.data_color_general in "danger" %}btn-danger{% elif request.user.data_color_general in "orange" %}btn-warning{% elif request.user.data_color_general in "green" %}btn-success{% elif request.user.data_color_general in "azure" %}btn-info{% elif request.user.data_color_general in "purple" %}btn-primary{% endif %} {% else %} btn-success {% endif %} btn-sm editable-submit"><i class="glyphicon glyphicon-ok"/></button><button   type="button" class="btn btn-default btn-sm editable-cancel">	<i class="glyphicon glyphicon-remove"/></button></div></div><div class="editable-error-block help-block" style="display: none;"/></div> </form></div>';
+   
+  
+$(this).closest('td').html(form);
+
+});
+function clearText() {
+    var input = document.getElementById("currentInput").value;
+    document.getElementById(input).value = "";
+
+};
+$(document).on('click', '.editable-cancel', function (e) {
+    e.preventDefault();
+    var form = document.getElementById("currentForm").value;
+    var pk = document.getElementById("pk").value;
+    var gradetype = document.getElementById("gradetype").value;  
+    var oldValue = document.getElementById("oldValue").value; 
+	var OldLink = '<div class="tag_a"><a style="border-bottom: dashed 1px;" href="#" id ="'+pk+'" data-name="'+gradetype+'" data-pk="'+pk+'" data-value="'+oldValue+'" class=" editable-click2"> '+oldValue+'</a> </div>';
+	var OldLink = '<div class="tag_a"><a style="border-bottom: dashed 1px;" href="#" id ="'+pk+'" data-name="'+gradetype+'" data-pk="'+pk+'" data-value="'+oldValue+'" class=" editable-click2"> '+oldValue+'</a> </div>';
+   
+    $(this).closest('td').html(OldLink);
+
+});
+$(document).on('click', '.editable-submit', function (e) {
+    e.preventDefault();
+	  
+    //var grade = parseInt($(this).closest('tr').find('.input-sm').val());
+    var pk = document.getElementById("pk").value;
+    var gradetype = document.getElementById("gradetype").value;
+    var input = document.getElementById("currentInput").value;
+	var grade = $("#"+input).val();
+    var data = {
+	   "pk": pk ,
+	   "grade": grade ,
+	   "gradetype": gradetype ,
+	   };
+	// alert(str);
+	 if(Number.isNaN(grade))
+      {
+        alert("Grade should be numeric");
+      }else if(grade ==""){
+	   alert("Input should not be empty");
+	  }else{
+	  if( grade > 100)
+      {
+        alert('Grade should be less than 100');
+      }
+	  else {
+		
+	var text = '<div class="tag_a"><a style="border-bottom: dashed 1px;" href="#" id ="'+pk+'" data-name="'+gradetype+'" data-pk="'+pk+'" data-value="'+grade+'" class=" editable-click2"> '+grade+'</a> </div>';
+	$(this).closest('td').html(text);
+			$.ajax({ // 
+				type:'POST',
+				url: '/update_remark_CAorEXAMS',
+				data: data,
+				success: function(data) {	
+					document.getElementById('total_'+pk).innerHTML = '<div> ' +data.total+' </div>';
+					document.getElementById('gradePoint_'+pk).innerHTML = '<div> ' +data.gradepoint+' </div>';
+					document.getElementById('gradeComment_'+pk).innerHTML = '<div> ' +data.gradeComment+' </div>';
+					
+					swal("Successfully Submitted", {
+					icon: "success",
+					buttons: true,
+						 })
+						  .then((result) => {
+						    //td.html(grade);
+						  //location.reload()
+                                });
+				
+				}
+			});
+
+       }
+	   }
+               
+});
+</script>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <script>
+    $(document).ready(function() {
+      // Javascript method's body can be found in assets/js/demos.js
+      md.initDashboardPageCharts();
+
+    });
+  </script>
+
+{% endblock javascripts %}

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Employer Profile - CertChain</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../admin.css">
+</head>
+<body>
+  <div class="admin-layout">
+    <aside class="admin-sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="../../index.html" class="sidebar-logo">
+          <div class="logo-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <span class="logo-text">CertChain</span>
+        </a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <span class="nav-section-title">Verification</span>
+          <ul class="nav-list">
+            <li><a href="verify-credentials.html" class="nav-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg><span>Verify Credential</span></a></li>
+            <li><a href="scan-qr.html" class="nav-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="7" y="7" width="10" height="10"/></svg><span>Scan QR Code</span></a></li>
+            <li><a href="accreditation-lookup.html" class="nav-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/></svg><span>Accreditation Lookup</span></a></li>
+            <li><a href="history.html" class="nav-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><span>Verification History</span></a></li>
+          </ul>
+        </div>
+        <div class="nav-section">
+          <span class="nav-section-title">Account</span>
+          <ul class="nav-list">
+            <li><a href="profile.html" class="nav-link active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profile</span></a></li>
+          </ul>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-header">
+        <div class="header-left">
+          <button class="menu-toggle" id="menu-toggle">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <div class="breadcrumb">
+            <span>Employer Profile</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="admin-content">
+        <div class="page-header">
+          <h1 class="page-title">Company Profile</h1>
+          <p class="page-subtitle">Manage your organization's information and verification settings</p>
+        </div>
+
+        <div class="profile-settings-grid">
+          <div class="profile-settings-card">
+            <div class="profile-avatar-section">
+              <div class="profile-avatar-wrapper company">
+                <img src="/placeholder.svg?height=120&width=120" alt="Company Logo" class="profile-avatar-img">
+                <button class="avatar-change-btn">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                </button>
+              </div>
+              <h3>TechCorp International</h3>
+              <p>hr@techcorp.com</p>
+              <span class="badge badge-info">Verified Employer</span>
+            </div>
+            <div class="profile-stats">
+              <div class="profile-stat">
+                <span class="stat-value">156</span>
+                <span class="stat-label">Verifications</span>
+              </div>
+              <div class="profile-stat">
+                <span class="stat-value">23</span>
+                <span class="stat-label">This Month</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-forms">
+            <div class="settings-card">
+              <div class="settings-card-header">
+                <h2>Company Information</h2>
+              </div>
+              <div class="settings-card-body">
+                <div class="form-group">
+                  <label class="form-label">Company Name</label>
+                  <input type="text" class="form-input" value="TechCorp International">
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label">Industry</label>
+                    <select class="form-select">
+                      <option>Technology</option>
+                      <option>Finance</option>
+                      <option>Healthcare</option>
+                      <option>Education</option>
+                      <option>Manufacturing</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Company Size</label>
+                    <select class="form-select">
+                      <option>1-50 employees</option>
+                      <option>51-200 employees</option>
+                      <option selected>201-500 employees</option>
+                      <option>500+ employees</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Website</label>
+                  <input type="url" class="form-input" value="https://techcorp.com">
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Address</label>
+                  <textarea class="form-textarea">45 Innovation Drive, Lagos, Nigeria</textarea>
+                </div>
+              </div>
+              <div class="settings-card-footer">
+                <button class="btn btn-secondary">Cancel</button>
+                <button class="btn btn-primary">Save Changes</button>
+              </div>
+            </div>
+
+            <div class="settings-card">
+              <div class="settings-card-header">
+                <h2>Contact Person</h2>
+              </div>
+              <div class="settings-card-body">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label">Full Name</label>
+                    <input type="text" class="form-input" value="Michael Johnson">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Job Title</label>
+                    <input type="text" class="form-input" value="HR Manager">
+                  </div>
+                </div>
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" value="m.johnson@techcorp.com">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Phone</label>
+                    <input type="tel" class="form-input" value="+234 800 123 4567">
+                  </div>
+                </div>
+              </div>
+              <div class="settings-card-footer">
+                <button class="btn btn-primary">Update Contact</button>
+              </div>
+            </div>
+
+            <div class="settings-card">
+              <div class="settings-card-header">
+                <h2>API Access</h2>
+                <p>Integrate credential verification into your HR systems</p>
+              </div>
+              <div class="settings-card-body">
+                <div class="api-key-display">
+                  <label class="form-label">Your API Key</label>
+                  <div class="api-key-input-group">
+                    <input type="password" class="form-input" value="emp_live_************************abcd" readonly id="api-key">
+                    <button class="btn btn-secondary" onclick="toggleApiKey()">Show</button>
+                    <button class="btn btn-secondary">Copy</button>
+                  </div>
+                </div>
+                <div class="api-usage">
+                  <div class="usage-item">
+                    <span class="usage-label">API Calls This Month</span>
+                    <span class="usage-value">234 / 1000</span>
+                  </div>
+                  <div class="usage-bar">
+                    <div class="usage-fill" style="width: 23.4%;"></div>
+                  </div>
+                </div>
+                <a href="#" class="btn btn-ghost">View API Documentation</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.getElementById('menu-toggle').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('show');
+    });
+
+    function toggleApiKey() {
+      const input = document.getElementById('api-key');
+      input.type = input.type === 'password' ? 'text' : 'password';
+    }
+  </script>
+</body>
+</html>

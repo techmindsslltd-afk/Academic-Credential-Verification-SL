@@ -1,0 +1,467 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Analytics {% endblock %} 
+
+{% block content %}
+{% load static %}
+  <!-- Analytics Section -->
+  <section class="content-section active" id="section-analytics">
+    <div class="section-header">
+      <div>
+        <h1 class="section-title">Analytics Dashboard</h1>
+        <p class="section-subtitle">Platform performance and usage analytics</p>
+      </div>
+    </div>
+
+    <!-- Overview Statistics -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+      <!-- Credentials Card -->
+      <div class="data-table-card" style="padding: 1.5rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+          <div>
+            <p style="margin: 0; font-size: 0.875rem; color: var(--text-muted); font-weight: 500;">Total Credentials</p>
+            <h3 style="margin: 0.5rem 0 0 0; font-size: 2rem; font-weight: 700; color: var(--text-primary);">{{ total_credentials }}</h3>
+          </div>
+          <div style="width: 48px; height: 48px; border-radius: 12px; background: var(--accent-primary); opacity: 0.1; display: flex; align-items: center; justify-content: center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+              <path d="M14 2v6h6"/>
+            </svg>
+          </div>
+        </div>
+        <div style="display: flex; gap: 1rem; font-size: 0.875rem;">
+          <div>
+            <span style="color: var(--text-muted);">Issued:</span>
+            <strong style="color: var(--success); margin-left: 0.25rem;">{{ issued_credentials }}</strong>
+          </div>
+          <div>
+            <span style="color: var(--text-muted);">Revoked:</span>
+            <strong style="color: var(--error); margin-left: 0.25rem;">{{ revoked_credentials }}</strong>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Verifications Card -->
+      <div class="data-table-card" style="padding: 1.5rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+          <div>
+            <p style="margin: 0; font-size: 0.875rem; color: var(--text-muted); font-weight: 500;">Total Verifications</p>
+            <h3 style="margin: 0.5rem 0 0 0; font-size: 2rem; font-weight: 700; color: var(--text-primary);">{{ total_verifications }}</h3>
+          </div>
+          <div style="width: 48px; height: 48px; border-radius: 12px; background: var(--success, #10b981); opacity: 0.1; display: flex; align-items: center; justify-content: center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--success, #10b981)" stroke-width="2">
+              <path d="m9 12 2 2 4-4"/>
+              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+            </svg>
+          </div>
+        </div>
+        <div style="display: flex; gap: 1rem; font-size: 0.875rem;">
+          <div>
+            <span style="color: var(--text-muted);">Valid:</span>
+            <strong style="color: var(--success); margin-left: 0.25rem;">{{ valid_verifications }}</strong>
+          </div>
+          <div>
+            <span style="color: var(--text-muted);">Invalid:</span>
+            <strong style="color: var(--error); margin-left: 0.25rem;">{{ invalid_verifications }}</strong>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Institutions Card -->
+      <div class="data-table-card" style="padding: 1.5rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+          <div>
+            <p style="margin: 0; font-size: 0.875rem; color: var(--text-muted); font-weight: 500;">Total Institutions</p>
+            <h3 style="margin: 0.5rem 0 0 0; font-size: 2rem; font-weight: 700; color: var(--text-primary);">{{ total_institutions }}</h3>
+          </div>
+          <div style="width: 48px; height: 48px; border-radius: 12px; background: var(--warning, #f59e0b); opacity: 0.1; display: flex; align-items: center; justify-content: center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--warning, #f59e0b)" stroke-width="2">
+              <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+              <polyline points="9 22 9 12 15 12 15 22"/>
+            </svg>
+          </div>
+        </div>
+        <div style="display: flex; gap: 1rem; font-size: 0.875rem;">
+          <div>
+            <span style="color: var(--text-muted);">Active:</span>
+            <strong style="color: var(--success); margin-left: 0.25rem;">{{ active_institutions }}</strong>
+          </div>
+          <div>
+            <span style="color: var(--text-muted);">Partners:</span>
+            <strong style="color: var(--accent-primary); margin-left: 0.25rem;">{{ partner_institutions }}</strong>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Users Card -->
+      <div class="data-table-card" style="padding: 1.5rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem;">
+          <div>
+            <p style="margin: 0; font-size: 0.875rem; color: var(--text-muted); font-weight: 500;">Total Users</p>
+            <h3 style="margin: 0.5rem 0 0 0; font-size: 2rem; font-weight: 700; color: var(--text-primary);">{{ total_users }}</h3>
+          </div>
+          <div style="width: 48px; height: 48px; border-radius: 12px; background: var(--accent-primary); opacity: 0.1; display: flex; align-items: center; justify-content: center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2">
+              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+          </div>
+        </div>
+        <div style="display: flex; gap: 1rem; font-size: 0.875rem; flex-wrap: wrap;">
+          <div>
+            <span style="color: var(--text-muted);">Students:</span>
+            <strong style="margin-left: 0.25rem;">{{ students }}</strong>
+          </div>
+          <div>
+            <span style="color: var(--text-muted);">Admins:</span>
+            <strong style="margin-left: 0.25rem;">{{ institution_admins }}</strong>
+          </div>
+          <div>
+            <span style="color: var(--text-muted);">Employers:</span>
+            <strong style="margin-left: 0.25rem;">{{ employers }}</strong>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Activity Today/This Week/This Month -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+      <div class="data-table-card" style="padding: 1.5rem; text-align: center;">
+        <p style="margin: 0; font-size: 0.875rem; color: var(--text-muted); font-weight: 500;">Today</p>
+        <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">
+          {{ credentials_today }} Credentials<br>
+          {{ verifications_today }} Verifications<br>
+          {{ users_today }} Users
+        </h3>
+      </div>
+      <div class="data-table-card" style="padding: 1.5rem; text-align: center;">
+        <p style="margin: 0; font-size: 0.875rem; color: var(--text-muted); font-weight: 500;">This Week</p>
+        <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">
+          {{ credentials_this_week }} Credentials<br>
+          {{ verifications_this_week }} Verifications<br>
+          {{ users_this_week }} Users
+        </h3>
+      </div>
+      <div class="data-table-card" style="padding: 1.5rem; text-align: center;">
+        <p style="margin: 0; font-size: 0.875rem; color: var(--text-muted); font-weight: 500;">This Month</p>
+        <h3 style="margin: 0.5rem 0 0 0; font-size: 1.5rem; font-weight: 700; color: var(--text-primary);">
+          {{ credentials_this_month }} Credentials<br>
+          {{ verifications_this_month }} Verifications<br>
+          {{ users_this_month }} Users
+        </h3>
+      </div>
+    </div>
+
+    <!-- Charts Row -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+      <!-- Credentials Trend Chart -->
+      <div class="data-table-card" style="padding: 1.5rem;">
+        <h3 style="margin: 0 0 1rem 0; font-size: 1.125rem; font-weight: 600;">Credentials Trend (Last 30 Days)</h3>
+        <canvas id="credentialsTrendChart" style="max-height: 300px;"></canvas>
+      </div>
+      
+      <!-- Verifications Trend Chart -->
+      <div class="data-table-card" style="padding: 1.5rem;">
+        <h3 style="margin: 0 0 1rem 0; font-size: 1.125rem; font-weight: 600;">Verifications Trend (Last 30 Days)</h3>
+        <canvas id="verificationsTrendChart" style="max-height: 300px;"></canvas>
+      </div>
+    </div>
+
+    <!-- Breakdown Charts Row -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+      <!-- Credentials by Status -->
+      <div class="data-table-card" style="padding: 1.5rem;">
+        <h3 style="margin: 0 0 1rem 0; font-size: 1.125rem; font-weight: 600;">Credentials by Status</h3>
+        <canvas id="credentialsByStatusChart" style="max-height: 250px;"></canvas>
+      </div>
+      
+      <!-- Credentials by Type -->
+      <div class="data-table-card" style="padding: 1.5rem;">
+        <h3 style="margin: 0 0 1rem 0; font-size: 1.125rem; font-weight: 600;">Credentials by Type</h3>
+        <canvas id="credentialsByTypeChart" style="max-height: 250px;"></canvas>
+      </div>
+      
+      <!-- Verifications by Result -->
+      <div class="data-table-card" style="padding: 1.5rem;">
+        <h3 style="margin: 0 0 1rem 0; font-size: 1.125rem; font-weight: 600;">Verifications by Result</h3>
+        <canvas id="verificationsByResultChart" style="max-height: 250px;"></canvas>
+      </div>
+      
+      <!-- Verifications by Method -->
+      <div class="data-table-card" style="padding: 1.5rem;">
+        <h3 style="margin: 0 0 1rem 0; font-size: 1.125rem; font-weight: 600;">Verifications by Method</h3>
+        <canvas id="verificationsByMethodChart" style="max-height: 250px;"></canvas>
+      </div>
+    </div>
+
+    <!-- Top Lists Row -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+      <!-- Top Institutions -->
+      <div class="data-table-card" style="padding: 1.5rem;">
+        <h3 style="margin: 0 0 1rem 0; font-size: 1.125rem; font-weight: 600;">Top Institutions by Credentials</h3>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          {% for institution in top_institutions %}
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--bg-hover, #f5f5f5); border-radius: 8px;">
+            <div>
+              <div style="font-weight: 500;">{{ institution.name }}</div>
+              <div style="font-size: 0.875rem; color: var(--text-muted);">{{ institution.country }}</div>
+            </div>
+            <div style="font-weight: 700; color: var(--accent-primary);">{{ institution.credential_count }} credentials</div>
+          </div>
+          {% empty %}
+          <p style="color: var(--text-muted); text-align: center; padding: 2rem;">No institutions found</p>
+          {% endfor %}
+        </div>
+      </div>
+      
+      <!-- Top Verifiers -->
+      <div class="data-table-card" style="padding: 1.5rem;">
+        <h3 style="margin: 0 0 1rem 0; font-size: 1.125rem; font-weight: 600;">Top Verifiers</h3>
+        <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+          {% for verifier in top_verifiers %}
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 0.75rem; background: var(--bg-hover, #f5f5f5); border-radius: 8px;">
+            <div>
+              <div style="font-weight: 500;">{{ verifier.full_name }}</div>
+              <div style="font-size: 0.875rem; color: var(--text-muted);">{{ verifier.email }}</div>
+            </div>
+            <div style="font-weight: 700; color: var(--success);">{{ verifier.verification_count }} verifications</div>
+          </div>
+          {% empty %}
+          <p style="color: var(--text-muted); text-align: center; padding: 2rem;">No verifiers found</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Additional Statistics -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem;">
+      <div class="data-table-card" style="padding: 1.5rem;">
+        <p style="margin: 0; font-size: 0.875rem; color: var(--text-muted); font-weight: 500;">Blockchain Credentials</p>
+        <h3 style="margin: 0.5rem 0 0 0; font-size: 2rem; font-weight: 700; color: var(--accent-primary);">{{ blockchain_credentials }}</h3>
+        <p style="margin: 0.5rem 0 0 0; font-size: 0.875rem; color: var(--text-muted);">
+          {{ blockchain_percentage }}% of total
+        </p>
+      </div>
+      
+      <div class="data-table-card" style="padding: 1.5rem;">
+        <p style="margin: 0; font-size: 0.875rem; color: var(--text-muted); font-weight: 500;">Blockchain Transactions</p>
+        <h3 style="margin: 0.5rem 0 0 0; font-size: 2rem; font-weight: 700; color: var(--accent-primary);">{{ total_transactions }}</h3>
+        <p style="margin: 0.5rem 0 0 0; font-size: 0.875rem; color: var(--text-muted);">
+          {{ confirmed_transactions }} confirmed, {{ pending_transactions }} pending
+        </p>
+      </div>
+      
+      <div class="data-table-card" style="padding: 1.5rem;">
+        <p style="margin: 0; font-size: 0.875rem; color: var(--text-muted); font-weight: 500;">Avg Response Time</p>
+        <h3 style="margin: 0.5rem 0 0 0; font-size: 2rem; font-weight: 700; color: var(--accent-primary);">{{ avg_response_time }}ms</h3>
+        <p style="margin: 0.5rem 0 0 0; font-size: 0.875rem; color: var(--text-muted);">Average verification response time</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+
+  <script>
+    // Chart colors
+    const colors = {
+      primary: '#4f46e5',
+      success: '#10b981',
+      error: '#ef4444',
+      warning: '#f59e0b',
+      info: '#3b82f6',
+      muted: '#6b7280',
+    };
+
+    // Credentials Trend Chart
+    const credentialsTrendCtx = document.getElementById('credentialsTrendChart').getContext('2d');
+    new Chart(credentialsTrendCtx, {
+      type: 'line',
+      data: {
+        labels: {{ trend_dates|safe }},
+        datasets: [{
+          label: 'Credentials Created',
+          data: {{ credential_trends|safe }},
+          borderColor: colors.primary,
+          backgroundColor: colors.primary + '20',
+          tension: 0.4,
+          fill: true,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: {
+            display: false
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1
+            }
+          }
+        }
+      }
+    });
+
+    // Verifications Trend Chart
+    const verificationsTrendCtx = document.getElementById('verificationsTrendChart').getContext('2d');
+    new Chart(verificationsTrendCtx, {
+      type: 'line',
+      data: {
+        labels: {{ trend_dates|safe }},
+        datasets: [{
+          label: 'Verifications',
+          data: {{ verification_trends|safe }},
+          borderColor: colors.success,
+          backgroundColor: colors.success + '20',
+          tension: 0.4,
+          fill: true,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: {
+            display: false
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1
+            }
+          }
+        }
+      }
+    });
+
+    // Credentials by Status Chart
+    const credentialsByStatusData = {{ credentials_by_status|safe }};
+    const credentialsByStatusCtx = document.getElementById('credentialsByStatusChart').getContext('2d');
+    new Chart(credentialsByStatusCtx, {
+      type: 'doughnut',
+      data: {
+        labels: Object.keys(credentialsByStatusData).map(k => k.charAt(0).toUpperCase() + k.slice(1)),
+        datasets: [{
+          data: Object.values(credentialsByStatusData),
+          backgroundColor: [
+            colors.success,
+            colors.warning,
+            colors.error,
+            colors.muted,
+            colors.info,
+          ]
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }
+    });
+
+    // Credentials by Type Chart
+    const credentialsByTypeData = {{ credentials_by_type|safe }};
+    const credentialsByTypeCtx = document.getElementById('credentialsByTypeChart').getContext('2d');
+    new Chart(credentialsByTypeCtx, {
+      type: 'doughnut',
+      data: {
+        labels: Object.keys(credentialsByTypeData),
+        datasets: [{
+          data: Object.values(credentialsByTypeData),
+          backgroundColor: [
+            colors.primary,
+            colors.success,
+            colors.warning,
+            colors.info,
+            colors.muted,
+          ]
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }
+    });
+
+    // Verifications by Result Chart
+    const verificationsByResultData = {{ verifications_by_result|safe }};
+    const verificationsByResultCtx = document.getElementById('verificationsByResultChart').getContext('2d');
+    new Chart(verificationsByResultCtx, {
+      type: 'doughnut',
+      data: {
+        labels: Object.keys(verificationsByResultData).map(k => k.charAt(0).toUpperCase() + k.slice(1).replace('_', ' ')),
+        datasets: [{
+          data: Object.values(verificationsByResultData),
+          backgroundColor: [
+            colors.success,
+            colors.error,
+            colors.warning,
+            colors.muted,
+            colors.info,
+            colors.error,
+          ]
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: {
+            position: 'bottom'
+          }
+        }
+      }
+    });
+
+    // Verifications by Method Chart
+    const verificationsByMethodData = {{ verifications_by_method|safe }};
+    const verificationsByMethodCtx = document.getElementById('verificationsByMethodChart').getContext('2d');
+    new Chart(verificationsByMethodCtx, {
+      type: 'bar',
+      data: {
+        labels: Object.keys(verificationsByMethodData),
+        datasets: [{
+          label: 'Verifications',
+          data: Object.values(verificationsByMethodData),
+          backgroundColor: colors.primary,
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: {
+            display: false
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1
+            }
+          }
+        }
+      }
+    });
+  </script>
+
+{% endblock content %}

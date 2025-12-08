@@ -1,0 +1,36 @@
+{% load translate_tags %}
+	{% load static %} 
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <div class="logo">
+        <a href="{% url 'home' %}">
+         <img style="width:30px; border-radius:50%;" src='{% static "assets/guest/images/logo.png"%}' alt="The  Sierra Leone we want logo" loading="lazy">
+          <span>THE SIERRA LEONE WE WANT</span>
+        </a>
+      </div>
+        <!-- Menu Icon (Hamburger) -->
+        <button class="menu-toggle">
+            <i class="fas fa-bars"></i> <!-- This is the missing menu icon -->
+        </button>
+
+      <div class="nav-links">
+        <a href="{% url 'home' %}" class="nav-link {% if request.path == '/' %} active {% endif %}">Home</a>
+        <a href="{% url 'about' %}" class="nav-link {% if request.path == 'about' %} active {% endif %}">About Us</a>
+        <a href="{% url 'our_team' %}" class="nav-link {% if request.path == 'our_team' %} active {% endif %}">Our Team</a>
+        <a href="{% url 'news_blogs' %}" class="nav-link {% if request.path == 'news_blogs' %} active {% endif %}">Articles</a>
+		
+		<a href="https://webmail.slww.org/" target="_blank"><i class="flaticon-phone"></i>Webmail</a>
+        <a href="{% url 'contact' %}" class="nav-link {% if request.path == 'contact' %} active {% endif %}">Contact Us</a>
+      </div>
+      
+      <div class="nav-actions" >
+        <button class="icon-btn search-btn magnetic-element">
+          <i class="fas fa-search"></i>
+        </button>
+		 <a class=" magnetic-element" href="{% url 'login' %}" ><i   style="z-index:9999" class="fa">&#xf090;</i>  </a>
+      
+      </div>
+    </div>
+  </nav>

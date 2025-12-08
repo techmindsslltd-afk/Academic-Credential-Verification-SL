@@ -1,0 +1,167 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Add Program Structure{% endblock %} 
+{% block titlePage %} Add Program Structure{% endblock %} 
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %} 
+<div class="content">
+	<div class="container-fluid">
+		<div class="row ">
+			<div class="col-md-10 ">
+				<div class="card">
+					<div class="card-header card-header-icon card-header-rose">
+						
+						<h4 class="card-title">Create Program Structure
+							<!-- <small class="category">Complete Students details</small> --></h4>
+					</div>
+					<div class="card-body">
+						<form id="defaultForm"
+						      action=""
+						      role="form"
+						      data-toggle="validator"
+						      method="POST"
+						      enctype="multipart/form-data">
+							   <h6 class="card-category">
+							  {% if msg %}
+								<span class="text-danger">{{ msg }}</span>
+							  {% else %}
+							
+							  {% endif %}  
+						  </h6>
+						  
+								<br />
+					{% csrf_token %} 
+              <div class="row ">
+			    <div style="margin-left: auto;margin-right: auto;" class="col-md-8 ">
+              
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Year</label>
+                    {{ form.year }}
+                  </div>
+				  <span class="text-danger">{{ form.year.errors }}</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Total Modules</label>
+                    {{ form.reguire_total_module }}
+                  </div>
+				  <span class="text-danger">{{ form.reguire_total_module.errors }}</span>
+                </div>
+              </div>
+			  
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Total Compulsory Module</label>
+                    {{ form.total_compulsory_module }}
+                  </div>
+				  <span class="text-danger">{{ form.total_compulsory_module.errors }}</span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Reguire First Semester Module</label>
+                    {{ form.reguire_first_semester_module }}
+                  </div>
+				  <span class="text-danger">{{ form.reguire_first_semester_module.errors }}</span>
+                </div>
+              </div>
+              
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Reguire Second Semester Module</label>
+                    {{ form.reguire_second_semester_module }}
+                  </div>
+				  <span class="text-danger">{{ form.reguire_second_semester_module.errors }}</span>
+                </div>
+              </div>
+			  
+             
+			  <div class="row" id="ipamsession" >
+                <div class="col-md-12">
+                  <div class="form-group">
+				  <label class="bmd-label-floating">Accademic Session</label>
+                    {{ form.accademicSession }}
+					<span class="text-danger">{{ form.accademicSession.errors }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+				   <label class="bmd-label-floating">Grading System </label>
+                    {{ form.gradingsystem }}
+					<span class="text-danger">{{ form.gradingsystem.errors }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+				   <label class="bmd-label-floating">Honours/General </label>
+                    {{ form.honsOnly }}
+              <span class="text-danger">{{ form.honsOnly.errors }}</span>
+                  </div>
+                </div>
+              </div>
+			  <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+				   <label class="bmd-label-floating">Final Year </label>
+                    {{ form.finalyear }}
+              <span class="text-danger">{{ form.finalyear.errors }}</span>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+				   <label class="bmd-label-floating">Status </label>
+                    {{ form.is_active }} 
+					<span class="text-danger">{{ form.is_active.errors }}</span>
+                  </div>
+                </div>
+              </div>
+
+						<div  class="card-footer d-flex justify-content-end py-6">
+								<button type="submit"
+								        class="btn  btn-primary pull-right">Submit</button>
+								
+								</div><div class="clearfix"/>
+							
+							</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<!--  end card  -->
+			</div>
+			<!-- end col-md-12 -->
+		</div>
+		<!-- end row -->
+	</div>
+</div>
+	<input style="display:none"type="text" value="{{campus}}" id="courseIDValue"name="courseIDValue"/>	
+{% endblock content %}
+{{ form.media.js }}
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+  <script>
+    $(document).ready(function() {
+      // Javascript method's body can be found in assets/js/demos.js
+      md.initDashboardPageCharts();
+
+    });
+  </script>
+
+{% endblock javascripts %}

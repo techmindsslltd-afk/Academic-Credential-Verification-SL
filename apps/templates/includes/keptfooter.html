@@ -1,0 +1,376 @@
+	{% load static %} 
+	{% load translate_tags %}
+	 <div class="chat-container"  id="chatBox">
+        <div class="chat-header">
+            <h3 style="color:white" data-translate="SPS" data-source="en" data-target="{{request.GET.transl}}" >{% translate  'Chat'  transl_OLD request.GET.transl %} </h3>
+            <button id="closeChat">&times;</button>
+        </div>
+        <div class="chat-body" id="chatBody">
+            <div class="message support">
+                <strong></strong>
+                <span>Welcome! How can I assist you today?</span>
+            </div>
+            <div class="options">
+                <button>What programs are offered?</button>
+                <button>How do I apply?</button>
+                <button>What are the tuition fees?</button>
+                <button>What are the admission requirements?</button>
+                <button class="real-person">Chat with a real person</button>
+            </div>
+        </div>
+        <div class="chat-footer">
+            <input type="text" id="chatInput" placeholder="Type a message...">
+            <button id="sendMessage">Send</button>
+        </div>
+    </div>
+
+
+    <script>
+        const chatButton = document.getElementById('chatButton');
+        const chatBox = document.getElementById('chatBox');
+        const closeChat = document.getElementById('closeChat');
+        const sendMessage = document.getElementById('sendMessage');
+        const chatBody = document.getElementById('chatBody');
+        const chatInput = document.getElementById('chatInput');
+        let awaitingProgram = false;
+
+        // Open chatbox
+        chatButton.addEventListener('click', () => {
+            chatBox.style.display = 'flex';
+            chatButton.style.display = 'none';
+        });
+
+        // Close chatbox
+        closeChat.addEventListener('click', () => {
+            chatBox.style.display = 'none';
+            chatButton.style.display = 'block';
+        });
+
+        // Handle option clicks
+        document.querySelectorAll('.options button').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const userMessage = e.target.textContent;
+                const userMessageElement = document.createElement('div');
+                userMessageElement.classList.add('message', 'user');
+                userMessageElement.innerHTML = `<strong></strong><span>${userMessage}</span>`;
+                chatBody.appendChild(userMessageElement);
+
+                // Auto-scroll to the bottom
+                chatBody.scrollTop = chatBody.scrollHeight;
+
+                if (userMessage === "What are the tuition fees?") {
+                    awaitingProgram = true;
+                    const aiResponseElement = document.createElement('div');
+                    aiResponseElement.classList.add('message', 'support');
+                    aiResponseElement.innerHTML = `<strong></strong><span>Which program are you asking about?</span>`;
+                    chatBody.appendChild(aiResponseElement);
+                    chatBody.scrollTop = chatBody.scrollHeight;
+                } else if (e.target.classList.contains('real-person')) {
+                    const aiResponseElement = document.createElement('div');
+                    aiResponseElement.classList.add('message', 'support');
+                    aiResponseElement.innerHTML = `<strong></strong><span>Connecting you to a real person. Please wait...</span>`;
+                    chatBody.appendChild(aiResponseElement);
+                    chatBody.scrollTop = chatBody.scrollHeight;
+                } else {
+                    const aiResponseElement = document.createElement('div');
+                    aiResponseElement.classList.add('message', 'support');
+                    aiResponseElement.innerHTML = `<strong></strong><span>Thank you for your question! Let me assist you with that.</span>`;
+                    chatBody.appendChild(aiResponseElement);
+                    chatBody.scrollTop = chatBody.scrollHeight;
+                }
+            });
+        });
+
+        // Send message
+        sendMessage.addEventListener('click', () => {
+            const userMessage = chatInput.value.trim();
+            if (userMessage) {
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message', 'user');
+                messageElement.innerHTML = `<strong></strong><span>${userMessage}</span>`;
+                chatBody.appendChild(messageElement);
+                chatInput.value = '';
+
+                // Auto-scroll to the bottom
+                chatBody.scrollTop = chatBody.scrollHeight;
+
+                if (awaitingProgram) {
+                    // Simulate the program fee response
+                    let programFee = "";
+                    switch (userMessage.toLowerCase()) {
+                        case "computer science":
+                            programFee = "$10,000";
+                            break;
+                        case "business administration":
+                            programFee = "$8,000";
+                            break;
+                        case "law":
+                            programFee = "$12,000";
+                            break;
+                        default:
+                            programFee = "Program not found. Please check the spelling or try another program.";
+                            break;
+                    }
+
+                    const aiResponseElement = document.createElement('div');
+                    aiResponseElement.classList.add('message', 'support');
+                    aiResponseElement.innerHTML = `<strong></strong><span>The tuition fee for ${userMessage} is ${programFee}</span>`;
+                    chatBody.appendChild(aiResponseElement);
+                    awaitingProgram = false;
+                    chatBody.scrollTop = chatBody.scrollHeight;
+                } else {
+                    // Simulate AI response
+                    setTimeout(() => {
+                        const aiResponseElement = document.createElement('div');
+                        aiResponseElement.classList.add('message', 'support');
+                        aiResponseElement.innerHTML = `<strong></strong><span>Thank you for your message! Let me assist you with that.</span>`;
+                        chatBody.appendChild(aiResponseElement);
+
+                        // Auto-scroll to the bottom
+                        chatBody.scrollTop = chatBody.scrollHeight;
+                    }, 1000);
+                }
+            }
+        });
+    </script>
+<!-- Finish Middle -->
+	<!-- Start Bottom -->
+	<div id="bottom" class="cmsmasters_color_scheme_first">
+		<div class="bottom_bg">
+			<div class="bottom_outer">
+				<div class="bottom_inner sidebar_layout_14141414">
+	<aside id="text-5" class="widget widget_text"><h3 class="widgettitle">{% translate  'Navigation'  transl_OLD request.GET.transl %} </h3>			<div class="textwidget"><ul>
+<li><a href="#">{% translate  'USL Overview'  transl_OLD request.GET.transl %} </a></li>
+<li><a href="#">{% translate  'Our Values'  transl_OLD request.GET.transl %}</a></li>
+<li><a href="#">{% translate  'Governance'  transl_OLD request.GET.transl %}</a></li>
+<li><a href="#">{% translate  'Campus Locations'  transl_OLD request.GET.transl %}</a></li>
+<li><a href="#">{% translate  'Partners'  transl_OLD request.GET.transl %}</a></li>
+</ul>
+</div>
+		</aside><aside id="text-6" class="widget widget_text"><h3 class="widgettitle">{% translate  'Academics'  transl_OLD request.GET.transl %}</h3>			<div class="textwidget"><ul>
+  <li><a href="#">{% translate  'Short Courses'  transl_OLD request.GET.transl %}</a></li>
+  <li><a href="#">{% translate  'USL Prospectus'  transl_OLD request.GET.transl %}</a></li>
+  <li><a href="#">{% translate  'Tuition & Fees'  transl_OLD request.GET.transl %}</a></li>
+  <li><a href="#">{% translate  'Scholarships'  transl_OLD request.GET.transl %}</a></li>
+  <li><a href="#">{% translate  'Academic Calendar'  transl_OLD request.GET.transl %}</a></li>
+</ul></div>
+		</aside><aside id="text-7" class="widget widget_text"><h3 class="widgettitle">{% translate  'Socials'  transl_OLD request.GET.transl %}</h3>			<div class="textwidget"><ul>
+<li><a href="#">{% translate  'Facebook'  transl_OLD request.GET.transl %}</a></li>
+<li><a href="#">{% translate  'Twitter'  transl_OLD request.GET.transl %}</a></li>
+<li><a href="#">{% translate  'YouTube'  transl_OLD request.GET.transl %}</a></li>
+<li><a href="#">{% translate  'Instagram'  transl_OLD request.GET.transl %}</a></li>
+<li><a href="#">{% translate  'LinkedIn'  transl_OLD request.GET.transl %}</a></li>
+</ul>
+</div>
+		</aside><aside id="text-8" class="widget widget_text">			<div class="textwidget"><p><a href="{% url 'home' %}" ><img loading="lazy" decoding="async" class="" src="{% static 'assets/guest/wp-content/uploads/2024/03/USL-Logo-latest.png'%}" alt="University of Sierra Leone Logo" width="260" height="73" /></a></p>
+<p>{% translate  'A.J. Momoh Drive, Tower Hill, Freetown, Sierra Leone'  transl_OLD request.GET.transl %} </p>
+<p>{% translate  'Phone: +232 79 741202'  transl_OLD request.GET.transl %}<br />
+{% translate  'Email: registry@usl.edu.sl'  transl_OLD request.GET.transl %} </p>
+</div>
+		</aside>				</div>
+			</div>
+		</div>
+	</div>
+	<!-- Finish Bottom -->
+	<a href="javascript:void(0)" id="slide_top" class="cmsmasters_theme_icon_slide_top"><span></span></a>
+</div>
+<!-- Finish Main -->
+
+<!-- Start Footer -->
+<footer id="footer">
+	<div class="footer cmsmasters_color_scheme_footer cmsmasters_footer_default">
+	<div class="footer_inner">
+		<div class="footer_logo_wrap"><a href="{% url 'home' %}"  title="University of Sierra Leone" class="footer_logo">
+	<img src="{% static 'assets/guest/wp-content/uploads/2024/03/USL-Logo-v5.png'%}" alt="University of Sierra Leone" />
+<img class="footer_logo_retina" src="{% static 'assets/guest/wp-content/uploads/2024/03/USL-Logo-v5.png'%}" alt="University of Sierra Leone" width="175" height="50" />
+</a>
+</div>		<span class="footer_copyright copyright">
+			{% translate  'University of Sierra Leone © 2024 / All Rights Reserved'  transl_OLD request.GET.transl %} 		</span>
+	</div>
+</div></footer>
+<!-- Finish Footer -->
+
+</div>
+<span class="cmsmasters_responsive_width"></span>
+<!-- Finish Page -->
+
+<script id="ckyBannerTemplate" type="text/template"><div class="cky-overlay cky-hide"></div><div class="cky-btn-revisit-wrapper cky-revisit-hide" data-cky-tag="revisit-consent" data-tooltip="Consent Preferences" style="background-color:#0056a7"> <button class="cky-btn-revisit" aria-label="Consent Preferences"> <img src="{% static 'assets/guest/wp-content/plugins/cookie-law-info/lite/frontend/images/revisit.svg' %}" alt="Revisit consent button"> </button></div><div class="cky-consent-container cky-hide" tabindex="0"> <div class="cky-consent-bar" data-cky-tag="notice" style="background-color:#FFFFFF;border-color:#f4f4f4;color:#212121">  <div class="cky-notice"> <p class="cky-title" role="heading" aria-level="1" data-cky-tag="title" style="color:#212121">We value your privacy</p><div class="cky-notice-group"> <div class="cky-notice-des" data-cky-tag="description" style="color:#212121"> <p>We use cookies to enhance your browsing experience, serve personalized ads or content, and analyze our traffic. By clicking "Accept All", you consent to our use of cookies.</p> </div><div class="cky-notice-btn-wrapper" data-cky-tag="notice-buttons"> <button class="cky-btn cky-btn-customize" aria-label="Customize" data-cky-tag="settings-button" style="color:#1863dc;background-color:transparent;border-color:#1863dc">Customize</button> <button class="cky-btn cky-btn-reject" aria-label="Reject All" data-cky-tag="reject-button" style="color:#1863dc;background-color:transparent;border-color:#1863dc">Reject All</button> <button class="cky-btn cky-btn-accept" aria-label="Accept All" data-cky-tag="accept-button" style="color:#FFFFFF;background-color:#1863dc;border-color:#1863dc">Accept All</button>  </div></div></div></div></div><div class="cky-modal" tabindex="0"> <div class="cky-preference-center" data-cky-tag="detail" style="color:#212121;background-color:#FFFFFF;border-color:#F4F4F4"> <div class="cky-preference-header"> <span class="cky-preference-title" role="heading" aria-level="1" data-cky-tag="detail-title" style="color:#212121">Customize Consent Preferences</span> <button class="cky-btn-close" aria-label="[cky_preference_close_label]" data-cky-tag="detail-close"> <img src="{% static 'assets/guest/wp-content/plugins/cookie-law-info/lite/frontend/images/close.svg' %}" alt="Close"> </button> </div><div class="cky-preference-body-wrapper"> <div class="cky-preference-content-wrapper" data-cky-tag="detail-description" style="color:#212121"> <p>We use cookies to help you navigate efficiently and perform certain functions. You will find detailed information about all cookies under each consent category below.</p><p>The cookies that are categorized as "Necessary" are stored on your browser as they are essential for enabling the basic functionalities of the site. </p><p>We also use third-party cookies that help us analyze how you use this website, store your preferences, and provide the content and advertisements that are relevant to you. These cookies will only be stored in your browser with your prior consent.</p><p>You can choose to enable or disable some or all of these cookies but disabling some of them may affect your browsing experience.</p> </div><div class="cky-accordion-wrapper" data-cky-tag="detail-categories"> <div class="cky-accordion" id="ckyDetailCategorynecessary"> <div class="cky-accordion-item"> <div class="cky-accordion-chevron"><i class="cky-chevron-right"></i></div> <div class="cky-accordion-header-wrapper"> <div class="cky-accordion-header"><button class="cky-accordion-btn" aria-label="Necessary" data-cky-tag="detail-category-title" style="color:#212121">Necessary</button><span class="cky-always-active">Always Active</span> <div class="cky-switch" data-cky-tag="detail-category-toggle"><input type="checkbox" id="ckySwitchnecessary"></div> </div> <div class="cky-accordion-header-des" data-cky-tag="detail-category-description" style="color:#212121"> <p>Necessary cookies are required to enable the basic features of this site, such as providing secure log-in or adjusting your consent preferences. These cookies do not store any personally identifiable data.</p></div> </div> </div> <div class="cky-accordion-body"> <div class="cky-audit-table" data-cky-tag="audit-table" style="color:#212121;background-color:#f4f4f4;border-color:#ebebeb"><p class="cky-empty-cookies-text">No cookies to display.</p></div> </div> </div><div class="cky-accordion" id="ckyDetailCategoryfunctional"> <div class="cky-accordion-item"> <div class="cky-accordion-chevron"><i class="cky-chevron-right"></i></div> <div class="cky-accordion-header-wrapper"> <div class="cky-accordion-header"><button class="cky-accordion-btn" aria-label="Functional" data-cky-tag="detail-category-title" style="color:#212121">Functional</button><span class="cky-always-active">Always Active</span> <div class="cky-switch" data-cky-tag="detail-category-toggle"><input type="checkbox" id="ckySwitchfunctional"></div> </div> <div class="cky-accordion-header-des" data-cky-tag="detail-category-description" style="color:#212121"> <p>Functional cookies help perform certain functionalities like sharing the content of the website on social media platforms, collecting feedback, and other third-party features.</p></div> </div> </div> <div class="cky-accordion-body"> <div class="cky-audit-table" data-cky-tag="audit-table" style="color:#212121;background-color:#f4f4f4;border-color:#ebebeb"><p class="cky-empty-cookies-text">No cookies to display.</p></div> </div> </div><div class="cky-accordion" id="ckyDetailCategoryanalytics"> <div class="cky-accordion-item"> <div class="cky-accordion-chevron"><i class="cky-chevron-right"></i></div> <div class="cky-accordion-header-wrapper"> <div class="cky-accordion-header"><button class="cky-accordion-btn" aria-label="Analytics" data-cky-tag="detail-category-title" style="color:#212121">Analytics</button><span class="cky-always-active">Always Active</span> <div class="cky-switch" data-cky-tag="detail-category-toggle"><input type="checkbox" id="ckySwitchanalytics"></div> </div> <div class="cky-accordion-header-des" data-cky-tag="detail-category-description" style="color:#212121"> <p>Analytical cookies are used to understand how visitors interact with the website. These cookies help provide information on metrics such as the number of visitors, bounce rate, traffic source, etc.</p></div> </div> </div> <div class="cky-accordion-body"> <div class="cky-audit-table" data-cky-tag="audit-table" style="color:#212121;background-color:#f4f4f4;border-color:#ebebeb"><p class="cky-empty-cookies-text">No cookies to display.</p></div> </div> </div><div class="cky-accordion" id="ckyDetailCategoryperformance"> <div class="cky-accordion-item"> <div class="cky-accordion-chevron"><i class="cky-chevron-right"></i></div> <div class="cky-accordion-header-wrapper"> <div class="cky-accordion-header"><button class="cky-accordion-btn" aria-label="Performance" data-cky-tag="detail-category-title" style="color:#212121">Performance</button><span class="cky-always-active">Always Active</span> <div class="cky-switch" data-cky-tag="detail-category-toggle"><input type="checkbox" id="ckySwitchperformance"></div> </div> <div class="cky-accordion-header-des" data-cky-tag="detail-category-description" style="color:#212121"> <p>Performance cookies are used to understand and analyze the key performance indexes of the website which helps in delivering a better user experience for the visitors.</p></div> </div> </div> <div class="cky-accordion-body"> <div class="cky-audit-table" data-cky-tag="audit-table" style="color:#212121;background-color:#f4f4f4;border-color:#ebebeb"><p class="cky-empty-cookies-text">No cookies to display.</p></div> </div> </div><div class="cky-accordion" id="ckyDetailCategoryadvertisement"> <div class="cky-accordion-item"> <div class="cky-accordion-chevron"><i class="cky-chevron-right"></i></div> <div class="cky-accordion-header-wrapper"> <div class="cky-accordion-header"><button class="cky-accordion-btn" aria-label="Advertisement" data-cky-tag="detail-category-title" style="color:#212121">Advertisement</button><span class="cky-always-active">Always Active</span> <div class="cky-switch" data-cky-tag="detail-category-toggle"><input type="checkbox" id="ckySwitchadvertisement"></div> </div> <div class="cky-accordion-header-des" data-cky-tag="detail-category-description" style="color:#212121"> <p>Advertisement cookies are used to provide visitors with customized advertisements based on the pages you visited previously and to analyze the effectiveness of the ad campaigns.</p></div> </div> </div> <div class="cky-accordion-body"> <div class="cky-audit-table" data-cky-tag="audit-table" style="color:#212121;background-color:#f4f4f4;border-color:#ebebeb"><p class="cky-empty-cookies-text">No cookies to display.</p></div> </div> </div> </div></div><div class="cky-footer-wrapper"> <span class="cky-footer-shadow"></span> <div class="cky-prefrence-btn-wrapper" data-cky-tag="detail-buttons"> <button class="cky-btn cky-btn-reject" aria-label="Reject All" data-cky-tag="detail-reject-button" style="color:#1863dc;background-color:transparent;border-color:#1863dc"> Reject All </button> <button class="cky-btn cky-btn-preferences" aria-label="Save My Preferences" data-cky-tag="detail-save-button" style="color:#1863dc;background-color:transparent;border-color:#1863dc"> Save My Preferences </button> <button class="cky-btn cky-btn-accept" aria-label="Accept All" data-cky-tag="detail-accept-button" style="color:#ffffff;background-color:#1863dc;border-color:#1863dc"> Accept All </button> </div></div></div></div></script><div class="modal-window" id="modal-window-1"><div class="modal-window__wrapper"><div class="modal-window__content"><div class="modal-window__close">Close</div><div class="modal-window__content-wrapper"><div class="modal-window__content-main"><p><span style="text-decoration: underline"><span style="color: #008000"><strong><span style="font-family: arial, helvetica, sans-serif;font-size: 12pt">Researcher Profile Info</span></strong></span></span></p>
+<table style="height: 350px" width="599">
+<tbody>
+<tr>
+<td width="123">
+<p><span style="font-family: arial, helvetica, sans-serif;font-size: 10pt"><strong>Qualification:</strong></span></p>
+</td>
+<td width="302">
+<p><span style="font-family: arial, helvetica, sans-serif;font-size: 10pt">FWACP (Lab Medicine); D.Sc (Medical Microbiology); M.Sc (Medical Microbiology); M.BchB (Medicine &amp; Surgery); BSc.Hon (Health Sciences); BSc.Ed (Biological Sciences)</span></p>
+</td>
+</tr>
+<tr>
+<td width="123">
+<p><span style="font-family: arial, helvetica, sans-serif;font-size: 10pt"><strong>Research Area:</strong></span></p>
+</td>
+<td width="302">
+<p><span style="font-family: arial, helvetica, sans-serif;font-size: 10pt">Medicine &amp; Biology</span></p>
+</td>
+</tr>
+<tr>
+<td width="123">
+<p><span style="font-family: arial, helvetica, sans-serif;font-size: 10pt"><strong>Publications:</strong></span></p>
+</td>
+<td width="302">
+<ul>
+<li><span style="font-family: arial, helvetica, sans-serif;font-size: 10pt"><a href="#">Publication Title 01</a></span></li>
+<li><span style="font-family: arial, helvetica, sans-serif;font-size: 10pt"><a href="#">Publication</a><a href="#"> Title 02</a></span></li>
+<li><span style="font-family: arial, helvetica, sans-serif;font-size: 10pt"><a href="#">Publication</a><a href="#"> Title 03</a></span></li>
+<li><span style="font-family: arial, helvetica, sans-serif;font-size: 10pt"><a href="#">Publication</a><a href="#"> Title 04</a></span></li>
+<li><span style="font-family: arial, helvetica, sans-serif;font-size: 10pt"><a href="#">Publication</a><a href="#"> Title 05</a></span></li>
+</ul>
+</td>
+</tr>
+<tr>
+<td width="123">
+<p><span style="font-family: arial, helvetica, sans-serif;font-size: 10pt"><strong>Host/Campus:</strong></span></p>
+</td>
+<td width="302">
+<p><span style="font-family: arial, helvetica, sans-serif;font-size: 10pt">College of Medicine and Allied Health Sciences (COMAHS)</span></p>
+</td>
+</tr>
+<tr>
+<td width="123">
+<p><span style="font-family: arial, helvetica, sans-serif;font-size: 10pt"><strong>Staff Status:</strong></span></p>
+</td>
+<td width="302">
+<p><span style="font-family: arial, helvetica, sans-serif;font-size: 10pt">Dean, Faculty of Social Sciences </span></p>
+</td>
+</tr>
+<tr>
+<td width="123">
+<p><span style="font-family: arial, helvetica, sans-serif;font-size: 10pt"><strong>Contact:</strong></span></p>
+</td>
+<td width="302">
+<p><span style="font-family: arial, helvetica, sans-serif;font-size: 10pt">username@usl.edu.sl</span></p>
+</td>
+</tr>
+</tbody>
+</table></div></div></div></div><div class="modal-float-button is-inactive is-left wow-modal-id-1">See Researcher Info</div></div><div class="modal-window" id="modal-window-2"><div class="modal-window__wrapper"><div class="modal-window__content"><div class="modal-window__close">Close</div><div class="modal-window__content-wrapper"><div class="modal-window__content-main"><p><span style="text-decoration: underline"><span style="color: #008000"><strong><span style="font-family: arial, helvetica, sans-serif;font-size: 12pt">List of Fourah Bay College Graduands</span></strong></span></span></p>
+<p> </p>
+<ul>
+<li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li>
+<li>Etiam consequat diam sed velit rhoncus hendrerit.</li>
+<li>Donec vitae urna a lacus condimentum condimentum.</li>
+<li>Phasellus maximus purus at nisi tempus aliquet.</li>
+<li>Pellentesque congue velit gravida, elementum neque id, molestie leo.</li>
+<li>Mauris vel nibh et nisi lobortis mollis eu at risus.</li>
+<li>Nunc ac ante vitae purus rutrum posuere eget vel elit.</li>
+<li>Sed consectetur nisi sit amet volutpat consequat.</li>
+<li>Aenean interdum neque quis semper facilisis.</li>
+<li>Morbi ornare felis sit amet enim finibus, ac vehicula nibh maximus.</li>
+<li>Donec aliquam nisl quis felis accumsan, ac malesuada elit feugiat.</li>
+<li>Sed rutrum turpis sit amet ornare commodo.</li>
+<li>Donec eget lorem facilisis, tincidunt dui id, sodales est.</li>
+<li>Suspendisse at lectus cursus, gravida augue ac, sagittis justo.</li>
+<li>Pellentesque tempus diam et tincidunt sagittis.</li>
+<li>Suspendisse sollicitudin mi pulvinar eros vestibulum, vitae faucibus ipsum convallis.</li>
+<li>Vestibulum ac magna a nibh luctus eleifend a eget turpis.</li>
+<li>Sed sed dui eget justo tincidunt condimentum vitae accumsan velit.</li>
+<li>Curabitur luctus nisi sed turpis dignissim, vel fringilla ipsum lacinia.</li>
+<li>Vestibulum suscipit sem vel placerat bibendum.</li>
+<li>Sed id lorem eget odio posuere luctus nec sed odio.</li>
+<li>Sed suscipit purus ut dapibus posuere.</li>
+</ul>
+<p> </p></div></div></div></div><div class="modal-float-button is-inactive is-left wow-modal-id-2">See Researcher Info</div></div>		<script>
+		( function ( body ) {
+			'use strict';
+			body.className = body.className.replace( /\btribe-no-js\b/, 'tribe-js' );
+		} )( document.body );
+		</script>
+		<script> /* <![CDATA[ */var tribe_l10n_datatables = {"aria":{"sort_ascending":": activate to sort column ascending","sort_descending":": activate to sort column descending"},"length_menu":"Show _MENU_ entries","empty_table":"No data available in table","info":"Showing _START_ to _END_ of _TOTAL_ entries","info_empty":"Showing 0 to 0 of 0 entries","info_filtered":"(filtered from _MAX_ total entries)","zero_records":"No matching records found","search":"Search:","all_selected_text":"All items on this page were selected. ","select_all_link":"Select all pages","clear_selection":"Clear Selection.","pagination":{"all":"All","next":"Next","previous":"Previous"},"select":{"rows":{"0":"","_":": Selected %d rows","1":": Selected 1 row"}},"datepicker":{"dayNames":["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],"dayNamesShort":["Sun","Mon","Tue","Wed","Thu","Fri","Sat"],"dayNamesMin":["S","M","T","W","T","F","S"],"monthNames":["January","February","March","April","May","June","July","August","September","October","November","December"],"monthNamesShort":["January","February","March","April","May","June","July","August","September","October","November","December"],"monthNamesMin":["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"],"nextText":"Next","prevText":"Prev","currentText":"Today","closeText":"Done","today":"Today","clear":"Clear"}};/* ]]> */ </script><link rel='stylesheet' id='google-fonts-pt-sans-css' href='http://fonts.googleapis.com/css?family=PT+Sans%3A400%2C400i%2C700%2C700i&amp;ver=6.6.1' type='text/css' media='all' />
+<script type="text/javascript" src="{% static 'assets/guest/wp-includes/js/jquery/ui/core.minb37e.js' %}" id="jquery-ui-core-js"></script>
+<script type="text/javascript" src="{% static 'assets/guest/wp-includes/js/jquery/ui/mouse.minb37e.js' %}" id="jquery-ui-mouse-js"></script>
+<script type="text/javascript" src="{% static 'assets/guest/wp-includes/js/jquery/ui/slider.minb37e.js' %}" id="jquery-ui-slider-js"></script>
+<script type="text/javascript" src="{% static 'assets/guest/wp-includes/js/jquery/ui/effect.minb37e.js' %}"id="jquery-effects-core-js"></script>
+<script type="text/javascript" src="{% static 'assets/guest/wp-content/plugins/cmsmasters-mega-menu/js/jquery.megaMenu077c.js' %}" id="megamenu-js"></script>
+<script type="text/javascript" src="{% static 'assets/guest/wp-includes/js/dist/hooks.min2757.js' %}" id="wp-hooks-js"></script>
+<script type="text/javascript" src="{% static 'assets/guest/wp-includes/js/dist/i18n.minc33c.js' %}" id="wp-i18n-js"></script>
+<script type="text/javascript" id="wp-i18n-js-after">
+/* <![CDATA[ */ 
+wp.i18n.setLocaleData( { 'text direction\u0004ltr': [ 'ltr' ] } );
+/* ]]> */
+</script>
+<script type="text/javascript" src="{% static 'assets/guest/wp-content/plugins/contact-form-7/includes/swv/js/indexe2db.js?ver=5.9.8" id="swv-js"></script>
+<script type="text/javascript" id="contact-form-7-js-extra">
+/* <![CDATA[ */
+var wpcf7 = {"api":{"root":"https:\/\/usl.edu.sl\/wp-json\/","namespace":"contact-form-7\/v1"}};
+/* ]]> */
+</script>
+<script type="text/javascript" src="{% static 'assets/guest/wp-content/plugins/contact-form-7/includes/js/indexe2db.js' %}" id="contact-form-7-js"></script>
+<script type="text/javascript" src="{% static 'assets/guest/wp-content/themes/schule/js/cmsmasters-hover-slider.min8a54.js' %}" id="cmsmasters-hover-slider-js"></script>
+<script type="text/javascript" src="{% static 'assets/guest/wp-content/themes/schule/js/easing.min8a54.js ' %}" id="easing-js"></script>
+<script type="text/javascript" src="{% static 'assets/guest/wp-content/themes/schule/js/easy-pie-chart.min8a54.js ' %}" id="easy-pie-chart-js"></script>
+<script type="text/javascript" src="{% static 'assets/guest/wp-content/themes/schule/js/mousewheel.min8a54.js ' %}" id="mousewheel-js"></script>
+<script type="text/javascript" src="{% static 'assets/guest/wp-content/themes/schule/js/owlcarousel.min8a54.js ' %}" id="owlcarousel-js"></script>
+<script type="text/javascript" src="{% static 'assets/guest/wp-includes/js/imagesloaded.minbb93.js' %}" id="imagesloaded-js"></script>
+<script type="text/javascript" src="{% static 'assets/guest/wp-content/themes/schule/js/request-animation-frame.min8a54.js' %}" id="request-animation-frame-js"></script>
+<script type="text/javascript" src="{% static 'assets/guest/wp-content/themes/schule/js/scrollspy8a54.js' %}" id="scrollspy-js"></script>
+<script type="text/javascript" src="{% static 'assets/guest/wp-content/themes/schule/js/scroll-to.min8a54.js' %}" id="scroll-to-js"></script>
+<script type="text/javascript" src="{% static 'assets/guest/wp-content/themes/schule/js/stellar.min8a54.js' %}" id="stellar-js"></script>
+<script type="text/javascript" src="{% static 'assets/guest/wp-content/themes/schule/js/waypoints.min8a54.js' %}" id="waypoints-js"></script>
+<script type="text/javascript" id="schule-script-js-extra">
+/* <![CDATA[ */
+var cmsmasters_script = {"theme_url":"https:\/\/usl.edu.sl\/wp-content\/themes\/schule","site_url":"https:\/\/usl.edu.sl\/","ajaxurl":"https:\/\/usl.edu.sl\/wp-admin\/admin-ajax.php","nonce_ajax_like":"42ec6d1ca2","nonce_ajax_view":"dfe4519edb","project_puzzle_proportion":"0.7069","gmap_api_key":"","gmap_api_key_notice":"Please add your Google Maps API key","gmap_api_key_notice_link":"read more how","primary_color":"#10700e","ilightbox_skin":"dark","ilightbox_path":"vertical","ilightbox_infinite":"0","ilightbox_aspect_ratio":"1","ilightbox_mobile_optimizer":"1","ilightbox_max_scale":"1","ilightbox_min_scale":"0.2","ilightbox_inner_toolbar":"0","ilightbox_smart_recognition":"0","ilightbox_fullscreen_one_slide":"0","ilightbox_fullscreen_viewport":"center","ilightbox_controls_toolbar":"1","ilightbox_controls_arrows":"0","ilightbox_controls_fullscreen":"1","ilightbox_controls_thumbnail":"1","ilightbox_controls_keyboard":"1","ilightbox_controls_mousewheel":"1","ilightbox_controls_swipe":"1","ilightbox_controls_slideshow":"0","ilightbox_close_text":"Close","ilightbox_enter_fullscreen_text":"Enter Fullscreen (Shift+Enter)","ilightbox_exit_fullscreen_text":"Exit Fullscreen (Shift+Enter)","ilightbox_slideshow_text":"Slideshow","ilightbox_next_text":"Next","ilightbox_previous_text":"Previous","ilightbox_load_image_error":"An error occurred when trying to load photo.","ilightbox_load_contents_error":"An error occurred when trying to load contents.","ilightbox_missing_plugin_error":"The content your are attempting to view requires the <a href='{pluginspage}' target='_blank'>{type} plugin<\\\/a>."};
+/* ]]> */
+</script>
+<script type="text/javascript" src="{% static 'assets/guest/wp-content/themes/schule/js/jquery.script8a54.js' %}" id="schule-script-js"></script>
+<script type="text/javascript" id="schule-theme-script-js-extra">
+/* <![CDATA[ */
+var cmsmasters_theme_script = {"primary_color":"#10700e"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="{% static 'assets/guest/wp-content/themes/schule/theme-framework/theme-style/js/jquery.theme-script8a54.js' %}"id="schule-theme-script-js"></script>
+<script type="text/javascript" src="{% static 'assets/guest/wp-content/themes/schule/js/jquery.tweet.mine7f0.js' %}" id="twitter-js"></script>
+<script type="text/javascript" src="{% static 'assets/guest/wp-content/themes/schule/js/smooth-sticky.min20b9.js' %}" id="smooth-sticky-js"></script>
+<script type="text/javascript" src="{% static 'assets/guest/wp-includes/js/comment-reply.minb6a4.js' %}" id="comment-reply-js" async="async" data-wp-strategy="async"></script>
+<script type="text/javascript" id="modal-window-js-extra">
+/* <![CDATA[ */
+var ModalWindow = {"modal-window-1":{"overlay":true,"blockPage":true,"action":["click",0],"closeAction":[false,false],"mobile":[480,85,"%"],"triggers":["wow-modal-id-1","wow-modal-close-1","wow-button-close1"],"animation":["no",400,"no",400],"style":{"--mw-zindex":"999999","--mw-position":"fixed","--mw-radius":"5px","--mw-padding":"10px","--mw-font-size":"12px","--mw-font-family":"inherit","--mw-bg-color":"#ffffff","--mw-overlay":"rgba(0,0,0,.7)","--mw-scrollbar-width":"thin","--mw-scrollbar-color":"#4F4F4F","--mw-scrollbar-track":"rgba(255,255,255, 0)","--mw-scrollbar-thin":"6px","--mw-width":"662px","--mw-height":"auto","--mw-inset-top":"10vh","--mw-inset-right":"0vh","--mw-inset-left":"0vh","--mw-close-padding":"6px 12px","--mw-close-size":"12px","--mw-close-font":"inherit","--mw-close-weight":"400","--mw-close-style":"normal","--mw-close-radius":"0px","--mw-close-box":"24px","--mw-close-color":"#ffffff","--mw-close-h-color":"#000000","--mw-close-bg":"#000000","--mw-close-h-bg":"#ffffff","--mw-close-inset":"0px 0px auto auto","--mw-flbtn-padding":"","--mw-flbtn-radius":"4px","--mw-flbtn-size":"1.2px","--mw-flbtn-color":"#ffffff","--mw-flbtn-h-color":"#ffffff","--mw-flbtn-bg":"#383838","--mw-flbtn-h-bg":"#797979","--mw-anime-duration":"5s","--mw-anime-iteration":"5","--mw-flbtn-inset":"50% auto auto px"}},"modal-window-2":{"overlay":true,"blockPage":true,"action":["click",0],"closeAction":[false,false],"mobile":[480,85,"%"],"triggers":["wow-modal-id-2","wow-modal-close-2","wow-button-close2"],"animation":["no",400,"no",400],"style":{"--mw-zindex":"999999","--mw-position":"fixed","--mw-radius":"5px","--mw-padding":"10px","--mw-font-size":"12px","--mw-font-family":"inherit","--mw-bg-color":"#ffffff","--mw-overlay":"rgba(0,0,0,.7)","--mw-scrollbar-width":"thin","--mw-scrollbar-color":"#4F4F4F","--mw-scrollbar-track":"rgba(255,255,255, 0)","--mw-scrollbar-thin":"6px","--mw-width":"662px","--mw-height":"auto","--mw-inset-top":"10vh","--mw-inset-right":"0vh","--mw-inset-left":"0vh","--mw-close-padding":"6px 12px","--mw-close-size":"12px","--mw-close-font":"inherit","--mw-close-weight":"400","--mw-close-style":"normal","--mw-close-radius":"0px","--mw-close-box":"24px","--mw-close-color":"#ffffff","--mw-close-h-color":"#000000","--mw-close-bg":"#000000","--mw-close-h-bg":"#ffffff","--mw-close-inset":"0px 0px auto auto","--mw-flbtn-padding":"","--mw-flbtn-radius":"4px","--mw-flbtn-size":"1.2px","--mw-flbtn-color":"#ffffff","--mw-flbtn-h-color":"#ffffff","--mw-flbtn-bg":"#383838","--mw-flbtn-h-bg":"#797979","--mw-anime-duration":"5s","--mw-anime-iteration":"5","--mw-flbtn-inset":"50% auto auto px"}},"ajaxurl":"https:\/\/usl.edu.sl\/wp-admin\/admin-ajax.php","nonce":"4b1b8eefb0"};
+/* ]]> */
+</script>
+<script type="text/javascript" src="{% static 'assets/guest/wp-content/plugins/modal-window/public/assets/js/modalWindow-min52c7.js?ver=6.0.5" id="modal-window-js"></script>
+
+
+<script>
+  async function lazyLoadTranslations() {
+    const elements = document.querySelectorAll('[data-translate]'); // Select elements to translate
+    const loader = document.getElementById('loader');
+
+    // Show the loader
+    loader.style.display = 'block';
+
+    try {
+      for (const element of elements) {
+        const text = element.getAttribute('data-translate');
+        const source = element.getAttribute('data-source') || 'auto'; // Default to auto-detect
+        const target = element.getAttribute('data-target') || 'en';   // Default target is English
+
+        const response = await fetch(`/api/translate/?text=${encodeURIComponent(text)}&source=${source}&target=${target}`);
+        const data = await response.json();
+
+        if (data.translation) {
+          element.textContent = data.translation;
+        } else {
+          console.error('Translation error:', data.error);
+          element.textContent = text; // Fallback to original text
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching translation:', error);
+    } finally {
+      // Hide the loader
+      loader.style.display = 'none';
+    }
+  }
+
+  // Call the function after the page has loaded
+  document.addEventListener('DOMContentLoaded', lazyLoadTranslations);
+</script>
+

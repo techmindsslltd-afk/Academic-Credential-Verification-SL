@@ -1,0 +1,224 @@
+{% extends "layouts/guest.html" %}
+
+{% block title %} Programs - Apple of God Foundation {% endblock %} 
+
+{% block content %}
+{% load static %}
+    <link rel="stylesheet" href="{% static 'assets/guest/css/pages.css' %}">
+    <style>
+        .program-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px rgba(102, 126, 234, 0.2) !important;
+            border-color: rgba(102, 126, 234, 0.3) !important;
+        }
+        .program-card:hover .program-link {
+            background: linear-gradient(135deg, #764ba2, #667eea) !important;
+            transform: scale(1.02);
+        }
+        .program-card:hover img {
+            transform: scale(1.1);
+        }
+        .program-card.featured {
+            border: 2px solid rgba(102, 126, 234, 0.3) !important;
+            box-shadow: 0 6px 30px rgba(102, 126, 234, 0.15) !important;
+        }
+        @media (max-width: 768px) {
+            .programs-grid {
+                grid-template-columns: 1fr !important;
+            }
+        }
+    </style>
+
+
+    <main id="main-content">
+        <!-- Page Hero -->
+        <section class="page-hero">
+            <div class="page-hero-content">
+                <div class="breadcrumb">
+                    <a href="index.html">Home</a> / <span>Programs</span>
+                </div>
+                <h1 class="page-title">Our Programs</h1>
+                <p class="page-subtitle">
+                    Discover how we're making a difference through various community-focused initiatives 
+                    designed to spread love and create lasting positive change.
+                </p>
+            </div>
+            <div class="page-hero-visual">
+                <div class="hero-pattern"></div>
+            </div>
+        </section>
+
+        <!-- Programs Overview -->
+        <section class="section">
+            <div class="container">
+                <div class="programs-intro">
+                    <h2>Transforming Communities Through Love</h2>
+                    <p>Our comprehensive programs address the fundamental needs of communities while fostering sustainable growth and empowerment. Each initiative is designed with love at its core, ensuring that every person we serve feels valued and supported.</p>
+                </div>
+
+                <!-- Filter and Search Section -->
+                {% if categories %}
+                <div class="programs-filter mb-4">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <div class="btn-group" role="group">
+                                <a href="{% url 'programs' %}" class="btn {% if not selected_category %}btn-primary{% else %}btn-outline-primary{% endif %}">All Programs</a>
+                                {% for category in categories %}
+                                <a href="{% url 'programs' %}?category={{ category.slug }}" 
+                                   class="btn {% if selected_category == category.slug %}btn-primary{% else %}btn-outline-primary{% endif %}">
+                                    {% if category.icon %}{{ category.icon }}{% endif %} {{ category.name }}
+                                </a>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <form method="GET" action="{% url 'programs' %}">
+                                <div class="input-group">
+                                    <input type="text" name="search" class="form-control" placeholder="Search programs..." value="{{ search_query|default:'' }}">
+                                    <button class="btn btn-primary" type="submit"><i class="fas fa-search"></i></button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+
+                <!-- Programs Grid -->
+                {% if programs %}
+                <div class="programs-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 2rem; margin-top: 3rem;">
+                    {% for program in programs %}
+                    <div class="program-card {% if program.is_featured %}featured{% endif %}" style="background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%); border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); transition: all 0.3s ease; position: relative; border: 1px solid rgba(102, 126, 234, 0.1);">
+                        {% if program.is_featured %}
+                        <div style="position: absolute; top: 1rem; right: 1rem; background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; z-index: 2; box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);">
+                            <i class="fas fa-star"></i> Featured
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Program Image or Icon -->
+                        <div style="position: relative; height: 200px; overflow: hidden; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            {% if program.featured_image %}
+                                <img src="{{ program.featured_image.url }}" alt="{{ program.title }}" style="width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s ease;">
+                            {% else %}
+                                <div style="display: flex; align-items: center; justify-content: center; height: 100%;">
+                                    {% if program.icon %}
+                                        {% if program.icon|slice:":2" == "fa" or program.icon|slice:":3" == "fas" or program.icon|slice:":3" == "far" or program.icon|slice:":3" == "fab" %}
+                                            <i class="{{ program.icon }}" style="font-size: 4rem; color: rgba(255, 255, 255, 0.9);"></i>
+                                        {% else %}
+                                            <span style="font-size: 4rem;">{{ program.icon }}</span>
+                                        {% endif %}
+                                    {% else %}
+                                        <i class="fas fa-hand-holding-heart" style="font-size: 4rem; color: rgba(255, 255, 255, 0.9);"></i>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                            {% if program.category %}
+                            <div style="position: absolute; bottom: 1rem; left: 1rem;">
+                                <span style="background: rgba(255, 255, 255, 0.95); color: #667eea; padding: 0.4rem 0.8rem; border-radius: 20px; font-size: 0.75rem; font-weight: 600; backdrop-filter: blur(10px);">
+                                    {% if program.category.icon %}{{ program.category.icon }}{% endif %} {{ program.category.name }}
+                                </span>
+                            </div>
+                            {% endif %}
+                        </div>
+                        
+                        <!-- Program Content -->
+                        <div class="program-content" style="padding: 1.5rem;">
+                            <h3 style="margin: 0 0 0.75rem 0; font-size: 1.5rem; font-weight: 700; color: #2c3e50; line-height: 1.3;">{{ program.title }}</h3>
+                            <p style="margin: 0 0 1.25rem 0; color: #6c757d; line-height: 1.6; font-size: 0.95rem;">{{ program.short_description|truncatewords:25 }}</p>
+                            
+                            <!-- Impact Stats -->
+                            {% if program.communities_served > 0 or program.families_served > 0 or program.individuals_served > 0 %}
+                            <div style="display: flex; gap: 1rem; margin-bottom: 1.25rem; padding: 1rem; background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05)); border-radius: 12px; flex-wrap: wrap;">
+                                {% if program.communities_served > 0 %}
+                                <div style="flex: 1; min-width: 80px; text-align: center;">
+                                    <div style="font-size: 1.5rem; font-weight: 700; color: #667eea; margin-bottom: 0.25rem;">{{ program.communities_served }}</div>
+                                    <div style="font-size: 0.75rem; color: #6c757d; font-weight: 500;">Communities</div>
+                                </div>
+                                {% endif %}
+                                {% if program.families_served > 0 %}
+                                <div style="flex: 1; min-width: 80px; text-align: center;">
+                                    <div style="font-size: 1.5rem; font-weight: 700; color: #667eea; margin-bottom: 0.25rem;">{{ program.families_served }}</div>
+                                    <div style="font-size: 0.75rem; color: #6c757d; font-weight: 500;">Families</div>
+                                </div>
+                                {% endif %}
+                                {% if program.individuals_served > 0 %}
+                                <div style="flex: 1; min-width: 80px; text-align: center;">
+                                    <div style="font-size: 1.5rem; font-weight: 700; color: #667eea; margin-bottom: 0.25rem;">{{ program.individuals_served }}</div>
+                                    <div style="font-size: 0.75rem; color: #6c757d; font-weight: 500;">Individuals</div>
+                                </div>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                            
+                            <!-- Features -->
+                            {% if program.features.all %}
+                            <div style="margin-bottom: 1.25rem; display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                                {% for feature in program.features.all|slice:":3" %}
+                                <span style="display: inline-flex; align-items: center; gap: 0.25rem; background: rgba(102, 126, 234, 0.1); color: #667eea; padding: 0.4rem 0.75rem; border-radius: 20px; font-size: 0.8rem; font-weight: 500;">
+                                    {% if feature.icon %}{{ feature.icon }}{% endif %} {{ feature.name }}
+                                </span>
+                                {% endfor %}
+                            </div>
+                            {% endif %}
+                            
+                            <!-- Learn More Button -->
+                            {% if program.slug %}
+                            <a href="{% url 'program_detail_public' program.slug %}" class="program-link" style="display: inline-flex; align-items: center; gap: 0.5rem; background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 0.75rem 1.5rem; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: all 0.3s ease; width: 100%; justify-content: center;">
+                                Learn More <i class="fas fa-arrow-right"></i>
+                            </a>
+                            {% else %}
+                            <a href="#program-{{ program.id }}" class="program-link" data-bs-toggle="modal" style="display: inline-flex; align-items: center; gap: 0.5rem; background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 0.75rem 1.5rem; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.95rem; transition: all 0.3s ease; width: 100%; justify-content: center;">
+                                Learn More <i class="fas fa-arrow-right"></i>
+                            </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-5">
+                    <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                    <h4 class="text-muted">No programs found</h4>
+                    <p class="text-muted">{% if search_query %}Try adjusting your search terms{% else %}Check back soon for new programs!{% endif %}</p>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+
+     
+        <!-- Program Application Process -->
+        <section class="section bg-light">
+            <div class="container">
+                <div class="section-header">
+                    <h2>How to Get Involved</h2>
+                    <p>Whether you need assistance or want to help others, here's how you can connect with our programs.</p>
+                </div>
+
+                <div class="process-steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <h3>Contact Us</h3>
+                        <p>Reach out through our contact form or call our helpline to discuss your needs or interest in volunteering.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <h3>Assessment</h3>
+                        <p>We'll work with you to understand your situation and match you with the most appropriate program or volunteer opportunity.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <h3>Get Started</h3>
+                        <p>Begin your journey with us, whether receiving support or providing help to others in your community.</p>
+                    </div>
+                </div>
+
+                <div class="cta-buttons">
+                    <a href="contact.html" class="btn btn-primary">Apply for Assistance</a>
+                    <a href="volunteer.html" class="btn btn-secondary">Volunteer Today</a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+   
+    <script src="{% static 'assets/guest/js/scripts.js' %}"></script>
+{% endblock content %}

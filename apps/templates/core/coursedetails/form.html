@@ -1,0 +1,464 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Program Profile {% endblock %} 
+{% block titlePage %}  {% if form.instance.name %} Program Profile -  {{ form.name }} {% else %}  Add Student {% endif %} {% endblock %} 
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %} 
+<style>
+span a{
+display: none;
+}
+.glyphicon-ok:before {
+        content: "\f00c";
+    }
+    .glyphicon-remove:before {
+        content: "\f00d";
+    }
+    .glyphicon {
+        display: inline-block;
+        font: normal normal normal 14px/1 FontAwesome;
+        font-size: inherit;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+	
+	
+	
+	.feedsMain{
+margin-left:10%;
+margin-right:10%;
+}
+
+@media screen and (max-width: 960px) {
+.feedsMain{
+margin-left:5%;
+margin-right:5%;
+}
+}
+@media screen and (max-width: 768px) {
+.feedsMain{
+margin-left:2%;
+margin-right:2%;
+}
+}
+
+@media screen and (max-width: 480px) {
+.feedsMain{
+margin-left:0%;
+margin-right:0%;
+}
+}
+</style>
+
+<div class="feedsMain">
+				<div class="card">
+					<div class="card-header card-header-icon card-header-rose">
+						
+						<h4 class="card-title">Add Program Profile -
+							<!-- <small class="category">Complete Patient details</small> --></h4>
+					</div>
+					<div class="card-body">
+						<form id="defaultForm"
+						      action=""
+						      role="form"
+						      data-toggle="validator"
+						      method="POST"
+							  enctype="multipart/form-data">
+							  {% if form.errors %}
+							  <div class="row">
+							 <p class="btn btn-danger">
+							 {{ form.errors }}
+							 {{ form.non_field_errors }}
+							 </p> 
+							 </div>
+							 {% endif  %}
+
+
+							  {% csrf_token %} 
+								
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group bmd-form-group">
+										<label class="bmd-label-floating">Course/Program</label>
+										 {{ form.course }}
+									</div>
+									<span class="text-danger">{{ form.course.errors }}</span>
+								</div>
+								
+								<div class="col-md-12">
+									<div class="form-group bmd-form-group">
+									<label class="bmd-label-floating">Overview
+										</label>
+										{{ form.overview }}
+									</div>
+										<span class="text-danger">{{ form.academic.errors }}</span>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group bmd-form-group">
+									<label class="bmd-label-floating">Degree Awarded
+										</label>
+										{{ form.degree_awarded }}
+									</div>
+										<span class="text-danger">{{ form.degree_awarded.errors }}</span>
+								</div>
+									
+   	                            
+								<div class="col-md-12">
+									<div class="form-group bmd-form-group">
+									<label class="bmd-label-floating">Duration
+										</label>
+										{{ form.duration }}
+									</div>
+										<span class="text-danger">{{ form.duration.errors }}</span>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group bmd-form-group">
+									<label class="bmd-label-floating">Total Credits
+										</label>
+										{{ form.total_credits }}
+									</div>
+										<span class="text-danger">{{ form.total_credits.errors }}</span>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group bmd-form-group">
+									<label class="bmd-label-floating">Study Mode
+										</label>
+										{{ form.study_mode }}
+									</div>
+										<span class="text-danger">{{ form.study_mode.errors }}</span>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group bmd-form-group">
+									<label class="bmd-label-floating">Language
+										</label>
+										{{ form.language }}
+									</div>
+										<span class="text-danger">{{ form.language.errors }}</span>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group bmd-form-group">
+									<label class="bmd-label-floating">Intake Periods
+										</label>
+										{{ form.intake_periods }}
+									</div>
+										<span class="text-danger">{{ form.intake_periods.errors }}</span>
+								</div>
+								<!--begin::Example-->
+								<div class="separator separator-dotted separator-content border-primary my-15"><span class="h1">Program Highlights</span></div>
+								<!--end::Example-->
+								
+						        <input type="hidden" class="form-control" name="recordOwner" value="{% if form.instance.recordOwner %} {{ form.instance.recordOwner.id }} {% else %}{{ request.user.id }} {% endif %}">
+
+								<div id="formContainer">
+								  {% if highlights  %}
+										{% for highlight in highlights %}
+										
+											<div class="col-md-12">
+												<input type="hidden" name="highlight_id[]" value="{{ highlight.id }}">
+												<div class="form-group bmd-form-group">
+													 <input type="text" class="form-control form-control-solid mb-2"value="{{highlight.description }}"  name="description[]" placeholder="Description"/>
+												</div>
+												
+												<button type="button" class="remove-btn btn btn-light-danger" onclick="removeInput(this)">Remove</button>
+											</div>
+										{% endfor %}
+								   {% else %}
+										<div class="col-md-12">
+											<div class="form-group bmd-form-group">
+												 <input type="text" class="form-control form-control-solid mb-2" name="description[]" placeholder="Description"/>
+											</div>
+										</div>
+										<div class="col-md-12">
+											<div class="form-group bmd-form-group">
+												 <input type="text" class="form-control form-control-solid mb-2" name="description[]" placeholder="Description"/>
+											</div>
+										</div>
+										 <div class="col-md-12">
+											<div class="form-group bmd-form-group">
+												 <input type="text" class="form-control form-control-solid mb-2" name="description[]" placeholder="Description"/>
+											</div>
+										</div>
+										<div class="col-md-12">
+											<div class="form-group bmd-form-group">
+												 <input type="text" class="form-control form-control-solid mb-2" name="description[]" placeholder="Description"/>
+											</div>
+										</div>
+								     {% endif %}
+								</div>
+								<button type="button" class="btn btn-light-primary" id="addInput">Add Input</button>
+								
+								
+								<!--begin::Example-->
+								<div class="separator separator-dotted separator-content border-primary my-15"><span class="h1">Admission Requirements</span></div>
+								<!--end::Example-->
+								
+								<div id="formContainerRequirement">
+								  {% if requirements  %}
+										{% for requirement in requirements %}
+										<div class="col-md-12">
+											<div class="form-group bmd-form-group">
+											<label class="badge badge-light-primary">Existing Requirement</label>
+											<input type="hidden" name="Requirement_id[]" value="{{ requirement.id }}">
+											<select name="requirement_type[]" class="form-control form-control-solid mb-2" >
+											  <option {% if requirement.requirement_type == "Academic" %} selected {% endif %} value="Academic">Academic</option>
+											  <option {% if requirement.requirement_type == "Application" %} selected {% endif %} value="Application">Application</option>
+											</select>
+												 <input type="text" value="{{requirement.description}}" class="form-control form-control-solid mb-2" name="RequirementDescription[]" placeholder="Description"/>
+												 
+												<button type="button" class="remove-btn btn btn-light-danger" onclick="requirementRemoveInput(this)">Remove</button>
+											<div class="separator separator-dotted border-primary my-15"></div>
+											</div>
+										</div>
+										{% endfor %}
+								   {% else %}
+										<div class="col-md-12">
+											<div class="form-group bmd-form-group">
+											<label class="badge badge-light-primary">Add New Requirement</label>
+											<select name="requirement_type[]" class="form-control form-control-solid mb-2" >
+											  <option value="Academic">Academic</option>
+											  <option value="Application">Application</option>
+											</select>
+												 <input type="text" class="form-control form-control-solid mb-2" name="RequirementDescription[]" placeholder="Description"/>
+											<div class="separator separator-dotted border-primary my-15"></div>
+											</div>
+										</div>
+										
+										<div class="col-md-12">
+											<div class="form-group bmd-form-group">
+											<label class="badge badge-light-primary">Add New Requirement</label>
+											<select name="requirement_type[]" class="form-control form-control-solid mb-2" >
+											  <option value="Academic">Academic</option>
+											  <option value="Application">Application</option>
+											</select>
+												 <input type="text" class="form-control form-control-solid mb-2" name="RequirementDescription[]" placeholder="Description"/>
+											<div class="separator separator-dotted border-primary my-15"></div>
+											</div>
+										</div>
+										
+										<div class="col-md-12">
+											<div class="form-group bmd-form-group">
+											<label class="badge badge-light-primary">Add New Requirement</label>
+											<select name="requirement_type[]" class="form-control form-control-solid mb-2" >
+											  <option value="Academic">Academic</option>
+											  <option value="Application">Application</option>
+											</select>
+												 <input type="text" class="form-control form-control-solid mb-2" name="RequirementDescription[]" placeholder="Description"/>
+											<div class="separator separator-dotted border-primary my-15"></div>
+											</div>
+										</div>
+										<div class="col-md-12">
+											<div class="form-group bmd-form-group">
+											<label class="badge badge-light-primary">Add New Requirement</label>
+											<select name="requirement_type[]" class="form-control form-control-solid mb-2" >
+											  <option value="Academic">Academic</option>
+											  <option value="Application">Application</option>
+											</select>
+												 <input type="text" class="form-control form-control-solid mb-2" name="RequirementDescription[]" placeholder="Description"/>
+											<div class="separator separator-dotted border-primary my-15"></div>
+											</div>
+										</div>
+										
+								     {% endif %}
+									 
+								</div>
+								
+								<button type="button" class="btn btn-light-primary" id="addRequirementInput">Add Input</button>
+								
+								<!--begin::Example-->
+								<div class="separator separator-dotted separator-content border-primary my-15"><span class="h1">Career Opportunity</span></div>
+								<!--end::Example-->
+								 
+								 	
+								<div id="formContainerCareer">
+								  {% if careers  %}
+										{% for career in careers %}
+											<div class="col-md-12">
+												<div class="form-group bmd-form-group">
+													 <label class="badge badge-light-primary">Existing Career Opportunity</label>
+													 <input type="hidden" name="career_id[]" value="{{ career.id }}">
+													 <input type="text" value="{{career.title}}" class="form-control form-control-solid mb-2" name="title[]" placeholder="Job Title"/>
+													 <input type="text" value="{{career.icon}}"  class="form-control form-control-solid mb-2" name="icon[]" placeholder="Job Icon (exp. fas fa-code)"/>
+													 <textarea  class="form-control form-control-solid mb-2" name="careerDescription[]" placeholder="Job Description" >  {% if career.description %} {{career.description}} {% endif %}
+													 </textarea>
+													<button type="button" class="remove-btn btn btn-light-danger" onclick="careerRemoveInput(this)">Remove</button>
+													<div class="separator separator-dotted border-primary my-15"></div>
+												</div>
+											</div>
+										{% endfor %}
+								   {% else %}
+										<div class="col-md-12">
+											<div class="form-group bmd-form-group">
+											<label class="badge badge-light-primary">Add Career Opportunity</label>
+											 <input type="text" class="form-control form-control-solid mb-2" name="title[]" placeholder="Job Title"/>
+											 <input type="text" class="form-control form-control-solid mb-2" name="icon[]" placeholder="Job Icon (exp. fas fa-code)"/>
+											 <textarea  class="form-control form-control-solid mb-2" name="careerDescription[]" placeholder="Job Description" > </textarea>
+											<div class="separator separator-dotted border-primary my-15"></div>
+											</div>
+										</div>
+										
+										<div class="col-md-12">
+											<div class="form-group bmd-form-group">
+											<label class="badge badge-light-primary">Add Career Opportunity</label>
+											 <input type="text" class="form-control form-control-solid mb-2" name="title[]" placeholder="Job Title"/>
+											 <input type="text" class="form-control form-control-solid mb-2" name="icon[]" placeholder="Job Icon (exp. fas fa-code)"/>
+											 <textarea  class="form-control form-control-solid mb-2" name="careerDescription[]" placeholder="Job Description" > </textarea>
+											<div class="separator separator-dotted border-primary my-15"></div>
+											</div>
+										</div>
+										
+												<div class="col-md-12">
+											<div class="form-group bmd-form-group">
+											<label class="badge badge-light-primary">Add Career Opportunity</label>
+											 <input type="text" class="form-control form-control-solid mb-2" name="title[]" placeholder="Job Title"/>
+											 <input type="text" class="form-control form-control-solid mb-2" name="icon[]" placeholder="Job Icon (exp. fas fa-code)"/>
+											 <textarea  class="form-control form-control-solid mb-2" name="careerDescription[]" placeholder="Job Description" > </textarea>
+											<div class="separator separator-dotted border-primary my-15"></div>
+											</div>
+										</div>
+										
+										<div class="col-md-12">
+											<div class="form-group bmd-form-group">
+											<label class="badge badge-light-primary">Add Career Opportunity</label>
+											 <input type="text" class="form-control form-control-solid mb-2" name="title[]" placeholder="Job Title"/>
+											 <input type="text" class="form-control form-control-solid mb-2" name="icon[]" placeholder="Job Icon (exp. fas fa-code)"/>
+											 <textarea  class="form-control form-control-solid mb-2" name="careerDescription[]" placeholder="Job Description" > </textarea>
+											<div class="separator separator-dotted border-primary my-15"></div>
+											</div>
+										</div>
+										
+										
+								     {% endif %}
+									 
+								</div>
+								
+								<button type="button" class="btn btn-light-primary" id="addformCareerInput">Add Input</button>  
+								
+								</div>
+								<div  class="card-footer d-flex justify-content-end py-6">
+								<button type="submit"
+								        class="btn  btn-primary pull-right">Submit</button>
+								
+								</div>
+								<div class="clearfix"/>
+							</form>
+						</div>
+					</div>
+					<!--  end card  -->
+				</div>
+				<!-- end col-md-12 -->
+ <script>
+document.addEventListener("DOMContentLoaded", function () {
+	const formContainer = document.getElementById("formContainer");
+	const addInputButton = document.getElementById("addInput");
+
+	let inputCount = 0;
+
+	// Function to add input field
+	function addInputField() {
+		inputCount++;
+		const div = document.createElement("div");
+		div.classList.add("col-md-12");
+		div.innerHTML = `
+				<div style="display:flex">
+					<input type="hidden" name="highlight_id[]" value="">
+				<div class="form-group bmd-form-group" style="width:90%">
+					 <input type="text" class="form-control form-control-solid mb-2" name="description[]" placeholder="Description"/>
+				</div>
+				
+			<button type="button" class="remove-btn btn btn-light-danger" onclick="removeInput(this)">Remove</button>
+			</div>
+		`;
+		formContainer.appendChild(div);
+	}
+
+	// Function to remove input field
+	window.removeInput = function (button) {
+		button.parentElement.remove();
+	};
+
+	// Event listener for adding inputs
+	addInputButton.addEventListener("click", addInputField);
+
+	//###############  Requirement form Container   #################################
+	const formContainerRequirement = document.getElementById("formContainerRequirement");
+	const addRequirementInput = document.getElementById("addRequirementInput");
+
+	let requirementInputCount = 0;
+
+	// Function to add input field
+	function addRequirementInputField() {
+		requirementInputCount++;
+		const div1 = document.createElement("div");
+		div1.classList.add("col-md-12");
+		div1.innerHTML = `
+			<div class="form-group bmd-form-group">
+			<label class="badge badge-light-primary">Add New Requirement</label>
+			<div style="width:90%">
+			<select name="requirement_type[]" class="form-control form-control-solid mb-2" >
+			  <option value="Academic">Academic</option>
+			  <option value="Application">Application</option>
+			</select>
+				 <input type="text" class="form-control form-control-solid mb-2" name="RequirementDescription[]" placeholder="Description"/>
+			</div>
+			<button type="button" class="remove-btn btn btn-light-danger" onclick="requirementRemoveInput(this)">Remove</button>
+			<div class="separator separator-dotted border-primary my-15"></div>
+			</div>
+		`;
+		formContainerRequirement.appendChild(div1);
+	}
+
+	// Function to remove input field
+	window.requirementRemoveInput = function (button) {
+		button.parentElement.remove();
+	};
+
+	// Event listener for adding inputs
+	addRequirementInput.addEventListener("click", addRequirementInputField);
+
+
+	//###############  career form Container   #################################
+	const formContainerCareer = document.getElementById("formContainerCareer");
+	const addformCareerInput = document.getElementById("addformCareerInput");
+
+	let careerInputCount = 0;
+
+	// Function to add input field
+	function addformCareerInputField() {
+		careerInputCount++;
+		const div2 = document.createElement("div");
+		div2.classList.add("col-md-12");
+		div2.innerHTML = `
+		
+				<div class="form-group bmd-form-group">
+					<label class="badge badge-light-primary">Add Career Opportunity</label>
+					 <div style="width:100%">
+						 <input type="text" class="form-control form-control-solid mb-2" name="title[]" placeholder="Job Title"/>
+						 <input type="text" class="form-control form-control-solid mb-2" name="icon[]" placeholder="Job Icon (exp. fas fa-code)"/>
+						 <textarea  class="form-control form-control-solid mb-2" name="careerDescription[]" placeholder="Job Description" > </textarea>
+					 </div>
+					<button type="button" class="remove-btn btn btn-light-danger" onclick="careerRemoveInput(this)">Remove</button>
+					<div class="separator separator-dotted border-primary my-15"></div>
+				</div>
+		`;
+		formContainerCareer.appendChild(div2);
+	}
+
+	// Function to remove input field
+	window.careerRemoveInput = function (button) {
+		button.parentElement.remove();
+	};
+
+	// Event listener for adding inputs
+	addformCareerInput.addEventListener("click", addformCareerInputField);
+
+			
+
+
+				
+        });
+    </script>			
+{% endblock content %}
+

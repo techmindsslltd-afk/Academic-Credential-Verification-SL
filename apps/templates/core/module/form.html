@@ -1,0 +1,196 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Add Courses {% endblock %} 
+{% block titlePage %}  {% if form.instance.name %} Edit Courses -  {{ form.name }} {% else %}  Add Student {% endif %} {% endblock %} 
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %} 
+<style>
+span a{
+display: none;
+}
+
+	
+	
+	
+	.feedsMain{
+margin-left:10%;
+margin-right:10%;
+}
+
+@media screen and (max-width: 960px) {
+.feedsMain{
+margin-left:5%;
+margin-right:5%;
+}
+}
+@media screen and (max-width: 768px) {
+.feedsMain{
+margin-left:2%;
+margin-right:2%;
+}
+}
+
+@media screen and (max-width: 480px) {
+.feedsMain{
+margin-left:0%;
+margin-right:0%;
+}
+}
+</style>
+
+<div class="feedsMain">
+				<div class="card">
+					<div class="card-header card-header-icon card-header-rose">
+						
+						<h4 class="card-title">Add Courses -
+							<!-- <small class="category">Complete Patient details</small> --></h4>
+					</div>
+					<div class="card-body">
+						<form id="defaultForm"
+						      action=""
+						      role="form"
+						      data-toggle="validator"
+						      method="POST"
+							  enctype="multipart/form-data">
+							  {% if form.errors %}
+							  <div class="row">
+							 <p class="btn btn-danger">
+							 {{ form.errors }}
+							 {{ form.non_field_errors }}
+							 </p> 
+							 </div>
+							 {% endif  %}
+
+
+							  {% csrf_token %} 
+								
+							<div class="row">
+								<div class="col-md-12">
+								<div class="input-group input-group-sm mb-5">
+									<span class="input-group-text" id="inputGroup-sizing-default">Name</span>
+									 {{ form.name }}
+								</div>
+									
+									<span class="text-danger">{{ form.name.errors }}</span>
+								</div>
+								
+								<div class="col-md-12">
+								
+								<div class="input-group input-group-sm mb-5">
+									<span class="input-group-text" id="inputGroup-sizing-default">Code</span>
+									 {{ form.code }}
+								</div>
+									<span class="text-danger">{{ form.code.errors }}</span>
+								</div>
+								<div class="col-md-12">
+								
+								<div class="input-group input-group-sm mb-5">
+									<span class="input-group-text" id="inputGroup-sizing-default">Credit Load</span>
+									 {{ form.creditLoad }}
+								</div>
+									<span class="text-danger">{{ form.creditLoad.errors }}</span>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group form-floating mb-7">
+										<label for="id_classification">Courses Type</label>
+										 {{ form.classification }}
+									</div>
+									<span class="text-danger">{{ form.classification.errors }}</span>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group form-floating mb-7">
+										<label for="id_semester">Semester</label>
+										 {{ form.semester }}
+									</div>
+									<span class="text-danger">{{ form.semester.errors }}</span>
+								</div>
+								
+								<div class="col-md-12">
+									<div class="form-group form-floating mb-7">
+										<label for="id_year">Year</label>
+										 {{ form.year }}
+									</div>
+									<span class="text-danger">{{ form.year.errors }}</span>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group form-floating mb-7">
+										<label for="id_campus">Campus</label>
+										 {{ form.campus }}
+									</div>
+									<span class="text-danger">{{ form.campus.errors }}</span>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group form-floating mb-7">
+										<label for="id_faculty">Faculty</label>
+										 {{ form.faculty }}
+									</div>
+									<span class="text-danger">{{ form.faculty.errors }}</span>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group form-floating mb-7">
+										<label for="id_department">Department</label>
+										 {{ form.department }}
+									</div>
+									<span class="text-danger">{{ form.department.errors }}</span>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group form-floating mb-7">
+										<label for="id_department">Course</label>
+										 {{ form.course }}
+									</div>
+									<span class="text-danger">{{ form.course.errors }}</span>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group form-floating mb-7">
+										<label for="id_level">Level</label>
+										 {{ form.level }}
+									</div>
+									<span class="text-danger">{{ form.level.errors }}</span>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group form-floating mb-7">
+										<label for="id_year">Courses  Departmental Status</label>
+										 {{ form.is_departmental }}
+									</div>
+									<span class="text-danger">{{ form.is_departmental.errors }}</span>
+								</div>
+								<div id="departmentBelong" style="display:none">
+								<p class=" badge badge-light-danger flex-shrink-0 align-self-center py-3 px-4 fs-7" style="cursor:pointer;">Select a department this Courses belong</p>
+								<div class="col-md-12">
+									<div class="form-group form-floating mb-7">
+										<label for="id_departmentBelong">Department Courses belong</label>
+										 {{ form.departmentBelong }}
+									</div>
+									<span class="text-danger">{{ form.departmentBelong.errors }}</span>
+								</div>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group form-floating mb-7">
+									<label for="id_is_active">Status
+										</label>
+										{{ form.is_active }}
+									</div>
+										<span class="text-danger">{{ form.is_active.errors }}</span>
+								</div>
+									
+   	                                	                            
+						        <input type="hidden" class="form-control" name="recordOwner" value="{% if form.instance.recordOwner %} {{ form.instance.recordOwner.id }} {% else %}{{ request.user.id }} {% endif %}">
+
+								</div>
+								<div  class="card-footer d-flex justify-content-end py-6">
+								<button type="submit"
+								        class="btn  btn-primary pull-right">Submit</button>
+								
+								</div>
+								<div class="clearfix"/>
+							</form>
+						</div>
+					</div>
+					<!--  end card  -->
+				</div>
+				<!-- end col-md-12 -->
+			
+{% endblock content %}
+

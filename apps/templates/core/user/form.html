@@ -1,0 +1,398 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Add User {% endblock %} 
+{% block titlePage %} Add User {% endblock %} 
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %} 
+<style>
+span a{
+display: none;
+}
+.green-border-focus .form-control:focus {
+    border: 1px solid #8bc34a;
+    box-shadow: 0 0 0 0.2rem rgba(139, 195, 74, .25);
+}
+.green-border-focus .form-control{
+    border: 1px solid #8bc34a;
+    box-shadow: 0 0 0 0.2rem rgba(139, 195, 74, .25);
+}
+	
+	.feedsMain{
+margin-left:10%;
+margin-right:10%;
+}
+
+@media screen and (max-width: 960px) {
+.feedsMain{
+margin-left:5%;
+margin-right:5%;
+}
+}
+@media screen and (max-width: 768px) {
+.feedsMain{
+margin-left:2%;
+margin-right:2%;
+}
+}
+
+@media screen and (max-width: 480px) {
+.feedsMain{
+margin-left:0%;
+margin-right:0%;
+}
+}
+
+  .input-container {
+    position: relative;
+    width: 100%;
+  }
+  .input-container input {
+    padding-right: 30px;
+  }
+  .input-container .input-icon {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateX(-50%);
+	cursor:pointer;
+	font-size:18px;
+  }
+</style>
+{% load static %}
+<div class="feedsMain ">
+				<div class="card">
+					<div class="card-header card-header-icon card-header-rose">
+					
+						<h4 class="card-title">Add Users - - {{ request.user.campus }}
+							<!-- <small class="category">Complete Users details</small> --></h4>
+					</div>
+					<div class="card-body">
+						<form id="defaultForm"
+						      action=""
+						      role="form"
+						      data-toggle="validator"
+						      method="POST"
+							  enctype="multipart/form-data">
+							 
+
+
+							  {% csrf_token %} 
+							<div class="row">
+								
+								<div class="col-md-6">
+									<div class="previewDiv" style="width: 194px ! important; height: 194px ! important;">
+										{% if form.instance.file  %}
+											<!-- Display the cropped image preview here -->
+											<img id="croppedPreview" src="{{form.instance.file.url}}" class="thumbnail" alt="" style="width:190px;height:200px;">
+										{% else %}
+										<img style="display:none" id="croppedPreview" src="" class="thumbnail" alt="photo" style="width:190px;height:200px;">
+										{% endif %}
+									</div>
+									<br>
+									<div class="file-upload">
+										<div class="file-select">
+											<div class="file-select-button" id="fileName">Choose File</div>
+											<div class="file-select-name" id="noFile">No file chosen...</div> 
+											<input type="file" name="file" id="id_file">
+											{{ form.x }}
+											{{ form.y }}
+											{{ form.width }}
+											{{ form.height }}
+										</div>
+									</div>
+									<br>
+								</div>
+							
+								<div class="col-md-6">
+						
+									<div class="form-group bmd-form-group mb-7">
+										<label class="bmd-label-floating">Prefix
+											<span class="text-danger">*</span>
+										</label>
+										 {{ form.prefix }}
+									</div>
+									
+									<div class="form-group bmd-form-group mb-7">
+										<label class="bmd-label-floating">Surname
+											<span class="text-danger">*</span>
+										</label>
+										 {{ form.surname }}
+									<span class="text-danger">{{ form.surname.errors }}</span>
+									</div>
+									<div class="form-group bmd-form-group mb-7">
+										<label class="bmd-label-floating">First Name
+											<span class="text-danger">*</span>
+										</label>
+										 {{ form.name }}
+									<span class="text-danger">{{ form.name.errors }}</span>
+									</div>
+								</div>
+							</div>
+							
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group bmd-form-group mb-7">
+										<label class="bmd-label-floating">Other Name(s)</label>
+										 {{ form.other_name }}
+									<span class="text-danger">{{ form.other_name.errors }}</span>
+									</div>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group bmd-form-group mb-7">
+										<label class="">Date of Birth
+											<span class="text-danger">*</span>
+										</label>
+										{{ form.dob }}
+									<span class="text-danger">{{ form.dob.errors }}</span>
+									</div>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group bmd-form-group mb-7">
+										<label class="control-label">Gender
+											<span class="text-danger">*</span>
+										</label>
+										{{ form.gender }}
+									<span class="text-danger">{{ form.gender.errors }}</span>
+									</div>
+								</div>
+
+								<div class="col-md-12">
+									<div class="form-group bmd-form-group mb-7">
+										<label class="bmd-label-floating">Phone Number
+											
+										</label>
+										{{ form.telephone }}
+										<span class="text-danger">{{ form.telephone.errors }}</span>
+									</div>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group bmd-form-group mb-7">
+										<label class="bmd-label-floating">Email
+										<span class="text-danger">*</span>	
+										</label>
+										{{ form.email }}
+										<span class="text-danger">{{ form.email.errors }}</span>
+									</div>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group bmd-form-group mb-7">
+										<label class="bmd-label-floating">Password
+											<span class="text-danger">*</span>
+										</label>
+										
+										<div class="input-container">
+										{{ form.password1 }}
+										  <i class="input-icon fa fa-eye" id="showPasswordCheckbox" ></i>
+										</div>
+										<span class="text-danger">{{ form.password1.errors }}</span>
+									</div>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group bmd-form-group mb-7">
+										<label class="bmd-label-floating">Confirm Password
+											<span class="text-danger">*</span>
+										</label>
+										<div class="input-container">
+										{{ form.password2 }}
+										  <i class="input-icon fa fa-eye" id="showPasswordCheckbox2" ></i>
+										</div>
+										<span class="text-danger">{{ form.password2.errors }}</span>
+									</div>
+								</div>
+								
+						
+								</div>
+								<!-- Hidden Fields -->
+								   	                            
+						        <input type="hidden" class="form-control" name="recordOwner" value="{% if form.instance.recordOwner %} {{ form.instance.recordOwner.id }} {% else %}{{ request.user.id }} {% endif %}">
+
+									
+					           <div  class="card-footer d-flex justify-content-end py-6">
+								<button type="submit"
+								        class="btn  btn-primary pull-right">Submit</button>
+								
+								</div>
+								<div class="clearfix"/>
+							</form>
+						</div>
+					</div>
+					<!--  end card  -->
+				</div>
+				<!-- end col-md-12 -->
+			
+
+<!-- MODAL TO CROP THE IMAGE -->
+<div class="modal fade" data-bs-backdrop="static" id="modalCrop">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+               
+                <h4 class="modal-title">Crop the photo</h4>
+				<div class="btn btn-icon btn-sm btn-color-gray-500 btn-active-icon-primary" data-bs-toggle="tooltip" title="Close Modal" data-bs-dismiss="modal">
+										<!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+										<span class="svg-icon svg-icon-1">
+											<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+												<rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor" />
+												<rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
+											</svg>
+										</span>
+										<!--end::Svg Icon-->
+										</div>
+            </div>
+            <div class="modal-body">
+                <img src="" id="image" style="max-width: 100%;">
+            </div>
+            <div class="modal-footer">
+                <div class="btn-group pull-left" role="group">
+                    <button type="button" class="btn btn-default js-zoom-in">
+                        <i class="fa fa-search-plus"></i>
+                    </button>
+                    <button type="button" class="btn btn-default js-zoom-out">
+                        <i class="fa fa-search-minus"></i>
+                    </button>
+                </div>
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary js-crop-and-upload">Crop and upload</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="{% static 'assets/js/plugins/cropper.min.js' %}"></script>
+<script>
+
+  // Get references to the password field and the checkbox
+  const passwordField = document.getElementById('id_password1');
+  const passwordField2 = document.getElementById('id_password2');
+  const showPasswordCheckbox = document.getElementById('showPasswordCheckbox');
+  const showPasswordCheckbox2 = document.getElementById('showPasswordCheckbox2');
+ // const icon = document.getElementById('icon');
+ 
+  // Add an event listener to the checkbox that toggles the password field's type
+  // between "text" and "password" when the checkbox is clicked
+  showPasswordCheckbox.addEventListener('click', function() {
+    if (passwordField.type === 'password') {
+      passwordField.type = 'text';
+	  
+    } else {
+      passwordField.type = 'password';
+    }
+	 
+	 if (showPasswordCheckbox.classList.contains('fa-eye')) {
+      showPasswordCheckbox.classList.remove('fa-eye');
+      showPasswordCheckbox.classList.add('fa-eye-slash');
+    } else {
+      showPasswordCheckbox.classList.remove('fa-eye-slash');
+      showPasswordCheckbox.classList.add('fa-eye');
+    }
+	
+  });
+  
+    showPasswordCheckbox2.addEventListener('click', function() {
+    if (passwordField2.type === 'password') {
+      passwordField2.type = 'text';
+	  
+    } else {
+      passwordField2.type = 'password';
+    }
+	 
+	 if (showPasswordCheckbox2.classList.contains('fa-eye')) {
+      showPasswordCheckbox2.classList.remove('fa-eye');
+      showPasswordCheckbox2.classList.add('fa-eye-slash');
+    } else {
+      showPasswordCheckbox2.classList.remove('fa-eye-slash');
+      showPasswordCheckbox2.classList.add('fa-eye');
+    }
+	
+  });
+{% if not form.instance.dob %}
+ document.getElementById("id_dob").value = new Date().toISOString().substr(0, 10);
+	{% endif %}
+
+	
+$(function () {
+    var $image = $("#image");
+    var cropBoxData;
+    var canvasData;
+     // File upload handling
+	  $('#id_file').on('change', function () {
+		var fullPath = this.value;
+		var filename = fullPath.replace(/^.*[\\\/]/, ''); // Extract file name from full path
+
+		if (/^\s*$/.test(filename)) {
+		  $(".file-upload").removeClass('active');
+		  $("#noFile").text("No file chosen...");
+		} else {
+		  $(".file-upload").addClass('active');
+		  $("#noFile").text(filename).css("color", "green");
+		}
+	  });
+
+    // Open modal and set image source on file selection
+    $("#id_file").change(function () {
+      if (this.files && this.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          $image.attr("src", e.target.result);
+          $("#modalCrop").modal("show");
+        };
+        reader.readAsDataURL(this.files[0]);
+      }
+    });
+
+    // Initialize cropper and restore data on modal show
+    $("#modalCrop").on("shown.bs.modal", function () {
+      $image.cropper({
+        viewMode: 1,
+        aspectRatio: 1/1,
+        minCropBoxWidth: 200,
+        minCropBoxHeight: 200,
+        ready: function () {
+          $image.cropper("setCanvasData", canvasData);
+          $image.cropper("setCropBoxData", cropBoxData);
+        }
+      });
+    }).on("hidden.bs.modal", function () {
+      cropBoxData = $image.cropper("getCropBoxData");
+      canvasData = $image.cropper("getCanvasData");
+      $image.cropper("destroy");
+    });
+
+    // Zoom in and out functionality
+    $(".js-zoom-in").click(function () {
+      $image.cropper("zoom", 0.1);
+    });
+
+    $(".js-zoom-out").click(function () {
+      $image.cropper("zoom", -0.1);
+    });
+
+    // Collect data and update cropped preview
+    $(".js-crop-and-upload").click(function () {
+      var cropData = $image.cropper("getData");
+      var croppedDataURL = $image.cropper("getCroppedCanvas").toDataURL("image/jpeg");
+	  $("#croppedPreview").css('display', 'block');
+      $("#croppedPreview").attr("src", croppedDataURL);
+      
+      // Set values in hidden inputs and submit the form
+      $("#id_x").val(cropData["x"]);
+      $("#id_y").val(cropData["y"]);
+      $("#id_width").val(cropData["width"]);
+      $("#id_height").val(cropData["height"]);
+      $("#modalCrop").modal("hide");
+    });
+  });
+
+</script>
+
+{% endblock content %}
+{{ form.media.js }}
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+
+{% endblock javascripts %}
+

@@ -1,0 +1,456 @@
+
+		{% load has_group %}
+		{% load humanize %}
+	
+	{% load static %}	
+   <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="{% url 'dashboard' %}" class="sidebar-logo">
+          <div class="sidebar-logo-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5"/>
+              <path d="M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <span class="sidebar-logo-text">{{settings.site_name_abb}}</span>
+        </a>
+        <!-- Mobile close button -->
+        <button class="sidebar-close-mobile" id="sidebar-close-mobile" aria-label="Close menu">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+        <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle sidebar">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="m15 18-6-6 6-6"/>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Role Selector (visible to all authenticated user roles) -->
+      {% if request.user.is_authenticated %}
+      <div class="role-selector" id="role-selector">
+        <label class="role-selector-label">Change Role:</label>
+       
+      </div>
+      {% endif %}
+
+      <!-- Navigation -->
+      <nav class="sidebar-nav" id="sidebar-nav">
+        <!-- Super Admin Menu -->
+        {% if request.user.is_authenticated %}
+          {% if request.user.role == 'super_admin' or debug %}
+        <div class="nav-section {% if request.user.role != 'super_admin' and debug %}hidden{% endif %}" >
+          <div class="nav-section-title">Main</div>
+          <ul class="nav-list">
+		  
+            <li>
+              <select class="role-selector-select nav-item" id="role-selector-select">
+				  <option value="super-admin" {% if request.user.role == 'super_admin' %}selected{% endif %}>Super Admin</option>
+				  <option value="institution-admin" {% if request.user.role == 'institution_admin' %}selected{% endif %}>Institution Admin</option>
+				  <option value="student" {% if request.user.role == 'student' %}selected{% endif %}>Student</option>
+				  <option value="employer" {% if request.user.role == 'employer' %}selected{% endif %}>Employer/Verifier</option>
+				</select>
+            </li>
+            <li>
+              <a href="{% url 'dashboard' %}" class="nav-item {% if segment == 'dashboard' %}active {% endif %}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="7" height="7" rx="1"/>
+                  <rect x="14" y="3" width="7" height="7" rx="1"/>
+                  <rect x="3" y="14" width="7" height="7" rx="1"/>
+                  <rect x="14" y="14" width="7" height="7" rx="1"/>
+                </svg>
+                <span>System Overview</span>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'super_admin_institutions' %}" class="nav-item {% if segment == 'institutions' %}active {% endif %}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                  <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+                <span>Institutions</span>
+                <span class="nav-badge">156</span>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'super_admin_users' %}" class="nav-item {% if segment == 'users' %}active {% endif %}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                  <circle cx="9" cy="7" r="4"/>
+                  <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+                <span>Users</span>
+                <span class="nav-badge">12.4k</span>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'super_admin_accreditation' %}" class="nav-item {% if segment == 'accreditation' %}active {% endif %}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="2" y1="12" x2="22" y2="12"/>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                </svg>
+                <span>Global Accreditation</span>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'super_admin_ledger' %}" class="nav-item {% if segment == 'ledger' %}active {% endif %}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                  <path d="M2 17l10 5 10-5"/>
+                  <path d="M2 12l10 5 10-5"/>
+                </svg>
+                <span>Credentials Ledger</span>
+              </a>
+            </li>
+          </ul>
+          <div class="nav-section-title">System</div>
+          <ul class="nav-list">
+            <li>
+              <a href="{% url 'super_admin_analytics' %}" class="nav-item {% if segment == 'analytics' %}active {% endif %}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <line x1="18" y1="20" x2="18" y2="10"/>
+                  <line x1="12" y1="20" x2="12" y2="4"/>
+                  <line x1="6" y1="20" x2="6" y2="14"/>
+                </svg>
+                <span>Analytics</span>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'super_admin_settings' %}" class="nav-item {% if segment == 'settings' %}active {% endif %}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="3"/>
+                  <path d="M12 1v4m0 14v4m11-11h-4M5 12H1m16.36-5.64l-2.83 2.83m-7.07 7.07l-2.83 2.83m0-12.73l2.83 2.83m7.07 7.07l2.83 2.83"/>
+                </svg>
+                <span>Settings</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+          {% endif %}
+        {% endif %}
+
+        <!-- Institution Admin Menu -->
+        {% if request.user.is_authenticated %}
+          {% if request.user.role == 'institution_admin' or debug %}
+        <div class="nav-section {% if request.user.role != 'institution_admin' and debug %}hidden{% endif %}" data-role="institution-admin">
+          <div class="nav-section-title">Dashboard</div>
+          <ul class="nav-list">
+            <li>
+              <select class="role-selector-select nav-item" id="role-selector-select">
+				  <option value="super-admin" {% if request.user.role == 'super_admin' %}selected{% endif %}>Super Admin</option>
+				  <option value="institution-admin" {% if request.user.role == 'institution_admin' %}selected{% endif %}>Institution Admin</option>
+				  <option value="student" {% if request.user.role == 'student' %}selected{% endif %}>Student</option>
+				  <option value="employer" {% if request.user.role == 'employer' %}selected{% endif %}>Employer/Verifier</option>
+				</select>
+            </li>
+            <li>
+              <a href="{% url 'dashboard' %}" class="nav-item {% if segment == 'dashboard' %}active {% endif %}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="7" height="7" rx="1"/>
+                  <rect x="14" y="3" width="7" height="7" rx="1"/>
+                  <rect x="3" y="14" width="7" height="7" rx="1"/>
+                  <rect x="14" y="14" width="7" height="7" rx="1"/>
+                </svg>
+                <span>Dashboard</span>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'institution_admin_issue_credentials' %}" class="nav-item {% if segment == 'issue-credentials' %}active {% endif %}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="12" y1="18" x2="12" y2="12"/>
+                  <line x1="9" y1="15" x2="15" y2="15"/>
+                </svg>
+                <span>Issue Credentials</span>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'institution_admin_students' %}" class="nav-item {% if segment == 'students' %}active {% endif %}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M22 10v6M2 10l10-5 10 5-10 5z"/>
+                  <path d="M6 12v5c3 3 9 3 12 0v-5"/>
+                </svg>
+                <span>Students</span>
+                {% if request.user.is_authenticated and request.user.role == 'institution_admin' and institution_student_count > 0 %}
+                  <span class="nav-badge">{{ institution_student_count|intcomma }}</span>
+                {% endif %}
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'institution_admin_programs' %}" class="nav-item {% if segment == 'programs' %}active {% endif %}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="16" y1="13" x2="8" y2="13"/>
+                  <line x1="16" y1="17" x2="8" y2="17"/>
+                  <polyline points="10 9 9 9 8 9"/>
+                </svg>
+                <span>Programs</span>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'institution_admin_verification_logs' %}" class="nav-item {% if segment == 'verification-logs' %}active {% endif %}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <path d="M14 2v6h6"/>
+                  <path d="M16 13H8"/>
+                  <path d="M16 17H8"/>
+                  <path d="M10 9H8"/>
+                </svg>
+                <span>Verification Logs</span>
+              </a>
+            </li>
+          </ul>
+          <div class="nav-section-title">Account</div>
+          <ul class="nav-list">
+            <li>
+              <a href="{% url 'institution_admin_profile' %}" class="nav-item {% if segment == 'inst-profile' %}active {% endif %}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                  <circle cx="12" cy="7" r="4"/>
+                </svg>
+                <span>Profile</span>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'institution_admin_settings' %}" class="nav-item {% if segment == 'inst-settings' %}active {% endif %}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="3"/>
+                  <path d="M12 1v4m0 14v4m11-11h-4M5 12H1m16.36-5.64l-2.83 2.83m-7.07 7.07l-2.83 2.83m0-12.73l2.83 2.83m7.07 7.07l2.83 2.83"/>
+                </svg>
+                <span>Settings</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+          {% endif %}
+        {% endif %}
+
+        <!-- Student Menu -->
+        {% if request.user.is_authenticated %}
+          {% if request.user.role == 'student' or debug %}
+        <div class="nav-section {% if request.user.role != 'student' and debug %}hidden{% endif %}" data-role="student">
+          <div class="nav-section-title">My Credentials</div>
+          <ul class="nav-list">
+		  
+            <li>
+              <select class="role-selector-select nav-item" id="role-selector-select">
+				  <option value="super-admin" {% if request.user.role == 'super_admin' %}selected{% endif %}>Super Admin</option>
+				  <option value="institution-admin" {% if request.user.role == 'institution_admin' %}selected{% endif %}>Institution Admin</option>
+				  <option value="student" {% if request.user.role == 'student' %}selected{% endif %}>Student</option>
+				  <option value="employer" {% if request.user.role == 'employer' %}selected{% endif %}>Employer/Verifier</option>
+				</select>
+            </li>
+            <li>
+              <a href="{% url 'dashboard' %}" class="nav-item  {% if segment == 'dashboard' %}active {% endif %}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="2" y="4" width="20" height="16" rx="2"/>
+                  <path d="M22 10H2"/>
+                  <path d="M6 14h.01"/>
+                  <path d="M10 14h.01"/>
+                  <path d="M14 14h.01"/>
+                </svg>
+                <span>My Credentials Wallet</span>
+                <span class="nav-badge success">3</span>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'student_share_qr' %}" class="nav-item  {% if segment == 'share-qr' %}active {% endif %}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <rect x="3" y="3" width="7" height="7"/>
+                  <rect x="14" y="3" width="7" height="7"/>
+                  <rect x="3" y="14" width="7" height="7"/>
+                  <rect x="14" y="14" width="7" height="7"/>
+                </svg>
+                <span>Download/Share QR</span>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'student_history' %}" class="nav-item  {% if segment == 'student-history' %}active {% endif %}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+                <span>Verification History</span>
+              </a>
+            </li>
+          </ul>
+          <div class="nav-section-title">Account</div>
+          <ul class="nav-list">
+            <li>
+              <a href="{% url 'student_profile' %}" class="nav-item  {% if segment == 'student-profile' %}active {% endif %}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                  <circle cx="12" cy="7" r="4"/>
+                </svg>
+                <span>Profile Settings</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+          {% endif %}
+        {% endif %}
+
+        <!-- Employer Menu -->
+        {% if request.user.is_authenticated %}
+          {% if request.user.role == 'employer' or debug %}
+        <div class="nav-section {% if request.user.role != 'employer' and debug %}hidden{% endif %}" data-role="employer">
+          <div class="nav-section-title">Verification</div>
+          <ul class="nav-list">
+		  
+            <li>
+              <select class="role-selector-select nav-item" id="role-selector-select">
+				  <option value="super-admin" {% if request.user.role == 'super_admin' %}selected{% endif %}>Super Admin</option>
+				  <option value="institution-admin" {% if request.user.role == 'institution_admin' %}selected{% endif %}>Institution Admin</option>
+				  <option value="student" {% if request.user.role == 'student' %}selected{% endif %}>Student</option>
+				  <option value="employer" {% if request.user.role == 'employer' %}selected{% endif %}>Employer/Verifier</option>
+				</select>
+            </li>
+            <li>
+              <a href="{% url 'dashboard' %}" class="nav-item {% if segment == 'dashboard' %}active {% endif %}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                  <path d="m9 12 2 2 4-4"/>
+                </svg>
+                <span>Verify Credential</span>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'employer_scan_qr' %}" class="nav-item {% if segment == 'scan-qr' %}active {% endif %}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M7 3H3v4"/>
+                  <path d="M21 3h-4v0"/>
+                  <path d="M21 3v4"/>
+                  <path d="M3 21v-4"/>
+                  <path d="M7 21H3"/>
+                  <path d="M21 21h-4"/>
+                  <path d="M21 21v-4"/>
+                  <rect x="7" y="7" width="10" height="10"/>
+                </svg>
+                <span>Scan QR Code</span>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'employer_accreditation_lookup' %}" class="nav-item {% if segment == 'employer-accreditation' %}active {% endif %}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <line x1="2" y1="12" x2="22" y2="12"/>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                </svg>
+                <span>Accreditation Lookup</span>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'employer_history' %}" class="nav-item {% if segment == 'employer-history' %}active {% endif %}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <polyline points="12 6 12 12 16 14"/>
+                </svg>
+                <span>Verification History</span>
+              </a>
+            </li>
+          </ul>
+          <div class="nav-section-title">Account</div>
+          <ul class="nav-list">
+            <li>
+              <a href="{% url 'employer_profile' %}" class="nav-item {% if segment == 'employer-profile' %}active {% endif %}">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                  <circle cx="12" cy="7" r="4"/>
+                </svg>
+                <span>Profile</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+          {% endif %}
+        {% endif %}
+
+        <!-- Guest/Unauthenticated Message -->
+        {% if not request.user.is_authenticated %}
+        <div class="nav-section">
+          <div class="nav-section-title">Access</div>
+          <ul class="nav-list">
+		  
+            <li>
+              <select class="role-selector-select nav-item" id="role-selector-select">
+				  <option value="super-admin" {% if request.user.role == 'super_admin' %}selected{% endif %}>Super Admin</option>
+				  <option value="institution-admin" {% if request.user.role == 'institution_admin' %}selected{% endif %}>Institution Admin</option>
+				  <option value="student" {% if request.user.role == 'student' %}selected{% endif %}>Student</option>
+				  <option value="employer" {% if request.user.role == 'employer' %}selected{% endif %}>Employer/Verifier</option>
+				</select>
+            </li>
+            <li>
+              <a href="{% url 'login' %}" class="nav-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                  <polyline points="10 17 15 12 10 7"/>
+                  <line x1="15" y1="12" x2="3" y2="12"/>
+                </svg>
+                <span>Log In</span>
+              </a>
+            </li>
+            <li>
+              <a href="{% url 'register' %}" class="nav-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                  <circle cx="9" cy="7" r="4"/>
+                  <line x1="19" y1="8" x2="19" y2="14"/>
+                  <line x1="22" y1="11" x2="16" y2="11"/>
+                </svg>
+                <span>Sign Up</span>
+              </a>
+            </li>
+          </ul>
+        </div>
+        {% endif %}
+      </nav>
+
+      <!-- Sidebar Footer -->
+      <div class="sidebar-footer">
+        <div class="sidebar-user">
+          <div class="sidebar-user-avatar">
+            {% if request.user.is_authenticated and request.user.avatar %}
+              <img src="{{ request.user.avatar.url }}" alt="{{ request.user.full_name }}">
+            {% else %}
+              {% if request.user.is_authenticated %}
+                <div style="width: 40px; height: 40px; border-radius: 50%; background: var(--accent-primary); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 0.875rem;">
+                  {{ request.user.first_name|first|upper }}{{ request.user.last_name|first|upper }}
+                </div>
+              {% else %}
+                <img src="/placeholder.svg?height=40&width=40" alt="User">
+              {% endif %}
+            {% endif %}
+          </div>
+          <div class="sidebar-user-info">
+            <div class="sidebar-user-name">
+              {% if request.user.is_authenticated %}
+                {{ request.user.full_name|default:request.user.email }}
+              {% else %}
+                Guest User
+              {% endif %}
+            </div>
+            <div class="sidebar-user-role">
+              {% if request.user.is_authenticated and request.user.role %}
+                {{ request.user.get_role_display }}
+              {% else %}
+                Guest
+              {% endif %}
+            </div>
+          </div>
+          <button class="sidebar-user-menu" aria-label="User menu">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="1"/>
+              <circle cx="12" cy="5" r="1"/>
+              <circle cx="12" cy="19" r="1"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+    </aside>
+	  

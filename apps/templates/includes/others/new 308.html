@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Search</title>
+</head>
+<body>
+    <input type="text" id="userSearch" placeholder="Search users...">
+    <div id="userList">
+        <div class="user">
+            <div class="userName">John Doe</div>
+        </div>
+        <div class="user">
+            <div class="userName">Jane Smith</div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const userSearchInput = document.getElementById('userSearch');
+            const userList = document.getElementById('userList');
+
+            userSearchInput.addEventListener('keyup', () => {
+                const searchText = userSearchInput.value.toLowerCase();
+                const users = userList.getElementsByClassName('user');
+
+                for (const user of users) {
+                    const userName = user.querySelector('.userName').textContent.toLowerCase();
+                    if (userName.includes(searchText)) {
+                        user.style.display = 'block';
+                    } else {
+                        user.style.display = 'none';
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

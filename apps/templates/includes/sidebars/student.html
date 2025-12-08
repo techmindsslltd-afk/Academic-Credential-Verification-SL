@@ -1,0 +1,72 @@
+<!--begin:Menu item-->
+<div class="menu-item pt-5">
+    <!--begin:Menu content-->
+    <div class="menu-content">
+        <span class="menu-heading fw-bold text-uppercase fs-7">My Credentials</span>
+    </div>
+    <!--end:Menu content-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item me-5">
+    <!--begin:Menu link-->
+    <a href="{% url 'dashboard' %}" class="menu-link {% if 'wallet' == segment %} active {% endif %}">
+        <span class="menu-icon">
+            <i style='opacity:0.3;' class='fas fa-wallet'></i>
+        </span>
+        <span class="menu-title">My Credentials Wallet</span>
+    </a>
+    <!--end:Menu link-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item me-5">
+    <!--begin:Menu link-->
+    <a href="{% url 'credential_share' %}" class="menu-link {% if 'share-qr' == segment %} active {% endif %}">
+        <span class="menu-icon">
+            <i style='opacity:0.3;' class='fas fa-qrcode'></i>
+        </span>
+        <span class="menu-title">Download/Share QR</span>
+    </a>
+    <!--end:Menu link-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item me-5">
+    <!--begin:Menu link-->
+    <a href="#" class="menu-link {% if 'student-history' == segment %} active {% endif %}">
+        <span class="menu-icon">
+            <i style='opacity:0.3;' class='fas fa-history'></i>
+        </span>
+        <span class="menu-title">Verification History</span>
+    </a>
+    <!--end:Menu link-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item pt-5">
+    <!--begin:Menu content-->
+    <div class="menu-content">
+        <span class="menu-heading fw-bold text-uppercase fs-7">Account</span>
+    </div>
+    <!--end:Menu content-->
+</div>
+<!--end:Menu item-->
+
+<!--begin:Menu item-->
+<div class="menu-item me-5">
+    <!--begin:Menu link-->
+    <a href="{% url 'profile' %}" class="menu-link {% if 'student-profile' == segment %} active {% endif %}">
+        <span class="menu-icon">
+            <i style='opacity:0.3;' class='fas fa-user'></i>
+        </span>
+        <span class="menu-title">Profile Settings</span>
+    </a>
+    <!--end:Menu link-->
+</div>
+<!--end:Menu item-->
+

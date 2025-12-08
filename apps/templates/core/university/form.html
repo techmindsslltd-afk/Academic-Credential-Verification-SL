@@ -1,0 +1,318 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Add College/University {% endblock %} 
+{% block titlePage %}  {% if form.instance.name %} Edit College/University -  {{ form.name }} {% else %}  Add Student {% endif %} {% endblock %} 
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %} 
+<style>
+span a{
+display: none;
+}
+.glyphicon-ok:before {
+        content: "\f00c";
+    }
+    .glyphicon-remove:before {
+        content: "\f00d";
+    }
+    .glyphicon {
+        display: inline-block;
+        font: normal normal normal 14px/1 FontAwesome;
+        font-size: inherit;
+        text-rendering: auto;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+	
+	
+	
+	.feedsMain{
+margin-left:10%;
+margin-right:10%;
+}
+
+@media screen and (max-width: 960px) {
+.feedsMain{
+margin-left:5%;
+margin-right:5%;
+}
+}
+@media screen and (max-width: 768px) {
+.feedsMain{
+margin-left:2%;
+margin-right:2%;
+}
+}
+
+@media screen and (max-width: 480px) {
+.feedsMain{
+margin-left:0%;
+margin-right:0%;
+}
+}  
+
+{% load static %}
+</style>
+
+<div class="feedsMain">
+				<div class="card">
+					<div class="card-header card-header-icon card-header-rose">
+						
+						<h4 class="card-title">Add College/University -
+							<!-- <small class="category">Complete Patient details</small> --></h4>
+					</div>
+					<div class="card-body">
+						<form id="defaultForm"
+						      action=""
+						      role="form"
+						      data-toggle="validator"
+						      method="POST"
+							  enctype="multipart/form-data">
+							  {% if form.errors %}
+							  <div class="row">
+							 <p class="btn btn-danger">
+							 {{ form.errors }}
+							 {{ form.non_field_errors }}
+							 </p> 
+							 </div>
+							 {% endif  %}
+
+
+							  {% csrf_token %} 
+								<div class="row">
+							
+								<div class="col-md-6">
+									<div class="previewDiv" style="width: 194px ! important; height: 194px ! important;">
+										{% if form.instance.file  %}
+											<!-- Display the cropped image preview here -->
+											<img id="croppedPreview" src="{{form.instance.file.url}}" class="thumbnail" alt="" style="width:190px;height:200px;">
+										{% else %}
+										<img style="display:none" id="croppedPreview" src="" class="thumbnail" alt="photo" style="width:190px;height:200px;">
+										{% endif %}
+									</div>
+									<br>
+									<div class="file-upload">
+										<div class="file-select">
+											<div class="file-select-button" id="fileName">Choose File</div>
+											<div class="file-select-name" id="noFile">No file chosen...</div> 
+											<input type="file" name="file" id="id_file">
+											{{ form.x }}
+											{{ form.y }}
+											{{ form.width }}
+											{{ form.height }}
+										</div>
+									</div>
+									<br>
+								</div>
+
+							
+								<div class="col-md-6">
+									<div class="form-group bmd-form-group">
+										<label class="bmd-label-floating">Abbreviation</label>
+										 {{ form.abbreviation }}
+									</div>
+									<span class="text-danger">{{ form.abbreviation.errors }}</span>
+								</div>
+							</div>
+							<div class="row">
+								<div class="col-md-12">
+									<div class="form-group bmd-form-group">
+										<label class="bmd-label-floating">Name</label>
+										 {{ form.name }}
+									</div>
+									<span class="text-danger">{{ form.name.errors }}</span>
+								</div>
+								
+								
+								<div class="col-md-12">
+									<div class="form-group bmd-form-group">
+									<label class="bmd-label-floating">Address
+										</label>
+										{{ form.address }}
+									</div>
+										<span class="text-danger">{{ form.address.errors }}</span>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group bmd-form-group">
+									<label class="bmd-label-floating">Telephone
+										</label>
+										{{ form.phone }}
+									</div>
+										<span class="text-danger">{{ form.phone.errors }}</span>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group bmd-form-group">
+									<label class="bmd-label-floating">Telephone 2
+										</label>
+										{{ form.phone_2 }}
+									</div>
+										<span class="text-danger">{{ form.phone_2.errors }}</span>
+								</div>
+								<div class="col-md-12">
+									<div class="form-group bmd-form-group">
+									<label class="bmd-label-floating">Email
+										</label>
+										{{ form.email }}
+									</div>
+										<span class="text-danger">{{ form.email.errors }}</span>
+								</div>
+								
+								<div class="col-md-12">
+									<div class="form-group bmd-form-group">
+									<label class="bmd-label-floating">Has constituent colleges/campus? 
+										</label>
+										{{ form.has_constituent }}
+									</div>
+										<span class="text-danger">{{ form.has_constituent.errors }}</span>
+								</div>
+									
+								<div class="col-md-12">
+									<div class="form-group bmd-form-group">
+									<label class="bmd-label-floating">Status
+										</label>
+										{{ form.status }}
+									</div>
+										<span class="text-danger">{{ form.status.errors }}</span>
+								</div>
+									
+   	                               	                            
+						        <input type="hidden" class="form-control" name="recordOwner" value="{% if form.instance.recordOwner %} {{ form.instance.recordOwner.id }} {% else %}{{ request.user.id }} {% endif %}">
+
+								 
+								</div>
+								<div  class="card-footer d-flex justify-content-end py-6">
+								<button type="submit"
+								        class="btn  btn-primary pull-right">Submit</button>
+								
+								</div><div class="clearfix"/>
+							</form>
+						</div>
+					</div>
+					<!--  end card  -->
+				</div>
+				<!-- end col-md-12 -->
+<!-- MODAL TO CROP THE IMAGE -->
+<div class="modal fade" data-bs-backdrop="static" id="modalCrop">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+               
+                <h4 class="modal-title">Crop the photo</h4>
+				<div class="btn btn-icon btn-sm btn-color-gray-500 btn-active-icon-primary" data-bs-toggle="tooltip" title="Close Modal" data-bs-dismiss="modal">
+										<!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+										<span class="svg-icon svg-icon-1">
+											<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+												<rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor" />
+												<rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
+											</svg>
+										</span>
+										<!--end::Svg Icon-->
+										</div>
+            </div>
+            <div class="modal-body">
+                <img src="" id="image" style="max-width: 100%;">
+            </div>
+            <div class="modal-footer">
+                <div class="btn-group pull-left" role="group">
+                    <button type="button" class="btn btn-default js-zoom-in">
+                        <i class="fa fa-search-plus"></i>
+                    </button>
+                    <button type="button" class="btn btn-default js-zoom-out">
+                        <i class="fa fa-search-minus"></i>
+                    </button>
+                </div>
+                <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary js-crop-and-upload">Crop and upload</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{% static 'assets/js/plugins/cropper.min.js' %}"></script>
+<script>
+
+	
+$(function () {
+    var $image = $("#image");
+    var cropBoxData;
+    var canvasData;
+     // File upload handling
+	  $('#id_file').on('change', function () {
+		var fullPath = this.value;
+		var filename = fullPath.replace(/^.*[\\\/]/, ''); // Extract file name from full path
+
+		if (/^\s*$/.test(filename)) {
+		  $(".file-upload").removeClass('active');
+		  $("#noFile").text("No file chosen...");
+		} else {
+		  $(".file-upload").addClass('active');
+		  $("#noFile").text(filename).css("color", "green");
+		}
+	  });
+
+    // Open modal and set image source on file selection
+    $("#id_file").change(function () {
+	
+      if (this.files && this.files[0]) {
+        var reader = new FileReader();
+        reader.onload = function (e) {
+          $image.attr("src", e.target.result);
+          $("#modalCrop").modal("show");
+        };
+        reader.readAsDataURL(this.files[0]);
+      }
+    });
+
+    // Initialize cropper and restore data on modal show
+    $("#modalCrop").on("shown.bs.modal", function () {
+      $image.cropper({
+        viewMode: 1,
+        aspectRatio: 1/1,
+        minCropBoxWidth: 200,
+        minCropBoxHeight: 200,
+        ready: function () {
+          $image.cropper("setCanvasData", canvasData);
+          $image.cropper("setCropBoxData", cropBoxData);
+        }
+      });
+    }).on("hidden.bs.modal", function () {
+      cropBoxData = $image.cropper("getCropBoxData");
+      canvasData = $image.cropper("getCanvasData");
+      $image.cropper("destroy");
+    });
+
+    // Zoom in and out functionality
+    $(".js-zoom-in").click(function () {
+      $image.cropper("zoom", 0.1);
+    });
+
+    $(".js-zoom-out").click(function () {
+      $image.cropper("zoom", -0.1);
+    });
+
+    // Collect data and update cropped preview
+    $(".js-crop-and-upload").click(function () {
+      var cropData = $image.cropper("getData");
+      var croppedDataURL = $image.cropper("getCroppedCanvas").toDataURL("image/jpeg");
+	  $("#croppedPreview").css('display', 'block');
+      $("#croppedPreview").attr("src", croppedDataURL);
+      
+      // Set values in hidden inputs and submit the form
+      $("#id_x").val(cropData["x"]);
+      $("#id_y").val(cropData["y"]);
+      $("#id_width").val(cropData["width"]);
+      $("#id_height").val(cropData["height"]);
+      $("#modalCrop").modal("hide");
+    });
+  });
+
+</script>			
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+
+
+{% endblock javascripts %}

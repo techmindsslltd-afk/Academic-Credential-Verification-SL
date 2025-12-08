@@ -1,0 +1,61 @@
+{% extends "accounts/emails/base_email.html" %}
+{% load static %}
+
+{% block title %}Test Email from {{ settings.site_name|default:"Apple of God" }}{% endblock %}
+
+{% block header %}
+<img src="{% if request.is_secure %}https{% else %}http{% endif %}://{{ request.get_host }}{% static 'logo/logo.jpeg' %}" alt="Apple of God" style="max-height: 50px; margin-bottom: 10px;">
+<br>
+{{ settings.site_name|default:"Apple of God" }} - Test Email
+{% endblock %}
+
+{% block content %}
+<table width="100%" cellpadding="0" cellspacing="0" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+    
+    <!-- Test Message -->
+    <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+        <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; margin: 0; padding: 0 0 20px; color: #333;" valign="top">
+            <p style="margin: 0 0 15px 0; font-size: 16px; line-height: 1.5;">
+                Hello <strong>{{ name|default:"Test User" }}</strong>,
+            </p>
+            <p style="margin: 0 0 15px 0; font-size: 14px; line-height: 1.6; color: #666;">
+                This is a test email to verify that the email system is working correctly.
+            </p>
+        </td>
+    </tr>
+    
+    <!-- Test Details -->
+    <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+        <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+            <div style="background-color: #f8f9fa; border-left: 4px solid #28a745; padding: 20px; margin: 20px 0; border-radius: 4px;">
+                <h4 style="margin: 0 0 15px 0; color: #333; font-size: 16px;">Test Information:</h4>
+                <ul style="margin: 0; padding-left: 20px; color: #555;">
+                    <li>Email template system is working</li>
+                    <li>HTML rendering is functional</li>
+                    <li>Email delivery is successful</li>
+                    <li>Timestamp: {% now "F d, Y \a\t h:i A" %}</li>
+                </ul>
+            </div>
+        </td>
+    </tr>
+    
+    <!-- Success Message -->
+    <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+        <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+            <p style="margin: 0 0 15px 0; font-size: 14px; line-height: 1.6; color: #666;">
+                If you received this email, the email system is working correctly!
+            </p>
+        </td>
+    </tr>
+    
+    <!-- Closing -->
+    <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+        <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+            <p style="margin: 0 0 10px 0; font-size: 14px; line-height: 1.6; color: #333;">
+                Best regards,<br>
+                <strong>{{ settings.site_name|default:"Apple of God" }} Development Team</strong>
+            </p>
+        </td>
+    </tr>
+</table>
+{% endblock %}

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Analytics - CertChain Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../admin.css">
+</head>
+<body>
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="../../index.html" class="sidebar-logo">
+          <div class="logo-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <span class="logo-text">CertChain</span>
+        </a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <span class="nav-section-title">Main</span>
+          <ul class="nav-list">
+            <li><a href="../../dashboard.html" class="nav-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>System Overview</span></a></li>
+            <li><a href="institutions.html" class="nav-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Institutions</span><span class="nav-badge">156</span></a></li>
+            <li><a href="users.html" class="nav-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Users</span><span class="nav-badge">12.4k</span></a></li>
+            <li><a href="global-accreditation.html" class="nav-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><span>Global Accreditation</span></a></li>
+            <li><a href="credentials-ledger.html" class="nav-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg><span>Credentials Ledger</span></a></li>
+          </ul>
+        </div>
+        <div class="nav-section">
+          <span class="nav-section-title">System</span>
+          <ul class="nav-list">
+            <li><a href="analytics.html" class="nav-link active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span>Analytics</span></a></li>
+            <li><a href="settings.html" class="nav-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg><span>Settings</span></a></li>
+          </ul>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+      <header class="admin-header">
+        <div class="header-left">
+          <button class="menu-toggle" id="menu-toggle">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <div class="breadcrumb">
+            <a href="../../dashboard.html">Dashboard</a>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+            <span>Analytics</span>
+          </div>
+        </div>
+        <div class="header-right">
+          <div class="header-user">
+            <img src="/placeholder.svg?height=36&width=36" alt="Admin" class="user-avatar">
+            <span class="user-name">John Doe</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="admin-content">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h1 class="page-title">Analytics Dashboard</h1>
+            <p class="page-subtitle">Comprehensive insights into platform performance and usage</p>
+          </div>
+          <div class="page-header-right">
+            <div class="date-range-picker">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              <select class="form-select" style="width: auto;">
+                <option>Last 7 days</option>
+                <option selected>Last 30 days</option>
+                <option>Last 90 days</option>
+                <option>This Year</option>
+              </select>
+            </div>
+            <button class="btn btn-primary">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+              Export Report
+            </button>
+          </div>
+        </div>
+
+        <!-- Overview Stats -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #4f46e5, #6366f1);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+            </div>
+            <div class="stat-content">
+              <p class="stat-label">Total Credentials</p>
+              <h3 class="stat-value">847,293</h3>
+              <span class="stat-change positive">+12.5% from last month</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #0d9488, #14b8a6);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 12 2 2 4-4"/><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div class="stat-content">
+              <p class="stat-label">Verifications</p>
+              <h3 class="stat-value">1,234,567</h3>
+              <span class="stat-change positive">+23.1% from last month</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #f97316, #fb923c);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
+            <div class="stat-content">
+              <p class="stat-label">Active Institutions</p>
+              <h3 class="stat-value">156</h3>
+              <span class="stat-change positive">+8 this month</span>
+            </div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-icon" style="background: linear-gradient(135deg, #ec4899, #f472b6);">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div class="stat-content">
+              <p class="stat-label">Active Users</p>
+              <h3 class="stat-value">12,847</h3>
+              <span class="stat-change positive">+15.3% from last month</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts Section -->
+        <div class="charts-section">
+          <div class="chart-card large">
+            <div class="chart-header">
+              <h3 class="chart-title">Credential Issuance Trend</h3>
+              <div class="chart-actions">
+                <button class="chart-tab active">Monthly</button>
+                <button class="chart-tab">Weekly</button>
+                <button class="chart-tab">Daily</button>
+              </div>
+            </div>
+            <div class="chart-body">
+              <div class="line-chart">
+                <svg viewBox="0 0 800 300" class="chart-svg">
+                  <!-- Grid Lines -->
+                  <g class="grid-lines">
+                    <line x1="50" y1="50" x2="750" y2="50" stroke="#e2e8f0" stroke-dasharray="4"/>
+                    <line x1="50" y1="100" x2="750" y2="100" stroke="#e2e8f0" stroke-dasharray="4"/>
+                    <line x1="50" y1="150" x2="750" y2="150" stroke="#e2e8f0" stroke-dasharray="4"/>
+                    <line x1="50" y1="200" x2="750" y2="200" stroke="#e2e8f0" stroke-dasharray="4"/>
+                    <line x1="50" y1="250" x2="750" y2="250" stroke="#e2e8f0" stroke-dasharray="4"/>
+                  </g>
+                  <!-- Area Fill -->
+                  <defs>
+                    <linearGradient id="areaGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" style="stop-color:#4f46e5;stop-opacity:0.3"/>
+                      <stop offset="100%" style="stop-color:#4f46e5;stop-opacity:0.05"/>
+                    </linearGradient>
+                  </defs>
+                  <path d="M50 200 L110 180 L170 190 L230 160 L290 170 L350 140 L410 120 L470 130 L530 100 L590 90 L650 70 L710 60 L750 50 L750 250 L50 250 Z" fill="url(#areaGradient)"/>
+                  <!-- Line -->
+                  <path d="M50 200 L110 180 L170 190 L230 160 L290 170 L350 140 L410 120 L470 130 L530 100 L590 90 L650 70 L710 60 L750 50" fill="none" stroke="#4f46e5" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+                  <!-- Data Points -->
+                  <g class="data-points">
+                    <circle cx="50" cy="200" r="5" fill="#4f46e5"/>
+                    <circle cx="110" cy="180" r="5" fill="#4f46e5"/>
+                    <circle cx="170" cy="190" r="5" fill="#4f46e5"/>
+                    <circle cx="230" cy="160" r="5" fill="#4f46e5"/>
+                    <circle cx="290" cy="170" r="5" fill="#4f46e5"/>
+                    <circle cx="350" cy="140" r="5" fill="#4f46e5"/>
+                    <circle cx="410" cy="120" r="5" fill="#4f46e5"/>
+                    <circle cx="470" cy="130" r="5" fill="#4f46e5"/>
+                    <circle cx="530" cy="100" r="5" fill="#4f46e5"/>
+                    <circle cx="590" cy="90" r="5" fill="#4f46e5"/>
+                    <circle cx="650" cy="70" r="5" fill="#4f46e5"/>
+                    <circle cx="710" cy="60" r="5" fill="#4f46e5"/>
+                  </g>
+                  <!-- X-axis Labels -->
+                  <g class="x-labels" fill="#64748b" font-size="12">
+                    <text x="50" y="275" text-anchor="middle">Jan</text>
+                    <text x="110" y="275" text-anchor="middle">Feb</text>
+                    <text x="170" y="275" text-anchor="middle">Mar</text>
+                    <text x="230" y="275" text-anchor="middle">Apr</text>
+                    <text x="290" y="275" text-anchor="middle">May</text>
+                    <text x="350" y="275" text-anchor="middle">Jun</text>
+                    <text x="410" y="275" text-anchor="middle">Jul</text>
+                    <text x="470" y="275" text-anchor="middle">Aug</text>
+                    <text x="530" y="275" text-anchor="middle">Sep</text>
+                    <text x="590" y="275" text-anchor="middle">Oct</text>
+                    <text x="650" y="275" text-anchor="middle">Nov</text>
+                    <text x="710" y="275" text-anchor="middle">Dec</text>
+                  </g>
+                  <!-- Y-axis Labels -->
+                  <g class="y-labels" fill="#64748b" font-size="12">
+                    <text x="40" y="55" text-anchor="end">100k</text>
+                    <text x="40" y="105" text-anchor="end">80k</text>
+                    <text x="40" y="155" text-anchor="end">60k</text>
+                    <text x="40" y="205" text-anchor="end">40k</text>
+                    <text x="40" y="255" text-anchor="end">20k</text>
+                  </g>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-header">
+              <h3 class="chart-title">Verification by Type</h3>
+            </div>
+            <div class="chart-body">
+              <div class="donut-chart">
+                <svg viewBox="0 0 200 200" class="donut-svg">
+                  <circle cx="100" cy="100" r="70" fill="none" stroke="#e2e8f0" stroke-width="30"/>
+                  <circle cx="100" cy="100" r="70" fill="none" stroke="#4f46e5" stroke-width="30" stroke-dasharray="220 440" stroke-dashoffset="0" transform="rotate(-90 100 100)"/>
+                  <circle cx="100" cy="100" r="70" fill="none" stroke="#0d9488" stroke-width="30" stroke-dasharray="110 440" stroke-dashoffset="-220" transform="rotate(-90 100 100)"/>
+                  <circle cx="100" cy="100" r="70" fill="none" stroke="#f97316" stroke-width="30" stroke-dasharray="66 440" stroke-dashoffset="-330" transform="rotate(-90 100 100)"/>
+                  <circle cx="100" cy="100" r="70" fill="none" stroke="#ec4899" stroke-width="30" stroke-dasharray="44 440" stroke-dashoffset="-396" transform="rotate(-90 100 100)"/>
+                </svg>
+                <div class="donut-center">
+                  <span class="donut-total">1.2M</span>
+                  <span class="donut-label">Total</span>
+                </div>
+              </div>
+              <div class="chart-legend">
+                <div class="legend-item"><span class="legend-color" style="background: #4f46e5;"></span><span>ID Verification (50%)</span></div>
+                <div class="legend-item"><span class="legend-color" style="background: #0d9488;"></span><span>QR Scan (25%)</span></div>
+                <div class="legend-item"><span class="legend-color" style="background: #f97316;"></span><span>API Calls (15%)</span></div>
+                <div class="legend-item"><span class="legend-color" style="background: #ec4899;"></span><span>Hash Lookup (10%)</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <div class="chart-header">
+              <h3 class="chart-title">Top Countries</h3>
+            </div>
+            <div class="chart-body">
+              <div class="bar-chart-horizontal">
+                <div class="bar-item">
+                  <div class="bar-label">Sierra Leone</div>
+                  <div class="bar-container">
+                    <div class="bar-fill" style="width: 85%; background: linear-gradient(90deg, #4f46e5, #6366f1);"></div>
+                  </div>
+                  <div class="bar-value">45,230</div>
+                </div>
+                <div class="bar-item">
+                  <div class="bar-label">Nigeria</div>
+                  <div class="bar-container">
+                    <div class="bar-fill" style="width: 72%; background: linear-gradient(90deg, #0d9488, #14b8a6);"></div>
+                  </div>
+                  <div class="bar-value">38,450</div>
+                </div>
+                <div class="bar-item">
+                  <div class="bar-label">Ghana</div>
+                  <div class="bar-container">
+                    <div class="bar-fill" style="width: 58%; background: linear-gradient(90deg, #f97316, #fb923c);"></div>
+                  </div>
+                  <div class="bar-value">30,120</div>
+                </div>
+                <div class="bar-item">
+                  <div class="bar-label">Kenya</div>
+                  <div class="bar-container">
+                    <div class="bar-fill" style="width: 45%; background: linear-gradient(90deg, #ec4899, #f472b6);"></div>
+                  </div>
+                  <div class="bar-value">23,890</div>
+                </div>
+                <div class="bar-item">
+                  <div class="bar-label">United Kingdom</div>
+                  <div class="bar-container">
+                    <div class="bar-fill" style="width: 32%; background: linear-gradient(90deg, #8b5cf6, #a78bfa);"></div>
+                  </div>
+                  <div class="bar-value">16,540</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Additional Analytics -->
+        <div class="analytics-grid">
+          <div class="analytics-card">
+            <div class="analytics-header">
+              <h3>Fraud Detection</h3>
+              <span class="badge badge-error">3 Alerts</span>
+            </div>
+            <div class="analytics-content">
+              <div class="fraud-stat">
+                <div class="fraud-number">127</div>
+                <div class="fraud-label">Attempts Blocked</div>
+              </div>
+              <div class="fraud-stat">
+                <div class="fraud-number">99.8%</div>
+                <div class="fraud-label">Detection Rate</div>
+              </div>
+              <div class="fraud-stat">
+                <div class="fraud-number">$2.4M</div>
+                <div class="fraud-label">Potential Loss Prevented</div>
+              </div>
+            </div>
+            <a href="#" class="analytics-link">View Fraud Reports →</a>
+          </div>
+
+          <div class="analytics-card">
+            <div class="analytics-header">
+              <h3>System Performance</h3>
+              <span class="badge badge-success">Healthy</span>
+            </div>
+            <div class="analytics-content">
+              <div class="performance-item">
+                <span class="perf-label">API Response Time</span>
+                <span class="perf-value">42ms</span>
+                <div class="perf-bar"><div class="perf-fill" style="width: 15%; background: #10b981;"></div></div>
+              </div>
+              <div class="performance-item">
+                <span class="perf-label">Server Uptime</span>
+                <span class="perf-value">99.99%</span>
+                <div class="perf-bar"><div class="perf-fill" style="width: 99%; background: #10b981;"></div></div>
+              </div>
+              <div class="performance-item">
+                <span class="perf-label">Blockchain Sync</span>
+                <span class="perf-value">Real-time</span>
+                <div class="perf-bar"><div class="perf-fill" style="width: 100%; background: #10b981;"></div></div>
+              </div>
+            </div>
+            <a href="#" class="analytics-link">View System Status →</a>
+          </div>
+
+          <div class="analytics-card">
+            <div class="analytics-header">
+              <h3>Recent Activity</h3>
+            </div>
+            <div class="activity-list">
+              <div class="activity-item">
+                <div class="activity-icon success">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 12 2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+                </div>
+                <div class="activity-content">
+                  <p>University of Freetown issued 45 credentials</p>
+                  <span class="activity-time">2 minutes ago</span>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-icon info">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                </div>
+                <div class="activity-content">
+                  <p>New employer registered: TechCorp International</p>
+                  <span class="activity-time">15 minutes ago</span>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-icon warning">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                </div>
+                <div class="activity-content">
+                  <p>Suspicious verification attempt blocked</p>
+                  <span class="activity-time">32 minutes ago</span>
+                </div>
+              </div>
+              <div class="activity-item">
+                <div class="activity-icon success">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                </div>
+                <div class="activity-content">
+                  <p>Njala University completed onboarding</p>
+                  <span class="activity-time">1 hour ago</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.getElementById('menu-toggle').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('show');
+    });
+  </script>
+</body>
+</html>

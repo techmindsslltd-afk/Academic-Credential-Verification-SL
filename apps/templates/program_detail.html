@@ -1,0 +1,398 @@
+{% extends "layouts/guest.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block title %} {{ program.title }} - Programs - Apple of God Foundation {% endblock %} 
+
+{% block content %}
+{% load static %}
+    <link rel="stylesheet" href="{% static 'assets/guest/css/pages.css' %}">
+    <style>
+        .program-hero {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+            margin-bottom: 3rem;
+        }
+        .program-hero-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .program-hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.85), rgba(118, 75, 162, 0.85));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-align: center;
+            padding: 2rem;
+        }
+        .program-hero-content h1 {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+        .program-hero-content p {
+            font-size: 1.25rem;
+            opacity: 0.95;
+            max-width: 800px;
+        }
+        .impact-stats {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+            padding: 2rem;
+            border-radius: 16px;
+            margin: 2rem 0;
+        }
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+        }
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+        .stat-label {
+            font-size: 0.95rem;
+            color: #6c757d;
+            font-weight: 500;
+        }
+        .feature-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+            padding: 0.6rem 1.2rem;
+            border-radius: 25px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            margin: 0.5rem;
+        }
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .gallery-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            height: 200px;
+        }
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+        .gallery-item:hover img {
+            transform: scale(1.1);
+        }
+        .testimonial-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 1.5rem;
+            border-left: 4px solid #667eea;
+        }
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+        .testimonial-author img {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .related-programs {
+            margin-top: 4rem;
+            padding-top: 3rem;
+            border-top: 2px solid #e9ecef;
+        }
+        .related-program-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            transition: all 0.3s ease;
+        }
+        .related-program-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.2);
+        }
+        .content-section {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+        }
+        .content-section h2 {
+            color: #2c3e50;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+        .content-section p, .content-section li {
+            line-height: 1.8;
+            color: #4a5568;
+            font-size: 1.05rem;
+        }
+    </style>
+
+    <main id="main-content">
+        <!-- Program Hero Section -->
+        <section class="program-hero">
+            {% if program.featured_image %}
+                <img src="{{ program.featured_image.url }}" alt="{{ program.title }}" class="program-hero-image">
+            {% endif %}
+            <div class="program-hero-overlay">
+                <div class="program-hero-content">
+                    {% if program.icon %}
+                        <div style="font-size: 4rem; margin-bottom: 1rem;">
+                            {% if program.icon|slice:":2" == "fa" or program.icon|slice:":3" == "fas" or program.icon|slice:":3" == "far" or program.icon|slice:":3" == "fab" %}
+                                <i class="{{ program.icon }}"></i>
+                            {% else %}
+                                {{ program.icon }}
+                            {% endif %}
+                        </div>
+                    {% endif %}
+                    <h1>{{ program.title }}</h1>
+                    {% if program.category %}
+                        <span style="display: inline-block; background: rgba(255, 255, 255, 0.2); padding: 0.5rem 1rem; border-radius: 20px; margin-bottom: 1rem;">
+                            {% if program.category.icon %}{{ program.category.icon }}{% endif %} {{ program.category.name }}
+                        </span>
+                    {% endif %}
+                    <p>{{ program.short_description }}</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Main Content -->
+        <section class="section">
+            <div class="container">
+                <!-- Breadcrumb -->
+                <nav aria-label="breadcrumb" style="margin-bottom: 2rem;">
+                    <ol style="display: flex; list-style: none; padding: 0; gap: 0.5rem; color: #6c757d;">
+                        <li><a href="/" style="color: #667eea; text-decoration: none;">Home</a></li>
+                        <li>/</li>
+                        <li><a href="{% url 'programs' %}" style="color: #667eea; text-decoration: none;">Programs</a></li>
+                        <li>/</li>
+                        <li style="color: #2c3e50;">{{ program.title }}</li>
+                    </ol>
+                </nav>
+
+                <div class="row">
+                    <!-- Main Content Column -->
+                    <div class="col-lg-8">
+                        <!-- Program Description -->
+                        <div class="content-section">
+                            <h2>About This Program</h2>
+                            {% if program.full_description %}
+                                <div>{{ program.full_description|safe }}</div>
+                            {% else %}
+                                <p>{{ program.short_description }}</p>
+                            {% endif %}
+                        </div>
+
+                        <!-- Program Features -->
+                        {% if program.features.all %}
+                        <div class="content-section">
+                            <h2>Key Features</h2>
+                            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                                {% for feature in program.features.all %}
+                                <span class="feature-tag">
+                                    {% if feature.icon %}{{ feature.icon }}{% endif %} {{ feature.name }}
+                                </span>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <!-- Program Gallery -->
+                        {% if program.photos.all %}
+                        <div class="content-section">
+                            <h2>Program Gallery</h2>
+                            <div class="gallery-grid">
+                                {% for photo in program.photos.all %}
+                                <div class="gallery-item">
+                                    <img src="{{ photo.image.url }}" alt="{{ photo.caption|default:program.title }}">
+                                    {% if photo.caption %}
+                                    <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(to top, rgba(0,0,0,0.7), transparent); padding: 1rem; color: white; font-size: 0.875rem;">
+                                        {{ photo.caption }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <!-- Testimonials -->
+                        {% if program.testimonials.all %}
+                        <div class="content-section">
+                            <h2>Success Stories</h2>
+                            {% for testimonial in program.testimonials.all %}
+                            <div class="testimonial-card">
+                                <p style="font-style: italic; color: #4a5568; line-height: 1.8; font-size: 1.05rem;">
+                                    "{{ testimonial.content }}"
+                                </p>
+                                <div class="testimonial-author">
+                                    {% if testimonial.image %}
+                                        <img src="{{ testimonial.image.url }}" alt="{{ testimonial.name }}">
+                                    {% else %}
+                                        <div style="width: 60px; height: 60px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700;">
+                                            {{ testimonial.name|first|upper }}
+                                        </div>
+                                    {% endif %}
+                                    <div>
+                                        <div style="font-weight: 600; color: #2c3e50;">{{ testimonial.name }}</div>
+                                        {% if testimonial.role %}
+                                            <div style="color: #6c757d; font-size: 0.875rem;">{{ testimonial.role }}</div>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Sidebar -->
+                    <div class="col-lg-4">
+                        <!-- Impact Stats -->
+                        {% if program.communities_served > 0 or program.families_served > 0 or program.individuals_served > 0 %}
+                        <div class="impact-stats">
+                            <h3 style="text-align: center; margin-bottom: 1.5rem; color: #2c3e50; font-size: 1.5rem;">Program Impact</h3>
+                            <div class="row">
+                                {% if program.communities_served > 0 %}
+                                <div class="col-4 stat-item">
+                                    <div class="stat-number">{{ program.communities_served|intcomma }}</div>
+                                    <div class="stat-label">Communities</div>
+                                </div>
+                                {% endif %}
+                                {% if program.families_served > 0 %}
+                                <div class="col-4 stat-item">
+                                    <div class="stat-number">{{ program.families_served|intcomma }}</div>
+                                    <div class="stat-label">Families</div>
+                                </div>
+                                {% endif %}
+                                {% if program.individuals_served > 0 %}
+                                <div class="col-4 stat-item">
+                                    <div class="stat-number">{{ program.individuals_served|intcomma }}</div>
+                                    <div class="stat-label">Individuals</div>
+                                </div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        {% endif %}
+
+                        <!-- Program Info Card -->
+                        <div style="background: white; padding: 2rem; border-radius: 16px; box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); margin-bottom: 2rem;">
+                            <h3 style="color: #2c3e50; margin-bottom: 1.5rem; font-size: 1.5rem;">Program Information</h3>
+                            
+                            {% if program.status %}
+                            <div style="margin-bottom: 1rem;">
+                                <strong style="color: #6c757d;">Status:</strong>
+                                <span style="display: inline-block; padding: 0.25rem 0.75rem; border-radius: 20px; font-size: 0.875rem; font-weight: 600; margin-left: 0.5rem;
+                                    {% if program.status == 'active' %}background: #d4edda; color: #155724;
+                                    {% elif program.status == 'completed' %}background: #e2e3e5; color: #383d41;
+                                    {% elif program.status == 'upcoming' %}background: #d1ecf1; color: #0c5460;
+                                    {% else %}background: #fff3cd; color: #856404;{% endif %}">
+                                    {{ program.get_status_display }}
+                                </span>
+                            </div>
+                            {% endif %}
+
+                            {% if program.location %}
+                            <div style="margin-bottom: 1rem;">
+                                <strong style="color: #6c757d;"><i class="fas fa-map-marker-alt"></i> Location:</strong>
+                                <p style="margin: 0.5rem 0 0 0; color: #2c3e50;">{{ program.location }}</p>
+                            </div>
+                            {% endif %}
+
+                            {% if program.start_date or program.end_date %}
+                            <div style="margin-bottom: 1rem;">
+                                <strong style="color: #6c757d;"><i class="fas fa-calendar"></i> Timeline:</strong>
+                                <p style="margin: 0.5rem 0 0 0; color: #2c3e50;">
+                                    {% if program.start_date %}
+                                        Started: {{ program.start_date|date:"F Y" }}
+                                    {% endif %}
+                                    {% if program.end_date %}
+                                        {% if program.start_date %}<br>{% endif %}
+                                        Ended: {{ program.end_date|date:"F Y" }}
+                                    {% endif %}
+                                </p>
+                            </div>
+                            {% endif %}
+
+                            {% if program.is_featured %}
+                            <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #e9ecef;">
+                                <span style="display: inline-flex; align-items: center; gap: 0.5rem; background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.875rem; font-weight: 600;">
+                                    <i class="fas fa-star"></i> Featured Program
+                                </span>
+                            </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Call to Action -->
+                        <div style="background: linear-gradient(135deg, #667eea, #764ba2); padding: 2rem; border-radius: 16px; text-align: center; color: white;">
+                            <h3 style="color: white; margin-bottom: 1rem;">Get Involved</h3>
+                            <p style="margin-bottom: 1.5rem; opacity: 0.95;">Want to support or participate in this program?</p>
+                            <a href="{% url 'contact' %}" style="display: inline-block; background: white; color: #667eea; padding: 0.75rem 2rem; border-radius: 8px; text-decoration: none; font-weight: 600; transition: transform 0.3s ease;">
+                                Contact Us <i class="fas fa-arrow-right"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Related Programs -->
+                {% if related_programs %}
+                <div class="related-programs">
+                    <h2 style="margin-bottom: 2rem; color: #2c3e50; font-size: 2rem; font-weight: 700;">Related Programs</h2>
+                    <div class="row">
+                        {% for related in related_programs %}
+                        <div class="col-md-4">
+                            <div class="related-program-card">
+                                {% if related.featured_image %}
+                                    <img src="{{ related.featured_image.url }}" alt="{{ related.title }}" style="width: 100%; height: 180px; object-fit: cover;">
+                                {% else %}
+                                    <div style="height: 180px; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">
+                                        {% if related.icon %}
+                                            {% if related.icon|slice:":2" == "fa" or related.icon|slice:":3" == "fas" %}<i class="{{ related.icon }}"></i>{% else %}{{ related.icon }}{% endif %}
+                                        {% else %}<i class="fas fa-hand-holding-heart"></i>{% endif %}
+                                    </div>
+                                {% endif %}
+                                <div style="padding: 1.5rem;">
+                                    <h4 style="margin: 0 0 0.75rem 0; color: #2c3e50; font-size: 1.25rem;">{{ related.title }}</h4>
+                                    <p style="color: #6c757d; font-size: 0.9rem; margin-bottom: 1rem; line-height: 1.6;">{{ related.short_description|truncatewords:20 }}</p>
+                                    <a href="{% url 'program_detail_public' related.slug %}" style="color: #667eea; text-decoration: none; font-weight: 600; font-size: 0.9rem;">
+                                        Learn More <i class="fas fa-arrow-right"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        </section>
+    </main>
+
+    <script src="{% static 'assets/guest/js/scripts.js' %}"></script>
+{% endblock content %}
+

@@ -1,0 +1,78 @@
+
+	{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <!-- Simplified mobile viewport - allow user scaling for accessibility -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="theme-color" content="#4f46e5">
+  <title>{% block title %}{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{% static 'assets/guest/css/styles.css' %}">
+  <link rel="stylesheet" href="{% static 'assets/css/dashboard.css' %}">
+</head>
+<body class="dashboard-body">
+  <!-- Dashboard Container -->
+  <div class="dashboard-container">
+    
+    <!-- Sidebar Overlay for mobile -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- Sidebar -->
+		{% include 'includes/sidebar.html' %}
+	<!-- Main Content -->
+    <main class="main-content">
+		{% include 'includes/navigation.html' %}
+      <!-- Content Wrapper - Scrollable Content Area -->
+      <div class="content-wrapper" id="content-wrapper">
+        
+		{% block content %}{% endblock content %}
+
+
+
+			
+		{% load sweetify %}
+		{% sweetify %}
+
+      </div>
+    </main>
+
+</div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Pass user data from Django to JavaScript -->
+  <script>
+    // User data from Django template
+    window.DJANGO_USER_DATA = {
+      {% if request.user.is_authenticated %}
+      isAuthenticated: true,
+      id: "{{ request.user.id }}",
+      email: "{{ request.user.email }}",
+      firstName: "{{ request.user.first_name }}",
+      lastName: "{{ request.user.last_name }}",
+      fullName: "{{ request.user.full_name }}",
+      role: "{{ request.user.role }}",
+      roleDisplay: "{{ request.user.get_role_display }}",
+      avatar: {% if request.user.avatar %}"{{ request.user.avatar.url }}"{% else %}null{% endif %},
+      {% else %}
+      isAuthenticated: false,
+      {% endif %}
+      debug: {% if debug %}true{% else %}false{% endif %},
+    };
+  </script>
+
+  <!-- SweetAlert2 -->
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <script src="{% static 'assets/js/dashboard.js' %}"></script>
+  
+  {% block extra_js %}{% endblock extra_js %}
+</body>
+</html>

@@ -1,0 +1,399 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Users Management {% endblock %} 
+{% block titlePage %} Users Management {% endblock %} 
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %} 
+{% load static %}
+
+
+{% load has_group %}
+
+	
+		
+				
+				<div class="card">
+					<div class="card-header card-header-primary card-header-icon">
+					
+						<h4 class="card-title">Users Management-  </h4>
+						<div class="card-toolbar">
+							<a href='{% url "add_user" %}{% if user_group %}?user_group={{user_group}}{% endif %}' class="btn btn-flex btn-primary" data-kt-calendar="add">
+							<!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
+							<span class="svg-icon svg-icon-2">
+								<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="currentColor" />
+									<rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="currentColor" />
+								</svg>
+							</span>
+							<!--end::Svg Icon-->Add {% if user_group %}{{user_group}}{% endif %} User</a>
+						</div>
+					</div>
+					  
+					  
+					  
+				<!--begin::Card body-->
+				<div class="card-body py-4">
+					  
+					  
+					  <div class="table-responsive">
+							<div id="toolbar"
+							     class="select">
+								<select class="form-control">
+									<option value="">Export Basic</option>
+									<option value="all">Export All</option>
+									<option value="selected">Export Selected</option>
+								</select>
+							</div>
+							<table id="fresh-table"
+							       data-toggle="table"
+							       class="table"
+							       id="table"
+							       data-toolbar="#toolbar"
+							       data-search="true"
+							       data-show-toggle="true"
+							       data-show-fullscreen="true"
+							       data-show-columns="true"
+							       data-show-columns-toggle-all="true"
+							       data-show-export="true"
+							       data-click-to-select="true"
+							       data-minimum-count-columns="2"
+							       data-pagination="true"
+							       data-id-field="id"
+							       data-toolbar="#toolbar"
+							       data-page-list="[10, 25, 50, 100, all]"
+							       data-show-footer="true"
+							       data-sort-priority='[{"sortName": "id","sortOrder":"desc"},{"sortName":"name","sortOrder":"desc"}]'
+							       data-show-multi-sort="true"
+							       data-show-jump-to="true"
+							       data-response-handler="responseHandler"
+							       data-resizable="true"
+							       data-advanced-search="true"
+							       data-id-table="advancedTable"
+							       data-show-print="true"
+							       data-filter-control="true"
+								   data-show-footer="true"
+							       data-show-search-clear-button="true">
+								<thead>
+									<th scope="col" data-field="Name"
+									    data-filter-control="input"
+									    data-sortable="true">Details</th>
+									<th>User Role</th>
+									{% if user_group == "Student" %}<th scope="col" data-field="Branch">Program</th>	{% endif %}	
+									<th scope="col" data-field="Status">Status</th>									
+									<th scope="col" data-field="action"
+									    data-print-ignore="true">Action</th>
+								</thead>
+								<tbody>
+								 {% for obj in objects %}
+								 
+									{% if  obj|has_group:"TechMinds Support"%} 
+			
+									{% else %}
+											<tr class='clickable-row'>
+											  
+											   
+																	   
+									   <td class="d-flex align-items-center">
+									 
+										<!--begin:: Avatar -->
+										<div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+											<a {% if obj.file or obj.file.url != '/media/False' or obj.file or obj.file.url != '' %}data-bs-toggle="modal"{% endif %} href="#myModalImage" onclick=" {% if obj.file or obj.file.url != '/media/False' %}document.getElementById('myImage').src='{{ obj.file.url}}'{% endif %};document.getElementById('myModalImageleLabel').innerHTML='{{ obj.full_name}}'" href="#">
+											   {% if obj.file %}
+												<div class="symbol-label">
+													<img src="{{ obj.file.url}}" alt="" class="w-100" />
+												</div>
+												{% else %}
+												<div class="symbol-label fs-3  {% if forloop.counter|divisibleby:2 %}bg-light-danger text-danger {% elif forloop.counter|divisibleby:3 %}bg-light-warning text--warning {% else %}bg-light-success text-success {% endif %} ">{{ obj.full_name|make_list|first }}</div>
+												{% endif %}
+											</a>
+										</div>
+										
+										<!--end::Avatar-->
+										<!--begin::User details-->
+										<div class="d-flex flex-column">
+											<a href="{% url 'show_user' obj.id %}" class="text-gray-800 text-hover-primary mb-1">{{obj.full_name}}</a>
+											<span>{% if obj.email %} {{obj.email}}<br> {% endif %}{% if obj.telephone %} {{obj.telephone}}<br> {% endif %}{% if obj.address %} {{obj.address}}<br> {% endif %} {% if obj.gender %} {{obj.gender}}<br> {% endif %} </span>
+										<br>
+										<a style="float:left; " class="btn btn-light" 
+																		 href="" title="View"
+																		data-toggle="tooltip">View  
+																	</a>
+										</div>
+										<!--begin::User details-->
+									</td>
+											   
+									<td> {{ obj.groups.all.0}}</td>
+											{% if user_group == "Student" %}
+											<td> 
+											 <p id="course_badge_{{obj.id}}">{{obj.course}} </p>											
+											
+										<a style="float:left; " class="btn btn-light" 
+													   data-bs-toggle="modal" href="#student_course_{{obj.id}}"
+													   title="View"
+													   data-toggle="tooltip">Update </a>
+										<div class="modal fade" id="student_course_{{obj.id}}"  data-bs-backdrop="static" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+										  <div class="modal-dialog"  role="document">
+											<div class="modal-content">
+											  <div class="modal-header">
+												<h5 class="modal-title" id="exampleModalLabel">Update Program </h5>
+												
+												<button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+												  <span aria-hidden="true">&times;</span>
+												</button>
+											  </div>
+											  <div class="modal-body">
+											  <p> {{obj}}</p>
+												<br>
+												<select style= 'width:100%!important' class="course_2 form-control" name="course" id="course_{{obj.id}}">
+												
+												  <option value=""></option>
+												{% for data in program_object %}
+												  <option value="{{data.id}}" {% if obj.course.id == data.id %} Selected {% endif %}>{{data}}</option>
+												  
+												 {% endfor %}
+												</select>
+												
+												
+												
+											  </div>
+											  <div class="modal-footer">
+												<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+													<a style="color:#fff" onclick="changeProgram('{{ obj.id }}', '{{ obj }}')" class="student_course_{{obj.id}} btn btn-danger" data-id="{{obj.id}}">Update</a>
+											  </div>
+											</div>
+										  </div>
+										</div>				</a>
+											</td>
+											
+											{% endif %}
+												<td>
+												{% if obj.is_active %}
+												<span class="badge badge-light-success"> Active</span>
+												{% else %}
+												<span class="badge badge-light-danger">Inactive</span>
+												{% endif %}
+												</td>
+												<td>
+												
+												
+													
+												
+													
+													 
+														{% if obj.is_block %} 
+														<p id="ban_status_{{obj.id}}"><span class="badge badge-light-danger"> User is Ban </span></p>
+														{% else %}
+														<p id="ban_status_{{obj.id}}"><span class="badge badge-light-success">User is not Ban</span></p>
+														{% endif %}
+												<div class="" Style="cursor:default;"> 
+										
+													<a  style="cursor:pointer;"class="btn btn-sm {% if  obj.is_block %} btn-danger{% else %}  btn-primary  {% endif %}   me-3" id="ban_user_{{obj.id}}"  onclick="confirm_ban_unban('{{obj.id}}')"  >
+														<i class="ki-duotone ki-check fs-3 d-none"></i>                            
+														<!--begin::Indicator label-->
+														<span class="indicator-label">
+															{% if  obj.is_block %} Un-ban User {% else %}    Ban User   {% endif %} </span>
+														<!--end::Indicator label-->
+
+														<!--begin::Indicator progress-->
+														<span class="indicator-progress">
+															Please wait...    <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+														</span>
+														<!--end::Indicator progress-->                        
+													</a>
+												</div>
+													
+													
+															   
+																
+																 
+												</td>
+												</tr>
+												
+										
+											{% endif %}
+										 {% endfor %}
+										 
+									</tbody>
+								</table>
+							</div>
+					<!--  end card  -->
+					
+					
+					
+						</div>
+					
+					
+				</div>
+				
+	<!--begin::Modal - New Product-->
+<div class="modal fade" id="myModalImage"    aria-hidden="true">
+	<!--begin::Modal dialog-->
+	<div class="modal-dialog modal-dialog-centered modal-sm">
+		<!--begin::Modal content-->
+		<div class="modal-content">
+			<!--begin::Modal header-->
+			<div class="modal-header border-0 ">
+				<!--begin::Edit-->
+				  <h5 class="modal-title" id="myModalImageleLabel">Modal 1</h5>
+				<!--begin::Close-->
+				<div class="btn btn-icon btn-sm btn-color-gray-500 btn-active-icon-primary" data-bs-toggle="tooltip" title="Hide Photo" data-bs-dismiss="modal">
+					<!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+					<span class="svg-icon svg-icon-1">
+						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor" />
+							<rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
+						</svg>
+					</span>
+					<!--end::Svg Icon-->
+				</div>
+				<!--end::Close-->
+			</div>
+			<!--end::Modal header-->
+			<!--begin::Modal body-->
+			<div class="modal-body pt-0 pb-20 px-lg-17">
+				<!--begin::Row-->
+				<div class="">
+					<img id="myImage"
+					     src=""
+						 
+						 style="margin-left:auto; margin-right:auto;width:100%; height:100%; display:block;"
+					     class=" img-thumbnail thumbnail zoom"/>
+					
+					
+				</div>
+				
+				
+
+			</div>
+				<!--end::Row-->
+			</div>
+			<!--end::Modal body-->
+		</div>
+	</div>
+	<!--end::Modal Vital Sign-->
+
+<form>
+{% csrf_token %} 
+
+</form>
+<script>   
+
+function changeProgram(dataId, userName) {
+    var courseElement = document.getElementById('course_' + dataId);
+    var courseText = courseElement.options[courseElement.selectedIndex].text; // Get selected text
+
+    Swal.fire({
+        text: "Are you sure you want to change Current Program for " + userName + "?",
+        icon: "warning",
+        showCancelButton: true,
+        buttonsStyling: false,
+        confirmButtonText: "Yes, Change!",
+        cancelButtonText: "No, cancel",
+        customClass: {
+            confirmButton: "btn fw-bold btn-danger",
+            cancelButton: "btn fw-bold btn-active-light-primary"
+        }
+    }).then(function (result) {
+        if (result.value) {
+            var data = {
+                "id": dataId,
+                "course": courseElement.value,
+            };
+
+            $.ajax({
+                type: "POST",
+                url: "{% if request.is_secure %}https://{% else %}http://{% endif %}{{ request.get_host }}/change_student_current_course",
+                data: data,
+                success: function (data) {
+                    if (data.status === "success") {
+                        document.getElementById('course_badge_' + dataId).innerHTML = courseText; // Update displayed text
+                        Swal.fire({
+                            text: "You have changed " + userName + "'s current Program.",
+                            icon: "success",
+                            buttonsStyling: false,
+                            confirmButtonText: "Ok, got it!",
+                            customClass: {
+                                confirmButton: "btn fw-bold btn-primary",
+                            }
+                        });
+                        $('#student_course_' + dataId).modal('hide');
+                    } else {
+                        Swal.fire("Error updating!", "You are not permitted to update", "error");
+                    }
+                },
+                error: function () {
+                    Swal.fire("Error updating!", "An error occurred while updating", "error");
+                }
+            });
+
+        } else if (result.dismiss === 'cancel') {
+            Swal.fire({
+                text: "Change canceled.",
+                icon: "error",
+                buttonsStyling: false,
+                confirmButtonText: "Ok, got it!",
+                customClass: {
+                    confirmButton: "btn fw-bold btn-primary",
+                }
+            });
+        }
+    });
+}
+
+function confirm_ban_unban(dataId) {
+    // Show indicator
+    const ban_user = document.querySelector('#ban_user_' + dataId);
+    ban_user.setAttribute('data-kt-indicator', 'on');
+
+    // Disable button to avoid multiple clicks
+    ban_user.disabled = true;
+
+    // Build data obj
+    var data = {
+        "id": dataId,
+		"csrfmiddlewaretoken": document.querySelector('[name="csrfmiddlewaretoken"]').value,
+    };
+
+    $.ajax({
+        type: 'POST',
+        url: '/ban_user_main/' + dataId,
+        data: data,
+        success: function (response) {
+            if (response) {
+                setTimeout(function () {
+                    ban_user.removeAttribute('data-kt-indicator');
+                    if (response.status === "Ban") {
+                        ban_user.classList.add("btn-danger");
+                        ban_user.classList.remove("btn-primary");  // Remove btn-success class
+                        ban_user.querySelector("i").classList.remove("d-none");
+                        ban_user.querySelector(".indicator-label").innerHTML = 'Ban User';
+                        document.querySelector("#ban_status_" + dataId).innerHTML = '<span class="badge badge-light-danger"> User is Ban </span>';
+                    } else {
+                        ban_user.classList.add("btn-success");
+                        ban_user.classList.remove("btn-danger");  // Remove btn-danger class
+                        ban_user.querySelector("i").classList.add("d-none");
+                        ban_user.querySelector(".indicator-label").innerHTML = 'Un-Ban User';
+                        document.querySelector("#ban_status_" + dataId).innerHTML = '<span class="badge badge-light-success"> User not Ban </span>';
+                    }
+                    ban_user.disabled = false;
+                    Swal.fire({
+                        title: response.status === "Ban" ?"Ban User": "Un-Ban User",
+                    });
+                }, 1000);
+            }
+        }
+    });
+}
+
+
+</script>	
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+ 
+
+{% endblock javascripts %}

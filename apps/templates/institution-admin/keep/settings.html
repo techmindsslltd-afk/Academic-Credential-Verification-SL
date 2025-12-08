@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Institution Settings - CertChain</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../admin.css">
+</head>
+<body>
+  <div class="admin-layout">
+    <aside class="admin-sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="../../index.html" class="sidebar-logo">
+          <div class="logo-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <span class="logo-text">CertChain</span>
+        </a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <span class="nav-section-title">Dashboard</span>
+          <ul class="nav-list">
+            <li><a href="dashboard.html" class="nav-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Dashboard</span></a></li>
+            <li><a href="issue-credentials.html" class="nav-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><line x1="12" y1="18" x2="12" y2="12"/><line x1="9" y1="15" x2="15" y2="15"/></svg><span>Issue Credentials</span></a></li>
+            <li><a href="students.html" class="nav-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg><span>Students</span></a></li>
+            <li><a href="verification-logs.html" class="nav-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg><span>Verification Logs</span></a></li>
+          </ul>
+        </div>
+        <div class="nav-section">
+          <span class="nav-section-title">Account</span>
+          <ul class="nav-list">
+            <li><a href="profile.html" class="nav-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><span>Profile</span></a></li>
+            <li><a href="settings.html" class="nav-link active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4"/></svg><span>Settings</span></a></li>
+          </ul>
+        </div>
+      </nav>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-header">
+        <div class="header-left">
+          <button class="menu-toggle" id="menu-toggle">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <div class="breadcrumb">
+            <a href="dashboard.html">Dashboard</a>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+            <span>Settings</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="admin-content">
+        <div class="page-header">
+          <h1 class="page-title">Institution Settings</h1>
+          <p class="page-subtitle">Manage your institution's preferences and configurations</p>
+        </div>
+
+        <div class="settings-layout">
+          <aside class="settings-nav">
+            <ul class="settings-nav-list">
+              <li><a href="#general" class="settings-nav-item active"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg>General</a></li>
+              <li><a href="#credentials" class="settings-nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/></svg>Credential Settings</a></li>
+              <li><a href="#notifications" class="settings-nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg>Notifications</a></li>
+              <li><a href="#team" class="settings-nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>Team Members</a></li>
+              <li><a href="#security" class="settings-nav-item"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>Security</a></li>
+            </ul>
+          </aside>
+
+          <div class="settings-content">
+            <section id="general" class="settings-section">
+              <div class="settings-card">
+                <div class="settings-card-header">
+                  <h2>General Information</h2>
+                  <p>Update your institution's basic information</p>
+                </div>
+                <div class="settings-card-body">
+                  <div class="form-group">
+                    <label class="form-label">Institution Name</label>
+                    <input type="text" class="form-input" value="University of Sierra Leone" readonly>
+                    <span class="form-hint">Contact support to change your institution name</span>
+                  </div>
+                  <div class="form-row">
+                    <div class="form-group">
+                      <label class="form-label">Contact Email</label>
+                      <input type="email" class="form-input" value="registrar@usl.edu.sl">
+                    </div>
+                    <div class="form-group">
+                      <label class="form-label">Phone Number</label>
+                      <input type="tel" class="form-input" value="+232 22 226 421">
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Website</label>
+                    <input type="url" class="form-input" value="https://usl.edu.sl">
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Address</label>
+                    <textarea class="form-textarea">Mount Aureol, Freetown, Sierra Leone</textarea>
+                  </div>
+                </div>
+                <div class="settings-card-footer">
+                  <button class="btn btn-secondary">Cancel</button>
+                  <button class="btn btn-primary">Save Changes</button>
+                </div>
+              </div>
+            </section>
+
+            <section id="credentials" class="settings-section">
+              <div class="settings-card">
+                <div class="settings-card-header">
+                  <h2>Credential Settings</h2>
+                  <p>Configure how credentials are issued and displayed</p>
+                </div>
+                <div class="settings-card-body">
+                  <div class="form-group">
+                    <label class="form-label">Credential ID Prefix</label>
+                    <input type="text" class="form-input" value="CERT-USL" placeholder="e.g., CERT-USL">
+                    <span class="form-hint">This prefix will be added to all credential IDs</span>
+                  </div>
+                  <div class="toggle-group">
+                    <div class="toggle-item">
+                      <div class="toggle-info">
+                        <h4>Auto-generate Student IDs</h4>
+                        <p>Automatically generate unique student IDs when adding students</p>
+                      </div>
+                      <label class="toggle">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                      </label>
+                    </div>
+                    <div class="toggle-item">
+                      <div class="toggle-info">
+                        <h4>Require Supporting Documents</h4>
+                        <p>Require document uploads when issuing credentials</p>
+                      </div>
+                      <label class="toggle">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                      </label>
+                    </div>
+                    <div class="toggle-item">
+                      <div class="toggle-info">
+                        <h4>Email Notifications to Students</h4>
+                        <p>Send email to students when credentials are issued</p>
+                      </div>
+                      <label class="toggle">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="settings-card-footer">
+                  <button class="btn btn-secondary">Cancel</button>
+                  <button class="btn btn-primary">Save Changes</button>
+                </div>
+              </div>
+            </section>
+
+            <section id="team" class="settings-section">
+              <div class="settings-card">
+                <div class="settings-card-header">
+                  <h2>Team Members</h2>
+                  <p>Manage who has access to your institution's dashboard</p>
+                </div>
+                <div class="settings-card-body">
+                  <div class="team-list">
+                    <div class="team-member">
+                      <img src="/placeholder.svg?height=48&width=48" alt="Admin" class="team-avatar">
+                      <div class="team-info">
+                        <h4>Dr. Sarah Bangura</h4>
+                        <p>sarah.bangura@usl.edu.sl</p>
+                      </div>
+                      <span class="badge badge-primary">Admin</span>
+                      <button class="btn btn-ghost btn-sm">Edit</button>
+                    </div>
+                    <div class="team-member">
+                      <img src="/placeholder.svg?height=48&width=48" alt="Staff" class="team-avatar">
+                      <div class="team-info">
+                        <h4>Mohamed Kamara</h4>
+                        <p>m.kamara@usl.edu.sl</p>
+                      </div>
+                      <span class="badge badge-secondary">Staff</span>
+                      <button class="btn btn-ghost btn-sm">Edit</button>
+                    </div>
+                  </div>
+                  <button class="btn btn-secondary" style="margin-top: 1rem;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    Invite Team Member
+                  </button>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.getElementById('menu-toggle').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('show');
+    });
+
+    document.querySelectorAll('.settings-nav-item').forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.querySelectorAll('.settings-nav-item').forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+        const target = item.getAttribute('href');
+        document.querySelector(target).scrollIntoView({ behavior: 'smooth' });
+      });
+    });
+  </script>
+</body>
+</html>

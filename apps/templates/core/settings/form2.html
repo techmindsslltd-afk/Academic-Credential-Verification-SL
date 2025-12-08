@@ -1,0 +1,345 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} General Settings {% endblock %} 
+{% block titlePage %} General Settings  {% endblock %} 
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %} 
+			
+<style>	
+	.feedsMain{
+margin-left:10%;
+margin-right:10%;
+}
+
+@media screen and (max-width: 960px) {
+.feedsMain{
+margin-left:5%;
+margin-right:5%;
+}
+}
+@media screen and (max-width: 768px) {
+.feedsMain{
+margin-left:2%;
+margin-right:2%;
+}
+}
+
+@media screen and (max-width: 480px) {
+.feedsMain{
+margin-left:0%;
+margin-right:0%;
+}
+}
+</style>
+
+<div class="feedsMain">		
+								
+				<div class="card">
+					<div class="card-header card-header-icon card-header-rose">
+						
+						<h4 class="card-title">General Settings 
+							<!-- <small class="category">Complete Students details</small> --></h4>
+					</div>
+					<div class="card-body">
+						<form id="defaultForm"
+						      action=""
+						      role="form"
+						      data-toggle="validator"
+						      method="POST"
+						      enctype="multipart/form-data">
+							   <h6 class="card-category">
+							  {% if msg %}
+								<span class="text-danger">{{ msg }}</span>
+							  
+							  {% endif %}  
+						  </h6>
+						  
+								<br />
+					{% csrf_token %} 
+              <div class="row ">
+			    <div style="margin-left: auto;margin-right: auto;" class="col-md-8 ">
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Site Name</label>
+                    {{ form.site_name }}
+                  </div>
+                </div>
+              <span class="text-danger">{{ form.site_name.errors }}</span>
+
+              <br />
+			<div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Site Abbreviation</label>
+                    {{ form.site_name_abb }}
+                  </div>
+                </div>
+              <span class="text-danger">{{ form.site_name_abb.errors }}</span>
+
+              <br />
+			 <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Slogan</label>
+                    {{ form.slogan }}
+                  </div>
+              <span class="text-danger">{{ form.slogan.errors }}</span>
+                </div>
+
+              <br />
+			 <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Primary Color</label>
+                    {{ form.primary_color }}
+                  </div>
+              <span class="text-danger">{{ form.primary_color.errors }}</span>
+                </div>
+
+              <br />
+			 <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Secondary Color</label>
+                    {{ form.secondary_color }}
+                  </div>
+              <span class="text-danger">{{ form.secondary_color.errors }}</span>
+                </div>
+
+              <br />
+			 <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">First Logo</label>
+                    {{ form.file }}
+                  </div>
+              <span class="text-danger">{{ form.file.errors }}</span>
+                </div>
+
+              <br />
+			 <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Second Logo</label>
+                    {{ form.file_2 }}
+                  </div>
+              <span class="text-danger">{{ form.file_2.errors }}</span>
+                </div>
+
+              <br />
+
+			 <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">First Email</label>
+                    {{ form.email }}
+                  </div>
+              <span class="text-danger">{{ form.email.errors }}</span>
+                </div>
+
+              <br />
+			   <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Second Email</label>
+                    {{ form.email2 }}
+                  </div>
+                </div>
+              <span class="text-danger">{{ form.email2.errors }}</span>
+
+              <br />
+			   <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Site Description</label>
+                    {{ form.site_desc }}
+                  </div>
+                </div>
+              <span class="text-danger">{{ form.site_desc.errors }}</span>
+
+              <br />
+			   <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Site Keywords</label>
+                    {{ form.site_keyword }}
+                  </div>
+                </div>
+              <span class="text-danger">{{ form.site_keyword.errors }}</span>
+
+              <br />
+			   <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Google Code</label>
+                    {{ form.google_code }}
+                  </div>
+                </div>
+              <span class="text-danger">{{ form.google_code.errors }}</span>
+
+              <br />
+			   <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Office Address (Street)</label>
+                    {{ form.street }}
+                  </div>
+                </div>
+              <span class="text-danger">{{ form.street.errors }}</span>
+
+              <br />
+			   <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Office Address (City)</label>
+                    {{ form.city }}
+                  </div>
+                </div>
+              <span class="text-danger">{{ form.city.errors }}</span>
+
+              <br />
+			   <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Office Address (Country)</label>
+                    {{ form.country }}
+                  </div>
+                </div>
+              <span class="text-danger">{{ form.country.errors }}</span>
+			<br />
+			<div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Telephone</label>
+                    {{ form.phone }}
+                  </div>
+                </div>
+              <span class="text-danger">{{ form.phone.errors }}</span>
+			<br />
+			   <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Office Address 2 (Street)</label>
+                    {{ form.street2 }}
+                  </div>
+                </div>
+              
+              <span class="text-danger">{{ form.street2.errors }}</span>
+
+              <br />
+			   <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Office Address 2 (City)</label>
+                    {{ form.city2 }}
+                  </div>
+                </div>
+              
+              <span class="text-danger">{{ form.city2.errors }}</span>
+
+              <br />
+			   <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Office Address 2 (Country)</label>
+                    {{ form.country2 }}
+                  </div>
+                </div>
+             
+              <span class="text-danger">{{ form.country2.errors }}</span>
+              <br />	
+
+			<div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Telephone</label>
+                    {{ form.phone2 }}
+                  </div>
+                </div>
+              <span class="text-danger">{{ form.phone2.errors }}</span>
+			<br />			  
+			  <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Facebook</label>
+                    {{ form.facebook }}
+                  </div>
+                </div>
+             
+              <span class="text-danger">{{ form.facebook.errors }}</span>
+              <br />			   <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Twitter</label>
+                    {{ form.twitter }}
+                  </div>
+                </div>
+             
+              <span class="text-danger">{{ form.twitter.errors }}</span>
+              <br />			   <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Linkedin</label>
+                    {{ form.linkedin }}
+                  </div>
+                </div>
+             
+              <span class="text-danger">{{ form.linkedin.errors }}</span>
+              <br />			   <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Instagram</label>
+                    {{ form.instagram }}
+                  </div>
+                </div>
+             
+              <span class="text-danger">{{ form.instagram.errors }}</span>
+              <br />			   <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Google</label>
+                    {{ form.google }}
+                  </div>
+                </div>
+             
+              <span class="text-danger">{{ form.google.errors }}</span>
+              <br />
+			  
+              <br />			   
+			  <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Reddit</label>
+                    {{ form.reddit }}
+                  </div>
+                </div>
+             
+              <span class="text-danger">{{ form.reddit.errors }}</span>
+              <br />
+			                <br />			   <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Tumblr</label>
+                    {{ form.tumblr }}
+                  </div>
+                </div>
+             
+              <span class="text-danger">{{ form.tumblr.errors }}</span>
+              <br />
+			                <br />			   <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Status</label>
+                    {{ form.status }}
+                  </div>
+                </div>
+             
+              <span class="text-danger">{{ form.status.errors }}</span>  <br />			  
+			  <div class="col-md-12">
+                  <div class="form-group">
+                    <label class="bmd-label-floating">Grade & Fee Status</label>
+                    {{ form.check_for_fee_b4_view_grades }}
+                  </div>
+					<span class="text-danger">{{ form.check_for_fee_b4_view_grades.errors }}</span>
+                </div>
+             
+              <br />
+              <br />
+							<button type="submit"
+							        class="btn    btn-primary ">Submit</button>
+							<div class="clearfix"/>
+							
+							</div>
+							</div>
+						</form>
+					</div>
+				</div>
+				<!--  end card  -->
+			</div>
+			<!-- end col-md-12 -->
+		</div>
+		<!-- end row -->
+	
+{% endblock content %}
+{{ form.media.js }}
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+
+{% endblock javascripts %}

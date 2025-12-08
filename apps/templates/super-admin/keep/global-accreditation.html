@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Global Accreditation - CertChain Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../admin.css">
+</head>
+<body>
+  <div class="admin-layout">
+    <!-- Sidebar -->
+    <aside class="admin-sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <a href="../../index.html" class="sidebar-logo">
+          <div class="logo-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <span class="logo-text">CertChain</span>
+        </a>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <span class="nav-section-title">Main</span>
+          <ul class="nav-list">
+            <li><a href="../../dashboard.html" class="nav-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>System Overview</span></a></li>
+            <li><a href="institutions.html" class="nav-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>Institutions</span><span class="nav-badge">156</span></a></li>
+            <li><a href="users.html" class="nav-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><span>Users</span><span class="nav-badge">12.4k</span></a></li>
+            <li><a href="global-accreditation.html" class="nav-link active"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg><span>Global Accreditation</span></a></li>
+            <li><a href="credentials-ledger.html" class="nav-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg><span>Credentials Ledger</span></a></li>
+          </ul>
+        </div>
+        <div class="nav-section">
+          <span class="nav-section-title">System</span>
+          <ul class="nav-list">
+            <li><a href="analytics.html" class="nav-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg><span>Analytics</span></a></li>
+            <li><a href="settings.html" class="nav-link"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4"/></svg><span>Settings</span></a></li>
+          </ul>
+        </div>
+      </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="admin-main">
+      <header class="admin-header">
+        <div class="header-left">
+          <button class="menu-toggle" id="menu-toggle">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+          </button>
+          <div class="breadcrumb">
+            <a href="../../dashboard.html">Dashboard</a>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg>
+            <span>Global Accreditation</span>
+          </div>
+        </div>
+        <div class="header-right">
+          <div class="header-user">
+            <img src="/placeholder.svg?height=36&width=36" alt="Admin" class="user-avatar">
+            <span class="user-name">John Doe</span>
+          </div>
+        </div>
+      </header>
+
+      <div class="admin-content">
+        <div class="page-header">
+          <div class="page-header-left">
+            <h1 class="page-title">Global Accreditation Checker</h1>
+            <p class="page-subtitle">Verify institutional accreditation status worldwide via UNESCO WHED and regional bodies</p>
+          </div>
+        </div>
+
+        <!-- Search Section -->
+        <div class="accreditation-search-section">
+          <div class="search-card">
+            <h3>Search Institution</h3>
+            <p>Check if an institution is accredited and recognized globally</p>
+            <div class="search-form">
+              <div class="search-row">
+                <div class="form-group flex-2">
+                  <label class="form-label">Institution Name</label>
+                  <input type="text" class="form-input" placeholder="e.g., University of Sierra Leone" id="institution-search">
+                </div>
+                <div class="form-group flex-1">
+                  <label class="form-label">Country</label>
+                  <select class="form-select" id="country-select">
+                    <option value="">All Countries</option>
+                    <option value="SL">Sierra Leone</option>
+                    <option value="NG">Nigeria</option>
+                    <option value="GH">Ghana</option>
+                    <option value="KE">Kenya</option>
+                    <option value="ZA">South Africa</option>
+                    <option value="GB">United Kingdom</option>
+                    <option value="US">United States</option>
+                  </select>
+                </div>
+                <div class="form-group flex-1">
+                  <label class="form-label">Database</label>
+                  <select class="form-select">
+                    <option value="all">All Sources</option>
+                    <option value="unesco">UNESCO WHED</option>
+                    <option value="nctva">NCTVA (Sierra Leone)</option>
+                    <option value="tec">TEC (Sierra Leone)</option>
+                    <option value="regional">Regional Bodies</option>
+                  </select>
+                </div>
+              </div>
+              <button class="btn btn-primary btn-lg" id="search-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                Search Accreditation Database
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Data Sources -->
+        <div class="data-sources-grid">
+          <div class="source-card">
+            <div class="source-icon" style="background: linear-gradient(135deg, #2563eb, #3b82f6);">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            </div>
+            <div class="source-info">
+              <h4>UNESCO WHED</h4>
+              <p>World Higher Education Database</p>
+              <span class="source-count">28,000+ Institutions</span>
+            </div>
+            <span class="badge badge-success">Active</span>
+          </div>
+          <div class="source-card">
+            <div class="source-icon" style="background: linear-gradient(135deg, #059669, #10b981);">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            </div>
+            <div class="source-info">
+              <h4>NCTVA</h4>
+              <p>National Council for TVET Accreditation</p>
+              <span class="source-count">150+ Institutions</span>
+            </div>
+            <span class="badge badge-success">Active</span>
+          </div>
+          <div class="source-card">
+            <div class="source-icon" style="background: linear-gradient(135deg, #7c3aed, #8b5cf6);">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            </div>
+            <div class="source-info">
+              <h4>TEC</h4>
+              <p>Tertiary Education Commission (SL)</p>
+              <span class="source-count">45+ Institutions</span>
+            </div>
+            <span class="badge badge-success">Active</span>
+          </div>
+          <div class="source-card">
+            <div class="source-icon" style="background: linear-gradient(135deg, #dc2626, #ef4444);">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div class="source-info">
+              <h4>Regional Bodies</h4>
+              <p>ECOWAS, AAU, ACU</p>
+              <span class="source-count">500+ Institutions</span>
+            </div>
+            <span class="badge badge-success">Active</span>
+          </div>
+        </div>
+
+        <!-- Search Results -->
+        <div class="search-results-section" id="search-results" style="display: none;">
+          <div class="results-header">
+            <h3>Search Results</h3>
+            <span class="results-count">3 institutions found</span>
+          </div>
+          <div class="results-list">
+            <!-- Results will be populated by JavaScript -->
+          </div>
+        </div>
+
+        <!-- Recently Verified -->
+        <div class="recent-verifications">
+          <div class="section-header">
+            <h3>Recently Verified Institutions</h3>
+            <a href="#" class="view-all">View All</a>
+          </div>
+          <div class="data-table-wrapper">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th>Institution</th>
+                  <th>Country</th>
+                  <th>Type</th>
+                  <th>Accreditation Body</th>
+                  <th>Status</th>
+                  <th>Verified On</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <div class="institution-cell">
+                      <img src="/placeholder.svg?height=40&width=40" alt="USL" class="institution-logo">
+                      <div>
+                        <span class="institution-name">University of Sierra Leone</span>
+                        <span class="institution-location">Freetown, Sierra Leone</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>Sierra Leone</td>
+                  <td>University</td>
+                  <td>TEC, UNESCO WHED</td>
+                  <td><span class="badge badge-success">Accredited</span></td>
+                  <td>Nov 29, 2024</td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="institution-cell">
+                      <img src="/placeholder.svg?height=40&width=40" alt="Njala" class="institution-logo">
+                      <div>
+                        <span class="institution-name">Njala University</span>
+                        <span class="institution-location">Njala, Sierra Leone</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>Sierra Leone</td>
+                  <td>University</td>
+                  <td>TEC, UNESCO WHED</td>
+                  <td><span class="badge badge-success">Accredited</span></td>
+                  <td>Nov 28, 2024</td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="institution-cell">
+                      <img src="/placeholder.svg?height=40&width=40" alt="UNILAG" class="institution-logo">
+                      <div>
+                        <span class="institution-name">University of Lagos</span>
+                        <span class="institution-location">Lagos, Nigeria</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>Nigeria</td>
+                  <td>University</td>
+                  <td>NUC, UNESCO WHED</td>
+                  <td><span class="badge badge-success">Accredited</span></td>
+                  <td>Nov 27, 2024</td>
+                </tr>
+                <tr>
+                  <td>
+                    <div class="institution-cell">
+                      <img src="/placeholder.svg?height=40&width=40" alt="Unknown" class="institution-logo">
+                      <div>
+                        <span class="institution-name">Global Online Academy</span>
+                        <span class="institution-location">Unknown</span>
+                      </div>
+                    </div>
+                  </td>
+                  <td>Unknown</td>
+                  <td>Online</td>
+                  <td>None Found</td>
+                  <td><span class="badge badge-error">Not Accredited</span></td>
+                  <td>Nov 26, 2024</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    document.getElementById('menu-toggle').addEventListener('click', () => {
+      document.getElementById('sidebar').classList.toggle('show');
+    });
+
+    // Search functionality
+    document.getElementById('search-btn').addEventListener('click', () => {
+      const searchTerm = document.getElementById('institution-search').value;
+      const resultsSection = document.getElementById('search-results');
+      
+      if (searchTerm.trim()) {
+        resultsSection.style.display = 'block';
+        resultsSection.querySelector('.results-list').innerHTML = `
+          <div class="result-card">
+            <div class="result-header">
+              <div class="result-institution">
+                <img src="/placeholder.svg?height=60&width=60" alt="Institution" class="result-logo">
+                <div>
+                  <h4>${searchTerm}</h4>
+                  <p>Freetown, Sierra Leone</p>
+                </div>
+              </div>
+              <span class="badge badge-success badge-lg">Accredited</span>
+            </div>
+            <div class="result-details">
+              <div class="result-item">
+                <span class="label">Institution Type</span>
+                <span class="value">Public University</span>
+              </div>
+              <div class="result-item">
+                <span class="label">Founded</span>
+                <span class="value">1967</span>
+              </div>
+              <div class="result-item">
+                <span class="label">UNESCO WHED ID</span>
+                <span class="value">IAU-021456</span>
+              </div>
+              <div class="result-item">
+                <span class="label">National Recognition</span>
+                <span class="value">TEC Accredited</span>
+              </div>
+            </div>
+            <div class="result-sources">
+              <span class="source-tag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 12 2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg> UNESCO WHED</span>
+              <span class="source-tag"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 12 2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg> TEC Sierra Leone</span>
+            </div>
+            <div class="result-actions">
+              <button class="btn btn-primary">View Full Report</button>
+              <button class="btn btn-secondary">Add to CertChain</button>
+            </div>
+          </div>
+        `;
+        resultsSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,987 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Issue Credentials {% endblock %} 
+
+{% block content %}
+{% load static %}
+  <!-- Select2 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet" />
+  <!-- Select2 JS -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <!-- Issue Credentials Section -->
+  <section class="content-section active" id="section-issue-credentials">
+    <div class="section-header">
+      <div>
+        <h1 class="section-title">Issue Credentials</h1>
+        <p class="section-subtitle">Issue and manage academic credentials for students</p>
+      </div>
+      <div class="section-actions">
+        <button class="btn btn-outline" id="filter-btn" onclick="openFilterModal()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+          </svg>
+          Filter
+        </button>
+        <button class="btn btn-primary" id="add-credential-btn" onclick="openAddCredentialModal()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Issue Credential
+        </button>
+      </div>
+    </div>
+    
+    <!-- Search Bar -->
+    <div style="margin-bottom: 1.5rem;">
+      <form method="get" action="{% url 'institution_admin_issue_credentials' %}" style="display: flex; gap: 0.75rem; align-items: center;">
+        <div style="position: relative; flex: 1; max-width: 400px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none;">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.3-4.3"/>
+          </svg>
+          <input 
+            type="text" 
+            name="search" 
+            value="{{ search_query }}"
+            placeholder="Search by credential ID, student name, or program..." 
+            class="input"
+            style="padding-left: 2.5rem; width: 100%;"
+            autocomplete="off"
+          >
+          {% if search_query %}
+          <a href="{% url 'institution_admin_issue_credentials' %}" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); text-decoration: none; padding: 4px;" title="Clear search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </a>
+          {% endif %}
+        </div>
+        <button type="submit" class="btn btn-primary" style="white-space: nowrap;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+          </svg>
+          Search
+        </button>
+      </form>
+    </div>
+
+    <div class="data-table-card">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Credential ID</th>
+            <th>Student</th>
+            <th>Program</th>
+            <th>Type</th>
+            <th>Completion Date</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if credentials %}
+            {% for credential in credentials %}
+            <tr>
+              <td>
+                <div class="table-cell-title" style="font-family: monospace; font-size: 0.875rem;">{{ credential.credential_id }}</div>
+                <div class="table-cell-subtitle">{{ credential.created_at|date:"M d, Y" }}</div>
+              </td>
+              <td>
+                <div class="table-cell-main">
+                  <div>
+                    <div class="table-cell-title">{{ credential.holder_name }}</div>
+                    <div class="table-cell-subtitle">
+                      {% if credential.holder_student_id %}{{ credential.holder_student_id }}{% else %}{{ credential.holder.email }}{% endif %}
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="table-cell-title">{{ credential.program_name }}</div>
+                {% if credential.degree_level %}
+                <div class="table-cell-subtitle">{{ credential.degree_level }}</div>
+                {% endif %}
+              </td>
+              <td>
+                <span class="type-badge">{{ credential.get_credential_type_display }}</span>
+              </td>
+              <td>
+                {% if credential.completion_date %}
+                  {{ credential.completion_date|date:"M d, Y" }}
+                {% else %}
+                  <span style="color: var(--text-muted);">—</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if credential.status == 'issued' %}
+                  <span class="status-badge success">Issued</span>
+                {% elif credential.status == 'draft' %}
+                  <span class="status-badge warning">Draft</span>
+                {% elif credential.status == 'pending' %}
+                  <span class="status-badge info">Pending</span>
+                {% elif credential.status == 'revoked' %}
+                  <span class="status-badge error">Revoked</span>
+                {% else %}
+                  <span class="status-badge">{{ credential.get_status_display }}</span>
+                {% endif %}
+              </td>
+              <td>
+                <div class="table-actions">
+                  <button class="table-action-btn" aria-label="View" title="View Details" onclick="viewCredential('{{ credential.id }}')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                      <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                  </button>
+                  <button class="table-action-btn" aria-label="Edit" title="Edit Credential" onclick="editCredential('{{ credential.id }}')" {% if credential.status == 'issued' or credential.status == 'revoked' %}disabled title="Cannot edit issued or revoked credentials"{% endif %}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                    </svg>
+                  </button>
+                  <button class="table-action-btn" aria-label="Delete" title="Delete Credential" onclick="deleteCredential('{{ credential.id }}', '{{ credential.credential_id|escapejs }}')" style="color: var(--error);" {% if credential.status != 'draft' %}disabled title="Can only delete draft credentials"{% endif %}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="3 6 5 6 21 6"/>
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                      <line x1="10" y1="11" x2="10" y2="17"/>
+                      <line x1="14" y1="11" x2="14" y2="17"/>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="7" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 1rem;">
+                  <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                  <line x1="12" y1="18" x2="12" y2="12"/>
+                  <line x1="9" y1="15" x2="15" y2="15"/>
+                </svg>
+                <p style="margin: 0; font-size: 1.125rem; font-weight: 600;">No credentials found</p>
+                <p style="margin: 0.5rem 0 0 0; font-size: 0.875rem;">Use the "Issue Credential" button above to create a new credential</p>
+              </td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    {% if credentials.has_other_pages %}
+    <div class="pagination-container">
+      <span class="pagination-info">
+        Showing {{ credentials.start_index }} to {{ credentials.end_index }} of {{ credentials.paginator.count }} credentials
+      </span>
+      <div class="pagination-controls">
+        {% if credentials.has_previous %}
+          <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}{% if filter_type %}&type={{ filter_type }}{% endif %}{% if filter_status %}&status={{ filter_status }}{% endif %}" class="pagination-btn" title="First Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="11 17 6 12 11 7"></polyline><polyline points="18 17 13 12 18 7"></polyline></svg>
+          </a>
+          <a href="?page={{ credentials.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if filter_type %}&type={{ filter_type }}{% endif %}{% if filter_status %}&status={{ filter_status }}{% endif %}" class="pagination-btn" title="Previous Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </a>
+        {% else %}
+          <span class="pagination-btn disabled" title="First Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="11 17 6 12 11 7"></polyline><polyline points="18 17 13 12 18 7"></polyline></svg>
+          </span>
+          <span class="pagination-btn disabled" title="Previous Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </span>
+        {% endif %}
+
+        {% for i in credentials.paginator.page_range %}
+          {% if credentials.number == i %}
+            <span class="pagination-btn active">{{ i }}</span>
+          {% elif i > credentials.number|add:'-3' and i < credentials.number|add:'3' %}
+            <a href="?page={{ i }}{% if search_query %}&search={{ search_query }}{% endif %}{% if filter_type %}&type={{ filter_type }}{% endif %}{% if filter_status %}&status={{ filter_status }}{% endif %}" class="pagination-btn">{{ i }}</a>
+          {% endif %}
+        {% endfor %}
+
+        {% if credentials.has_next %}
+          <a href="?page={{ credentials.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if filter_type %}&type={{ filter_type }}{% endif %}{% if filter_status %}&status={{ filter_status }}{% endif %}" class="pagination-btn" title="Next Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </a>
+          <a href="?page={{ credentials.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}{% if filter_type %}&type={{ filter_type }}{% endif %}{% if filter_status %}&status={{ filter_status }}{% endif %}" class="pagination-btn" title="Last Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="13 17 18 12 13 7"></polyline><polyline points="6 17 11 12 6 7"></polyline></svg>
+          </a>
+        {% else %}
+          <span class="pagination-btn disabled" title="Next Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </span>
+          <span class="pagination-btn disabled" title="Last Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="13 17 18 12 13 7"></polyline><polyline points="6 17 11 12 6 7"></polyline></svg>
+          </span>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+  </section>
+
+  <!-- Filter Modal -->
+  <div id="filter-modal" class="modal" style="display: none;">
+    <div class="modal-overlay" onclick="closeFilterModal()"></div>
+    <div class="modal-content" style="max-width: 500px;">
+      <div class="modal-header">
+        <h2 class="modal-title">Filter Credentials</h2>
+        <button class="modal-close" onclick="closeFilterModal()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <form method="get" action="{% url 'institution_admin_issue_credentials' %}" id="filter-form">
+        <div class="modal-body" style="padding: 1.5rem;">
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Credential Type</label>
+            <select name="type" class="input select">
+              <option value="">All Types</option>
+              {% for value, label in credential_types %}
+              <option value="{{ value }}" {% if filter_type == value %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Status</label>
+            <select name="status" class="input select">
+              <option value="">All Statuses</option>
+              {% for value, label in credential_statuses %}
+              <option value="{{ value }}" {% if filter_status == value %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          
+          {% if search_query %}
+          <input type="hidden" name="search" value="{{ search_query }}">
+          {% endif %}
+        </div>
+        <div class="modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 0.75rem;">
+          <button type="button" class="btn btn-outline" onclick="clearFilters()">Clear</button>
+          <button type="submit" class="btn btn-primary">Apply Filters</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add/Edit Credential Modal -->
+  <div id="credential-modal" class="modal" style="display: none;">
+    <div class="modal-overlay" onclick="closeCredentialModal()"></div>
+    <div class="modal-content" style="max-width: 800px; max-height: 90vh; overflow-y: auto;">
+      <div class="modal-header">
+        <h2 class="modal-title" id="credential-modal-title">Issue Credential</h2>
+        <button class="modal-close" onclick="closeCredentialModal()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <form id="credential-form" onsubmit="saveCredential(event)">
+        <div class="modal-body" style="padding: 1.5rem;">
+          <input type="hidden" id="credential-id" name="id">
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+            <div class="form-group">
+              <label class="form-label">Student <span style="color: var(--error);">*</span></label>
+              <select id="credential-holder" name="holder" class="input select" required style="width: 100%;">
+                <option value="">Select Student</option>
+                {% for student in students %}
+                <option value="{{ student.id }}" data-student-id="{% if student.student_profile %}{{ student.student_profile.student_id|default:'' }}{% endif %}" data-email="{{ student.email }}">{{ student.full_name }} ({{ student.email }}){% if student.student_profile and student.student_profile.student_id %} - {{ student.student_profile.student_id }}{% endif %}</option>
+                {% endfor %}
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Holder Name (as on credential) <span style="color: var(--error);">*</span></label>
+              <input type="text" id="credential-holder-name" name="holder_name" class="input" required>
+            </div>
+          </div>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+            <div class="form-group">
+              <label class="form-label">Student ID</label>
+              <input type="text" id="credential-holder-student-id" name="holder_student_id" class="input">
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Date of Birth</label>
+              <input type="date" id="credential-holder-dob" name="holder_date_of_birth" class="input">
+            </div>
+          </div>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+            <div class="form-group">
+              <label class="form-label">Program</label>
+              <select id="credential-program" name="program" class="input select">
+                <option value="">Select Program</option>
+                {% for program in programs %}
+                <option value="{{ program.id }}">{{ program.name }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Program Name <span style="color: var(--error);">*</span></label>
+              <input type="text" id="credential-program-name" name="program_name" class="input" required>
+            </div>
+          </div>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+            <div class="form-group">
+              <label class="form-label">Credential Type</label>
+              <select id="credential-type" name="credential_type" class="input select">
+                {% for value, label in credential_types %}
+                <option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Degree Level</label>
+              <input type="text" id="credential-degree-level" name="degree_level" class="input" placeholder="e.g., Bachelor's">
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Status</label>
+              <select id="credential-status" name="status" class="input select">
+                {% for value, label in credential_statuses %}
+                <option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+            <div class="form-group">
+              <label class="form-label">Major</label>
+              <input type="text" id="credential-major" name="major" class="input">
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Minor</label>
+              <input type="text" id="credential-minor" name="minor" class="input">
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Specialization</label>
+              <input type="text" id="credential-specialization" name="specialization" class="input">
+            </div>
+          </div>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+            <div class="form-group">
+              <label class="form-label">Grade/Classification</label>
+              <input type="text" id="credential-grade" name="grade" class="input" placeholder="e.g., First Class">
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Honors</label>
+              <input type="text" id="credential-honors" name="honors" class="input" placeholder="e.g., Cum Laude">
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Credits Earned</label>
+              <input type="number" id="credential-credits" name="credits_earned" class="input" step="0.01" min="0">
+            </div>
+          </div>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+            <div class="form-group">
+              <label class="form-label">Enrollment Date</label>
+              <input type="date" id="credential-enrollment-date" name="enrollment_date" class="input">
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Completion Date</label>
+              <input type="date" id="credential-completion-date" name="completion_date" class="input">
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Issue Date</label>
+              <input type="date" id="credential-issue-date" name="issue_date" class="input">
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Expiry Date</label>
+              <input type="date" id="credential-expiry-date" name="expiry_date" class="input">
+            </div>
+          </div>
+          
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Certificate Document</label>
+            <input type="file" id="credential-document" name="document" class="input" accept=".pdf,.jpg,.jpeg,.png,.doc,.docx">
+            <small style="color: var(--text-muted); font-size: 0.75rem; display: block; margin-top: 0.25rem;">
+              Accepted formats: PDF, JPG, PNG, DOC, DOCX (Max 10MB)
+            </small>
+            <div id="credential-document-preview" style="margin-top: 0.5rem; display: none;">
+              <div style="display: flex; align-items: center; gap: 0.5rem; padding: 0.5rem; background: var(--bg-tertiary); border-radius: var(--radius-md);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="color: var(--accent-primary);">
+                  <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                </svg>
+                <span id="credential-document-name" style="flex: 1; font-size: 0.875rem;"></span>
+                <button type="button" onclick="clearDocumentPreview()" style="background: none; border: none; color: var(--error); cursor: pointer; padding: 4px;">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+            {% if credential and credential.document %}
+            <div style="margin-top: 0.5rem;">
+              <a href="{{ credential.document.url }}" target="_blank" style="display: inline-flex; align-items: center; gap: 0.5rem; color: var(--accent-primary); text-decoration: none; font-size: 0.875rem;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/>
+                  <polyline points="14 2 14 8 20 8"/>
+                </svg>
+                View current document
+              </a>
+            </div>
+            {% endif %}
+          </div>
+          
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Notes</label>
+            <textarea id="credential-notes" name="notes" class="input" rows="3"></textarea>
+          </div>
+        </div>
+        <div class="modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 0.75rem;">
+          <button type="button" class="btn btn-outline" onclick="closeCredentialModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="credential-submit-btn">
+            <span class="btn-text">Save Credential</span>
+            <span class="btn-spinner" style="display: none;">
+              <span class="spinner" style="width: 16px; height: 16px; border-width: 2px;"></span>
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Modal Functions
+    function openFilterModal() {
+      document.getElementById('filter-modal').style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeFilterModal() {
+      document.getElementById('filter-modal').style.display = 'none';
+      document.body.style.overflow = '';
+    }
+    
+    function clearFilters() {
+      window.location.href = "{% url 'institution_admin_issue_credentials' %}";
+    }
+    
+    function openAddCredentialModal() {
+      document.getElementById('credential-modal-title').textContent = 'Issue Credential';
+      document.getElementById('credential-form').reset();
+      document.getElementById('credential-id').value = '';
+      document.getElementById('credential-status').value = 'issued';
+      // Clear document preview
+      clearDocumentPreview();
+      // Set today's date as default issue date
+      const today = new Date().toISOString().split('T')[0];
+      document.getElementById('credential-issue-date').value = today;
+      document.getElementById('credential-modal').style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+      
+      // Initialize Select2 for student dropdown
+      $('#credential-holder').select2({
+        theme: 'bootstrap-5',
+        placeholder: 'Search for a student...',
+        allowClear: true,
+        width: '100%',
+        dropdownParent: $('#credential-modal'),
+        language: {
+          noResults: function() {
+            return "No students found";
+          },
+          searching: function() {
+            return "Searching...";
+          }
+        }
+      });
+      
+      // Auto-fill student details when student is selected
+      $('#credential-holder').off('change').on('change', function() {
+        const selectedOption = $(this).find('option:selected');
+        const studentId = selectedOption.data('student-id');
+        const email = selectedOption.data('email');
+        const studentName = selectedOption.text().split(' (')[0]; // Extract name before email
+        
+        if (studentId) {
+          document.getElementById('credential-holder-student-id').value = studentId;
+        }
+        if (studentName) {
+          document.getElementById('credential-holder-name').value = studentName;
+        }
+      });
+    }
+    
+    function closeCredentialModal() {
+      // Destroy Select2 instance before closing
+      if ($('#credential-holder').hasClass('select2-hidden-accessible')) {
+        $('#credential-holder').select2('destroy');
+      }
+      document.getElementById('credential-modal').style.display = 'none';
+      document.body.style.overflow = '';
+      document.getElementById('credential-form').reset();
+    }
+    
+    // Document preview functions
+    function clearDocumentPreview() {
+      document.getElementById('credential-document').value = '';
+      document.getElementById('credential-document-preview').style.display = 'none';
+    }
+    
+    // Show document preview when file is selected
+    document.addEventListener('DOMContentLoaded', function() {
+      const documentInput = document.getElementById('credential-document');
+      if (documentInput) {
+        documentInput.addEventListener('change', function(e) {
+          const file = e.target.files[0];
+          if (file) {
+            const preview = document.getElementById('credential-document-preview');
+            const fileName = document.getElementById('credential-document-name');
+            fileName.textContent = file.name;
+            preview.style.display = 'block';
+            
+            // Validate file size (10MB max)
+            const maxSize = 10 * 1024 * 1024; // 10MB in bytes
+            if (file.size > maxSize) {
+              Swal.fire({
+                icon: 'error',
+                title: 'File too large',
+                text: 'File size must be less than 10MB',
+                confirmButtonText: 'OK'
+              });
+              clearDocumentPreview();
+              return;
+            }
+          } else {
+            clearDocumentPreview();
+          }
+        });
+      }
+    });
+    
+    // CRUD Functions
+    async function saveCredential(event) {
+      event.preventDefault();
+      
+      const form = event.target;
+      const formData = new FormData(form);
+      
+      const credentialId = document.getElementById('credential-id').value;
+      const isEdit = !!credentialId;
+      const url = isEdit 
+        ? `/institution-admin/credentials/${credentialId}/update/`
+        : '/institution-admin/credentials/create/';
+      const method = isEdit ? 'PUT' : 'POST';
+      
+      const submitBtn = document.getElementById('credential-submit-btn');
+      const btnText = submitBtn.querySelector('.btn-text');
+      const btnSpinner = submitBtn.querySelector('.btn-spinner');
+      
+      btnText.style.display = 'none';
+      btnSpinner.style.display = 'inline-block';
+      submitBtn.disabled = true;
+      
+      try {
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || 
+                         document.cookie.split(';').find(c => c.trim().startsWith('csrftoken='))?.split('=')[1];
+        
+        // Check if there's a file to upload
+        const documentFile = document.getElementById('credential-document').files[0];
+        const hasFile = !!documentFile;
+        
+        // If there's a file, use FormData, otherwise use JSON
+        let requestBody;
+        let contentType;
+        
+        if (hasFile) {
+          // Use FormData for file upload
+          requestBody = formData;
+          contentType = undefined; // Let browser set Content-Type with boundary for multipart/form-data
+        } else {
+          // Use JSON for regular data
+          const data = Object.fromEntries(formData.entries());
+          requestBody = JSON.stringify(data);
+          contentType = 'application/json';
+        }
+        
+        const headers = {
+          'X-CSRFToken': csrfToken,
+        };
+        
+        if (contentType) {
+          headers['Content-Type'] = contentType;
+        }
+        
+        const response = await fetch(url, {
+          method: method,
+          headers: headers,
+          credentials: 'include',
+          body: requestBody
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok && result.success) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: result.message || 'Credential saved successfully',
+            timer: 2000,
+            showConfirmButton: false,
+            toast: true,
+            position: 'top-end'
+          });
+          closeCredentialModal();
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: result.error || 'Failed to save credential',
+            confirmButtonText: 'OK'
+          });
+        }
+      } catch (error) {
+        console.error('Error saving credential:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: 'An error occurred while saving credential',
+          confirmButtonText: 'OK'
+        });
+      } finally {
+        btnText.style.display = 'inline-block';
+        btnSpinner.style.display = 'none';
+        submitBtn.disabled = false;
+      }
+    }
+    
+    async function editCredential(credentialId) {
+      try {
+        const response = await fetch(`/institution-admin/credentials/${credentialId}/`);
+        const data = await response.json();
+        
+        if (response.ok) {
+          document.getElementById('credential-modal-title').textContent = 'Edit Credential';
+          document.getElementById('credential-id').value = data.id;
+          
+          // Initialize Select2 if not already initialized
+          if (!$('#credential-holder').hasClass('select2-hidden-accessible')) {
+            $('#credential-holder').select2({
+              theme: 'bootstrap-5',
+              placeholder: 'Search for a student...',
+              allowClear: true,
+              width: '100%',
+              dropdownParent: $('#credential-modal'),
+              language: {
+                noResults: function() {
+                  return "No students found";
+                },
+                searching: function() {
+                  return "Searching...";
+                }
+              }
+            });
+            
+            // Auto-fill student details when student is selected
+            $('#credential-holder').off('change').on('change', function() {
+              const selectedOption = $(this).find('option:selected');
+              const studentId = selectedOption.data('student-id');
+              const email = selectedOption.data('email');
+              const studentName = selectedOption.text().split(' (')[0];
+              
+              if (studentId) {
+                document.getElementById('credential-holder-student-id').value = studentId;
+              }
+              if (studentName) {
+                document.getElementById('credential-holder-name').value = studentName;
+              }
+            });
+          }
+          
+          // Set the selected value using Select2 API
+          $('#credential-holder').val(data.holder || '').trigger('change');
+          document.getElementById('credential-holder-name').value = data.holder_name || '';
+          document.getElementById('credential-holder-student-id').value = data.holder_student_id || '';
+          document.getElementById('credential-holder-dob').value = data.holder_date_of_birth || '';
+          document.getElementById('credential-program').value = data.program || '';
+          document.getElementById('credential-program-name').value = data.program_name || '';
+          document.getElementById('credential-type').value = data.credential_type || 'degree';
+          document.getElementById('credential-degree-level').value = data.degree_level || '';
+          document.getElementById('credential-status').value = data.status || 'draft';
+          document.getElementById('credential-major').value = data.major || '';
+          document.getElementById('credential-minor').value = data.minor || '';
+          document.getElementById('credential-specialization').value = data.specialization || '';
+          document.getElementById('credential-grade').value = data.grade || '';
+          document.getElementById('credential-honors').value = data.honors || '';
+          document.getElementById('credential-credits').value = data.credits_earned || '';
+          document.getElementById('credential-enrollment-date').value = data.enrollment_date || '';
+          document.getElementById('credential-completion-date').value = data.completion_date || '';
+          document.getElementById('credential-issue-date').value = data.issue_date || '';
+          document.getElementById('credential-expiry-date').value = data.expiry_date || '';
+          document.getElementById('credential-notes').value = data.notes || '';
+          
+          // Show current document if exists
+          if (data.document) {
+            const documentPreview = document.getElementById('credential-document-preview');
+            const documentName = document.getElementById('credential-document-name');
+            if (documentPreview && documentName) {
+              const fileName = data.document_name || data.document.split('/').pop() || 'certificate.pdf';
+              documentName.innerHTML = `<a href="${data.document}" target="_blank" style="color: var(--accent-primary); text-decoration: none;">${fileName}</a> (Current)`;
+              documentPreview.style.display = 'block';
+            }
+          } else {
+            document.getElementById('credential-document-preview').style.display = 'none';
+          }
+          
+          document.getElementById('credential-modal').style.display = 'flex';
+          document.body.style.overflow = 'hidden';
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: data.error || 'Failed to load credential',
+            confirmButtonText: 'OK'
+          });
+        }
+      } catch (error) {
+        console.error('Error loading credential:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: 'An error occurred while loading credential',
+          confirmButtonText: 'OK'
+        });
+      }
+    }
+    
+    async function deleteCredential(credentialId, credentialIdStr) {
+      const result = await Swal.fire({
+        title: 'Are you sure?',
+        text: `Do you want to delete credential "${credentialIdStr}"? This action cannot be undone!`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel'
+      });
+      
+      if (!result.isConfirmed) {
+        return;
+      }
+      
+      try {
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || 
+                         document.cookie.split(';').find(c => c.trim().startsWith('csrftoken='))?.split('=')[1];
+        
+        const response = await fetch(`/institution-admin/credentials/${credentialId}/delete/`, {
+          method: 'DELETE',
+          headers: {
+            'X-CSRFToken': csrfToken,
+          },
+          credentials: 'include'
+        });
+        
+        const deleteResult = await response.json();
+        
+        if (response.ok && deleteResult.success) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Deleted!',
+            text: deleteResult.message || 'Credential deleted successfully',
+            timer: 2000,
+            showConfirmButton: false,
+            toast: true,
+            position: 'top-end'
+          });
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: deleteResult.error || 'Failed to delete credential',
+            confirmButtonText: 'OK'
+          });
+        }
+      } catch (error) {
+        console.error('Error deleting credential:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: 'An error occurred while deleting credential',
+          confirmButtonText: 'OK'
+        });
+      }
+    }
+    
+    function viewCredential(credentialId) {
+      editCredential(credentialId);
+    }
+    
+    // Close modals on ESC key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeFilterModal();
+        closeCredentialModal();
+      }
+    });
+  </script>
+
+  <style>
+    /* Modal Styles */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    
+    .modal-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+    }
+    
+    .modal-content {
+      position: relative;
+      background: var(--bg-card, #fff);
+      border-radius: var(--radius-lg, 12px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      width: 100%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .modal-title {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    
+    .modal-close {
+      background: none;
+      border: none;
+      padding: 0.5rem;
+      cursor: pointer;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s;
+    }
+    
+    .modal-close:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+    
+    .modal-body {
+      flex: 1;
+      overflow-y: auto;
+    }
+    
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      font-size: 0.875rem;
+      color: var(--text-primary);
+    }
+    
+    /* Select2 Custom Styling */
+    .select2-container--bootstrap-5 .select2-selection {
+      min-height: 42px;
+      border: 1px solid var(--border-color, #e5e7eb);
+      border-radius: var(--radius-md, 8px);
+      background-color: var(--bg-secondary, #fff);
+    }
+    
+    .select2-container--bootstrap-5 .select2-selection--single .select2-selection__rendered {
+      line-height: 40px;
+      padding-left: 12px;
+      color: var(--text-primary);
+    }
+    
+    .select2-container--bootstrap-5 .select2-selection--single .select2-selection__arrow {
+      height: 40px;
+      right: 12px;
+    }
+    
+    .select2-container--bootstrap-5 .select2-dropdown {
+      border: 1px solid var(--border-color, #e5e7eb);
+      border-radius: var(--radius-md, 8px);
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+      z-index: 1001;
+    }
+    
+    .select2-container--bootstrap-5 .select2-search--dropdown .select2-search__field {
+      border: 1px solid var(--border-color, #e5e7eb);
+      border-radius: var(--radius-sm, 6px);
+      padding: 8px 12px;
+    }
+    
+    .select2-container--bootstrap-5 .select2-results__option--highlighted[aria-selected] {
+      background-color: var(--accent-primary, #4f46e5);
+      color: white;
+    }
+    
+    .select2-container--bootstrap-5 .select2-results__option[aria-selected=true] {
+      background-color: var(--bg-hover, #f3f4f6);
+      color: var(--text-primary);
+    }
+    
+    .select2-container {
+      z-index: 1001;
+    }
+  </style>
+
+{% endblock content %}

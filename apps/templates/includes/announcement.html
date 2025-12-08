@@ -1,0 +1,108 @@
+<style>
+
+.announcement-bar {
+  width: 100%;
+  color: white;
+  overflow: hidden;
+  position: relative;
+  text-align: center;
+  border-radius: 30px;
+}
+.announcement-wrapper {
+  position: relative;
+  height: 10px; /* Adjust to fit your announcement text height */
+}
+.announcement {
+  position: relative;
+  padding: 10px 15px;
+  background: linear-gradient(135deg, #002845, #002845);
+  color: #fff;
+  font-size: 1.2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  overflow: hidden;
+  animation: pulse 3s infinite;
+}
+
+.announcement p{  
+opacity: 0;
+  visibility: hidden;
+  animation: showAndHide 12s infinite;
+}
+
+.announcement:before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.5), transparent);
+  animation: spin 5s linear infinite;
+}
+
+.announcement p {
+  margin: 0;
+  z-index: 1;
+  position: relative;
+}
+
+.announcement strong {
+  color: #fff;
+  text-transform: uppercase;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+
+.announcement p:nth-child(1) {
+  animation-delay: 0s;
+}
+
+.announcement p:nth-child(2) {
+  animation-delay: 4s; /* Appears after the first announcement */
+}
+
+.announcement p:nth-child(3) {
+  animation-delay: 8s; /* Appears after the second announcement */
+}
+
+@keyframes showAndHide {
+  0%, 33% {
+    opacity: 1;
+    visibility: visible;
+  }
+  34%, 100% {
+    opacity: 0;
+    visibility: hidden;
+  }
+}
+</style>
+
+<div class="announcement-bar">
+  <div class="announcement">
+    <p><strong>Urgent:</strong> The system will be down for maintenance from 12 AM to 3 AM.</p>
+	<p><strong>Info:</strong> New features coming soon! Stay tuned for updates.</p>
+	 <p><strong>Reminder:</strong> Submit your project proposals by December 31st.</p>
+  </div>
+
+</div> 

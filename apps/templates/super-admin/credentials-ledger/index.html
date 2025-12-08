@@ -1,0 +1,652 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Credentials Ledger {% endblock %} 
+
+{% block content %}
+{% load static %}
+  <!-- Credentials Ledger Section -->
+  <section class="content-section active" id="section-ledger">
+    <div class="section-header">
+      <div>
+        <h1 class="section-title">Credentials Ledger</h1>
+        <p class="section-subtitle">View all blockchain-recorded credentials and transactions</p>
+      </div>
+      <div class="section-actions">
+        <button class="btn btn-outline" id="filter-btn" onclick="openFilterModal()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+          </svg>
+          Filter
+        </button>
+      </div>
+    </div>
+
+    <!-- Statistics Cards -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+      <div class="data-table-card" style="padding: 1.5rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <p style="margin: 0; font-size: 0.875rem; color: var(--text-muted); font-weight: 500;">Total Credentials</p>
+            <h3 style="margin: 0.5rem 0 0 0; font-size: 2rem; font-weight: 700; color: var(--text-primary);">{{ total_credentials }}</h3>
+          </div>
+          <div style="width: 48px; height: 48px; border-radius: 12px; background: var(--accent-primary); opacity: 0.1; display: flex; align-items: center; justify-content: center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5"/>
+              <path d="M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      
+      <div class="data-table-card" style="padding: 1.5rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <p style="margin: 0; font-size: 0.875rem; color: var(--text-muted); font-weight: 500;">Issued</p>
+            <h3 style="margin: 0.5rem 0 0 0; font-size: 2rem; font-weight: 700; color: var(--success, #10b981);">{{ issued_credentials }}</h3>
+          </div>
+          <div style="width: 48px; height: 48px; border-radius: 12px; background: var(--success, #10b981); opacity: 0.1; display: flex; align-items: center; justify-content: center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--success, #10b981)" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+              <polyline points="22 4 12 14.01 9 11.01"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      
+      <div class="data-table-card" style="padding: 1.5rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <p style="margin: 0; font-size: 0.875rem; color: var(--text-muted); font-weight: 500;">Revoked</p>
+            <h3 style="margin: 0.5rem 0 0 0; font-size: 2rem; font-weight: 700; color: var(--error, #ef4444);">{{ revoked_credentials }}</h3>
+          </div>
+          <div style="width: 48px; height: 48px; border-radius: 12px; background: var(--error, #ef4444); opacity: 0.1; display: flex; align-items: center; justify-content: center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--error, #ef4444)" stroke-width="2">
+              <circle cx="12" cy="12" r="10"/>
+              <line x1="15" y1="9" x2="9" y2="15"/>
+              <line x1="9" y1="9" x2="15" y2="15"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      
+      <div class="data-table-card" style="padding: 1.5rem;">
+        <div style="display: flex; align-items: center; justify-content: space-between;">
+          <div>
+            <p style="margin: 0; font-size: 0.875rem; color: var(--text-muted); font-weight: 500;">On Blockchain</p>
+            <h3 style="margin: 0.5rem 0 0 0; font-size: 2rem; font-weight: 700; color: var(--accent-primary);">{{ blockchain_credentials }}</h3>
+          </div>
+          <div style="width: 48px; height: 48px; border-radius: 12px; background: var(--accent-primary); opacity: 0.1; display: flex; align-items: center; justify-content: center;">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--accent-primary)" stroke-width="2">
+              <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/>
+              <line x1="7" y1="2" x2="7" y2="22"/>
+              <line x1="17" y1="2" x2="17" y2="22"/>
+              <line x1="2" y1="12" x2="22" y2="12"/>
+              <line x1="2" y1="7" x2="7" y2="7"/>
+              <line x1="2" y1="17" x2="7" y2="17"/>
+              <line x1="17" y1="17" x2="22" y2="17"/>
+              <line x1="17" y1="7" x2="22" y2="7"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Search Bar -->
+    <div style="margin-bottom: 1.5rem;">
+      <form method="get" action="{% url 'super_admin_ledger' %}" style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap;">
+        <div style="position: relative; flex: 1; max-width: 400px; min-width: 250px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none;">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.3-4.3"/>
+          </svg>
+          <input 
+            type="text" 
+            name="search" 
+            value="{{ search_query }}"
+            placeholder="Search by credential ID, holder name, blockchain hash..." 
+            class="input"
+            style="padding-left: 2.5rem; width: 100%;"
+            autocomplete="off"
+          >
+          {% if search_query %}
+          <a href="{% url 'super_admin_ledger' %}{% if filter_status or filter_type or filter_institution or filter_has_blockchain %}?{% if filter_status %}status={{ filter_status }}{% endif %}{% if filter_type %}{% if filter_status %}&{% endif %}type={{ filter_type }}{% endif %}{% if filter_institution %}{% if filter_status or filter_type %}&{% endif %}institution={{ filter_institution }}{% endif %}{% if filter_has_blockchain %}{% if filter_status or filter_type or filter_institution %}&{% endif %}has_blockchain={{ filter_has_blockchain }}{% endif %}{% endif %}" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); text-decoration: none; padding: 4px;" title="Clear search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </a>
+          {% endif %}
+        </div>
+        {% if filter_status or filter_type or filter_institution or filter_has_blockchain %}
+        <input type="hidden" name="status" value="{{ filter_status }}">
+        <input type="hidden" name="type" value="{{ filter_type }}">
+        <input type="hidden" name="institution" value="{{ filter_institution }}">
+        <input type="hidden" name="has_blockchain" value="{{ filter_has_blockchain }}">
+        {% endif %}
+        <button type="submit" class="btn btn-primary" style="white-space: nowrap;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+          </svg>
+          Search
+        </button>
+      </form>
+      
+      <!-- Active Filters Display -->
+      {% if filter_status or filter_type or filter_institution or filter_has_blockchain %}
+      <div style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;">
+        <span style="font-size: 0.875rem; color: var(--text-muted); font-weight: 500;">Active filters:</span>
+        {% if filter_status %}
+        <span class="status-badge info" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+          Status: {{ filter_status|title }}
+          <a href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if filter_type %}type={{ filter_type }}{% if filter_institution or filter_has_blockchain %}&{% endif %}{% endif %}{% if filter_institution %}institution={{ filter_institution }}{% if filter_has_blockchain %}&{% endif %}{% endif %}{% if filter_has_blockchain %}has_blockchain={{ filter_has_blockchain }}{% endif %}" style="color: inherit; text-decoration: none; font-weight: bold;" title="Remove filter">×</a>
+        </span>
+        {% endif %}
+        {% if filter_type %}
+        <span class="status-badge info" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+          Type: {{ filter_type|title }}
+          <a href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if filter_status %}status={{ filter_status }}{% if filter_institution or filter_has_blockchain %}&{% endif %}{% endif %}{% if filter_institution %}institution={{ filter_institution }}{% if filter_has_blockchain %}&{% endif %}{% endif %}{% if filter_has_blockchain %}has_blockchain={{ filter_has_blockchain }}{% endif %}" style="color: inherit; text-decoration: none; font-weight: bold;" title="Remove filter">×</a>
+        </span>
+        {% endif %}
+        {% if filter_institution %}
+        <span class="status-badge info" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+          Institution: {% for inst in institutions %}{% if inst.id|stringformat:"s" == filter_institution %}{{ inst.name }}{% endif %}{% endfor %}
+          <a href="?{% if search_query %}search={{ search_query }}&{% endif %}{% if filter_status %}status={{ filter_status }}{% if filter_type or filter_has_blockchain %}&{% endif %}{% endif %}{% if filter_type %}type={{ filter_type }}{% if filter_has_blockchain %}&{% endif %}{% endif %}{% if filter_has_blockchain %}has_blockchain={{ filter_has_blockchain }}{% endif %}" style="color: inherit; text-decoration: none; font-weight: bold;" title="Remove filter">×</a>
+        </span>
+        {% endif %}
+        {% if filter_has_blockchain %}
+        <span class="status-badge info" style="display: inline-flex; align-items: center; gap: 0.5rem;">
+          Blockchain: {{ filter_has_blockchain|title }}
+          <a href="?{% if search_query %}search={{ search_query }}{% if filter_status or filter_type or filter_institution %}&{% endif %}{% endif %}{% if filter_status %}status={{ filter_status }}{% if filter_type or filter_institution %}&{% endif %}{% endif %}{% if filter_type %}type={{ filter_type }}{% if filter_institution %}&{% endif %}{% endif %}{% if filter_institution %}institution={{ filter_institution }}{% endif %}" style="color: inherit; text-decoration: none; font-weight: bold;" title="Remove filter">×</a>
+        </span>
+        {% endif %}
+        <a href="{% url 'super_admin_ledger' %}{% if search_query %}?search={{ search_query }}{% endif %}" style="font-size: 0.875rem; color: var(--accent-primary); text-decoration: none; font-weight: 500;">Clear all filters</a>
+      </div>
+      {% endif %}
+    </div>
+
+    <div class="data-table-card">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>Credential ID</th>
+            <th>Holder</th>
+            <th>Institution</th>
+            <th>Program</th>
+            <th>Type</th>
+            <th>Status</th>
+            <th>Blockchain Hash</th>
+            <th>Issue Date</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if credentials %}
+            {% for credential in credentials %}
+            <tr>
+              <td>
+                <div class="table-cell-main">
+                  <div>
+                    <div class="table-cell-title" style="font-family: monospace; font-size: 0.875rem;">{{ credential.credential_id }}</div>
+                    {% if credential.blockchain_tx_id %}
+                    <div class="table-cell-subtitle" style="font-size: 0.75rem; color: var(--accent-primary);">TX: {{ credential.blockchain_tx_id|truncatechars:16 }}</div>
+                    {% endif %}
+                  </div>
+                </div>
+              </td>
+              <td>
+                <div class="table-cell-title">{{ credential.holder_name }}</div>
+                {% if credential.holder %}
+                <div class="table-cell-subtitle">{{ credential.holder.email }}</div>
+                {% endif %}
+              </td>
+              <td>
+                <div class="table-cell-title">{{ credential.institution.name }}</div>
+                <div class="table-cell-subtitle">{{ credential.institution.country }}</div>
+              </td>
+              <td>
+                <div class="table-cell-title">{{ credential.program_name|default:"—" }}</div>
+                {% if credential.degree_level %}
+                <div class="table-cell-subtitle">{{ credential.degree_level }}</div>
+                {% endif %}
+              </td>
+              <td>
+                <span class="status-badge info">{{ credential.get_credential_type_display }}</span>
+              </td>
+              <td>
+                {% if credential.status == 'issued' %}
+                  <span class="status-badge success">Issued</span>
+                {% elif credential.status == 'revoked' %}
+                  <span class="status-badge error">Revoked</span>
+                {% elif credential.status == 'expired' %}
+                  <span class="status-badge warning">Expired</span>
+                {% elif credential.status == 'pending' %}
+                  <span class="status-badge warning">Pending</span>
+                {% else %}
+                  <span class="status-badge">Draft</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if credential.blockchain_hash %}
+                  <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2" style="flex-shrink: 0;">
+                      <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/>
+                      <line x1="7" y1="2" x2="7" y2="22"/>
+                      <line x1="17" y1="2" x2="17" y2="22"/>
+                    </svg>
+                    <span style="font-family: monospace; font-size: 0.75rem; color: var(--text-muted); word-break: break-all;">{{ credential.blockchain_hash|truncatechars:20 }}</span>
+                  </div>
+                  {% if credential.block_number %}
+                  <div class="table-cell-subtitle" style="font-size: 0.75rem;">Block: {{ credential.block_number }}</div>
+                  {% endif %}
+                {% else %}
+                  <span style="color: var(--text-muted); font-size: 0.875rem;">Not on blockchain</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if credential.issue_date %}
+                  {{ credential.issue_date|date:"M d, Y" }}
+                {% else %}
+                  <span style="color: var(--text-muted);">—</span>
+                {% endif %}
+              </td>
+              <td>
+                <div class="table-actions">
+                  <button class="table-action-btn" aria-label="View" title="View Details" onclick="viewCredential('{{ credential.id }}')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                      <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                  </button>
+                  {% if credential.blockchain_hash %}
+                  <button class="table-action-btn" aria-label="View Blockchain" title="View Blockchain Transactions" onclick="viewBlockchainTransactions('{{ credential.id }}', '{{ credential.credential_id|escapejs }}')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/>
+                      <line x1="7" y1="2" x2="7" y2="22"/>
+                      <line x1="17" y1="2" x2="17" y2="22"/>
+                    </svg>
+                  </button>
+                  {% endif %}
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="9" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 1rem;">
+                  <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                  <path d="M2 17l10 5 10-5"/>
+                  <path d="M2 12l10 5 10-5"/>
+                </svg>
+                <p style="margin: 0; font-size: 1.125rem; font-weight: 600;">No credentials found</p>
+                <p style="margin: 0.5rem 0 0 0; font-size: 0.875rem;">No credentials match your search criteria</p>
+              </td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    {% if credentials.has_other_pages %}
+    <div class="pagination-container">
+      <span class="pagination-info">
+        Showing {{ credentials.start_index }} to {{ credentials.end_index }} of {{ credentials.paginator.count }} credentials
+      </span>
+      <div class="pagination-controls">
+        {% if credentials.has_previous %}
+          <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}{% if filter_status %}&status={{ filter_status }}{% endif %}{% if filter_type %}&type={{ filter_type }}{% endif %}{% if filter_institution %}&institution={{ filter_institution }}{% endif %}{% if filter_has_blockchain %}&has_blockchain={{ filter_has_blockchain }}{% endif %}" class="pagination-btn" title="First Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="11 17 6 12 11 7"></polyline><polyline points="18 17 13 12 18 7"></polyline></svg>
+          </a>
+          <a href="?page={{ credentials.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if filter_status %}&status={{ filter_status }}{% endif %}{% if filter_type %}&type={{ filter_type }}{% endif %}{% if filter_institution %}&institution={{ filter_institution }}{% endif %}{% if filter_has_blockchain %}&has_blockchain={{ filter_has_blockchain }}{% endif %}" class="pagination-btn" title="Previous Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </a>
+        {% else %}
+          <span class="pagination-btn disabled" title="First Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="11 17 6 12 11 7"></polyline><polyline points="18 17 13 12 18 7"></polyline></svg>
+          </span>
+          <span class="pagination-btn disabled" title="Previous Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </span>
+        {% endif %}
+
+        {% for i in credentials.paginator.page_range %}
+          {% if credentials.number == i %}
+            <span class="pagination-btn active">{{ i }}</span>
+          {% elif i > credentials.number|add:'-3' and i < credentials.number|add:'3' %}
+            <a href="?page={{ i }}{% if search_query %}&search={{ search_query }}{% endif %}{% if filter_status %}&status={{ filter_status }}{% endif %}{% if filter_type %}&type={{ filter_type }}{% endif %}{% if filter_institution %}&institution={{ filter_institution }}{% endif %}{% if filter_has_blockchain %}&has_blockchain={{ filter_has_blockchain }}{% endif %}" class="pagination-btn">{{ i }}</a>
+          {% endif %}
+        {% endfor %}
+
+        {% if credentials.has_next %}
+          <a href="?page={{ credentials.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if filter_status %}&status={{ filter_status }}{% endif %}{% if filter_type %}&type={{ filter_type }}{% endif %}{% if filter_institution %}&institution={{ filter_institution }}{% endif %}{% if filter_has_blockchain %}&has_blockchain={{ filter_has_blockchain }}{% endif %}" class="pagination-btn" title="Next Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </a>
+          <a href="?page={{ credentials.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}{% if filter_status %}&status={{ filter_status }}{% endif %}{% if filter_type %}&type={{ filter_type }}{% endif %}{% if filter_institution %}&institution={{ filter_institution }}{% endif %}{% if filter_has_blockchain %}&has_blockchain={{ filter_has_blockchain }}{% endif %}" class="pagination-btn" title="Last Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="13 17 18 12 13 7"></polyline><polyline points="6 17 11 12 6 7"></polyline></svg>
+          </a>
+        {% else %}
+          <span class="pagination-btn disabled" title="Next Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </span>
+          <span class="pagination-btn disabled" title="Last Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="13 17 18 12 13 7"></polyline><polyline points="6 17 11 12 6 7"></polyline></svg>
+          </span>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+  </section>
+
+  <!-- Filter Modal -->
+  <div id="filter-modal" class="modal" style="display: none;">
+    <div class="modal-overlay" onclick="closeFilterModal()"></div>
+    <div class="modal-content" style="max-width: 500px;">
+      <div class="modal-header">
+        <h2 class="modal-title">Filter Credentials</h2>
+        <button class="modal-close" onclick="closeFilterModal()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <form method="get" action="{% url 'super_admin_ledger' %}" id="filter-form">
+        <div class="modal-body" style="padding: 1.5rem;">
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Status</label>
+            <select name="status" class="input select">
+              <option value="">All Statuses</option>
+              {% for value, label in credential_statuses %}
+              <option value="{{ value }}" {% if filter_status == value %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Type</label>
+            <select name="type" class="input select">
+              <option value="">All Types</option>
+              {% for value, label in credential_types %}
+              <option value="{{ value }}" {% if filter_type == value %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Institution</label>
+            <select name="institution" class="input select">
+              <option value="">All Institutions</option>
+              {% for institution in institutions %}
+              <option value="{{ institution.id }}" {% if filter_institution == institution.id|stringformat:"s" %}selected{% endif %}>{{ institution.name }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Blockchain Status</label>
+            <select name="has_blockchain" class="input select">
+              <option value="">All</option>
+              <option value="yes" {% if filter_has_blockchain == 'yes' %}selected{% endif %}>On Blockchain</option>
+              <option value="no" {% if filter_has_blockchain == 'no' %}selected{% endif %}>Not on Blockchain</option>
+            </select>
+          </div>
+          
+          {% if search_query %}
+          <input type="hidden" name="search" value="{{ search_query }}">
+          {% endif %}
+        </div>
+        <div class="modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 0.75rem;">
+          <button type="button" class="btn btn-outline" onclick="clearFilters()">Clear All</button>
+          <button type="submit" class="btn btn-primary">Apply Filters</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Blockchain Transactions Modal -->
+  <div id="blockchain-modal" class="modal" style="display: none;">
+    <div class="modal-overlay" onclick="closeBlockchainModal()"></div>
+    <div class="modal-content" style="max-width: 800px; max-height: 90vh; overflow-y: auto;">
+      <div class="modal-header">
+        <h2 class="modal-title" id="blockchain-modal-title">Blockchain Transactions</h2>
+        <button class="modal-close" onclick="closeBlockchainModal()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal-body" style="padding: 1.5rem;" id="blockchain-modal-body">
+        <div style="text-align: center; padding: 2rem;">
+          <div class="spinner" style="width: 40px; height: 40px; border-width: 4px; margin: 0 auto;"></div>
+          <p style="margin-top: 1rem; color: var(--text-muted);">Loading transactions...</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Modal Functions
+    function openFilterModal() {
+      document.getElementById('filter-modal').style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeFilterModal() {
+      document.getElementById('filter-modal').style.display = 'none';
+      document.body.style.overflow = '';
+    }
+    
+    function clearFilters() {
+      window.location.href = "{% url 'super_admin_ledger' %}";
+    }
+    
+    function closeBlockchainModal() {
+      document.getElementById('blockchain-modal').style.display = 'none';
+      document.body.style.overflow = '';
+    }
+    
+    async function viewBlockchainTransactions(credentialId, credentialIdText) {
+      document.getElementById('blockchain-modal-title').textContent = `Blockchain Transactions - ${credentialIdText}`;
+      document.getElementById('blockchain-modal-body').innerHTML = `
+        <div style="text-align: center; padding: 2rem;">
+          <div class="spinner" style="width: 40px; height: 40px; border-width: 4px; margin: 0 auto;"></div>
+          <p style="margin-top: 1rem; color: var(--text-muted);">Loading transactions...</p>
+        </div>
+      `;
+      document.getElementById('blockchain-modal').style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+      
+      try {
+        // Fetch credential details with transactions
+        const response = await fetch(`/api/credentials/${credentialId}/`);
+        const data = await response.json();
+        
+        if (response.ok && data.blockchain_transactions) {
+          const transactions = data.blockchain_transactions;
+          
+          if (transactions.length === 0) {
+            document.getElementById('blockchain-modal-body').innerHTML = `
+              <div style="text-align: center; padding: 2rem; color: var(--text-muted);">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 1rem; opacity: 0.5;">
+                  <rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/>
+                </svg>
+                <p>No blockchain transactions found for this credential.</p>
+              </div>
+            `;
+          } else {
+            let html = '<div style="display: flex; flex-direction: column; gap: 1rem;">';
+            transactions.forEach(tx => {
+              const txType = tx.transaction_type === 'issue' ? 'Issued' : tx.transaction_type === 'revoke' ? 'Revoked' : 'Updated';
+              const txTypeColor = tx.transaction_type === 'issue' ? 'success' : tx.transaction_type === 'revoke' ? 'error' : 'info';
+              html += `
+                <div class="data-table-card" style="padding: 1rem;">
+                  <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.75rem;">
+                    <div>
+                      <span class="status-badge ${txTypeColor}">${txType}</span>
+                      <p style="margin: 0.5rem 0 0 0; font-size: 0.875rem; color: var(--text-muted);">${new Date(tx.created_at).toLocaleString()}</p>
+                    </div>
+                    ${tx.is_confirmed ? '<span class="status-badge success">Confirmed</span>' : '<span class="status-badge warning">Pending</span>'}
+                  </div>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; font-size: 0.875rem;">
+                    <div>
+                      <strong>Transaction Hash:</strong>
+                      <p style="margin: 0.25rem 0 0 0; font-family: monospace; word-break: break-all; color: var(--text-muted);">${tx.transaction_hash}</p>
+                    </div>
+                    <div>
+                      <strong>Block Number:</strong>
+                      <p style="margin: 0.25rem 0 0 0; color: var(--text-muted);">${tx.block_number}</p>
+                    </div>
+                    ${tx.gas_used ? `
+                    <div>
+                      <strong>Gas Used:</strong>
+                      <p style="margin: 0.25rem 0 0 0; color: var(--text-muted);">${tx.gas_used.toLocaleString()}</p>
+                    </div>
+                    ` : ''}
+                    ${tx.confirmations > 0 ? `
+                    <div>
+                      <strong>Confirmations:</strong>
+                      <p style="margin: 0.25rem 0 0 0; color: var(--text-muted);">${tx.confirmations}</p>
+                    </div>
+                    ` : ''}
+                  </div>
+                </div>
+              `;
+            });
+            html += '</div>';
+            document.getElementById('blockchain-modal-body').innerHTML = html;
+          }
+        } else {
+          document.getElementById('blockchain-modal-body').innerHTML = `
+            <div style="text-align: center; padding: 2rem; color: var(--error);">
+              <p>Failed to load blockchain transactions.</p>
+            </div>
+          `;
+        }
+      } catch (error) {
+        console.error('Error loading blockchain transactions:', error);
+        document.getElementById('blockchain-modal-body').innerHTML = `
+          <div style="text-align: center; padding: 2rem; color: var(--error);">
+            <p>An error occurred while loading blockchain transactions.</p>
+          </div>
+        `;
+      }
+    }
+    
+    function viewCredential(credentialId) {
+      // Redirect to credential detail page or show in modal
+      window.location.href = `/institution-admin/issue-credentials/`;
+    }
+    
+    // Close modals on ESC key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeFilterModal();
+        closeBlockchainModal();
+      }
+    });
+  </script>
+
+  <style>
+    /* Modal Styles */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    
+    .modal-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+    }
+    
+    .modal-content {
+      position: relative;
+      background: var(--bg-card, #fff);
+      border-radius: var(--radius-lg, 12px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      width: 100%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .modal-title {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    
+    .modal-close {
+      background: none;
+      border: none;
+      padding: 0.5rem;
+      cursor: pointer;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s;
+    }
+    
+    .modal-close:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+    
+    .modal-body {
+      flex: 1;
+      overflow-y: auto;
+    }
+    
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      font-size: 0.875rem;
+      color: var(--text-primary);
+    }
+    
+    .spinner {
+      border: 3px solid var(--border-color);
+      border-top-color: var(--accent-primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+
+{% endblock content %}

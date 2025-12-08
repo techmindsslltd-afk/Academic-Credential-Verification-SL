@@ -1,0 +1,453 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Awaiting Users {% endblock %} 
+{% block titlePage %} Awaiting Users {% endblock %} 
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %} 
+{% load static %}
+				<div class="card">
+					<div class="card-header card-header-primary card-header-icon">
+						
+						<h4 class="card-title">Awaiting Users</h4>
+						<div class="card-toolbar">
+							<a href='{% url "add_user" %}' class="btn btn-flex btn-primary" data-kt-calendar="add">
+							<!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
+							<span class="svg-icon svg-icon-2">
+								<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+									<rect opacity="0.5" x="11.364" y="20.364" width="16" height="2" rx="1" transform="rotate(-90 11.364 20.364)" fill="currentColor" />
+									<rect x="4.36396" y="11.364" width="16" height="2" rx="1" fill="currentColor" />
+								</svg>
+							</span>
+							<!--end::Svg Icon-->Add User</a>
+						</div>
+					</div>
+						<div class="card-body">
+						 
+						<div class="table-responsive">
+							<div id="toolbar"
+							     class="select">
+								<select class="form-control">
+									<option value="">Export Basic</option>
+									<option value="all">Export All</option>
+									<option value="selected">Export Selected</option>
+								</select>
+							</div>
+							<table id="fresh-table"
+							       data-toggle="table"
+							       class="table"
+							       id="table"
+							       data-toolbar="#toolbar"
+							       data-search="true"
+							       data-show-toggle="true"
+							       data-show-fullscreen="true"
+							       data-show-columns="true"
+							       data-show-columns-toggle-all="true"
+							       data-show-export="true"
+							       data-click-to-select="true"
+							       data-minimum-count-columns="2"
+							       data-pagination="true"
+							       data-id-field="id"
+							       data-toolbar="#toolbar"
+							       data-page-list="[10, 25, 50, 100, all]"
+							       data-show-footer="true"
+							       data-sort-priority='[{"sortName": "id","sortOrder":"desc"},{"sortName":"name","sortOrder":"desc"}]'
+							       data-show-multi-sort="true"
+							       data-show-jump-to="true"
+							       data-response-handler="responseHandler"
+							       data-resizable="true"
+							       data-advanced-search="true"
+							       data-id-table="advancedTable"
+							       data-show-print="true"
+							       data-filter-control="true"
+								   data-show-footer="true"
+							       data-show-search-clear-button="true">
+								<thead>
+									<th scope="col" data-field="Name"
+									    data-filter-control="input"
+									    data-sortable="true">Name</th>
+									<th scope="col" data-field="resend"
+									    data-sortable="true">Reset Password</th>
+									<th scope="col" data-field="Status">Status</th>									
+									<th scope="col" data-field="action"
+									    data-print-ignore="true">Action</th>
+								</thead>
+								<tbody>
+								 {% for obj in users %}
+									<tr class='clickable-row' id="tr_{{obj.id}}">
+									  
+									   
+											 <td class="d-flex align-items-center">
+									 
+										<!--begin:: Avatar -->
+										<div class="symbol symbol-circle symbol-50px overflow-hidden me-3">
+											<a {% if obj.file or obj.file.url != '/media/False' or obj.file or obj.file.url != '' %}data-bs-toggle="modal"{% endif %} href="#myModalImage" onclick=" {% if obj.file or obj.file.url != '/media/False' %}document.getElementById('myImage').src='{{ obj.file.url}}'{% endif %};document.getElementById('myModalImageleLabel').innerHTML='{{ obj.full_name}}'" >
+											   {% if obj.file %}
+												<div class="symbol-label">
+													<img src="{{ obj.file.url}}" alt="" class="w-100" />
+												</div>
+												{% else %}
+												<div class="symbol-label fs-3  {% if forloop.counter|divisibleby:2 %}bg-light-danger text-danger {% elif forloop.counter|divisibleby:3 %}bg-light-warning text--warning {% else %}bg-light-success text-success {% endif %} ">{{ obj.full_name|make_list|first }}</div>
+												{% endif %}
+											</a>
+										</div>
+										
+										<!--end::Avatar-->
+										<!--begin::User details-->
+										<div class="d-flex flex-column">
+											<a href="{% url 'show_user' obj.id %}" class="text-gray-800 text-hover-primary mb-1">{{obj.full_name}}</a>
+											<span>{% if obj.email %} {{obj.email}}<br> {% endif %}{% if obj.telephone %} {{obj.telephone}}<br> {% endif %}{% if obj.address %} {{obj.address}}<br> {% endif %} {% if obj.gender %} {{obj.gender}}<br> {% endif %} </span>
+										<br>
+										<a style="float:left; " class="btn btn-light"  title="View"
+																		data-toggle="tooltip">{{ obj.groups.all.0 }}  
+																	</a>
+										</div>
+										<!--begin::User details-->
+									   </td>
+									   <td>
+										 
+										<p id="user_status_{{obj.id}}"><span class="badge badge-light-success">  </span></p>
+										<a data-bs-toggle="modal" href="#mycode" onclick="document.getElementById('myModalcodelabel').innerHTML='{{ obj.full_name}}';document.getElementById('myId').value='{{ obj.id}}'"  class="btn btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary">Reset Password</a>
+									
+										</td>
+										
+										<td>
+										{% if obj.is_active %}
+										<span class="badge badge-success">Active</span>
+										{% else %}
+										<span class="badge badge-danger"> Inactive</span>
+										{% endif %}
+										</td>
+										<td>	
+									   <div class="dropdown">
+											<a class="btn btn-light btn-active-light-primary btn-flex btn-center btn-sm  dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-bs-toggle="dropdown" data-bs-auto-close="false" aria-expanded="false"> Action </a>
+											<ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+											{% if  obj.recordOwner.id == request.user.id %}
+												<li><a class="dropdown-item" href="{% url 'update_user' obj.id  %}">Edit</a></li>
+												
+												<li class="deleteButton" onclick="deleteData('{{ obj.id}}', '{{ obj.full_name}}')"  data-id="{{ obj.id}}" data-name="{{ obj}}"><a class="dropdown-item" >Delete</a></li>
+											{% endif %}
+												<li class="dropdown dropend">
+													<a class="dropdown-item dropdown-toggle" href="#" id="multilevelDropdownMenu1" data-bs-toggle="dropdown" data-bs-auto-close="false" aria-haspopup="true" aria-expanded="false">Record Audit</a>
+													<ul class="dropdown-menu" aria-labelledby="multilevelDropdownMenu1">
+														<li><a class="dropdown-item" >
+														
+															<b class="badge badge-light-success fw-bold">Created by</b><br>
+															{{ obj.recordOwner.full_name}} <br>
+															{{ obj.recordOwner.email}}
+															
+															{% if  obj.update_by %}
+															<br>
+															<b class="badge badge-light-danger fw-bold">Updated by</b><br>
+															{{ obj.update_by.full_name}} <br>
+															{{ obj.update_by.email}}
+															{% endif %}
+														
+															{% if  obj.timestamp %}
+															<br>
+														   <b class="badge badge-light-success fw-bold">Created at</b><br>
+															{{ obj.timestamp}}
+															{% endif %}
+															
+															
+														
+														 
+														</a></li>
+													</ul>
+												</li>
+											</ul>
+										</div>		   	 
+										</td>
+										</tr>
+										 {% endfor %}
+										 
+									</tbody>
+								</table>
+							</div>
+						</div>
+						</div>
+						
+					
+					
+					
+					
+					
+				
+			<!--begin::Modal - New Product-->
+<div class="modal fade" id="myModalImage"    aria-hidden="true">
+	<!--begin::Modal dialog-->
+	<div class="modal-dialog modal-dialog-centered modal-sm">
+		<!--begin::Modal content-->
+		<div class="modal-content">
+			<!--begin::Modal header-->
+			<div class="modal-header border-0 ">
+				<!--begin::Edit-->
+				  <h5 class="modal-title" id="myModalImageleLabel">Modal 1</h5>
+				<!--begin::Close-->
+				<div class="btn btn-icon btn-sm btn-color-gray-500 btn-active-icon-primary" data-bs-toggle="tooltip" title="Hide Photo" data-bs-dismiss="modal">
+					<!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+					<span class="svg-icon svg-icon-1">
+						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor" />
+							<rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
+						</svg>
+					</span>
+					<!--end::Svg Icon-->
+				</div>
+				<!--end::Close-->
+			</div>
+			<!--end::Modal header-->
+			<!--begin::Modal body-->
+			<div class="modal-body pt-0 pb-20 px-lg-17">
+				<!--begin::Row-->
+				<div class="">
+					<img id="myImage"
+					     src=""
+						 
+						 style="margin-left:auto; margin-right:auto;width:100%; height:100%; display:block;"
+					     class=" img-thumbnail thumbnail zoom"/>
+					
+					
+				</div>
+				
+				
+
+			</div>
+				<!--end::Row-->
+			</div>
+			<!--end::Modal body-->
+		</div>
+	</div>
+	<!--end::Modal Vital Sign-->			
+		
+			<!--begin::Modal - New Product-->
+<div class="modal fade" id="mycode"    data-bs-backdrop="static" aria-hidden="true">
+	<!--begin::Modal dialog-->
+	<div class="modal-dialog modal-dialog-centered">
+		<!--begin::Modal content-->
+		<div class="modal-content">
+			<!--begin::Modal header-->
+			<div class="modal-header border-0 ">
+				<!--begin::Edit-->
+				 <h5 class="modal-title" id="myModalcodelabel">Modal 1</h5>
+				 
+				<!--begin::Close-->
+				<div class="btn btn-icon btn-sm btn-color-gray-500 btn-active-icon-primary" data-bs-toggle="tooltip" title="Hide Photo" data-bs-dismiss="modal">
+					<!--begin::Svg Icon | path: icons/duotune/arrows/arr061.svg-->
+					<span class="svg-icon svg-icon-1">
+						<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+							<rect opacity="0.5" x="6" y="17.3137" width="16" height="2" rx="1" transform="rotate(-45 6 17.3137)" fill="currentColor" />
+							<rect x="7.41422" y="6" width="16" height="2" rx="1" transform="rotate(45 7.41422 6)" fill="currentColor" />
+						</svg>
+					</span>
+					<!--end::Svg Icon-->
+				</div>
+				<!--end::Close-->
+			</div>
+			<!--end::Modal header-->
+			<!--begin::Modal body-->
+			<div class="modal-body pt-0 pb-20 px-lg-17">
+				<!--begin::Row-->
+				<div class="">
+					<br><label>New Password</label>
+					<div class="input-group">
+					<input type="password" id="mypassword" class="form-control" placeholder="Password" >
+					<div class="input-group-append">
+						<button class="btn btn-outline-secondary toggle-password" type="button">
+							<i class="far fa-eye"></i>
+						</button>
+					</div>
+				</div>
+
+					<input type="hidden" id="myId"/>
+				</div>
+				
+				
+				<div class="modal-footer">
+					<button type="button" class="btn btn-light" data-bs-dismiss="modal">Close</button>
+					<button id="send_Code"  type="button" class="btn btn-primary">Save</button>
+				
+				
+				
+				</div>
+			</div>
+				<!--end::Row-->
+			</div>
+			<!--end::Modal body-->
+		</div>
+	</div>
+	<!--end::Modal Vital Sign-->
+
+   	
+<form>
+{% csrf_token %} 
+
+</form>										
+
+<script> 
+ window.addEventListener('load', function() {
+            var inputField = document.querySelector('.bootstrap-table-filter-control-Name');
+            inputField.value = ''; // Set the value to an empty string   
+			inputField.setAttribute('placeholder', 'Search'); // Add the placeholder attribute
+			
+            var inputFieldpass = document.querySelector('#mypassword');
+			inputFieldpass.value = ''; 
+        
+        });
+document.addEventListener("DOMContentLoaded", function() {
+    const passwordInput = document.getElementById("mypassword");
+    const togglePasswordButton = document.querySelector(".toggle-password");
+    
+    togglePasswordButton.addEventListener("click", function() {
+        if (passwordInput.type === "password") {
+            passwordInput.type = "text";
+            togglePasswordButton.innerHTML = '<i class="far fa-eye-slash"></i>';
+        } else {
+            passwordInput.type = "password";
+            togglePasswordButton.innerHTML = '<i class="far fa-eye"></i>';
+        }
+    });
+});
+
+
+
+const send_Code = document.querySelector('#send_Code');
+
+send_Code.addEventListener("click", function() {
+    Swal.fire({
+        title: "Are you sure to change Password?",
+        text: "changing would not be undone",
+        icon: "warning",
+        showCancelButton: true,
+        buttonsStyling: false,
+        confirmButtonText: "Yes, change",
+        cancelButtonText: "No, cancel",
+        customClass: {
+            confirmButton: "btn fw-bold btn-danger",
+            cancelButton: "btn fw-bold btn-active-light-primary"
+        }
+    }).then((submit) => {
+        if (submit.isConfirmed) {
+            var inputElement = document.getElementById("mypassword");
+            var inputValue = inputElement.value.trim(); // Remove leading and trailing whitespace
+
+            if (inputValue === "") {
+                Swal.fire({
+                    title: 'Please enter Password!',
+                    icon: "error",
+                    buttons: true,
+                    dangerMode: true,
+                });
+            } else {
+                var dataId = document.getElementById("myId").value; // Assuming myId is a valid HTML element ID
+                var dataString = {
+                    "id": dataId,
+                    "password": inputValue,
+                    "csrfmiddlewaretoken": document.querySelector('[name="csrfmiddlewaretoken"]').value,
+                };
+
+                $.ajax({
+                    type: "POST",
+                    url: "/password_reset_ajax", // Make sure the URL is correct
+                    data: dataString,
+                    success: function(data) {
+                        if (data.status === 'success') { // Changed 'success' to 'sent' to match the returned JSON key
+                            Swal.fire({
+                                title: data.message,
+                                icon: 'success'
+                            });
+                           // document.querySelector("#mycode").innerHTML = '<span class="badge badge-light-success"> Code Sent </span>';
+							$('#mycode').modal('hide');
+                        } else {
+                            Swal.fire({
+                                title: data.message,
+                                text: 'Please try again',
+                                icon: 'error'
+                            });
+                        }
+                    }
+                });
+            }
+        } else {
+            Swal.fire({
+                title: 'Your content is safe!'
+            });
+        }
+    });
+});
+
+
+
+// Delete button on click
+function deleteData(dataId, userName) {
+	
+	var row = document.getElementById('tr_'+dataId);
+
+	// SweetAlert2 pop up --- official docs reference: https://sweetalert2.github.io/
+	Swal.fire({
+		text: "Are you sure you want to delete " + userName + "?",
+		icon: "warning",
+		showCancelButton: true,
+		buttonsStyling: false, 
+		confirmButtonText: "Yes, delete!",
+		cancelButtonText: "No, cancel",
+		customClass: {
+			confirmButton: "btn fw-bold btn-danger",
+			cancelButton: "btn fw-bold btn-active-light-primary"
+		}
+	}).then(function (result) {
+		if (result.value) {
+			var data = {
+				"id": dataId,
+			};
+
+			$.ajax({
+				type: "DELETE",
+				url: '/delete_user/' + dataId,
+				data: data,
+				success: function(deleted) {
+					if (deleted.status === "True") {
+						Swal.fire({
+							text: "You have deleted " + userName + "!.",
+							icon: "success",
+							buttonsStyling: false,
+							confirmButtonText: "Ok, got it!",
+							customClass: {
+								confirmButton: "btn fw-bold btn-primary",
+							}
+						}).then(function () {
+							$("#tr_" + dataId).remove();
+						});
+					} else {
+						Swal.fire("Error deleting!", "You are not permitted to delete", "error");
+					}
+				},
+				error: function() {
+					Swal.fire("Error deleting!", "An error occurred while deleting", "error");
+				}
+			});
+		} else if (result.dismiss === 'cancel') {
+			Swal.fire({
+				text: userName + " was not deleted.",
+				icon: "error",
+				buttonsStyling: false,
+				confirmButtonText: "Ok, got it!",
+				customClass: {
+					confirmButton: "btn fw-bold btn-primary",
+				}
+			});
+		}
+	});
+};
+
+
+</script>	
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+
+
+{% endblock javascripts %}

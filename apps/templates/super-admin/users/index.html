@@ -1,0 +1,732 @@
+ {% extends "layouts/base.html" %}
+
+{% block title %} Users {% endblock %} 
+
+{% block content %}
+{% load static %}
+  <!-- Users Section -->
+        <section class="content-section active" id="section-users">
+          <div class="section-header">
+            <div>
+              <h1 class="section-title">Users</h1>
+              <p class="section-subtitle">Manage platform users and permissions</p>
+            </div>
+      <div class="section-actions">
+        <button class="btn btn-outline" id="filter-btn" onclick="openFilterModal()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/>
+          </svg>
+          Filter
+        </button>
+        <button class="btn btn-primary" id="add-user-btn" onclick="openAddUserModal()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="12" y1="5" x2="12" y2="19"/>
+            <line x1="5" y1="12" x2="19" y2="12"/>
+          </svg>
+          Add User
+        </button>
+      </div>
+    </div>
+    
+    <!-- Search Bar -->
+    <div style="margin-bottom: 1.5rem;">
+      <form method="get" action="{% url 'super_admin_users' %}" style="display: flex; gap: 0.75rem; align-items: center;">
+        <div style="position: relative; flex: 1; max-width: 400px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); pointer-events: none;">
+            <circle cx="11" cy="11" r="8"/>
+            <path d="m21 21-4.3-4.3"/>
+          </svg>
+          <input 
+            type="text" 
+            name="search" 
+            value="{{ search_query }}"
+            placeholder="Search by name, email, or phone..." 
+            class="input"
+            style="padding-left: 2.5rem; width: 100%;"
+            autocomplete="off"
+          >
+          {% if search_query %}
+          <a href="{% url 'super_admin_users' %}" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); color: var(--text-muted); text-decoration: none; padding: 4px;" title="Clear search">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </a>
+          {% endif %}
+        </div>
+        <button type="submit" class="btn btn-primary" style="white-space: nowrap;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/>
+          </svg>
+          Search
+        </button>
+      </form>
+    </div>
+
+    <div class="data-table-card">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th>User</th>
+            <th>Role</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Status</th>
+            <th>Joined</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if users %}
+            {% for user_obj in users %}
+            <tr>
+              <td>
+                <div class="table-cell-main">
+                  {% if user_obj.avatar %}
+                    <img src="{{ user_obj.avatar.url }}" alt="{{ user_obj.full_name }}" class="institution-logo-img" style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover;">
+                  {% else %}
+                    <div class="institution-logo" style="width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.875rem; font-weight: 600;">
+                      {{ user_obj.first_name|first|upper }}{{ user_obj.last_name|first|upper }}
+                    </div>
+                  {% endif %}
+                  <div>
+                    <div class="table-cell-title">{{ user_obj.full_name }}</div>
+                    <div class="table-cell-subtitle">
+                      {% if user_obj.is_verified %}
+                        <span style="display: inline-flex; align-items: center; gap: 0.25rem; color: var(--success);">
+                          <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2L3.5 6.5v5.5c0 4.4 3.6 8.4 8.5 10 4.9-1.6 8.5-5.6 8.5-10V6.5L12 2zm-1 14l-4-4 1.4-1.4 2.6 2.6 5.6-5.6L18 9l-7 7z"/>
+                          </svg>
+                          Verified
+                        </span>
+                      {% else %}
+                        <span style="color: var(--text-muted);">Unverified</span>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </td>
+              <td>
+                <span class="type-badge" style="
+                  {% if user_obj.role == 'super_admin' %}background: rgba(139, 92, 246, 0.15); color: #8b5cf6;
+                  {% elif user_obj.role == 'institution_admin' %}background: rgba(59, 130, 246, 0.15); color: #3b82f6;
+                  {% elif user_obj.role == 'student' %}background: rgba(34, 197, 94, 0.15); color: #22c55e;
+                  {% else %}background: rgba(251, 146, 60, 0.15); color: #fb923c;
+                  {% endif %}
+                ">
+                  {{ user_obj.get_role_display }}
+                </span>
+              </td>
+              <td>{{ user_obj.email }}</td>
+              <td>{{ user_obj.phone|default:"—" }}</td>
+              <td>
+                {% if user_obj.is_active %}
+                  <span class="status-badge success">Active</span>
+                {% else %}
+                  <span class="status-badge error">Inactive</span>
+                {% endif %}
+                {% if user_obj.is_staff %}
+                  <span class="status-badge info" style="margin-left: 0.5rem;">Staff</span>
+                {% endif %}
+              </td>
+              <td>
+                <div style="font-size: 0.875rem; color: var(--text-secondary);">
+                  {{ user_obj.date_joined|date:"M d, Y" }}
+                </div>
+                {% if user_obj.last_login %}
+                <div style="font-size: 0.75rem; color: var(--text-muted);">
+                  Last: {{ user_obj.last_login|timesince }} ago
+                </div>
+                {% endif %}
+              </td>
+              <td>
+                <div class="table-actions">
+                  <button class="table-action-btn" aria-label="View" title="View Details" onclick="viewUser('{{ user_obj.id }}')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                      <circle cx="12" cy="12" r="3"/>
+                    </svg>
+                  </button>
+                  <button class="table-action-btn" aria-label="Edit" title="Edit User" onclick="editUser('{{ user_obj.id }}')">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                    </svg>
+                  </button>
+                  <button class="table-action-btn" aria-label="Delete" title="Delete User" onclick="deleteUser('{{ user_obj.id }}', '{{ user_obj.email|escapejs }}')" style="color: var(--error);" {% if user_obj.id == user.id or user_obj.role == 'super_admin' %}disabled title="Cannot delete this user"{% endif %}>
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="3 6 5 6 21 6"/>
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                      <line x1="10" y1="11" x2="10" y2="17"/>
+                      <line x1="14" y1="11" x2="14" y2="17"/>
+                    </svg>
+                  </button>
+          </div>
+              </td>
+            </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="7" style="text-align: center; padding: 3rem; color: var(--text-muted);">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="margin-bottom: 1rem;">
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+            </svg>
+                <p style="margin: 0; font-size: 1.125rem; font-weight: 600;">No users found</p>
+                <p style="margin: 0.5rem 0 0 0; font-size: 0.875rem;">Use the "Add User" button above to create a new user</p>
+              </td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Pagination -->
+    {% if users.has_other_pages %}
+    <div class="pagination-container">
+      <span class="pagination-info">
+        Showing {{ users.start_index }} to {{ users.end_index }} of {{ users.paginator.count }} users
+      </span>
+      <div class="pagination-controls">
+        {% if users.has_previous %}
+          <a href="?page=1{% if search_query %}&search={{ search_query }}{% endif %}{% if filter_role %}&role={{ filter_role }}{% endif %}{% if filter_status %}&status={{ filter_status }}{% endif %}{% if filter_verified %}&verified={{ filter_verified }}{% endif %}" class="pagination-btn" title="First Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="11 17 6 12 11 7"></polyline><polyline points="18 17 13 12 18 7"></polyline></svg>
+          </a>
+          <a href="?page={{ users.previous_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if filter_role %}&role={{ filter_role }}{% endif %}{% if filter_status %}&status={{ filter_status }}{% endif %}{% if filter_verified %}&verified={{ filter_verified }}{% endif %}" class="pagination-btn" title="Previous Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </a>
+        {% else %}
+          <span class="pagination-btn disabled" title="First Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="11 17 6 12 11 7"></polyline><polyline points="18 17 13 12 18 7"></polyline></svg>
+          </span>
+          <span class="pagination-btn disabled" title="Previous Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+          </span>
+        {% endif %}
+
+        {% for i in users.paginator.page_range %}
+          {% if users.number == i %}
+            <span class="pagination-btn active">{{ i }}</span>
+          {% elif i > users.number|add:'-3' and i < users.number|add:'3' %}
+            <a href="?page={{ i }}{% if search_query %}&search={{ search_query }}{% endif %}{% if filter_role %}&role={{ filter_role }}{% endif %}{% if filter_status %}&status={{ filter_status }}{% endif %}{% if filter_verified %}&verified={{ filter_verified }}{% endif %}" class="pagination-btn">{{ i }}</a>
+          {% endif %}
+        {% endfor %}
+
+        {% if users.has_next %}
+          <a href="?page={{ users.next_page_number }}{% if search_query %}&search={{ search_query }}{% endif %}{% if filter_role %}&role={{ filter_role }}{% endif %}{% if filter_status %}&status={{ filter_status }}{% endif %}{% if filter_verified %}&verified={{ filter_verified }}{% endif %}" class="pagination-btn" title="Next Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </a>
+          <a href="?page={{ users.paginator.num_pages }}{% if search_query %}&search={{ search_query }}{% endif %}{% if filter_role %}&role={{ filter_role }}{% endif %}{% if filter_status %}&status={{ filter_status }}{% endif %}{% if filter_verified %}&verified={{ filter_verified }}{% endif %}" class="pagination-btn" title="Last Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="13 17 18 12 13 7"></polyline><polyline points="6 17 11 12 6 7"></polyline></svg>
+          </a>
+        {% else %}
+          <span class="pagination-btn disabled" title="Next Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+          </span>
+          <span class="pagination-btn disabled" title="Last Page">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="13 17 18 12 13 7"></polyline><polyline points="6 17 11 12 6 7"></polyline></svg>
+          </span>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+  </section>
+
+  <!-- Filter Modal -->
+  <div id="filter-modal" class="modal" style="display: none;">
+    <div class="modal-overlay" onclick="closeFilterModal()"></div>
+    <div class="modal-content" style="max-width: 500px;">
+      <div class="modal-header">
+        <h2 class="modal-title">Filter Users</h2>
+        <button class="modal-close" onclick="closeFilterModal()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <form method="get" action="{% url 'super_admin_users' %}" id="filter-form">
+        <div class="modal-body" style="padding: 1.5rem;">
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Role</label>
+            <select name="role" class="input select">
+              <option value="">All Roles</option>
+              {% for value, label in user_roles %}
+              <option value="{{ value }}" {% if filter_role == value %}selected{% endif %}>{{ label }}</option>
+              {% endfor %}
+            </select>
+          </div>
+          
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Status</label>
+            <select name="status" class="input select">
+              <option value="">All Statuses</option>
+              <option value="active" {% if filter_status == 'active' %}selected{% endif %}>Active</option>
+              <option value="inactive" {% if filter_status == 'inactive' %}selected{% endif %}>Inactive</option>
+            </select>
+          </div>
+          
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Verification Status</label>
+            <select name="verified" class="input select">
+              <option value="">All</option>
+              <option value="verified" {% if filter_verified == 'verified' %}selected{% endif %}>Verified</option>
+              <option value="unverified" {% if filter_verified == 'unverified' %}selected{% endif %}>Unverified</option>
+            </select>
+          </div>
+          
+          {% if search_query %}
+          <input type="hidden" name="search" value="{{ search_query }}">
+          {% endif %}
+        </div>
+        <div class="modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 0.75rem;">
+          <button type="button" class="btn btn-outline" onclick="clearFilters()">Clear</button>
+          <button type="submit" class="btn btn-primary">Apply Filters</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Add/Edit User Modal -->
+  <div id="user-modal" class="modal" style="display: none;">
+    <div class="modal-overlay" onclick="closeUserModal()"></div>
+    <div class="modal-content" style="max-width: 700px; max-height: 90vh; overflow-y: auto;">
+      <div class="modal-header">
+        <h2 class="modal-title" id="user-modal-title">Add User</h2>
+        <button class="modal-close" onclick="closeUserModal()">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="18" y1="6" x2="6" y2="18"/>
+            <line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+      <form id="user-form" onsubmit="saveUser(event)">
+        <div class="modal-body" style="padding: 1.5rem;">
+          <input type="hidden" id="user-id" name="id">
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+            <div class="form-group">
+              <label class="form-label">First Name <span style="color: var(--error);">*</span></label>
+              <input type="text" id="user-first-name" name="first_name" class="input" required>
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Last Name <span style="color: var(--error);">*</span></label>
+              <input type="text" id="user-last-name" name="last_name" class="input" required>
+            </div>
+          </div>
+          
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Email <span style="color: var(--error);">*</span></label>
+            <input type="email" id="user-email" name="email" class="input" required>
+          </div>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+            <div class="form-group">
+              <label class="form-label">Phone</label>
+              <input type="text" id="user-phone" name="phone" class="input">
+            </div>
+            
+            <div class="form-group">
+              <label class="form-label">Role</label>
+              <select id="user-role" name="role" class="input select">
+                {% for value, label in user_roles %}
+                <option value="{{ value }}">{{ label }}</option>
+                {% endfor %}
+              </select>
+            </div>
+          </div>
+          
+          <div class="form-group" style="margin-bottom: 1rem;">
+            <label class="form-label">Password <span id="password-required" style="color: var(--error); display: none;">*</span></label>
+            <input type="password" id="user-password" name="password" class="input" placeholder="Leave blank to keep current password (edit only)">
+            <small style="color: var(--text-muted); font-size: 0.75rem; margin-top: 0.25rem; display: block;">Required for new users. Leave blank when editing to keep current password.</small>
+          </div>
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
+            <div class="form-group">
+              <label class="checkbox-label" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                <input type="checkbox" id="user-is-active" name="is_active" value="true" checked>
+                <span>Is Active</span>
+              </label>
+            </div>
+            
+            <div class="form-group">
+              <label class="checkbox-label" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                <input type="checkbox" id="user-is-staff" name="is_staff" value="true">
+                <span>Is Staff</span>
+              </label>
+            </div>
+            
+            <div class="form-group">
+              <label class="checkbox-label" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                <input type="checkbox" id="user-is-verified" name="is_verified" value="true">
+                <span>Is Verified</span>
+              </label>
+            </div>
+            
+            <div class="form-group">
+              <label class="checkbox-label" style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer;">
+                <input type="checkbox" id="user-email-verified" name="email_verified" value="true">
+                <span>Email Verified</span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer" style="padding: 1rem 1.5rem; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 0.75rem;">
+          <button type="button" class="btn btn-outline" onclick="closeUserModal()">Cancel</button>
+          <button type="submit" class="btn btn-primary" id="user-submit-btn">
+            <span class="btn-text">Save User</span>
+            <span class="btn-spinner" style="display: none;">
+              <span class="spinner" style="width: 16px; height: 16px; border-width: 2px;"></span>
+            </span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Modal Functions
+    function openFilterModal() {
+      document.getElementById('filter-modal').style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeFilterModal() {
+      document.getElementById('filter-modal').style.display = 'none';
+      document.body.style.overflow = '';
+    }
+    
+    function clearFilters() {
+      window.location.href = "{% url 'super_admin_users' %}";
+    }
+    
+    function openAddUserModal() {
+      document.getElementById('user-modal-title').textContent = 'Add User';
+      document.getElementById('user-form').reset();
+      document.getElementById('user-id').value = '';
+      document.getElementById('user-is-active').checked = true;
+      document.getElementById('user-password').required = true;
+      document.getElementById('password-required').style.display = 'inline';
+      document.getElementById('user-modal').style.display = 'flex';
+      document.body.style.overflow = 'hidden';
+    }
+    
+    function closeUserModal() {
+      document.getElementById('user-modal').style.display = 'none';
+      document.body.style.overflow = '';
+      document.getElementById('user-form').reset();
+    }
+    
+    // CRUD Functions
+    async function saveUser(event) {
+      event.preventDefault();
+      
+      const form = event.target;
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      
+      // Handle checkboxes
+      data.is_active = document.getElementById('user-is-active').checked;
+      data.is_staff = document.getElementById('user-is-staff').checked;
+      data.is_verified = document.getElementById('user-is-verified').checked;
+      data.email_verified = document.getElementById('user-email-verified').checked;
+      
+      const userId = document.getElementById('user-id').value;
+      const isEdit = !!userId;
+      const url = isEdit 
+        ? `/super-admin/users/${userId}/update/`
+        : '/super-admin/users/create/';
+      const method = isEdit ? 'PUT' : 'POST';
+      
+      // Remove password if empty during edit
+      if (isEdit && !data.password) {
+        delete data.password;
+      }
+      
+      const submitBtn = document.getElementById('user-submit-btn');
+      const btnText = submitBtn.querySelector('.btn-text');
+      const btnSpinner = submitBtn.querySelector('.btn-spinner');
+      
+      btnText.style.display = 'none';
+      btnSpinner.style.display = 'inline-block';
+      submitBtn.disabled = true;
+      
+      try {
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || 
+                         document.cookie.split(';').find(c => c.trim().startsWith('csrftoken='))?.split('=')[1];
+        
+        const response = await fetch(url, {
+          method: method,
+          headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': csrfToken,
+          },
+          credentials: 'include',
+          body: JSON.stringify(data)
+        });
+        
+        const result = await response.json();
+        
+        if (response.ok && result.success) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: result.message || 'User saved successfully',
+            timer: 2000,
+            showConfirmButton: false,
+            toast: true,
+            position: 'top-end'
+          });
+          closeUserModal();
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: result.error || 'Failed to save user',
+            confirmButtonText: 'OK'
+          });
+        }
+      } catch (error) {
+        console.error('Error saving user:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: 'An error occurred while saving user',
+          confirmButtonText: 'OK'
+        });
+      } finally {
+        btnText.style.display = 'inline-block';
+        btnSpinner.style.display = 'none';
+        submitBtn.disabled = false;
+      }
+    }
+    
+    async function editUser(userId) {
+      try {
+        const response = await fetch(`/super-admin/users/${userId}/`);
+        const data = await response.json();
+        
+        if (response.ok) {
+          document.getElementById('user-modal-title').textContent = 'Edit User';
+          document.getElementById('user-id').value = data.id;
+          document.getElementById('user-first-name').value = data.first_name || '';
+          document.getElementById('user-last-name').value = data.last_name || '';
+          document.getElementById('user-email').value = data.email || '';
+          document.getElementById('user-phone').value = data.phone || '';
+          document.getElementById('user-role').value = data.role || 'student';
+          document.getElementById('user-password').value = '';
+          document.getElementById('user-password').required = false;
+          document.getElementById('password-required').style.display = 'none';
+          document.getElementById('user-is-active').checked = data.is_active !== false;
+          document.getElementById('user-is-staff').checked = data.is_staff || false;
+          document.getElementById('user-is-verified').checked = data.is_verified || false;
+          document.getElementById('user-email-verified').checked = data.email_verified || false;
+          
+          document.getElementById('user-modal').style.display = 'flex';
+          document.body.style.overflow = 'hidden';
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: data.error || 'Failed to load user',
+            confirmButtonText: 'OK'
+          });
+        }
+      } catch (error) {
+        console.error('Error loading user:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: 'An error occurred while loading user',
+          confirmButtonText: 'OK'
+        });
+      }
+    }
+    
+    async function deleteUser(userId, userEmail) {
+      const result = await Swal.fire({
+        title: 'Are you sure?',
+        text: `Do you want to delete user "${userEmail}"? This action cannot be undone!`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel'
+      });
+      
+      if (!result.isConfirmed) {
+        return;
+      }
+      
+      try {
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]')?.value || 
+                         document.cookie.split(';').find(c => c.trim().startsWith('csrftoken='))?.split('=')[1];
+        
+        const response = await fetch(`/super-admin/users/${userId}/delete/`, {
+          method: 'DELETE',
+          headers: {
+            'X-CSRFToken': csrfToken,
+          },
+          credentials: 'include'
+        });
+        
+        const deleteResult = await response.json();
+        
+        if (response.ok && deleteResult.success) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Deleted!',
+            text: deleteResult.message || 'User deleted successfully',
+            timer: 2000,
+            showConfirmButton: false,
+            toast: true,
+            position: 'top-end'
+          });
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: deleteResult.error || 'Failed to delete user',
+            confirmButtonText: 'OK'
+          });
+        }
+      } catch (error) {
+        console.error('Error deleting user:', error);
+        Swal.fire({
+          icon: 'error',
+          title: 'Error!',
+          text: 'An error occurred while deleting user',
+          confirmButtonText: 'OK'
+        });
+      }
+    }
+    
+    function viewUser(userId) {
+      editUser(userId);
+    }
+    
+    
+    // Close modals on ESC key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') {
+        closeFilterModal();
+        closeUserModal();
+      }
+    });
+  </script>
+
+  <style>
+    /* Modal Styles (same as institutions) */
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+    }
+    
+    .modal-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+    }
+    
+    .modal-content {
+      position: relative;
+      background: var(--bg-card, #fff);
+      border-radius: var(--radius-lg, 12px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+      width: 100%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+    
+    .modal-title {
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+    
+    .modal-close {
+      background: none;
+      border: none;
+      padding: 0.5rem;
+      cursor: pointer;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: var(--radius-sm);
+      transition: all 0.2s;
+    }
+    
+    .modal-close:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+    
+    .modal-body {
+      flex: 1;
+      overflow-y: auto;
+    }
+    
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      font-size: 0.875rem;
+      color: var(--text-primary);
+    }
+    
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+      font-size: 0.875rem;
+    }
+    
+    .checkbox-label input[type="checkbox"] {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+    }
+  </style>
+
+{% endblock content %}

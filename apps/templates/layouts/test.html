@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expandable Search Bar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f4f4f4;
+        }
+
+        .search-container {
+            position: relative;
+            width: 50px;
+            transition: width 0.4s ease-in-out;
+            overflow: hidden;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 12px 45px 12px 15px;
+            font-size: 16px;
+            border: 2px solid #3498db;
+            border-radius: 25px;
+            outline: none;
+            transition: width 0.4s ease-in-out, padding 0.4s ease-in-out;
+            background: white;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .search-input:focus {
+            cursor: text;
+            opacity: 1;
+        }
+
+        .search-button {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #3498db;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .search-container.active {
+            width: 300px;
+        }
+
+        .search-container.active .search-input {
+            width: 100%;
+            opacity: 1;
+            padding-right: 45px;
+        }
+
+        @media (max-width: 480px) {
+            .search-container.active {
+                width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <form class="search-container" id="searchBox">
+        <input type="text" class="search-input" id="searchInput" placeholder="Search...">
+        <button type="submit" class="search-button" id="searchBtn">🔍</button>
+    </form>
+
+    <script>
+        const searchBox = document.getElementById('searchBox');
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+
+        searchBtn.addEventListener('click', function (event) {
+            if (!searchBox.classList.contains('active')) {
+                event.preventDefault(); // Prevent form submission on first click
+                searchBox.classList.add('active');
+                searchInput.focus();
+            }
+        });
+
+        document.addEventListener('click', function (event) {
+            if (!searchBox.contains(event.target) && searchInput.value === "") {
+                searchBox.classList.remove('active');
+            }
+        });
+    </script>
+
+</body>
+</html>

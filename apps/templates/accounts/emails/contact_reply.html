@@ -1,0 +1,82 @@
+{% extends "accounts/emails/base_email.html" %}
+{% load static %}
+
+{% block title %}Reply from {{ settings.site_name|default:"Apple of God" }}{% endblock %}
+
+{% block header %}
+{% if settings.file %}
+<img src="{% if request and request.is_secure %}https{% else %}http{% endif %}://{% if request %}{{ request.get_host }}{% else %}applegod.org{% endif %}{{ settings.file.url }}" alt="{{ settings.site_name|default:'Apple of God' }}" style="max-height: 50px; margin-bottom: 10px;">
+{% else %}
+<img src="{% if request and request.is_secure %}https{% else %}http{% endif %}://{% if request %}{{ request.get_host }}{% else %}applegod.org{% endif %}{% static 'assets/guest/images/logo.jpeg' %}" alt="{{ settings.site_name|default:'Apple of God' }}" style="max-height: 50px; margin-bottom: 10px;">
+{% endif %}
+<br>
+{{ settings.site_name|default:"Apple of God" }} - Contact Reply
+{% endblock %}
+
+{% block content %}
+<table width="100%" cellpadding="0" cellspacing="0" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+    
+    <!-- Greeting -->
+    <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+        <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 16px; vertical-align: top; margin: 0; padding: 0 0 20px; color: #333;" valign="top">
+            <p style="margin: 0 0 15px 0; font-size: 16px; line-height: 1.5;">
+                Dear <strong>{{ original_message.name }}</strong>,
+            </p>
+            <p style="margin: 0 0 15px 0; font-size: 14px; line-height: 1.6; color: #666;">
+                Thank you for contacting Apple of God. We have received your message and appreciate you taking the time to reach out to us.
+            </p>
+        </td>
+    </tr>
+    
+    <!-- Reply Content -->
+    <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+        <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+            <div style="background-color: #f8f9fa; border-left: 4px solid #667eea; padding: 20px; margin: 20px 0; border-radius: 4px;">
+                <h4 style="margin: 0 0 15px 0; color: #333; font-size: 16px;">Our Response:</h4>
+                <div style="white-space: pre-wrap; font-size: 14px; line-height: 1.6; color: #555;">{{ reply_message }}</div>
+            </div>
+        </td>
+    </tr>
+    
+    <!-- Original Message Reference -->
+    <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+        <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+            <div style="border-top: 1px solid #e9e9e9; padding-top: 20px; margin-top: 20px;">
+                <h5 style="margin: 0 0 10px 0; color: #666; font-size: 14px; font-weight: 600;">Your Original Message:</h5>
+                <div style="background-color: #f8f9fa; padding: 15px; border-radius: 4px; font-size: 13px; color: #666;">
+                    <p style="margin: 0 0 8px 0;"><strong>Subject:</strong> {{ original_message.subject }}</p>
+                    <p style="margin: 0 0 8px 0;"><strong>Date:</strong> {{ original_message.created_at|date:"F d, Y \a\t h:i A" }}</p>
+                    <p style="margin: 0; white-space: pre-wrap;">{{ original_message.message }}</p>
+                </div>
+            </div>
+        </td>
+    </tr>
+    
+    <!-- Contact Information -->
+    <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+        <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+            <p style="margin: 0 0 15px 0; font-size: 14px; line-height: 1.6; color: #666;">
+                If you have any further questions or need additional assistance, please don't hesitate to contact us:
+            </p>
+            <div style="background-color: #f8f9fa; padding: 15px; border-radius: 4px; font-size: 13px;">
+                <p style="margin: 0 0 5px 0;"><strong>Email:</strong> {% if settings.email %}{{ settings.email }}{% else %}info@applegod.org{% endif %}</p>
+                <p style="margin: 0 0 5px 0;"><strong>Phone:</strong> {% if settings.phone %}{{ settings.phone }}{% else %}+232-XXX-XXXX{% endif %}</p>
+                <p style="margin: 0;"><strong>Website:</strong> <a href="{% if request and request.is_secure %}https{% else %}http{% endif %}://{% if request %}{{ request.get_host }}{% else %}applegod.org{% endif %}" style="color: #667eea; text-decoration: none;">{% if request %}{{ request.get_host }}{% else %}applegod.org{% endif %}</a></p>
+            </div>
+        </td>
+    </tr>
+    
+    <!-- Closing -->
+    <tr style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; margin: 0;">
+        <td class="content-block" style="font-family: 'Helvetica Neue',Helvetica,Arial,sans-serif; box-sizing: border-box; font-size: 14px; vertical-align: top; margin: 0; padding: 0 0 20px;" valign="top">
+            <p style="margin: 0 0 10px 0; font-size: 14px; line-height: 1.6; color: #333;">
+                Best regards,<br>
+                <strong>Apple of God Team</strong>
+            </p>
+            <p style="margin: 0; font-size: 12px; color: #999;">
+                This is an automated response. Please do not reply directly to this email.
+            </p>
+        </td>
+    </tr>
+</table>
+{% endblock %}
