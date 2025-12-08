@@ -1,4 +1,4 @@
-# Academic Credential Verification System
+# Academic Credential Verification System (ACV SL)
 
 ![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
 ![Django](https://img.shields.io/badge/Django-5.0.3-green.svg)
