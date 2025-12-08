@@ -1,0 +1,30 @@
+[
+    {
+        "title": "Academic Programs",
+        "url": "/programs/",
+        "description": "Explore our undergraduate and graduate programs."
+    },
+    {
+        "title": "Admissions Requirements",
+        "url": "/admissions/",
+        "description": "Learn about how to apply and admission requirements."
+    },
+    {
+        "title": "International Programs",
+        "url": "/international-programs/",
+        "description": "Information about our global initiatives and study abroad options."
+    },
+    {
+        "title": "Faculty Directory",
+        "url": "/faculty/",
+        "description": "Meet our distinguished professors and researchers."
+    },
+    {
+        "title": "Events & Conferences",
+        "url": "/events/",
+        "description": "Stay updated on upcoming university events and academic conferences."
+    }
+]
+
+
+
