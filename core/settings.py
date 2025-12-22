@@ -56,12 +56,12 @@ DEFAULT_AUTO_FIELD='django.db.models.AutoField'
 AUTH_USER_MODEL = 'accounts.User'
 
 # Jitsi JWT secret (use the one configured on your Jitsi server)
-JITSI_SECRET = 'cxCcOI-W7M1o2Jy4hGz_6dLZpnrkPJVgYJH7wTz5ioQ='
+JITSI_SECRET = ''
 
 # load production server from .env     
 
 
-#ALLOWED_HOSTS = ['sierrahopesl.com', 'www.sierrahopesl.com', config('SERVER', default='66.29.138.4')]
+#ALLOWED_HOSTS = ['', '', config('SERVER', default='66.29.138.4')]
 
 
 ALLOWED_HOSTS = [ 'localhost','192.168.2.130','127.0.0.1:8000','192.168.1.130','127.0.0.1','192.168.1.119','192.168.2.100']
@@ -275,10 +275,10 @@ DATABASES = {
 #DATABASES = {
 #    'default': {
 #        'ENGINE': 'django.db.backends.mysql', 
-       #'NAME': 'clinic_management',  
-#        'NAME': 'sierrahopesl_clinic',                      # Or path to database file if using sqlite3.
-#        'USER': 'sierrahopesl_clinic_portal',                      # Not used with sqlite3.
-#        'PASSWORD': 'INow@?IyZTf7', 
+       #'NAME': '',  
+#        'NAME': '',                      # Or path to database file if using sqlite3.
+#        'USER': '',                      # Not used with sqlite3.
+#        'PASSWORD': '', 
 #        'HOST': 'localhost',   # Or an IP Address that your DB is hosted on
 #        'PORT': '3306',
  #   }
