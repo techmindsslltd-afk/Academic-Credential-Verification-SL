@@ -102,7 +102,7 @@ Visit: `http://127.0.0.1:8000/dashboard`
 
 ## ⛓️ Blockchain Integration
 
-CertChain uses a decentralized approach to credential verification inspired by the **Solana Attestation Service (SAS)**. This ensures that once a credential is issued, its proof is immutable and verifiable without relying solely on the central database.
+ACV-SL uses a decentralized approach to credential verification inspired by the **Solana Attestation Service (SAS)**. This ensures that once a credential is issued, its proof is immutable and verifiable without relying solely on the central database.
 
 ### How it Works:
 1.  **Attestation Generation**: When a credential status is set to `ISSUED`, the system automatically triggers the `BlockchainService`.
