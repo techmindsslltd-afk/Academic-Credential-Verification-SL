@@ -100,9 +100,22 @@ Visit: `http://127.0.0.1:8000/dashboard`
 
 ---
 
-## ⛓️ Blockchain Attestations
+## ⛓️ Blockchain Integration
 
-The system simulates/interfaces with on-chain attestations. To backfill existing data:
+CertChain uses a decentralized approach to credential verification inspired by the **Solana Attestation Service (SAS)**. This ensures that once a credential is issued, its proof is immutable and verifiable without relying solely on the central database.
+
+### How it Works:
+1.  **Attestation Generation**: When a credential status is set to `ISSUED`, the system automatically triggers the `BlockchainService`.
+2.  **Payload Hashing**: A cryptographic hash (SHA-256) is generated from the credential's core data (Student ID, Institution, Program, and Issue Date).
+3.  **On-Chain Record**: This hash is recorded as a "Transaction" (simulated in the current version) representing an on-chain attestation.
+4.  **Immutable Proof**: Each credential stores a `blockchain_tx_id` (Transaction Hash) and `block_number`, which serve as a permanent receipt of the issuance.
+
+### Key Components:
+-   **`BlockchainService`**: Located in `apps/credentials/services.py`, it handles the logic for creating and verifying attestations.
+-   **`BlockchainTransaction`**: A model that tracks the status (Confirmed/Pending) of each on-chain event.
+-   **Verification UI**: Employers can verify credentials by pasting a Transaction Hash directly into the verification portal.
+
+To backfill existing data with blockchain attestations:
 ```powershell
 python manage.py backfill_attestations --limit 100
 ```
